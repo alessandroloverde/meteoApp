@@ -1,0 +1,12 @@
+// Global foundation — imported once via nuxt.config; Tailwind utilities override as needed.
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: red;
+}

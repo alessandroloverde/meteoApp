@@ -43,36 +43,28 @@ const ui = computed(() => {
 </script>
 
 <template>
-  <div class="h-screen flex items-center justify-center bg-black text-white">
-    <div class="text-center">
-      
-      <div v-if="store.loading">Loading...</div>
-      
-      <div v-else-if="store.error">
-        Error: {{ store.error }}
-      </div>
+<div class="flex justify-center items-center min-h-screen bg-neutral-900">
+   <div class="w-[390px] h-[844px] bg-black rounded-[40px] overflow-hidden shadow-2xl">
+      <div class="text-center">
+         
+         <div v-if="store.loading">Loading...</div>
+         
+         <div v-else-if="store.error">Error: {{ store.error }}</div>
 
-      <div v-else-if="store.weather">
-        <h1 class="text-6xl font-bold">
-          {{ store.weather.temperature }}°
-        </h1>
-        <p class="mt-2 text-lg">
-          Weather code: {{ store.weather.weathercode }}
-        </p>
-      </div>
+         <div v-else-if="store.weather">
+            <h1 class="text-6xl font-bold">{{ store.weather.temperature }}°</h1>
+            <p class="mt-2 text-lg">Weather code: {{ store.weather.weathercode }}</p>
+         </div>
 
-      <div v-if="ui">
-         <p class="mt-4 text-sm opacity-60">
-            {{ ui.key }}
-         </p>
-      </div>
+         <div v-if="ui">
+            <p class="mt-4 text-sm">{{ ui.key }}</p>
+         </div>
 
-      <div v-if="store.city">
-        <p class="mt-4 text-sm opacity-60">
-          {{ store.city }} - {{ store.country }}
-        </p>
-      </div>
+         <div v-if="store.city">
+            <p class="mt-4 text-sm">{{ store.city }} - {{ store.country }}</p>
+         </div>
 
-    </div>
+      </div>
+   </div>
   </div>
 </template>
