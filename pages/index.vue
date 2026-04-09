@@ -9,25 +9,29 @@ import { reverseGeocode } from '@/composables/useReverseGeocoding'
 const store = useWeatherStore()
 const { getLocation } = useLocation()
 
+async function loadWeather(lat, lon) {
+  const weather = await fetchWeather(lat, lon)
+  store.setWeather(weather)
+}
+
 onMounted(async () => {
   try {
     store.setLoading(true)
 
-    // 1. GPS
-    const coords = await getLocation()
-    store.setGPS(coords)
+    const hasSaved = store.loadSavedLocation()
 
-    // 2. Fetch meteo
-    const weather = await fetchWeather(
-      coords.latitude,
-      coords.longitude
-    )
+    if (hasSaved && store.coords) {
+      await loadWeather(store.coords.latitude, store.coords.longitude)
+    } else {
+      const coords = await getLocation()
+      store.setGPS(coords)
 
-    store.setWeather(weather)
+      await loadWeather(coords.latitude, coords.longitude)
 
-    const location = await reverseGeocode(coords.latitude, coords.longitude)
-    store.city = location.city
-    store.country = location.country
+      const location = await reverseGeocode(coords.latitude, coords.longitude)
+      store.city = location.city
+      store.country = location.country
+    }
   } catch (err) {
     store.setError(err.message)
   } finally {

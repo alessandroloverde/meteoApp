@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { saveLocation, loadLocation, clearLocation } from '@/composables/useLocationStorage'
 
 export interface Coordinates {
   latitude: number
@@ -19,20 +20,43 @@ export const useWeatherStore = defineStore('weather', {
     source: 'gps',
     weather: null as CurrentWeather | null,
     loading: false,
-    error: null as string | null
+    error: null as string | null,
+    favoriteCities: [] as string[]
   }),
 
   actions: {
     setGPS(coords: Coordinates) {
       if (this.source === 'gps') {
         this.coords = coords
+        this.city = "Current location"
       }
     },
 
-    setCity(city: string, coords: Coordinates) {
+    setCity(city: string, country: string, coords: Coordinates) {
       this.city = city
+      this.country = country
       this.coords = coords
       this.source = 'search'
+      saveLocation({ city, country, latitude: coords.latitude, longitude: coords.longitude })
+    },
+
+    loadSavedLocation(): boolean {
+      const saved = loadLocation()
+      if (!saved?.latitude || !saved?.longitude) return false
+      this.city = saved.city
+      this.country = saved.country ?? null
+      this.coords = { latitude: saved.latitude, longitude: saved.longitude }
+      this.source = 'search'
+      return true
+    },
+
+    resetToGPS() {
+      clearLocation()
+      this.source = 'gps'
+      this.city = null
+      this.country = null
+      this.coords = null
+      this.weather = null
     },
 
     setCountry(country: string) {
