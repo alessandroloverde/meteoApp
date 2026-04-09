@@ -1,0 +1,33 @@
+@use 'sass:map';
+@use 'variables' as v;
+
+// ---- Type scale ----
+$_type-scale: (
+  'display':  3.5rem,
+  'h1':       2.25rem,
+  'h2':       1.75rem,
+  'h3':       1.25rem,
+  'body':     1rem,
+  'caption':  0.875rem,
+  'small':    0.75rem,
+);
+
+@each $name, $size in $_type-scale {
+  .text-#{$name} {
+    font-size: $size;
+  }
+}
+
+// ---- Base type rules ----
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: map.get($_type-scale, 'body');
+  line-height: 1.5;
+  color: v.$color-text;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  line-height: 1.2;
+}

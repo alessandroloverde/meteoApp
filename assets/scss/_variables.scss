@@ -1,0 +1,37 @@
+// ---- Colors ----
+$color-primary: #3b82f6;
+$color-primary-light: #60a5fa;
+$color-primary-dark: #2563eb;
+
+$color-bg: #000000;
+$color-surface: #1a1a1a;
+$color-surface-elevated: #262626;
+
+$color-text: $color-primary-light;
+$color-text-muted: #a3a3a3;
+
+$color-error: #ef4444;
+$color-success: #22c55e;
+
+// ---- Spacing ----
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-2xl: 48px;
+
+// ---- Radii ----
+$radius-sm: 8px;
+$radius-md: 16px;
+$radius-lg: 24px;
+$radius-full: 9999px;
+
+// ---- Breakpoints ----
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+
+// ---- Transitions ----
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;

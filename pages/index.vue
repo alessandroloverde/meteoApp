@@ -44,7 +44,7 @@ const ui = computed(() => {
 
 <template>
 <div class="flex justify-center items-center min-h-screen bg-neutral-900">
-   <div class="w-[375px] h-[667px] bg-black rounded-[40px] overflow-hidden shadow-2xl">
+   <div class="phoneContainer">
       <div class="text-center">
          
          <div v-if="store.loading">Loading...</div>

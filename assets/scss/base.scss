@@ -1,4 +1,15 @@
-// Global foundation — imported once via nuxt.config; Tailwind utilities override as needed.
+@use 'variables' as v;
+@use 'typography';
+@use 'layout';
+
+// ---- Reset / foundation ----
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -6,7 +17,17 @@ html {
 
 body {
   min-height: 100dvh;
+  background-color: v.$color-bg;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: red;
+}
+
+img, picture, video, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
