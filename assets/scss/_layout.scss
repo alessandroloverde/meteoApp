@@ -29,6 +29,22 @@
   padding-inline: v.$space-md;
 }
 
+.pageContainer {
+  @apply flex min-h-dvh items-center justify-center bg-neutral-700;
+}
+
+// Mobile UI frame: all app chrome (scroll + bottom nav) lives inside this box.
 .phoneContainer {
-  @apply w-[375px] h-[667px] bg-black rounded-[40px] overflow-hidden shadow-2xl
+  @apply w-[375px] h-[667px] max-h-[90dvh] bg-black rounded-[40px] shadow-2xl;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.phoneContainer__main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
