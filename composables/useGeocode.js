@@ -2,21 +2,18 @@ export async function searchCities(query) {
   if (!query || query.length < 2) return []
 
   const res = await fetch(
-    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&addressdetails=1`,
-    { headers: { 'Accept-Language': 'en' } }
+    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5&language=en`
   )
 
   const data = await res.json()
 
-  return data.map((item) => ({
-    displayName: [
-      item.address.city || item.address.town || item.address.village || item.name,
-      item.address.state,
-      item.address.country
-    ].filter(Boolean).join(', '),
-    city: item.address.city || item.address.town || item.address.village || item.name,
-    country: item.address.country || '',
-    latitude: parseFloat(item.lat),
-    longitude: parseFloat(item.lon)
+  if (!data.results) return []
+
+  return data.results.map((item) => ({
+    displayName: [item.name, item.admin1, item.country].filter(Boolean).join(', '),
+    city: item.name,
+    country: item.country || '',
+    latitude: item.latitude,
+    longitude: item.longitude
   }))
 }

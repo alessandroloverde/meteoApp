@@ -37,21 +37,26 @@ export const useWeatherStore = defineStore('weather', {
       this.country = country
       this.coords = coords
       this.source = 'search'
+
       saveLocation({ city, country, latitude: coords.latitude, longitude: coords.longitude })
     },
 
     loadSavedLocation(): boolean {
       const saved = loadLocation()
+
       if (!saved?.latitude || !saved?.longitude) return false
+
       this.city = saved.city
       this.country = saved.country ?? null
       this.coords = { latitude: saved.latitude, longitude: saved.longitude }
       this.source = 'search'
+      
       return true
     },
 
     resetToGPS() {
       clearLocation()
+
       this.source = 'gps'
       this.city = null
       this.country = null
