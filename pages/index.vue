@@ -150,7 +150,33 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   opacity: 1;
   position: relative;
   top:-5.5%;
-  background-color: transparent
+  background-color: transparent;
+}
+
+/* Matches terrain-1, terrain-2, ... */
+[class*='terrain-'] {
+  position: absolute;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--mask-gradient);
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 100% auto;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .moon {
@@ -183,44 +209,17 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrain-4--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrain-4--gradient.png');
   --mask-size: 100% auto;
   --mask-position: top center;
   --layer-gradient: rgb(110, 201, 143);
   --blend-mode: normal;
   --layer-opacity: 1;
   z-index: 7;
-  position: absolute;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('~/assets/images/masks/Terrain-4--gradient.png');
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 100% auto;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    //background-color: #b7711d;
-    //mix-blend-mode: overlay;
-    //mask-image: url('~/assets/images/masks/Terrain-4--gradient.png');
-    mask-size: 100% auto;
-    mask-position: top right;
-    mask-repeat: no-repeat;
-  }
-
 }
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrain-3--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrain-3--gradient.png');
   --mask-size: 100% auto;
   --mask-position: top center;
   --layer-gradient: rgb(142, 69, 124);
@@ -228,38 +227,12 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --layer-opacity: 1;
   top: 4%;
   z-index: 8;
-  position: absolute;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('~/assets/images/masks/Terrain-3--gradient.png');
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 100% auto;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    //background-color: #b7711d;
-    //mix-blend-mode: overlay;
-    //mask-image: url('~/assets/images/masks/Terrain-1--gradient.png');
-    mask-size: 100% auto;
-    mask-position: top right;
-    mask-repeat: no-repeat;
-  }
 
 }
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrain-2--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrain-2--gradient.png');
   --mask-size: 100% auto;
   --mask-position: top right;
   --layer-gradient: rgb(185, 157, 20);
@@ -267,38 +240,10 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --layer-opacity: 1;
   top:4%;
   z-index: 9;
-  position: absolute;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('~/assets/images/masks/Terrain-2--gradient.png');
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 100% auto;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    //background-color: #b7711d;
-    //mix-blend-mode: overlay;
-    //mask-image: url('~/assets/images/masks/Terrain-1--gradient.png');
-    mask-size: 100% auto;
-    mask-position: top right;
-    mask-repeat: no-repeat;
-  }
-
 }
 .terrain-1 {
   --mask-image: url('~/assets/images/masks/Terrain-1--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrain-1--gradient.png');
   --mask-size: 100% auto;
   --mask-position: top center;
   --layer-gradient: rgb(12, 82, 75);
@@ -306,34 +251,6 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --layer-opacity: 1;
   top: 8%;
   z-index: 10;
-  position: absolute;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('~/assets/images/masks/Terrain-1--gradient.png');
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 100% auto;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    //background-color: #b7711d;
-    //mix-blend-mode: overlay;
-    //mask-image: url('~/assets/images/masks/Terrain-1--gradient.png');
-    mask-size: 100% auto;
-    mask-position: top right;
-    mask-repeat: no-repeat;
-  }
 }
 
 .bushes-1 {
@@ -388,25 +305,11 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   z-index: 15;
 }
 
-.scene:not(.windows-lit) .houses-windows {
-  opacity: 0;
-}
-
-.scene.is-night .moon {
-  opacity: 0.92;
-}
-
-.scene:not(.is-night) .moon {
-  opacity: 0.35;
-}
-
-.scene.is-cloudy .clouds-near {
-  opacity: 0.42;
-}
-
-.scene:not(.is-cloudy) .clouds-near {
-  opacity: 0.18;
-}
+.scene:not(.windows-lit) .houses-windows { opacity: 0 }
+.scene.is-night .moon { opacity: 0.92 }
+.scene:not(.is-night) .moon { opacity: 0.35 }
+.scene.is-cloudy .clouds-near { opacity: 0.42 }
+.scene:not(.is-cloudy) .clouds-near { opacity: 0.18 }
 
 .main-content {
   position: relative;
