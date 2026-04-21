@@ -53,10 +53,12 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
     <div class="scene" :class="sceneStateClasses">
       <div class="scene-layer sky-base"></div>
       <div class="scene-layer mask-layer terrain">
-        <div class="scene-layer mask-layer terrain-1"></div>
-<!--         <div class="scene-layer mask-layer terrain-2"></div>
+        <div class="scene-layer mask-layer terrain-1">
+          <div class="scene-layer mask-layer bushes-1"></div>
+        </div>
+        <div class="scene-layer mask-layer terrain-2"></div>
         <div class="scene-layer mask-layer terrain-3"></div>
-        <div class="scene-layer mask-layer terrain-4"></div> -->
+        <div class="scene-layer mask-layer terrain-4"></div>
       </div>
     </div>
 
@@ -86,10 +88,31 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 <style scoped lang="scss">
 @use 'sass:map';
 
-$terrain-1-colors: (
-  "senf": #a56028,
+$autumn-palette: (
+  "accent": #a56028,
   "darkBrown": #3b1924,
   "medBrown": #503229
+);
+
+$terrain-1-colors: (
+  "accent": #a56028,
+  "darkBrown": #3b1924,
+  "medBrown": #503229
+);
+$terrain-2-colors: (
+  "accent": #be622d,
+  "darkBrown": #421513,
+  "medBrown": #8d4828
+);
+$terrain-3-colors: (
+  "accent": #ba581f,
+  "darkBrown": #743a24,
+  "medBrown": #8d4828
+);
+$terrain-4-colors: (
+  "accent": #ba581f,
+  "darkBrown": #58211d,
+  "medBrown": #8d4828
 );
 
 
@@ -141,7 +164,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   -webkit-mask-repeat: no-repeat;
           mask-repeat: no-repeat;
   background: var(--layer-gradient);
-  mix-blend-mode: var(--blend-mode, normal);
+  //mix-blend-mode: var(--blend-mode, normal);
   opacity: var(--layer-opacity, 1);
 }
 
@@ -165,6 +188,9 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 /* Matches terrain-1, terrain-2, ... */
 [class*='terrain-'] {
   position: absolute;
+  --mask-size: 100% auto;
+  --mask-position: top center;
+  --mask-repeat: no-repeat;
 
   &::before {
     content: '';
@@ -185,8 +211,8 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     right: 0;
     width: 100%;
     height: 100%;
-    background-color: #a56028;
-    mix-blend-mode: color;
+    background-color: var(--accent-color);
+    mix-blend-mode: var(--blend-mode);
     mask-image: var(--mask-gradient);
     mask-size: 100% auto;
     mask-position: top center;
@@ -214,7 +240,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 
 .clouds-near {
   --mask-image: url('~/assets/images/PartlyCloudy -9 copy 2.svg');
-  --mask-size: 118% auto;
+  --mask-size: 100% auto;
   --mask-position: top center;
   --layer-gradient: linear-gradient(to bottom, rgba(148, 145, 162, 0.5) 0%, rgba(64, 62, 89, 0.65) 90%);
   --blend-mode: screen;
@@ -225,60 +251,56 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrain-4--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-4--gradient.png');
-  --mask-size: 100% auto;
-  --mask-position: top center;
-  --layer-gradient: rgb(110, 201, 143);
-  --blend-mode: normal;
+  --layer-gradient: #{map.get($terrain-4-colors, darkBrown)};
+  --accent-color: #{map.get($terrain-4-colors, accent)};
+  --blend-mode: color;
   --layer-opacity: 1;
   z-index: 7;
 }
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrain-3--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-3--gradient.png');
-  --mask-size: 100% auto;
-  --mask-position: top center;
-  --layer-gradient: rgb(142, 69, 124);
-  --blend-mode: normal;
+  --layer-gradient: #{map.get($terrain-3-colors, darkBrown)};
+  --accent-color: #{map.get($terrain-3-colors, accent)};
+  --blend-mode: overlay;
   --layer-opacity: 1;
   top: 4%;
   z-index: 8;
-
-
 }
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrain-2--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-2--gradient.png');
-  --mask-size: 100% auto;
-  --mask-position: top right;
-  --layer-gradient: rgb(185, 157, 20);
-  --blend-mode: normal;
+  --layer-gradient: linear-gradient(
+    -45deg,
+    #{map.get($terrain-2-colors, darkBrown)} 20%,
+    #{map.get($terrain-2-colors, medBrown)} 100%
+  );  
+  --accent-color: #{map.get($terrain-2-colors, accent)};
+  --blend-mode: color;
   --layer-opacity: 1;
-  top:4%;
+  top: 4%;
   z-index: 9;
 }
 .terrain-1 {
   --mask-image: url('~/assets/images/masks/Terrain-1--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-1--gradient.png');
-  --mask-size: 100% auto;
-  --mask-position: top center;
   --layer-gradient: linear-gradient(
     45deg,
     #{map.get($terrain-1-colors, darkBrown)} 0%,
     #{map.get($terrain-1-colors, medBrown)} 100%
   );
-  --blend-mode: normal;
+  --accent-color: #{map.get($terrain-1-colors, accent)};
+  --blend-mode: color;
   --layer-opacity: 1;
   top: 8%;
   z-index: 10;
 }
 
 .bushes-1 {
-  --mask-image: url('~/assets/images/Bkg-1.svg');
-  --mask-size: 101% auto;
-  --mask-position: bottom center;
-  --layer-gradient: linear-gradient(to top, rgba(47, 29, 27, 0.95) 0%, rgba(99, 55, 39, 0.75) 52%, rgba(165, 103, 60, 0) 100%);
-  --blend-mode: multiply;
-  --layer-opacity: 0.5;
+  --mask-image: url('~/assets/images/masks/Bush-1.svg');
+  --layer-gradient: green;
+  --blend-mode: color;
+  --layer-opacity: 1;
   z-index: 11;
 }
 
