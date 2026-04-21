@@ -54,9 +54,9 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
       <div class="scene-layer sky-base"></div>
       <div class="scene-layer mask-layer terrain">
         <div class="scene-layer mask-layer terrain-1"></div>
-        <div class="scene-layer mask-layer terrain-2"></div>
+<!--         <div class="scene-layer mask-layer terrain-2"></div>
         <div class="scene-layer mask-layer terrain-3"></div>
-        <div class="scene-layer mask-layer terrain-4"></div>
+        <div class="scene-layer mask-layer terrain-4"></div> -->
       </div>
     </div>
 
@@ -84,6 +84,15 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 </template>
 
 <style scoped lang="scss">
+@use 'sass:map';
+
+$terrain-1-colors: (
+  "senf": #a56028,
+  "darkBrown": #3b1924,
+  "medBrown": #503229
+);
+
+
 $stormyNight--light: #66617e;
 $stormyNight--lighter: #5b5a73;
 $stormyNight--med: #4e4e56;
@@ -176,6 +185,12 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     right: 0;
     width: 100%;
     height: 100%;
+    background-color: #a56028;
+    mix-blend-mode: color;
+    mask-image: var(--mask-gradient);
+    mask-size: 100% auto;
+    mask-position: top center;
+    mask-repeat: no-repeat;
   }
 }
 
@@ -246,7 +261,11 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-gradient: url('~/assets/images/masks/Terrain-1--gradient.png');
   --mask-size: 100% auto;
   --mask-position: top center;
-  --layer-gradient: rgb(12, 82, 75);
+  --layer-gradient: linear-gradient(
+    45deg,
+    #{map.get($terrain-1-colors, darkBrown)} 0%,
+    #{map.get($terrain-1-colors, medBrown)} 100%
+  );
   --blend-mode: normal;
   --layer-opacity: 1;
   top: 8%;
