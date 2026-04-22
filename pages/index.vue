@@ -155,17 +155,23 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 }
 
 .mask-layer {
-  -webkit-mask-image: var(--mask-image);
-          mask-image: var(--mask-image);
-  -webkit-mask-size: var(--mask-size, 100% auto);
-          mask-size: var(--mask-size, 100% auto);
-  -webkit-mask-position: var(--mask-position, bottom center);
-          mask-position: var(--mask-position, bottom center);
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  background: var(--layer-gradient);
-  //mix-blend-mode: var(--blend-mode, normal);
+  @include mx.mask-props((
+    image: var(--mask-image),
+    size: var(--mask-size, 100% auto),
+    position: var(--mask-position, bottom center)
+  ));
+
+  background: var(--layer-bkg);
   opacity: var(--layer-opacity, 1);
+
+  @include mx.gradient-mask-overlay((
+    gradient-image: var(--mask-gradient),
+    gradient-size: 100% auto,
+    gradient-position: top center,
+    before-position: top right,
+    accent-color: var(--accent-color),
+    blend-mode: var(--blend-mode)
+  ));
 }
 
 .sky-base {
@@ -185,39 +191,11 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   background-color: transparent;
 }
 
-/* Matches terrain-1, terrain-2, ... */
 [class*='terrain-'] {
   position: absolute;
   --mask-size: 100% auto;
   --mask-position: top center;
   --mask-repeat: no-repeat;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-image: var(--mask-gradient);
-    background-repeat: no-repeat;
-    background-position: top right;
-    background-size: 100% auto;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--accent-color);
-    mix-blend-mode: var(--blend-mode);
-    mask-image: var(--mask-gradient);
-    mask-size: 100% auto;
-    mask-position: top center;
-    mask-repeat: no-repeat;
-  }
 }
 
 .moon {
