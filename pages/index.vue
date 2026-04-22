@@ -55,6 +55,7 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
       <div class="scene-layer mask-layer terrain">
         <div class="scene-layer mask-layer terrain-1">
           <div class="scene-layer mask-layer bushes-1"></div>
+          <div class="scene-layer mask-layer bushes-2"></div>
         </div>
         <div class="scene-layer mask-layer terrain-2"></div>
         <div class="scene-layer mask-layer terrain-3"></div>
@@ -159,23 +160,8 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 }
 
 .mask-layer {
-  @include mx.mask-props((
-    image: var(--mask-image),
-    size: var(--mask-size, 100% auto),
-    position: var(--mask-position, bottom center)
-  ));
-
-  background: var(--layer-bkg);
+  @include mx.gradient-mask-layer;
   opacity: var(--layer-opacity, 1);
-
-  @include mx.gradient-mask-overlay((
-    gradient-image: var(--mask-gradient),
-    gradient-size: 100% auto,
-    gradient-position: top center,
-    before-position: top right,
-    accent-color: var(--accent-color),
-    blend-mode: var(--blend-mode)
-  ));
 }
 
 .sky-base {
@@ -289,6 +275,15 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --blend-mode: color;
   --layer-opacity: 1;
   z-index: 11;
+}
+
+.bushes-2 {
+  --mask-image: url('~/assets/images/masks/Bush-2--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Bush-2--gradient.png');
+  --layer-bkg: #{map.get($autumn-palette, bushes, "1-dark")};
+  --blend-mode: color;
+  --layer-opacity: 1;
+  z-index: 12;
 }
 
 .trees-1 {
