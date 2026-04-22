@@ -1,0 +1,74 @@
+@use 'variables' as v;
+@use "sass:map";
+
+@function mask-get($cfg, $key, $fallback: null) {
+  @return if(map.has-key($cfg, $key), map.get($cfg, $key), $fallback);
+}
+
+@mixin mask-props($cfg: ()) {
+  $image: mask-get($cfg, image);
+  $size: mask-get($cfg, size, 100% auto);
+  $position: mask-get($cfg, position, top center);
+  $repeat: mask-get($cfg, repeat, no-repeat);
+  $origin: mask-get($cfg, origin, null);
+  $clip: mask-get($cfg, clip, null);
+
+  @if $image != null {
+    -webkit-mask-image: #{$image};
+            mask-image: #{$image};
+  }
+
+  -webkit-mask-size: #{$size};
+          mask-size: #{$size};
+
+  -webkit-mask-position: #{$position};
+          mask-position: #{$position};
+
+  -webkit-mask-repeat: #{$repeat};
+          mask-repeat: #{$repeat};
+
+  @if $origin != null {
+    -webkit-mask-origin: #{$origin};
+            mask-origin: #{$origin};
+  }
+  @if $clip != null {
+    -webkit-mask-clip: #{$clip};
+            mask-clip: #{$clip};
+  }
+}
+
+@mixin gradient-mask-overlay($cfg: ()) {
+  $gradient-image: mask-get($cfg, gradient-image, var(--mask-gradient));
+  $gradient-size: mask-get($cfg, gradient-size, 100% auto);
+  $gradient-position: mask-get($cfg, gradient-position, top center);
+  $gradient-repeat: mask-get($cfg, gradient-repeat, no-repeat);
+  $before-position: mask-get($cfg, before-position, top right);
+  $accent-color: mask-get($cfg, accent-color, var(--accent-color));
+  $blend-mode: mask-get($cfg, blend-mode, var(--blend-mode));
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  &::before {
+    background-image: #{$gradient-image};
+    background-repeat: #{$gradient-repeat};
+    background-position: #{$before-position};
+    background-size: #{$gradient-size};
+  }
+
+  &::after {
+    background-color: #{$accent-color};
+    mix-blend-mode: #{$blend-mode};
+
+    @include mask-props((
+      image: $gradient-image,
+      size: $gradient-size,
+      position: $gradient-position,
+      repeat: $gradient-repeat
+    ));
+  }
+}

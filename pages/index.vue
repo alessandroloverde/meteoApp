@@ -87,11 +87,15 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 
 <style scoped lang="scss">
 @use 'sass:map';
+@use '~/assets/scss/mixins' as mx;
 
 $autumn-palette: (
-  "accent": #a56028,
-  "darkBrown": #3b1924,
-  "medBrown": #503229
+  "bushes": (
+    "1-light": #ae5e19,
+    "1-dark": #432616,
+    "3-light": #432616,
+    "3-dark": #81481a,
+  )
 );
 
 $terrain-1-colors: (
@@ -210,7 +214,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-image: url('~/assets/images/PartlyCloudy -9.svg');
   --mask-size: 102% auto;
   --mask-position: top center;
-  --layer-gradient: linear-gradient(to bottom, rgba(112, 111, 132, 0.75) 0%, rgba(78, 77, 101, 0.45) 85%);
+  --layer-bkg: linear-gradient(to bottom, rgba(112, 111, 132, 0.75) 0%, rgba(78, 77, 101, 0.45) 85%);
   --blend-mode: lighten;
   --layer-opacity: 0.5;
   z-index: 3;
@@ -220,7 +224,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-image: url('~/assets/images/PartlyCloudy -9 copy 2.svg');
   --mask-size: 100% auto;
   --mask-position: top center;
-  --layer-gradient: linear-gradient(to bottom, rgba(148, 145, 162, 0.5) 0%, rgba(64, 62, 89, 0.65) 90%);
+  --layer-bkg: linear-gradient(to bottom, rgba(148, 145, 162, 0.5) 0%, rgba(64, 62, 89, 0.65) 90%);
   --blend-mode: screen;
   --layer-opacity: 0.38;
   z-index: 4;
@@ -229,7 +233,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrain-4--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-4--gradient.png');
-  --layer-gradient: #{map.get($terrain-4-colors, darkBrown)};
+  --layer-bkg: #{map.get($terrain-4-colors, darkBrown)};
   --accent-color: #{map.get($terrain-4-colors, accent)};
   --blend-mode: color;
   --layer-opacity: 1;
@@ -238,7 +242,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrain-3--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-3--gradient.png');
-  --layer-gradient: #{map.get($terrain-3-colors, darkBrown)};
+  --layer-bkg: #{map.get($terrain-3-colors, darkBrown)};
   --accent-color: #{map.get($terrain-3-colors, accent)};
   --blend-mode: overlay;
   --layer-opacity: 1;
@@ -248,7 +252,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrain-2--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-2--gradient.png');
-  --layer-gradient: linear-gradient(
+  --layer-bkg: linear-gradient(
     -45deg,
     #{map.get($terrain-2-colors, darkBrown)} 20%,
     #{map.get($terrain-2-colors, medBrown)} 100%
@@ -262,7 +266,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 .terrain-1 {
   --mask-image: url('~/assets/images/masks/Terrain-1--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-1--gradient.png');
-  --layer-gradient: linear-gradient(
+  --layer-bkg: linear-gradient(
     45deg,
     #{map.get($terrain-1-colors, darkBrown)} 0%,
     #{map.get($terrain-1-colors, medBrown)} 100%
@@ -275,8 +279,13 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 }
 
 .bushes-1 {
-  --mask-image: url('~/assets/images/masks/Bush-1.svg');
-  --layer-gradient: green;
+  --mask-image: url('~/assets/images/masks/Bush-1--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Bush-1--gradient.svg');
+  --layer-bkg: linear-gradient(
+    -45deg,
+    #{map.get($autumn-palette, bushes, "1-dark")} 20%,
+    #{map.get($autumn-palette, bushes, "1-light")} 100%
+  );
   --blend-mode: color;
   --layer-opacity: 1;
   z-index: 11;
@@ -286,7 +295,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-image: url('~/assets/images/Bkg-1.svg');
   --mask-size: 106% auto;
   --mask-position: bottom center;
-  --layer-gradient: linear-gradient(to top, rgba(38, 22, 31, 0.96) 0%, rgba(82, 43, 44, 0.66) 44%, rgba(178, 103, 65, 0) 100%);
+  --layer-bkg: linear-gradient(to top, rgba(38, 22, 31, 0.96) 0%, rgba(82, 43, 44, 0.66) 44%, rgba(178, 103, 65, 0) 100%);
   --blend-mode: color-burn;
   --layer-opacity: 0.36;
   z-index: 12;
@@ -296,7 +305,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-image: url('~/assets/images/Bkg-1.svg');
   --mask-size: 112% auto;
   --mask-position: bottom center;
-  --layer-gradient: linear-gradient(to top, rgba(39, 30, 40, 0.95) 0%, rgba(66, 55, 75, 0.85) 22%, rgba(90, 69, 88, 0.15) 100%);
+  --layer-bkg: linear-gradient(to top, rgba(39, 30, 40, 0.95) 0%, rgba(66, 55, 75, 0.85) 22%, rgba(90, 69, 88, 0.15) 100%);
   --blend-mode: multiply;
   --layer-opacity: 0.48;
   z-index: 13;
@@ -306,7 +315,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-image: url('~/assets/images/Bkg-1.svg');
   --mask-size: 112% auto;
   --mask-position: bottom center;
-  --layer-gradient: radial-gradient(circle at 26% 76%, rgba(255, 218, 157, 0.95) 0%, rgba(255, 189, 103, 0.34) 6%, rgba(255, 189, 103, 0) 13%),
+  --layer-bkg: radial-gradient(circle at 26% 76%, rgba(255, 218, 157, 0.95) 0%, rgba(255, 189, 103, 0.34) 6%, rgba(255, 189, 103, 0) 13%),
     radial-gradient(circle at 41% 71%, rgba(255, 223, 174, 0.9) 0%, rgba(255, 176, 95, 0.3) 6%, rgba(255, 176, 95, 0) 13%),
     radial-gradient(circle at 54% 74%, rgba(255, 212, 149, 0.88) 0%, rgba(255, 176, 94, 0.3) 5%, rgba(255, 176, 94, 0) 12%),
     radial-gradient(circle at 64% 73%, rgba(255, 224, 178, 0.9) 0%, rgba(255, 181, 102, 0.3) 6%, rgba(255, 181, 102, 0) 14%),
