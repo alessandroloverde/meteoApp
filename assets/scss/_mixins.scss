@@ -23,14 +23,14 @@
   }
 
   &::before {
-    background: var(--mask-gradient) top center / 100% auto no-repeat;
+    background: var(--mask-gradient) var(--mask-position, bottom center) / 100% auto no-repeat;
     opacity: var(--gradient-opacity, 1);
   }
 
   &::after {
     background-color: var(--accent-color);
     mix-blend-mode: var(--blend-mode);
-    -webkit-mask: var(--mask-gradient) top center / 100% auto no-repeat;
-            mask: var(--mask-gradient) top center / 100% auto no-repeat;
+    -webkit-mask: var(--mask-gradient) var(--mask-position, top center) / 100% auto no-repeat;
+            mask: var(--mask-gradient) var(--mask-position, top center) / 100% auto no-repeat;
   }
 }
