@@ -1,5 +1,7 @@
 <template>
   <div class="pageContainer">
+    <div class="phoneContainer phoneContainer--reference" aria-hidden="true"></div>
+
     <div class="phoneContainer">
       <main class="phoneContainer__main">
         <slot />

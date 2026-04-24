@@ -31,6 +31,7 @@
 
 .pageContainer {
   @apply flex min-h-dvh items-center justify-center bg-neutral-700;
+  gap: v.$space-md;
 }
 
 // Mobile UI frame: all app chrome (scroll + bottom nav) lives inside this box.
@@ -40,6 +41,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.phoneContainer--reference {
+  background: #000 url('~/assets/images/Modello.png') center / cover no-repeat;
 }
 
 .phoneContainer__main {
