@@ -54,11 +54,13 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
       <div class="scene-layer sky-base"></div>
       <div class="scene-layer mask-layer terrain">
         <div class="scene-layer mask-layer bushes-in-front">
-          <div class="scene-layer bushes-1 testing"></div>
-          <div class="scene-layer bushes-2 testing"></div>
+          <div class="bushes-1"></div>
+          <div class="bushes-2"></div>
         </div>
         <div class="scene-layer mask-layer terrain-1"></div>
-        <div class="scene-layer mask-layer terrain-2"></div>
+        <div class="scene-layer mask-layer terrain-2">
+          <div class="bushes-3"></div>
+        </div>
         <div class="scene-layer mask-layer terrain-3"></div>
         <div class="scene-layer mask-layer terrain-4"></div>
       </div>
@@ -93,8 +95,10 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 
 $autumn-palette: (
   "bushes": (
+    "1-lighter": #c17122,
     "1-light": #ae5e19,
-    "1-dark": #432616,
+    "1-med": #673611,
+    "1-dark": #412415,
     "3-light": #432616,
     "3-dark": #81481a,
   )
@@ -178,7 +182,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   z-index: 2;
   opacity: 1;
   position: relative;
-  top:-5.5%;
+  top:-8%;
   background-color: transparent;
 }
 
@@ -274,31 +278,68 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   height: 100%;
   outline: 2px solid magenta
 }
-.bushes-1 {
-  --mask-image: url('~/assets/images/masks/Bush-1--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Bush-1--gradient.svg');
-  --mask-position: center 5%;
-  --layer-bkg: linear-gradient(
-    -45deg,
-    #{map.get($autumn-palette, bushes, "1-dark")} 20%,
-    #{map.get($autumn-palette, bushes, "1-light")} 100%
-  );
-  --blend-mode: luminosity;
-  --layer-opacity: 1;
+.bushes-1 { 
   z-index: 11;
+  width: calc(141px / 2);
+  height: calc(62px / 2);
+  background: linear-gradient(
+    160deg,
+    #{map.get($autumn-palette, bushes, "1-lighter")} 25%,
+    #{map.get($autumn-palette, bushes, "1-dark")} 85%
+  );
+  position: absolute;
+  right: 0%;
+  top: 6%;
+  mask-image: url('~/assets/images/masks/Bush-1--bkg.svg');
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('~/assets/images/masks/Bush-1--gradient.png') center center / 100% auto no-repeat;
+    mix-blend-mode: soft-light;
+    opacity: 0.5;
+  }
 }
 .bushes-2 {
-  --mask-image: url('~/assets/images/masks/Bush-2--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Bush-2--gradient.png');
-  --mask-position: center 15%;
-  --layer-bkg: #{map.get($autumn-palette, bushes, "1-dark")};
-  --blend-mode: luminosity;
-  --layer-opacity: 1;
   z-index: 12;
-}
+  width: calc(160px / 2);
+  height: calc(58px / 2);
+  position: absolute;
+  background: linear-gradient(
+    160deg,
+    #{map.get($autumn-palette, bushes, "1-lighter")} 0%,
+    #{map.get($autumn-palette, bushes, "1-med")} 50%
+  );
+  left: 0%;
+  top: 10%;
+  mask-image: url('~/assets/images/masks/Bush-2--bkg.svg');
 
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('~/assets/images/masks/Bush-2--gradient.png') center center / 100% auto no-repeat;
+    mix-blend-mode: soft-light;
+    opacity: 0.65;
+  }
+}
+.bushes-3 {
+  z-index: 13;
+  width: calc(119px / 2);
+  height: calc(49px / 2);
+  background: linear-gradient(
+    160deg,
+    #{map.get($autumn-palette, bushes, "1-lighter")} 30%,
+    #{map.get($autumn-palette, bushes, "1-med")} 60%
+  );
+  position: absolute;
+  left: 60%;
+  top: 6%;
+  mask-image: url('~/assets/images/masks/Bush-3--bkg.svg');
+}
 .testing {
-  --gradient-opacity: 0.5;
+  --gradient-opacity: 1;
 
   position: absolute;
   top: 0;

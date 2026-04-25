@@ -24,10 +24,11 @@
 
   &::before {
     background: var(--mask-gradient) var(--mask-position, bottom center) / 100% auto no-repeat;
-    opacity: var(--gradient-opacity, 1);
   }
 
   &::after {
+   opacity: var(--gradient-opacity, 1);
+
     background-color: var(--accent-color);
     mix-blend-mode: var(--blend-mode);
     -webkit-mask: var(--mask-gradient) var(--mask-position, top center) / 100% auto no-repeat;
