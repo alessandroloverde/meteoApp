@@ -55,6 +55,10 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
       <div class="scene-layer mask-layer terrain">
         <div class="scene-layer mask-layer bushes-in-front">
           <div class="bushes-1"></div>
+          <div class="trees-1">
+            <div class="trees-1--trunk"></div>
+            <div class="trees-1--foliage"></div>
+          </div>
           <div class="bushes-2"></div>
         </div>
         <div class="scene-layer mask-layer terrain-1"></div>
@@ -101,11 +105,13 @@ $autumn-palette: (
     "1-dark": #412415,
     "3-light": #432616,
     "3-dark": #81481a,
+    "tree-1-trunk1": #5f1203,
+    "tree-1-trunk2": #281416,
   )
 );
 
 $terrain-1-colors: (
-  "accent": #a56028,
+  "accent": #db801b,
   "darkBrown": #3b1924,
   "medBrown": #503229
 );
@@ -263,7 +269,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     #{map.get($terrain-1-colors, medBrown)} 100%
   );
   --accent-color: #{map.get($terrain-1-colors, accent)};
-  --blend-mode: color;
+  --blend-mode: overlay;
   --layer-opacity: 1;
   top: 8%;
   z-index: 10;
@@ -338,46 +344,58 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   top: 6%;
   mask-image: url('~/assets/images/masks/Bush-3--bkg.svg');
 }
-.testing {
-  --gradient-opacity: 1;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  outline: 2px solid magenta;
-  opacity: var(--layer-opacity, 1);
-  background: var(--layer-bkg);
-  -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
-          mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
-  
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-  }
-
-  &::before {
-    background: var(--mask-gradient) var(--mask-position, bottom center) / 100% auto no-repeat;
-    mix-blend-mode: var(--blend-mode);
-
-    opacity: var(--gradient-opacity, 1);
-  }
-
-}
-
-
 
 .trees-1 {
-  --mask-image: url('~/assets/images/Bkg-1.svg');
-  --mask-size: 106% auto;
-  --mask-position: bottom center;
-  --layer-bkg: linear-gradient(to top, rgba(38, 22, 31, 0.96) 0%, rgba(82, 43, 44, 0.66) 44%, rgba(178, 103, 65, 0) 100%);
-  --blend-mode: color;
-  z-index: 12;
+  z-index: 11;
+  width: calc(112px / 2);
+  height: calc(194px / 2);
+  position: absolute;
+  right: 0%;
+  top: -19%;
+  z-index: 1;
+
+  &--trunk {
+    width: 100%;
+    height: auto;
+    background: linear-gradient(
+      90deg,
+      #{map.get($autumn-palette, bushes, "tree-1-trunk1")} 0%,
+      #{map.get($autumn-palette, bushes, "tree-1-trunk2")} 100%
+    );
+    position: absolute;
+    inset: 0;
+    top: 0;
+    mask-image: url('~/assets/images/masks/Tree-1--trunk.svg');
+    mask-size: 100% auto;
+    mask-position: 40% bottom;
+    mask-repeat: no-repeat;
+    z-index: 2;
+  }
+  &--foliage {
+    width: 100%;
+    aspect-ratio: 0.875 / 1;
+    background: linear-gradient(
+      180deg,
+      #{map.get($autumn-palette, bushes, "1-lighter")} 25%,
+      #{map.get($autumn-palette, bushes, "1-dark")} 85%
+    );
+    position: absolute;
+    inset: 0;
+    top: 0;
+    mask-image: url('~/assets/images/masks/Tree-1--foliage.png');
+    mask-size: 100% auto;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('~/assets/images/masks/Tree-1--foliage.png') center center / 100% auto no-repeat;
+      mix-blend-mode: soft-light;
+      opacity: 0.65;
+    }
+  }
 }
+
 
 .houses {
   --mask-image: url('~/assets/images/Bkg-1.svg');
