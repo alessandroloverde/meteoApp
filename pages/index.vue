@@ -107,6 +107,8 @@ $autumn-palette: (
     "3-dark": #81481a,
     "tree-1-trunk1": #5f1203,
     "tree-1-trunk2": #281416,
+    "tree-1-foliage1": #d06c33,
+    "tree-1-foliage2": #421f20,
   )
 );
 
@@ -375,9 +377,9 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     width: 100%;
     aspect-ratio: 0.875 / 1;
     background: linear-gradient(
-      180deg,
-      #{map.get($autumn-palette, bushes, "1-lighter")} 25%,
-      #{map.get($autumn-palette, bushes, "1-dark")} 85%
+      125deg,
+      #{map.get($autumn-palette, bushes, "tree-1-foliage1")} 10%,
+      #{map.get($autumn-palette, bushes, "tree-1-foliage2")} 95%
     );
     position: absolute;
     inset: 0;
@@ -390,8 +392,8 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
       position: absolute;
       inset: 0;
       background: url('~/assets/images/masks/Tree-1--foliage.png') center center / 100% auto no-repeat;
-      mix-blend-mode: soft-light;
-      opacity: 0.65;
+      mix-blend-mode: luminosity;
+      opacity: 1;
     }
   }
 }
