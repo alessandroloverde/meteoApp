@@ -59,6 +59,7 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
             <div class="trees-1--trunk"></div>
             <div class="trees-1--foliage"></div>
           </div>
+
           <div class="bushes-2"></div>
         </div>
         <div class="scene-layer mask-layer terrain-1"></div>
@@ -66,6 +67,12 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
           <div class="bushes-3"></div>
         </div>
         <div class="scene-layer mask-layer terrain-3"></div>
+        <div class="scene-layer mask-layer bushes-in-front" style="z-index: 8;">
+          <div class="trees-2">
+            <div class="trees-2--trunk"></div>
+            <div class="trees-2--foliage"></div>
+          </div>
+        </div>
         <div class="scene-layer mask-layer terrain-4"></div>
       </div>
     </div>
@@ -95,6 +102,7 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 
 <style scoped lang="scss">
 @use 'sass:map';
+@use 'sass:list';
 @use '~/assets/scss/mixins' as mx;
 
 $autumn-palette: (
@@ -105,10 +113,35 @@ $autumn-palette: (
     "1-dark": #412415,
     "3-light": #432616,
     "3-dark": #81481a,
-    "tree-1-trunk1": #5f1203,
-    "tree-1-trunk2": #281416,
-    "tree-1-foliage1": #d06c33,
-    "tree-1-foliage2": #421f20,
+  )
+);
+
+// Per-tree config. Add a new entry here to render a new tree;
+// the `<div class="trees-N">` markup + matching mask assets are all that's needed besides this.
+$trees: (
+  1: (
+    width: calc(112px / 2),
+    height: calc(194px / 2),
+    offset: (right: 0%, top: -19%),
+    z-index: 10,
+    trunk-colors: (#5f1203, #281416),
+    foliage-colors: (#d06c33, #421f20),
+    trunk-mask: 'Tree-1--trunk.svg',
+    trunk-mask-size: 100% auto,
+    trunk-mask-position: 40% bottom,
+    foliage-mask: 'Tree-1--foliage.png',
+  ),
+  2: (
+    width: calc(52px / 2),
+    height: calc(102px / 2),
+    offset: (right: 13%, top: -6%),
+    z-index: 9,
+    trunk-colors: (#5f1203, #281416),
+    foliage-colors: (#ec8b1b, #421f20),
+    trunk-mask: 'Tree-2--trunk.svg',
+    trunk-mask-size: 50% auto,
+    trunk-mask-position: 40% bottom,
+    foliage-mask: 'Tree-2--foliage.png',
   )
 );
 
@@ -347,57 +380,54 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   mask-image: url('~/assets/images/masks/Bush-3--bkg.svg');
 }
 
-.trees-1 {
-  z-index: 11;
-  width: calc(112px / 2);
-  height: calc(194px / 2);
+@mixin tree($config) {
   position: absolute;
-  right: 0%;
-  top: -19%;
-  z-index: 1;
+  width: map.get($config, width);
+  height: map.get($config, height);
+  z-index: map.get($config, z-index);
+
+  @each $prop, $value in map.get($config, offset) {
+    #{$prop}: $value;
+  }
+
+  $trunk: map.get($config, trunk-colors);
+  $foliage: map.get($config, foliage-colors);
+  $foliage-url: url('~/assets/images/masks/#{map.get($config, foliage-mask)}');
 
   &--trunk {
-    width: 100%;
-    height: auto;
-    background: linear-gradient(
-      90deg,
-      #{map.get($autumn-palette, bushes, "tree-1-trunk1")} 0%,
-      #{map.get($autumn-palette, bushes, "tree-1-trunk2")} 100%
-    );
     position: absolute;
     inset: 0;
-    top: 0;
-    mask-image: url('~/assets/images/masks/Tree-1--trunk.svg');
-    mask-size: 100% auto;
-    mask-position: 40% bottom;
-    mask-repeat: no-repeat;
     z-index: 2;
+    background: linear-gradient(90deg, list.nth($trunk, 1) 0%, list.nth($trunk, 2) 100%);
+    mask-image: url('~/assets/images/masks/#{map.get($config, trunk-mask)}');
+    mask-position: map.get($config, trunk-mask-position);
+    mask-size: map.get($config, trunk-mask-size);
+    mask-repeat: no-repeat;
   }
+
   &--foliage {
-    width: 100%;
-    aspect-ratio: 0.875 / 1;
-    background: linear-gradient(
-      125deg,
-      #{map.get($autumn-palette, bushes, "tree-1-foliage1")} 10%,
-      #{map.get($autumn-palette, bushes, "tree-1-foliage2")} 95%
-    );
     position: absolute;
     inset: 0;
-    top: 0;
-    mask-image: url('~/assets/images/masks/Tree-1--foliage.png');
-    mask-size: 100% auto;
+    width: 100%;
+    background: linear-gradient(125deg, list.nth($foliage, 1) 10%, list.nth($foliage, 2) 95%);
+    mask: $foliage-url  center top / 100% auto no-repeat;
 
     &::after {
       content: '';
       position: absolute;
+      top: 0;
       inset: 0;
-      background: url('~/assets/images/masks/Tree-1--foliage.png') center center / 100% auto no-repeat;
+      background: $foliage-url center top / 100% auto no-repeat;
       mix-blend-mode: luminosity;
-      opacity: 1;
     }
   }
 }
 
+@each $name, $config in $trees {
+  .trees-#{$name} {
+    @include tree($config);
+  }
+}
 
 .houses {
   --mask-image: url('~/assets/images/Bkg-1.svg');
