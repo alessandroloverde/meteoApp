@@ -72,6 +72,10 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
             <div class="trees-2--trunk"></div>
             <div class="trees-2--foliage"></div>
           </div>
+          <div class="trees-3">
+            <div class="trees-3--trunk"></div>
+            <div class="trees-3--foliage"></div>
+          </div>
         </div>
         <div class="scene-layer mask-layer terrain-4"></div>
       </div>
@@ -126,22 +130,28 @@ $trees: (
     z-index: 10,
     trunk-colors: (#5f1203, #281416),
     foliage-colors: (#d06c33, #421f20),
-    trunk-mask: 'Tree-1--trunk.svg',
     trunk-mask-size: 100% auto,
     trunk-mask-position: 40% bottom,
-    foliage-mask: 'Tree-1--foliage.png',
   ),
   2: (
     width: calc(52px / 2),
     height: calc(102px / 2),
     offset: (right: 13%, top: -6%),
     z-index: 9,
-    trunk-colors: (#5f1203, #281416),
+    trunk-colors: (#2c1313, #281416),
     foliage-colors: (#ec8b1b, #421f20),
-    trunk-mask: 'Tree-2--trunk.svg',
     trunk-mask-size: 50% auto,
     trunk-mask-position: 40% bottom,
-    foliage-mask: 'Tree-2--foliage.png',
+  ),
+  3: (
+    width: calc(79px / 2),
+    height: calc(100px / 2),
+    offset: (right: 21%, top: -6%),
+    z-index: 8,
+    trunk-colors: (#2c1313, #281416),
+    foliage-colors: (#ec8b1b, #421f20),
+    trunk-mask-size: 50% auto,
+    trunk-mask-position: 55% 150%,
   )
 );
 
@@ -380,7 +390,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   mask-image: url('~/assets/images/masks/Bush-3--bkg.svg');
 }
 
-@mixin tree($config) {
+@mixin tree($key, $config) {
   position: absolute;
   width: map.get($config, width);
   height: map.get($config, height);
@@ -392,14 +402,14 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 
   $trunk: map.get($config, trunk-colors);
   $foliage: map.get($config, foliage-colors);
-  $foliage-url: url('~/assets/images/masks/#{map.get($config, foliage-mask)}');
+  $foliage-url: url('~/assets/images/masks/Tree-#{$key}--foliage.png');
 
   &--trunk {
     position: absolute;
     inset: 0;
     z-index: 2;
     background: linear-gradient(90deg, list.nth($trunk, 1) 0%, list.nth($trunk, 2) 100%);
-    mask-image: url('~/assets/images/masks/#{map.get($config, trunk-mask)}');
+    mask-image: url('~/assets/images/masks/Tree-#{$key}--trunk.svg');
     mask-position: map.get($config, trunk-mask-position);
     mask-size: map.get($config, trunk-mask-size);
     mask-repeat: no-repeat;
@@ -423,9 +433,9 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   }
 }
 
-@each $name, $config in $trees {
-  .trees-#{$name} {
-    @include tree($config);
+@each $key, $config in $trees {
+  .trees-#{$key} {
+    @include tree($key, $config);
   }
 }
 
