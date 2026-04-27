@@ -63,6 +63,12 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
           <div class="bushes-2"></div>
         </div>
         <div class="scene-layer mask-layer terrain-1"></div>
+        <div class="scene-layer mask-layer bushes-in-front" style="z-index: 8;">
+          <div class="trees-4">
+            <div class="trees-4--trunk"></div>
+            <div class="trees-4--foliage"></div>
+          </div>
+        </div>
         <div class="scene-layer mask-layer terrain-2">
           <div class="bushes-3"></div>
         </div>
@@ -152,7 +158,17 @@ $trees: (
     foliage-colors: (#ec8b1b, #421f20),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 55% 150%,
-  )
+  ),
+  4: (
+    width: calc(51px / 2),
+    height: calc(99px / 2),
+    offset: (left: 8%, top: -5%),
+    z-index: 7,
+    trunk-colors: (#2c1313, #281416),
+    foliage-colors: (#ec8b1b, #421f20),
+    trunk-mask-size: 50% auto,
+    trunk-mask-position: 55% 150%,
+  ),
 );
 
 $terrain-1-colors: (
