@@ -53,27 +53,27 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
     <div class="scene" :class="sceneStateClasses">
       <div class="scene-layer sky-base"></div>
       <div class="scene-layer mask-layer terrain">
-        <div class="scene-layer mask-layer bushes-in-front">
+
+        <div class="scene-layer mask-layer terrain-1"></div>
+
+        <section class="scene-layer mask-layer bushes-in-front">
           <div class="bushes-1"></div>
           <div class="trees-1">
             <div class="trees-1--trunk"></div>
             <div class="trees-1--foliage"></div>
           </div>
-
           <div class="bushes-2"></div>
-        </div>
-        <div class="scene-layer mask-layer terrain-1"></div>
-        <div class="scene-layer mask-layer bushes-in-front" style="z-index: 8;">
           <div class="trees-4">
             <div class="trees-4--trunk"></div>
             <div class="trees-4--foliage"></div>
           </div>
-        </div>
+        </section>
+
         <div class="scene-layer mask-layer terrain-2">
           <div class="bushes-3"></div>
         </div>
-        <div class="scene-layer mask-layer terrain-3"></div>
-        <div class="scene-layer mask-layer bushes-in-front" style="z-index: 8;">
+
+        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 8;">
           <div class="trees-2">
             <div class="trees-2--trunk"></div>
             <div class="trees-2--foliage"></div>
@@ -82,8 +82,19 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
             <div class="trees-3--trunk"></div>
             <div class="trees-3--foliage"></div>
           </div>
-        </div>
+        </section>
+
+        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 7;">
+          <div class="trees-5">
+            <div class="trees-5--trunk"></div>
+            <div class="trees-5--foliage"></div>
+          </div>
+        </section>
+
+        <div class="scene-layer mask-layer terrain-3"></div>
+
         <div class="scene-layer mask-layer terrain-4"></div>
+
       </div>
     </div>
 
@@ -135,7 +146,7 @@ $trees: (
     offset: (right: 0%, top: -19%),
     z-index: 10,
     trunk-colors: (#5f1203, #281416),
-    foliage-colors: (#d06c33, #421f20),
+    foliage-colors: linear-gradient(125deg, #d06c33 10%, #421f20 95%),
     trunk-mask-size: 100% auto,
     trunk-mask-position: 40% bottom,
   ),
@@ -145,7 +156,7 @@ $trees: (
     offset: (right: 13%, top: -6%),
     z-index: 9,
     trunk-colors: (#2c1313, #281416),
-    foliage-colors: (#ec8b1b, #421f20),
+    foliage-colors: linear-gradient(125deg, #ec8b1b 10%, #421f20 95%),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 40% bottom,
   ),
@@ -155,7 +166,7 @@ $trees: (
     offset: (right: 21%, top: -6%),
     z-index: 8,
     trunk-colors: (#2c1313, #281416),
-    foliage-colors: (#ec8b1b, #421f20),
+    foliage-colors: linear-gradient(125deg, #ec8b1b 10%, #421f20 95%),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 55% 150%,
   ),
@@ -165,9 +176,19 @@ $trees: (
     offset: (left: 8%, top: -5%),
     z-index: 7,
     trunk-colors: (#2c1313, #281416),
-    foliage-colors: (#ec8b1b, #421f20),
+    foliage-colors: linear-gradient(125deg, #ec8b1b 10%, #421f20 95%),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 55% 150%,
+  ),
+  5: (
+    width: calc(64px / 2),
+    height: calc(122px / 2),
+    offset: (left: 1.5%, top: -11%),
+    z-index: 6,
+    trunk-colors: (#2c1313, #281416),
+    foliage-colors: linear-gradient(-90deg, #984022 10%, #4c2220 95%),
+    trunk-mask-size: 50% auto,
+    trunk-mask-position: 50% 180%,
   ),
 );
 
@@ -241,11 +262,9 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   background: $sky--bkg;
   z-index: 1;
   position: relative;
-  outline: 1px solid rgb(42, 40, 168);
 }
 .terrain {
   height: 55%;
-  outline: 1px solid rgb(41, 175, 119);
   z-index: 2;
   opacity: 1;
   position: relative;
@@ -343,7 +362,6 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   right: 0;
   width: 100%;
   height: 100%;
-  outline: 2px solid magenta
 }
 .bushes-1 { 
   z-index: 11;
@@ -417,7 +435,6 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   }
 
   $trunk: map.get($config, trunk-colors);
-  $foliage: map.get($config, foliage-colors);
   $foliage-url: url('~/assets/images/masks/Tree-#{$key}--foliage.png');
 
   &--trunk {
@@ -435,7 +452,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     position: absolute;
     inset: 0;
     width: 100%;
-    background: linear-gradient(125deg, list.nth($foliage, 1) 10%, list.nth($foliage, 2) 95%);
+    background: map.get($config, foliage-colors);
     mask: $foliage-url  center top / 100% auto no-repeat;
 
     &::after {
