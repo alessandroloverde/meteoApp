@@ -95,6 +95,14 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 
         <div class="scene-layer mask-layer terrain-4"></div>
 
+        <div class="scene-layer terrain-5"></div>
+
+        <section class="scene-layer">
+          <div class="houseBlock--small">
+            <div class="houseBlock--small--window"></div>
+          </div>
+        </section>
+
       </div>
     </div>
 
@@ -212,6 +220,11 @@ $terrain-4-colors: (
   "darkBrown": #58211d,
   "medBrown": #8d4828
 );
+$terrain-5-colors: (
+  "accent": #af6a2c,
+  "darkBrown": #813a1a,
+  "medBrown": #7f3918
+);
 
 
 $stormyNight--light: #66617e;
@@ -250,6 +263,8 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 .scene-layer {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .mask-layer {
@@ -277,6 +292,34 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-size: 100% auto;
   --mask-position: top center;
   --mask-repeat: no-repeat;
+}
+
+.houseBlock--small {
+  position: absolute;
+  width: calc(72px / 2);
+  height: calc(67px / 2);
+  background: #3e2b3a;
+  z-index: 1;
+  right: 29%;
+  top: -6%;
+  mask-image: url('~/assets/images/masks/HouseBlock--small.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+
+  &--window {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #f8bd7e;
+    z-index: 1;
+    right: 0%;
+    top: 0%;
+    mask-image: url('~/assets/images/masks/HouseBlock--small--window.svg');
+    mask-position: top center;
+    mask-size: 100% auto;
+    mask-repeat: no-repeat;
+  }
 }
 
 .moon {
@@ -307,6 +350,25 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   z-index: 4;
 }
 
+.terrain-5 {
+  --mask-image: url('~/assets/images/masks/Terrain-5--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrain-5--gradient.png');
+  --layer-bkg: #{map.get($terrain-5-colors, darkBrown)};
+  --accent-color: #{map.get($terrain-5-colors, accent)};
+  --blend-mode: color;
+  --layer-opacity: 1;
+
+/*   background: linear-gradient(
+    -45deg,
+    #{map.get($terrain-5-colors, accent)} 65%,
+    #{map.get($terrain-5-colors, medBrown)} 45%, 
+    #{map.get($terrain-5-colors, darkBrown)} 75%
+  ); */
+  background-color: #80391a;
+  -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
+          mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
+  z-index: 7;
+}
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrain-4--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-4--gradient.png');
