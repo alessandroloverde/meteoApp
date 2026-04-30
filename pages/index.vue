@@ -54,9 +54,7 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
       <div class="scene-layer sky-base"></div>
       <div class="scene-layer mask-layer terrain">
 
-        <div class="scene-layer mask-layer terrain-1"></div>
-
-        <section class="scene-layer mask-layer bushes-in-front">
+        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 10">
           <div class="bushes-1"></div>
           <div class="trees-1">
             <div class="trees-1--trunk"></div>
@@ -69,11 +67,13 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
           </div>
         </section>
 
-        <div class="scene-layer mask-layer terrain-2">
+        <div class="scene-layer mask-layer terrain-1" style="z-index: 9"></div>
+
+        <div class="scene-layer mask-layer terrain-2" style="z-index: 8">
           <div class="bushes-3"></div>
         </div>
 
-        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 8;">
+        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 7">
           <div class="trees-2">
             <div class="trees-2--trunk"></div>
             <div class="trees-2--foliage"></div>
@@ -84,22 +84,34 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
           </div>
         </section>
 
-        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 7;">
+        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 6;">
           <div class="trees-5">
             <div class="trees-5--trunk"></div>
             <div class="trees-5--foliage"></div>
           </div>
         </section>
 
-        <div class="scene-layer mask-layer terrain-3"></div>
+        <div class="scene-layer mask-layer terrain-3" style="z-index: 5"></div>
 
-        <div class="scene-layer mask-layer terrain-4"></div>
+        <section class="scene-layer" style="z-index: 4">
+          <div class="houseBlock--main">
+            <div class="houseBlock--main--windows"></div>
+            <div class="houseBlock--main--roofs"></div>
+          </div>
+          <div class="houseBlock--church"></div>
+          <div class="houseBlock--left">
+            <div class="houseBlock--left--roofs"></div>
+            <div class="houseBlock--left--windows"></div>
+          </div>
+        </section>
 
-        <div class="scene-layer terrain-5"></div>
+        <div class="scene-layer mask-layer terrain-4" style="z-index: 3"></div>
 
-        <section class="scene-layer">
+        <div class="scene-layer terrain-5" style="z-index: 3"></div>
+
+        <section class="scene-layer" style="z-index: 1">
           <div class="houseBlock--small">
-            <div class="houseBlock--small--window"></div>
+            <div class="houseBlock--small--windows"></div>
           </div>
         </section>
 
@@ -131,6 +143,7 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 
 <style scoped lang="scss">
 @use 'sass:map';
+@use 'sass:color';
 @use 'sass:list';
 @use '~/assets/scss/mixins' as mx;
 
@@ -172,7 +185,7 @@ $trees: (
     width: calc(79px / 2),
     height: calc(100px / 2),
     offset: (right: 21%, top: -6%),
-    z-index: 8,
+    z-index: auto,
     trunk-colors: (#2c1313, #281416),
     foliage-colors: linear-gradient(125deg, #ec8b1b 10%, #421f20 95%),
     trunk-mask-size: 50% auto,
@@ -294,11 +307,88 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-repeat: no-repeat;
 }
 
+.houseBlock--church {
+  position: absolute;
+  top: -1%;
+  left: 17%;
+  width: calc(68px / 2);
+  height: calc(44px / 2);
+  background: linear-gradient(45deg, #4b2128 10%, #b84d2d 100%);
+  mask-image: url('~/assets/images/masks/HouseBlock--church.svg');
+  z-index: 2;
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('~/assets/images/masks/HouseBlock--church.svg') center center / 100% auto no-repeat;
+    mix-blend-mode: soft-light;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #f8bd7e;
+    z-index: 1;
+    right: 0%;
+    top: 0%;
+    mask-image: url('~/assets/images/masks/HouseBlock--church--windows.png');
+    mask-position: top center;
+    mask-size: 100% auto;
+    mask-repeat: no-repeat;
+    opacity: 0.9;
+  }
+}
+.houseBlock--left {
+  position: absolute;
+  width: calc(223px / 2);
+  height: calc(117px / 2);
+  background: #3f1c22;
+  z-index: 1;
+  left: -1%;
+  top: -9%;
+  mask-image: url('~/assets/images/masks/HouseBlock--left.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+
+  &--roofs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: color.scale(#4a2229, $lightness: 10%);
+    z-index: 1;
+    right: 0%;
+    top: 0%;
+    mask-image: url('~/assets/images/masks/HouseBlock--left--roofs.svg');
+    mask-position: center top;
+    mask-size: 100% auto;
+    mask-repeat: no-repeat;
+  }
+  &--windows {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #f8bd7e;
+    z-index: 1;
+    right: 0%;
+    top: 0%;
+    mask-image: url('~/assets/images/masks/HouseBlock--left--windows.png');
+    mask-position: top center;
+    mask-size: 100% auto;
+    mask-repeat: no-repeat;
+    opacity: 0.9;
+  }
+}
 .houseBlock--small {
   position: absolute;
   width: calc(72px / 2);
   height: calc(67px / 2);
-  background: #3e2b3a;
+  background: #3f1c22;
   z-index: 1;
   right: 29%;
   top: -6%;
@@ -307,7 +397,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   mask-size: 100% auto;
   mask-repeat: no-repeat;
 
-  &--window {
+  &--windows {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -315,8 +405,50 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     z-index: 1;
     right: 0%;
     top: 0%;
-    mask-image: url('~/assets/images/masks/HouseBlock--small--window.svg');
+    mask-image: url('~/assets/images/masks/HouseBlock--small--windows.svg');
     mask-position: top center;
+    mask-size: 100% auto;
+    mask-repeat: no-repeat;
+    opacity: 0.9;
+  }
+}
+.houseBlock--main {
+  position: absolute;
+  width: calc(129px / 2);
+  height: calc(83px / 2);
+  background: #3f1c22;
+  z-index: 1;
+  left: 30%;
+  top: -6%;
+  mask-image: url('~/assets/images/masks/HouseBlock--main.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+
+  &--windows {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #f8bd7e;
+    z-index: 1;
+    right: 0%;
+    top: 0%;
+    mask-image: url('~/assets/images/masks/HouseBlock--main--windows.png');
+    mask-position: top center;
+    mask-size: 100% auto;
+    mask-repeat: no-repeat;
+    opacity: 0.9;
+  }
+  &--roofs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: color.scale(#4a2229, $lightness: 20%);
+    z-index: 1;
+    right: 0%;
+    top: 0%;
+    mask-image: url('~/assets/images/masks/HouseBlock--main--roofs.png');
+    mask-position: center -2px;
     mask-size: 100% auto;
     mask-repeat: no-repeat;
   }
@@ -386,7 +518,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --blend-mode: overlay;
   --layer-opacity: 1;
   top: 4%;
-  z-index: 8;
+  z-index: auto;
 }
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrain-2--bkg.svg');
