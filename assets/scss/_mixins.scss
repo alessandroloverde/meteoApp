@@ -1,3 +1,5 @@
+@use 'sass:map';
+@use 'sass:list';
 @use 'variables' as v;
 
 // A gradient-masked scene layer.
@@ -28,10 +30,124 @@
 
   &::after {
    opacity: var(--gradient-opacity, 1);
-
     background-color: var(--accent-color);
     mix-blend-mode: var(--blend-mode);
     -webkit-mask: var(--mask-gradient) var(--mask-position, top center) / 100% auto no-repeat;
             mask: var(--mask-gradient) var(--mask-position, top center) / 100% auto no-repeat;
   }
+}
+
+
+// Renders a single tree composed of two layered elements (trunk + foliage),
+// each painted by masking SVG/PNG silhouettes from `assets/images/masks/Tree-#{$key}--*`.
+@mixin tree($key, $config) {
+  position: absolute;
+  width: map.get($config, width);
+  height: map.get($config, height);
+  z-index: map.get($config, z-index);
+
+  @each $prop, $value in map.get($config, offset) {
+    #{$prop}: $value;
+  }
+
+  $trunk: map.get($config, trunk-colors);
+  $foliage-url: url('~/assets/images/masks/Tree-#{$key}--foliage.png');
+
+  &--trunk {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(90deg, list.nth($trunk, 1) 0%, list.nth($trunk, 2) 100%);
+    mask-image: url('~/assets/images/masks/Tree-#{$key}--trunk.svg');
+    mask-position: map.get($config, trunk-mask-position);
+    mask-size: map.get($config, trunk-mask-size);
+    mask-repeat: no-repeat;
+  }
+
+  &--foliage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: map.get($config, foliage-colors);
+    mask: $foliage-url  center top / 100% auto no-repeat;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      inset: 0;
+      background: $foliage-url center top / 100% auto no-repeat;
+      mix-blend-mode: luminosity;
+    }
+  }
+}
+
+// Renders the silhouette of a building block, masked from
+// `assets/images/masks/HouseBlock--#{$name}.svg` and stamped with the
+// configured fill.
+//
+// $name    identifier matching the asset filename and the
+//          `.houseBlock--#{$name}` selector.
+// $config  map describing the block:
+//   width, height   element dimensions
+//   offset          map of position properties (e.g. (left: 30%, top: -6%))
+//   background      paint shown through the silhouette mask (default: #3f1c22)
+//   z-index         stacking order (default: 1)
+@mixin house-block($name, $config) {
+  position: absolute;
+  width: map.get($config, width);
+  height: map.get($config, height);
+
+  @if map.has-key($config, background) {
+    background: map.get($config, background);
+  } @else {
+    background: #3f1c22;
+  }
+
+  @if map.has-key($config, z-index) {
+    z-index: map.get($config, z-index);
+  } @else {
+    z-index: 1;
+  }
+
+  @each $prop, $value in map.get($config, offset) {
+    #{$prop}: $value;
+  }
+
+  mask-image: url('~/assets/images/masks/HouseBlock--#{$name}.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+}
+
+// Renders an overlay (e.g. windows, roofs) layered over a `.houseBlock--*`
+// silhouette, masked from `HouseBlock--#{$name}--#{$suffix}.#{$ext}`.
+//
+// $name     parent block identifier.
+// $suffix   overlay identifier (e.g. windows, roofs).
+// $ext      asset file extension (svg or png).
+// $config   map describing the overlay:
+//   background       paint shown through the silhouette mask
+//   mask-position    mask-position (default: top center)
+//   opacity          opacity (default: unset)
+@mixin house-block-layer($name, $suffix, $ext, $config) {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: map.get($config, background);
+  z-index: 1;
+  right: 0%;
+  top: 0%;
+  mask-image: url('~/assets/images/masks/HouseBlock--#{$name}--#{$suffix}.#{$ext}');
+
+  @if map.has-key($config, mask-position) {
+    mask-position: map.get($config, mask-position);
+  } @else {
+    mask-position: top center;
+  }
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+
+  $opacity: map.get($config, opacity);
+  @if $opacity { opacity: $opacity; }
 }

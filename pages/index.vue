@@ -11,6 +11,7 @@ const { getLocation } = useLocation()
 
 async function loadWeather(lat, lon) {
   const weather = await fetchWeather(lat, lon)
+  
   store.setWeather(weather)
 }
 
@@ -24,11 +25,13 @@ onMounted(async () => {
       await loadWeather(store.coords.latitude, store.coords.longitude)
     } else {
       const coords = await getLocation()
+
       store.setGPS(coords)
 
       await loadWeather(coords.latitude, coords.longitude)
 
       const location = await reverseGeocode(coords.latitude, coords.longitude)
+
       store.city = location.city
       store.country = location.country
     }
@@ -51,7 +54,14 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 <template>
   <div class="page-bg">
     <div class="scene" :class="sceneStateClasses">
-      <div class="scene-layer sky-base"></div>
+      <div class="scene-layer sky-base">
+        <div class="scene-layer cloud-1"></div>
+        <div class="scene-layer cloud-2"></div>
+        <div class="scene-layer cloud-3"></div>
+        <div class="scene-layer moon"></div>
+      </div>
+
+
       <div class="scene-layer mask-layer terrain">
 
         <section class="scene-layer mask-layer bushes-in-front" style="z-index: 10">
@@ -159,7 +169,6 @@ $autumn-palette: (
 );
 
 // Per-tree config. Add a new entry here to render a new tree;
-// the `<div class="trees-N">` markup + matching mask assets are all that's needed besides this.
 $trees: (
   1: (
     width: calc(112px / 2),
@@ -212,6 +221,12 @@ $trees: (
     trunk-mask-position: 50% 180%,
   ),
 );
+
+@each $key, $config in $trees {
+  .trees-#{$key} {
+    @include mx.tree($key, $config);
+  }
+}
 
 $terrain-1-colors: (
   "accent": #db801b,
@@ -275,7 +290,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 
 .scene-layer {
   position: absolute;
-  inset: 0;
+  //inset: 0;
   width: 100%;
   height: 100%;
 }
@@ -308,17 +323,13 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 }
 
 .houseBlock--church {
-  position: absolute;
-  top: -1%;
-  left: 17%;
-  width: calc(68px / 2);
-  height: calc(44px / 2);
-  background: linear-gradient(45deg, #4b2128 10%, #b84d2d 100%);
-  mask-image: url('~/assets/images/masks/HouseBlock--church.svg');
-  z-index: 2;
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
+  @include mx.house-block(church, (
+    width: calc(68px / 2),
+    height: calc(44px / 2),
+    offset: (top: -1%, left: 17%),
+    background: linear-gradient(45deg, #4b2128 10%, #b84d2d 100%),
+    z-index: 2,
+  ));
 
   &::before {
     content: '';
@@ -329,158 +340,150 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   }
   &::after {
     content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #f8bd7e;
-    z-index: 1;
-    right: 0%;
-    top: 0%;
-    mask-image: url('~/assets/images/masks/HouseBlock--church--windows.png');
-    mask-position: top center;
-    mask-size: 100% auto;
-    mask-repeat: no-repeat;
-    opacity: 0.9;
+    @include mx.house-block-layer(church, windows, png, (
+      background: #f8bd7e,
+      opacity: 0.9,
+    ));
   }
 }
+
 .houseBlock--left {
-  position: absolute;
-  width: calc(223px / 2);
-  height: calc(117px / 2);
-  background: #3f1c22;
-  z-index: 1;
-  left: -1%;
-  top: -9%;
-  mask-image: url('~/assets/images/masks/HouseBlock--left.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
+  @include mx.house-block(left, (
+    width: calc(223px / 2),
+    height: calc(117px / 2),
+    offset: (left: -1%, top: -9%),
+  ));
 
   &--roofs {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: color.scale(#4a2229, $lightness: 10%);
-    z-index: 1;
-    right: 0%;
-    top: 0%;
-    mask-image: url('~/assets/images/masks/HouseBlock--left--roofs.svg');
-    mask-position: center top;
-    mask-size: 100% auto;
-    mask-repeat: no-repeat;
+    @include mx.house-block-layer(left, roofs, svg, (
+      background: color.scale(#4a2229, $lightness: 10%),
+      mask-position: center top,
+    ));
   }
   &--windows {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #f8bd7e;
-    z-index: 1;
-    right: 0%;
-    top: 0%;
-    mask-image: url('~/assets/images/masks/HouseBlock--left--windows.png');
-    mask-position: top center;
-    mask-size: 100% auto;
-    mask-repeat: no-repeat;
-    opacity: 0.9;
+    @include mx.house-block-layer(left, windows, png, (
+      background: #f8bd7e,
+      opacity: 0.9,
+    ));
   }
 }
+
 .houseBlock--small {
-  position: absolute;
-  width: calc(72px / 2);
-  height: calc(67px / 2);
-  background: #3f1c22;
-  z-index: 1;
-  right: 29%;
-  top: -6%;
-  mask-image: url('~/assets/images/masks/HouseBlock--small.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
+  @include mx.house-block(small, (
+    width: calc(72px / 2),
+    height: calc(67px / 2),
+    offset: (right: 29%, top: -6%),
+  ));
 
   &--windows {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #f8bd7e;
-    z-index: 1;
-    right: 0%;
-    top: 0%;
-    mask-image: url('~/assets/images/masks/HouseBlock--small--windows.svg');
-    mask-position: top center;
-    mask-size: 100% auto;
-    mask-repeat: no-repeat;
-    opacity: 0.9;
+    @include mx.house-block-layer(small, windows, svg, (
+      background: #f8bd7e,
+      opacity: 0.9,
+    ));
   }
 }
+
 .houseBlock--main {
-  position: absolute;
-  width: calc(129px / 2);
-  height: calc(83px / 2);
-  background: #3f1c22;
-  z-index: 1;
-  left: 30%;
-  top: -6%;
-  mask-image: url('~/assets/images/masks/HouseBlock--main.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
+  @include mx.house-block(main, (
+    width: calc(129px / 2),
+    height: calc(83px / 2),
+    offset: (left: 30%, top: -6%),
+  ));
 
   &--windows {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #f8bd7e;
-    z-index: 1;
-    right: 0%;
-    top: 0%;
-    mask-image: url('~/assets/images/masks/HouseBlock--main--windows.png');
-    mask-position: top center;
-    mask-size: 100% auto;
-    mask-repeat: no-repeat;
-    opacity: 0.9;
+    @include mx.house-block-layer(main, windows, png, (
+      background: #f8bd7e,
+      opacity: 0.9,
+    ));
   }
   &--roofs {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: color.scale(#4a2229, $lightness: 20%);
-    z-index: 1;
-    right: 0%;
-    top: 0%;
-    mask-image: url('~/assets/images/masks/HouseBlock--main--roofs.png');
-    mask-position: center -2px;
-    mask-size: 100% auto;
-    mask-repeat: no-repeat;
+    @include mx.house-block-layer(main, roofs, png, (
+      background: color.scale(#4a2229, $lightness: 20%),
+      mask-position: center -2px,
+    ));
   }
 }
 
 .moon {
-  background: radial-gradient(circle at 22% 18%, rgba(255, 234, 193, 0.95) 0%, rgba(246, 178, 114, 0.55) 9%,
-      rgba(255, 184, 109, 0.14) 18%, rgba(255, 185, 101, 0) 25%);
-  mix-blend-mode: screen;
-  opacity: 0.9;
+  background-image: url('~/assets/images//Moon--full.png');
+  background-size: 100% auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width:calc(260px / 2);
+  height: calc(260px / 2);
   z-index: 2;
+  position: absolute;
+  top: 18%;
+  left: 4%;
+  opacity: 0.9;
+  filter: blur(2px);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+    mix-blend-mode: soft-light;
+    opacity: 0.5;
+    filter: blur(5px);
+  }
 }
 
-.clouds-far {
-  --mask-image: url('~/assets/images/PartlyCloudy -9.svg');
-  --mask-size: 102% auto;
-  --mask-position: top center;
-  --layer-bkg: linear-gradient(to bottom, rgba(112, 111, 132, 0.75) 0%, rgba(78, 77, 101, 0.45) 85%);
-  --blend-mode: lighten;
-  --layer-opacity: 0.5;
-  z-index: 3;
-}
 
-.clouds-near {
-  --mask-image: url('~/assets/images/PartlyCloudy -9 copy 2.svg');
-  --mask-size: 100% auto;
-  --mask-position: top center;
-  --layer-bkg: linear-gradient(to bottom, rgba(148, 145, 162, 0.5) 0%, rgba(64, 62, 89, 0.65) 90%);
-  --blend-mode: screen;
-  --layer-opacity: 0.38;
+.cloud-1 {
+  width: 100%;
+  height:  calc(288px / 2);
   z-index: 4;
+  background: linear-gradient(to bottom, #595a6c 0%, #7b7d88 100%);
+  position: absolute;
+  mask-image: url('~/assets/images/masks/Cloud-1--mask.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+  opacity: 1;
+  backdrop-filter: blur(10px);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('~/assets/images/masks/Cloud-1--gradient.png') center center / 100% auto no-repeat;
+    mix-blend-mode: soft-light;
+  }
 }
+.cloud-2 {
+  width: calc(260px / 2);
+  height:  calc(108px / 2);
+  z-index: 3;
+  background: linear-gradient(to left, #b4b5a9 0%, #595a6c 100%);
+  position: absolute;
+  left: 0;
+  top: 20%;
+  mask-image: url('~/assets/images/masks/Cloud-2--mask.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+  opacity: 0.75;
+  filter: blur(8px)
+}
+.cloud-3 {
+  width: calc(317px / 2);
+  height:  calc(148px / 2);
+  z-index: 3;
+  background: linear-gradient(-15deg, #878795 0%, #535161 50%);
+  position: absolute;
+  right: -7%;
+  top: 20%;
+  mask-image: url('~/assets/images/masks/Cloud-3--mask.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+/*   opacity: 0.75;
+  filter: blur(8px) */
+}  
+
+
 
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrain-5--bkg.svg');
@@ -618,79 +621,6 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   mask-image: url('~/assets/images/masks/Bush-3--bkg.svg');
 }
 
-@mixin tree($key, $config) {
-  position: absolute;
-  width: map.get($config, width);
-  height: map.get($config, height);
-  z-index: map.get($config, z-index);
-
-  @each $prop, $value in map.get($config, offset) {
-    #{$prop}: $value;
-  }
-
-  $trunk: map.get($config, trunk-colors);
-  $foliage-url: url('~/assets/images/masks/Tree-#{$key}--foliage.png');
-
-  &--trunk {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    background: linear-gradient(90deg, list.nth($trunk, 1) 0%, list.nth($trunk, 2) 100%);
-    mask-image: url('~/assets/images/masks/Tree-#{$key}--trunk.svg');
-    mask-position: map.get($config, trunk-mask-position);
-    mask-size: map.get($config, trunk-mask-size);
-    mask-repeat: no-repeat;
-  }
-
-  &--foliage {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    background: map.get($config, foliage-colors);
-    mask: $foliage-url  center top / 100% auto no-repeat;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      inset: 0;
-      background: $foliage-url center top / 100% auto no-repeat;
-      mix-blend-mode: luminosity;
-    }
-  }
-}
-
-@each $key, $config in $trees {
-  .trees-#{$key} {
-    @include tree($key, $config);
-  }
-}
-
-.houses {
-  --mask-image: url('~/assets/images/Bkg-1.svg');
-  --mask-size: 112% auto;
-  --mask-position: bottom center;
-  --layer-bkg: linear-gradient(to top, rgba(39, 30, 40, 0.95) 0%, rgba(66, 55, 75, 0.85) 22%, rgba(90, 69, 88, 0.15) 100%);
-  --blend-mode: multiply;
-  --layer-opacity: 0.48;
-  z-index: 13;
-}
-
-.houses-windows {
-  --mask-image: url('~/assets/images/Bkg-1.svg');
-  --mask-size: 112% auto;
-  --mask-position: bottom center;
-  --layer-bkg: radial-gradient(circle at 26% 76%, rgba(255, 218, 157, 0.95) 0%, rgba(255, 189, 103, 0.34) 6%, rgba(255, 189, 103, 0) 13%),
-    radial-gradient(circle at 41% 71%, rgba(255, 223, 174, 0.9) 0%, rgba(255, 176, 95, 0.3) 6%, rgba(255, 176, 95, 0) 13%),
-    radial-gradient(circle at 54% 74%, rgba(255, 212, 149, 0.88) 0%, rgba(255, 176, 94, 0.3) 5%, rgba(255, 176, 94, 0) 12%),
-    radial-gradient(circle at 64% 73%, rgba(255, 224, 178, 0.9) 0%, rgba(255, 181, 102, 0.3) 6%, rgba(255, 181, 102, 0) 14%),
-    radial-gradient(circle at 74% 75%, rgba(255, 213, 146, 0.9) 0%, rgba(255, 168, 88, 0.27) 5%, rgba(255, 168, 88, 0) 12%);
-  --blend-mode: screen;
-  --layer-opacity: 0.75;
-  filter: drop-shadow(0 0 7px rgba(255, 185, 110, 0.46));
-  z-index: 14;
-}
-
 .foreground-haze {
   background: linear-gradient(to top, rgba(28, 19, 31, 0.75) 0%, rgba(28, 19, 31, 0.22) 38%, rgba(28, 19, 31, 0) 62%);
   mix-blend-mode: multiply;
@@ -698,11 +628,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   z-index: 15;
 }
 
-.scene:not(.windows-lit) .houses-windows { opacity: 0 }
-.scene.is-night .moon { opacity: 0.92 }
-.scene:not(.is-night) .moon { opacity: 0.35 }
-.scene.is-cloudy .clouds-near { opacity: 0.42 }
-.scene:not(.is-cloudy) .clouds-near { opacity: 0.18 }
+
 
 .main-content {
   position: relative;
