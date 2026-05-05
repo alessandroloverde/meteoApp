@@ -340,7 +340,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   @include mx.house-block(church, (
     width: calc(68px / 2),
     height: calc(44px / 2),
-    offset: (top: -1%, left: 17%),
+    offset: (top: -2%, left: 17%),
     background: linear-gradient(45deg, #4b2128 10%, #b84d2d 100%),
     z-index: 2,
   ));
@@ -351,6 +351,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     inset: 0;
     background: url('~/assets/images/masks/HouseBlock--church.svg') center center / 100% auto no-repeat;
     mix-blend-mode: soft-light;
+    opacity: 0.7;
   }
   &::after {
     content: '';
@@ -455,14 +456,14 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 .bottom-clouds { opacity: 0.8}
 
 .cloud-1-wrap {
-  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
   width: 100%;
   height:  calc(288px / 2);
   position: absolute;
   z-index: 4;
 }
 .cloud-1--low-wrap {
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
   width: calc(521px / 2);
   height:  calc(332px / 2);
   position: absolute;
@@ -545,7 +546,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   width: calc(260px / 2);
   height:  calc(108px / 2);
   z-index: 3;
-  background: linear-gradient(to left, #b4b5a9 0%, #595a6c 100%);
+  background: linear-gradient(to left, #b4b5a9 0%, #868793 100%);
   position: absolute;
   left: 0;
   top: 40%;
@@ -553,7 +554,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   mask-position: top center;
   mask-size: 100% auto;
   mask-repeat: no-repeat;
-  opacity: 0.75;
+  opacity: 0.8;
   filter: blur(8px)
 }
 .cloud-3 {
