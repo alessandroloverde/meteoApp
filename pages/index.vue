@@ -55,10 +55,24 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
   <div class="page-bg">
     <div class="scene" :class="sceneStateClasses">
       <div class="scene-layer sky-base">
-        <div class="scene-layer cloud-1"></div>
-        <div class="scene-layer cloud-2"></div>
-        <div class="scene-layer cloud-3"></div>
-        <div class="scene-layer moon"></div>
+        <secttion class="top-clouds">
+          <div class="cloud-1-wrap">
+            <div class="scene-layer cloud-1"></div>
+          </div>
+          <div class="scene-layer cloud-2"></div>
+          <div class="scene-layer cloud-3"></div>
+          <div class="scene-layer moon"></div>
+          <div class="scene-layer cloud-4"></div>
+        </secttion>
+        <secttion class="bottom-clouds">
+          <div class="cloud-1--low-wrap">
+            <div class="scene-layer cloud-1--low"></div>
+          </div>
+         <!--  <div class="scene-layer cloud-1--low"></div> -->
+          <div class="scene-layer cloud-2--low"></div>
+          <div class="scene-layer cloud-3--low"></div>
+          <div class="scene-layer cloud-4--low"></div>
+        </secttion>
       </div>
 
 
@@ -413,9 +427,8 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   height: calc(260px / 2);
   z-index: 2;
   position: absolute;
-  top: 18%;
+  top: 37%;
   left: 4%;
-  opacity: 0.9;
   filter: blur(2px);
 
   &::after {
@@ -430,19 +443,95 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   }
 }
 
+.top-clouds,
+.bottom-clouds {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 50%;
+  z-index: 2;
+}
+.top-clouds { z-index: 3 }
+.bottom-clouds { opacity: 0.8}
 
-.cloud-1 {
+.cloud-1-wrap {
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
   width: 100%;
   height:  calc(288px / 2);
-  z-index: 4;
-  background: linear-gradient(to bottom, #595a6c 0%, #7b7d88 100%);
   position: absolute;
+  z-index: 4;
+}
+.cloud-1--low-wrap {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.4));
+  width: calc(521px / 2);
+  height:  calc(332px / 2);
+  position: absolute;
+  right: -8%;
+  bottom: 8%;
+  z-index: 2;
+}
+.cloud-1--low {
+  width: calc(521px / 2);
+  height:  calc(332px / 2);
+  background: radial-gradient(circle at 40% 30%, #8f8d93 10%, #56505b 62%);
+/*   z-index: 2;
+  position: absolute;
+  right: -3%;
+  bottom: 4%; */
+  mask-image: url('~/assets/images/masks/Cloud-1--low--gradient.png');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+}
+.cloud-2--low {
+  width: calc(694px / 2);
+  height:  calc(265px / 2);
+  z-index: 3;
+  background: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%);
+  position: absolute;
+  right: -8%;
+  bottom: -6%;
+  mask-image: url('~/assets/images/masks/Cloud-2--low--mask.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+}
+.cloud-3--low {
+  width: calc(546px / 2);
+  height:  calc(229px / 2);
+  z-index: 3;
+  background: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%);
+  position: absolute;
+  left: -5%;
+  bottom: 0;
+  mask-image: url('~/assets/images/masks/Cloud-3--low--mask.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0.25;
+}
+.cloud-4--low {
+  width: calc(608px / 2);
+  height:  calc(334px / 2);
+  z-index: 1;
+  background: radial-gradient(circle at 46% 40%, #96949d 0%, #6d6775 46%);
+  position: absolute;
+  left: -15%;
+  bottom: -5%;
+  mask-image: url('~/assets/images/masks/Cloud-4--low--mask.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+}
+
+.cloud-1 {
+  background: linear-gradient(to bottom, #595a6c 0%, #7b7d88 100%);
   mask-image: url('~/assets/images/masks/Cloud-1--mask.svg');
   mask-position: top center;
   mask-size: 100% auto;
   mask-repeat: no-repeat;
   opacity: 1;
-  backdrop-filter: blur(10px);
 
   &::after {
     content: '';
@@ -459,7 +548,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   background: linear-gradient(to left, #b4b5a9 0%, #595a6c 100%);
   position: absolute;
   left: 0;
-  top: 20%;
+  top: 40%;
   mask-image: url('~/assets/images/masks/Cloud-2--mask.svg');
   mask-position: top center;
   mask-size: 100% auto;
@@ -471,19 +560,31 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   width: calc(317px / 2);
   height:  calc(148px / 2);
   z-index: 3;
-  background: linear-gradient(-15deg, #878795 0%, #535161 50%);
+  background: linear-gradient(0deg, #878795 0%, #535161 50%);
   position: absolute;
   right: -7%;
-  top: 20%;
+  top: 41%;
   mask-image: url('~/assets/images/masks/Cloud-3--mask.svg');
   mask-position: top center;
   mask-size: 100% auto;
   mask-repeat: no-repeat;
-/*   opacity: 0.75;
-  filter: blur(8px) */
 }  
 
-
+.cloud-4 {
+  width: calc(673px / 2);
+  height:  calc(208px / 2);
+  z-index: 1;
+  background: #74747b;
+  position: absolute;
+  right: -15%;
+  top: 46%;
+  mask-image: url('~/assets/images/masks/Cloud-4--mask.svg');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+  filter: blur(8px);
+  opacity: 0.75;
+}
 
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrain-5--bkg.svg');
