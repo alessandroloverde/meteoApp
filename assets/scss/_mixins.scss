@@ -151,3 +151,71 @@
   $opacity: map.get($config, opacity);
   @if $opacity { opacity: $opacity; }
 }
+
+// Renders a cloud silhouette layer.
+//
+// Base mask (silhouette) is loaded from
+//   assets/images/masks/Cloud-#{$key}#{$variant}--mask.#{mask-type}
+// where `mask-type` per cloud is either `svg` (default) or `png`.
+//
+// If `has-gradient-mask: true`, a soft-light PNG overlay is painted on
+// `&::after` from
+//   assets/images/masks/Cloud-#{$key}#{$variant}--gradient.png
+//
+// $key      identifier matching the asset filename (1..n).
+// $config   map describing the cloud:
+//   dimensions          sub-map (width, height)         [required]
+//   bkg                 paint behind the silhouette     [required]
+//   z-index             stacking order                  [required]
+//   mask-type           base-mask extension: svg | png  [default: svg]
+//   position            sub-map of position props (e.g. (right: 0%, top: 40%))
+//   opacity             optional
+//   filter              optional (e.g. blur(8px))
+//   mix-blend-mode      optional
+//   has-gradient-mask   if true, paints the ::after gradient overlay (PNG)
+// $variant  asset-slug suffix ('' for top clouds, '--low' for bottom clouds).
+@mixin cloud($key, $config, $variant: '') {
+  $mask-ext: map.get($config, mask-type) or svg;
+
+  width:  map.get($config, dimensions, width);
+  height: map.get($config, dimensions, height);
+  background: map.get($config, bkg);
+  z-index: map.get($config, z-index);
+
+  mask-image: url('~/assets/images/masks/Cloud-#{$key}#{$variant}--mask.#{$mask-ext}');
+  mask-position: top center;
+  mask-size: 100% auto;
+  mask-repeat: no-repeat;
+
+  @if map.has-key($config, opacity) {
+    opacity: map.get($config, opacity);
+  }
+
+  @if map.has-key($config, position) {
+    position: absolute;
+
+    @each $prop, $value in map.get($config, position) {
+      #{$prop}: $value;
+    }
+  }
+
+  @if map.has-key($config, filter) {
+    filter: map.get($config, filter);
+  }
+
+  @if map.has-key($config, mix-blend-mode) {
+    mix-blend-mode: map.get($config, mix-blend-mode);
+  }
+
+  @if map.get($config, has-gradient-mask) {
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        url('~/assets/images/masks/Cloud-#{$key}#{$variant}--gradient.png')
+        center center / 100% auto no-repeat;
+      mix-blend-mode: soft-light;
+    }
+  }
+}

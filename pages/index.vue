@@ -336,6 +336,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   --mask-repeat: no-repeat;
 }
 
+/* ––– Buildings ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 .houseBlock--church {
   @include mx.house-block(church, (
     width: calc(68px / 2),
@@ -361,7 +362,6 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     ));
   }
 }
-
 .houseBlock--left {
   @include mx.house-block(left, (
     width: calc(223px / 2),
@@ -382,7 +382,6 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     ));
   }
 }
-
 .houseBlock--small {
   @include mx.house-block(small, (
     width: calc(72px / 2),
@@ -397,7 +396,6 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     ));
   }
 }
-
 .houseBlock--main {
   @include mx.house-block(main, (
     width: calc(129px / 2),
@@ -418,6 +416,8 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     ));
   }
 }
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+
 
 .moon {
   background-image: url('~/assets/images//Moon--full.png');
@@ -437,11 +437,94 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+    background: radial-gradient(
+      circle at center, 
+      rgba(255, 255, 255, 0.5) 0%, 
+      rgba(255, 255, 255, 0) 100%);
     mix-blend-mode: soft-light;
     opacity: 0.5;
     filter: blur(5px);
   }
+}
+
+/* ––– Clouds –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+$clouds: (
+  1: (
+    dimensions: (width: inherit, height: inherit),
+    bkg: linear-gradient(to bottom, #595a6c 0%, #7b7d88 100%),
+    mask-type: svg,
+    opacity: 1,
+    z-index: 4,
+    has-gradient-mask: true,
+  ),
+  2: (
+    dimensions: (width: calc(260px / 2), height: calc(108px / 2)),
+    position: (left: 0, top: 40%),
+    bkg: linear-gradient(to left, #b4b5a9 0%, #868793 100%),
+    mask-type: svg,
+    opacity: 0.8,
+    z-index: 3,
+    filter: blur(8px),
+  ),
+  3: (
+    dimensions: (width: calc(317px / 2), height: calc(148px / 2)),
+    position: (right: -7%, top: 41%),
+    bkg: linear-gradient(0deg, #878795 0%, #535161 50%),
+    mask-type: svg,
+    z-index: 3,
+  ),
+  4: (
+    dimensions: (width: calc(673px / 2), height: calc(208px / 2)),
+    position: (right: -15%, top: 46%),
+    bkg: #74747b,
+    mask-type: svg,
+    opacity: 0.75,
+    z-index: 1,
+    filter: blur(8px),  
+  ),
+);
+$clouds--low: (
+  1: (
+    dimensions: (width: calc(521px / 2), height: calc(332px / 2)),
+    position: (right: -8%, bottom: 8%),
+    bkg: radial-gradient(circle at 40% 30%, #8f8d93 10%, #56505b 62%),
+    mask-type: png,
+    opacity: 1,
+    z-index: auto,
+  ),
+  2: (
+    dimensions: (width: calc(694px / 2), height: calc(265px / 2)),
+    position: (right: -8%, bottom: -6%),
+    bkg: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%),
+    mask-type: svg,
+    opacity: 1,
+    z-index: 3,
+  ),
+  3: (
+    dimensions: (width: calc(546px / 2), height: calc(229px / 2)),
+    position: (left: -5%, bottom: 0),
+    bkg: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%),
+    mask-type: svg,
+    opacity: 0.25,
+    z-index: 3,
+    mix-blend-mode: screen,
+  ),
+  4: (
+    dimensions: (width: calc(608px / 2), height: calc(334px / 2)),
+    position: (left: -15%, bottom: -5%),
+    bkg: radial-gradient(circle at 46% 40%, #96949d 0%, #6d6775 46%),
+    mask-type: svg,
+    opacity: 1,
+    z-index: 1,
+  ),
+);
+
+@each $key, $config in $clouds {
+  .cloud-#{$key} { @include mx.cloud($key, $config); }
+}
+
+@each $key, $config in $clouds--low {
+  .cloud-#{$key}--low { @include mx.cloud($key, $config, '--low'); }
 }
 
 .top-clouds,
@@ -463,129 +546,16 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   z-index: 4;
 }
 .cloud-1--low-wrap {
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
   width: calc(521px / 2);
   height:  calc(332px / 2);
   position: absolute;
-  right: -8%;
-  bottom: 8%;
+  right: -2%;
+  bottom: 6%;
   z-index: 2;
 }
-.cloud-1--low {
-  width: calc(521px / 2);
-  height:  calc(332px / 2);
-  background: radial-gradient(circle at 40% 30%, #8f8d93 10%, #56505b 62%);
-/*   z-index: 2;
-  position: absolute;
-  right: -3%;
-  bottom: 4%; */
-  mask-image: url('~/assets/images/masks/Cloud-1--low--gradient.png');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-}
-.cloud-2--low {
-  width: calc(694px / 2);
-  height:  calc(265px / 2);
-  z-index: 3;
-  background: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%);
-  position: absolute;
-  right: -8%;
-  bottom: -6%;
-  mask-image: url('~/assets/images/masks/Cloud-2--low--mask.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-}
-.cloud-3--low {
-  width: calc(546px / 2);
-  height:  calc(229px / 2);
-  z-index: 3;
-  background: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%);
-  position: absolute;
-  left: -5%;
-  bottom: 0;
-  mask-image: url('~/assets/images/masks/Cloud-3--low--mask.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-  mix-blend-mode: screen;
-  opacity: 0.25;
-}
-.cloud-4--low {
-  width: calc(608px / 2);
-  height:  calc(334px / 2);
-  z-index: 1;
-  background: radial-gradient(circle at 46% 40%, #96949d 0%, #6d6775 46%);
-  position: absolute;
-  left: -15%;
-  bottom: -5%;
-  mask-image: url('~/assets/images/masks/Cloud-4--low--mask.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-}
+/* ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.cloud-1 {
-  background: linear-gradient(to bottom, #595a6c 0%, #7b7d88 100%);
-  mask-image: url('~/assets/images/masks/Cloud-1--mask.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-  opacity: 1;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url('~/assets/images/masks/Cloud-1--gradient.png') center center / 100% auto no-repeat;
-    mix-blend-mode: soft-light;
-  }
-}
-.cloud-2 {
-  width: calc(260px / 2);
-  height:  calc(108px / 2);
-  z-index: 3;
-  background: linear-gradient(to left, #b4b5a9 0%, #868793 100%);
-  position: absolute;
-  left: 0;
-  top: 40%;
-  mask-image: url('~/assets/images/masks/Cloud-2--mask.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-  opacity: 0.8;
-  filter: blur(8px)
-}
-.cloud-3 {
-  width: calc(317px / 2);
-  height:  calc(148px / 2);
-  z-index: 3;
-  background: linear-gradient(0deg, #878795 0%, #535161 50%);
-  position: absolute;
-  right: -7%;
-  top: 41%;
-  mask-image: url('~/assets/images/masks/Cloud-3--mask.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-}  
-
-.cloud-4 {
-  width: calc(673px / 2);
-  height:  calc(208px / 2);
-  z-index: 1;
-  background: #74747b;
-  position: absolute;
-  right: -15%;
-  top: 46%;
-  mask-image: url('~/assets/images/masks/Cloud-4--mask.svg');
-  mask-position: top center;
-  mask-size: 100% auto;
-  mask-repeat: no-repeat;
-  filter: blur(8px);
-  opacity: 0.75;
-}
 
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrain-5--bkg.svg');
