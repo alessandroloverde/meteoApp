@@ -115,6 +115,29 @@
   --haze-rgb:      #{map.get(p.$atmosphere--autumn, haze-rgb)};
   --moon-glow-rgb: #{map.get(p.$atmosphere--autumn, moon-glow-rgb)};
 
+  // ---- Moon / sun disc --------------------------------------------------
+  // Position + look defaults are inherited by `.moon`; per-time variants
+  // override them on `.scene[data-time='…']` so the cascade reaches `.moon`.
+  // (Don't redeclare these on `.moon` itself — that would block inheritance.)
+  --moon-top:         18%;
+  --moon-left:        4%;
+  --moon-translate-x: 0;
+  --moon-filter:      blur(2px);
+  --moon-opacity:     1;
+
+  // ---- Sky overlays -----------------------------------------------------
+  // Full-bleed panes inside `.sky-base-overlay`. Defaults assume an
+  // average daytime read; per-time / per-weather variants below dial
+  // these up or down.
+  --cloudy-overlay-opacity: 0.5;
+
+  // Warm halo around the sun, radiating up into the upper sky. Off by
+  // default (opacity 0) so the layer is invisible whenever the disc is
+  // acting as a moon. Evening / sunset variants below dial it in.
+  --sun-glow-rgb:     255 200 120;
+  --sun-glow-opacity: 0;
+  --sun-glow-blend:   screen;
+
   // ---- Temperature tint (global overlay) --------------------------------
   // Applied as a fullscreen `mix-blend-mode` layer; defaults to no-op.
   --temp-tint-rgb:     0 0 0;
@@ -167,11 +190,29 @@
   // Cloud highlights pick up warm reflections from the horizon.
   --cloud-warm:  #d6a486;
   --cloud-light: #b08576;
+
+  // The moon becomes a fading sun: centered horizontally, dropped to mid-sky
+  // (just above the horizon), warm-tinted via filter, and softened. The disc
+  // image stays the same — we only change CSS vars consumed by `.moon`.
+  --moon-top:         50%;
+  --moon-left:        50%;
+  --moon-translate-x: -50%;
+  --moon-filter:      blur(3px) sepia(0.7) hue-rotate(-15deg) saturate(1.5) brightness(1.05);
+  --moon-glow-rgb:    255 200 120;
+  --moon-opacity:     0.9;
+
+  // Faint warm halo radiating from the sun upward through the sky,
+  // anchored to the disc's position via `--moon-*` tokens. Kept very
+  // low so it reads as atmosphere, not as a hard light source.
+  --sun-glow-rgb:     255 180 90;
+  --sun-glow-opacity: 0.35;
 }
 
 [data-time='night'] {
-  // Current default scene already represents night — no overrides needed.
-  // Retained as an explicit selector for when defaults shift to another time.
+  // Current default scene already represents night — sky/clouds/moon need
+  // no overrides yet. The cloudy overlay reads a touch heavy on the
+  // darker sky though, so dial it back slightly.
+  --cloudy-overlay-opacity: 0.4;
 }
 
 

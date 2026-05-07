@@ -69,14 +69,17 @@ const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: scene
       :data-temp="sceneTemp"
     >
       <div class="scene-layer sky-base">
-        <aside class="scene-layer sky-base-overlay"></aside>
+        <aside class="scene-layer sky-base-overlay">
+          <div class="sky-base-overlay--sun-glow"></div>
+          <div class="sky-base-overlay--cloudy-overlay"></div>
+        </aside>
+        <div class="scene-layer moon"></div>
         <section class="top-clouds">
           <div class="cloud-1-wrap">
             <div class="scene-layer cloud-1"></div>
           </div>
           <div class="scene-layer cloud-2"></div>
           <div class="scene-layer cloud-3"></div>
-          <div class="scene-layer moon"></div>
           <div class="scene-layer cloud-4"></div>
         </section>
         <section class="bottom-clouds">
@@ -287,11 +290,39 @@ $trees: (
 }
 
 .sky-base-overlay {
-  background: grey;
-  z-index: 10;
-  position: absolute;
-  inset: 0;
-  opacity: 0.5;
+  // Container for atmospheric overlays sitting between the sky gradient
+  // and the cloud layers. Each child is a full-bleed pane whose look is
+  // driven by tokens in _theme.scss so time-of-day / weather variants
+  // can tune them without touching markup.
+
+  .sky-base-overlay--sun-glow {
+    // Warm halo radiating from the sun into the upper sky. The ellipse
+    // is taller than the box (130% vertical radius) so the falloff
+    // happens off-canvas — what you see is a soft column of light biased
+    // upward. Anchored to the `--moon-*` position tokens so the halo
+    // tracks the disc wherever it sits. Off by default (opacity 0); the
+    // evening / sunset variants in _theme.scss dial it in. Z-index 0
+    // keeps it beneath every top cloud (which start at z 1).
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 50% 130% at var(--moon-left) var(--moon-top),
+      rgb(var(--sun-glow-rgb) / 1)   0%,
+      rgb(var(--sun-glow-rgb) / 0) 60%
+    );
+    mix-blend-mode: var(--sun-glow-blend);
+    opacity: var(--sun-glow-opacity);
+  }
+
+  .sky-base-overlay--cloudy-overlay {
+    background: grey;
+    z-index: 10;
+    position: absolute;
+    inset: 0;
+    opacity: var(--cloudy-overlay-opacity);
+  }
 }
 .sky-base {
   height: 55%;
@@ -399,17 +430,24 @@ $trees: (
 
 
 .moon {
+  // Position + look come from `--moon-*` tokens declared on `:root` in
+  // _theme.scss; time-of-day variants override them on `.scene` so the
+  // values cascade in here. Declaring `--moon-*` on `.moon` itself would
+  // shadow the inherited override, so we only *consume* the tokens here.
   background-image: url('~/assets/images//Moon--full.png');
   background-size: 100% auto;
   background-position: center center;
   background-repeat: no-repeat;
-  width:calc(260px / 2);
+  width:  calc(260px / 2);
   height: calc(260px / 2);
-  z-index: 2;
   position: absolute;
-  top: 37%;
-  left: 4%;
-  filter: blur(2px);
+  z-index: 2;
+
+  top:       var(--moon-top);
+  left:      var(--moon-left);
+  transform: translateX(var(--moon-translate-x));
+  filter:    var(--moon-filter);
+  opacity:   var(--moon-opacity);
 
   &::after {
     content: '';
