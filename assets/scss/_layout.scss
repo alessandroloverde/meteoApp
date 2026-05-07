@@ -30,7 +30,15 @@
 }
 
 .pageContainer {
-  @apply flex min-h-dvh items-center justify-center bg-neutral-700;
+  @apply flex min-h-dvh flex-col items-center justify-center bg-neutral-700;
+  gap: v.$space-md;
+  padding: v.$space-md;
+}
+
+// Side-by-side reference + live phone frames
+.phoneRow {
+  display: flex;
+  align-items: center;
   gap: v.$space-md;
 }
 

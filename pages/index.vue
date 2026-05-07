@@ -48,14 +48,29 @@ const ui = computed(() => {
   return mapWeatherToUI(store.weather)
 })
 
-const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'])
+// Dev/test theming knobs — driven by <SceneControls> in the layout.
+// Replace these bindings with the live `ui.*` values when wiring real data.
+const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: sceneTemp } = useSceneControls()
+
 </script>
 
 <template>
   <div class="page-bg">
-    <div class="scene" :class="sceneStateClasses">
+    <!--
+      Scene theming attributes are driven by <SceneControls> (dev panel above
+      the phones) via the `useSceneControls` composable. To swap to live data,
+      replace the bindings with: :data-season="ui?.season" etc.
+    -->
+    <div
+      class="scene"
+      :data-season="sceneSeason"
+      :data-time="sceneTime"
+      :data-weather="sceneWeather"
+      :data-temp="sceneTemp"
+    >
       <div class="scene-layer sky-base">
-        <secttion class="top-clouds">
+        <aside class="scene-layer sky-base-overlay"></aside>
+        <section class="top-clouds">
           <div class="cloud-1-wrap">
             <div class="scene-layer cloud-1"></div>
           </div>
@@ -63,8 +78,8 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
           <div class="scene-layer cloud-3"></div>
           <div class="scene-layer moon"></div>
           <div class="scene-layer cloud-4"></div>
-        </secttion>
-        <secttion class="bottom-clouds">
+        </section>
+        <section class="bottom-clouds">
           <div class="cloud-1--low-wrap">
             <div class="scene-layer cloud-1--low"></div>
           </div>
@@ -72,7 +87,7 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
           <div class="scene-layer cloud-2--low"></div>
           <div class="scene-layer cloud-3--low"></div>
           <div class="scene-layer cloud-4--low"></div>
-        </secttion>
+        </section>
       </div>
 
 
@@ -167,20 +182,11 @@ const sceneStateClasses = computed(() => ['is-night', 'is-cloudy', 'windows-lit'
 
 <style scoped lang="scss">
 @use 'sass:map';
-@use 'sass:color';
-@use 'sass:list';
 @use '~/assets/scss/mixins' as mx;
 
-$autumn-palette: (
-  "bushes": (
-    "1-lighter": #c17122,
-    "1-light": #ae5e19,
-    "1-med": #673611,
-    "1-dark": #412415,
-    "3-light": #432616,
-    "3-dark": #81481a,
-  )
-);
+// Color tokens come from `_theme.scss` (loaded globally via base.scss) as
+// CSS custom properties on `:root`. This file references them via `var(--…)`
+// and never declares raw hex values.
 
 // Per-tree config. Add a new entry here to render a new tree;
 $trees: (
@@ -189,8 +195,8 @@ $trees: (
     height: calc(194px / 2),
     offset: (right: 0%, top: -19%),
     z-index: 10,
-    trunk-colors: (#5f1203, #281416),
-    foliage-colors: linear-gradient(125deg, #d06c33 10%, #421f20 95%),
+    trunk-colors: (var(--trunk-base-accent), var(--trunk-tip)),
+    foliage-colors: linear-gradient(125deg, var(--foliage-warm-accent) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 100% auto,
     trunk-mask-position: 40% bottom,
   ),
@@ -199,8 +205,8 @@ $trees: (
     height: calc(102px / 2),
     offset: (right: 13%, top: -6%),
     z-index: 9,
-    trunk-colors: (#2c1313, #281416),
-    foliage-colors: linear-gradient(125deg, #ec8b1b 10%, #421f20 95%),
+    trunk-colors: (var(--trunk-base), var(--trunk-tip)),
+    foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 40% bottom,
   ),
@@ -209,8 +215,8 @@ $trees: (
     height: calc(100px / 2),
     offset: (right: 21%, top: -6%),
     z-index: auto,
-    trunk-colors: (#2c1313, #281416),
-    foliage-colors: linear-gradient(125deg, #ec8b1b 10%, #421f20 95%),
+    trunk-colors: (var(--trunk-base), var(--trunk-tip)),
+    foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 55% 150%,
   ),
@@ -219,8 +225,8 @@ $trees: (
     height: calc(99px / 2),
     offset: (left: 8%, top: -5%),
     z-index: 7,
-    trunk-colors: (#2c1313, #281416),
-    foliage-colors: linear-gradient(125deg, #ec8b1b 10%, #421f20 95%),
+    trunk-colors: (var(--trunk-base), var(--trunk-tip)),
+    foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 55% 150%,
   ),
@@ -229,8 +235,8 @@ $trees: (
     height: calc(122px / 2),
     offset: (left: 1.5%, top: -11%),
     z-index: 6,
-    trunk-colors: (#2c1313, #281416),
-    foliage-colors: linear-gradient(-90deg, #984022 10%, #4c2220 95%),
+    trunk-colors: (var(--trunk-base), var(--trunk-tip)),
+    foliage-colors: linear-gradient(-90deg, var(--foliage-warm-deep) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 50% 180%,
   ),
@@ -241,40 +247,6 @@ $trees: (
     @include mx.tree($key, $config);
   }
 }
-
-$terrain-1-colors: (
-  "accent": #db801b,
-  "darkBrown": #3b1924,
-  "medBrown": #503229
-);
-$terrain-2-colors: (
-  "accent": #be622d,
-  "darkBrown": #421513,
-  "medBrown": #8d4828
-);
-$terrain-3-colors: (
-  "accent": #ba581f,
-  "darkBrown": #743a24,
-  "medBrown": #8d4828
-);
-$terrain-4-colors: (
-  "accent": #ba581f,
-  "darkBrown": #58211d,
-  "medBrown": #8d4828
-);
-$terrain-5-colors: (
-  "accent": #af6a2c,
-  "darkBrown": #813a1a,
-  "medBrown": #7f3918
-);
-
-
-$stormyNight--light: #66617e;
-$stormyNight--lighter: #5b5a73;
-$stormyNight--med: #4e4e56;
-$stormyNight--darker: #4b4856;
-$stormyNight--darkest: #2b2238;
-$sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--med 50%, $stormyNight--lighter 66%, $stormyNight--light 100%);
 
 .main-content { display: none }
 
@@ -314,9 +286,16 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   opacity: var(--layer-opacity, 1);
 }
 
+.sky-base-overlay {
+  background: grey;
+  z-index: 10;
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+}
 .sky-base {
   height: 55%;
-  background: $sky--bkg;
+  background: var(--sky-gradient);
   z-index: 1;
   position: relative;
 }
@@ -342,7 +321,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     width: calc(68px / 2),
     height: calc(44px / 2),
     offset: (top: -2%, left: 17%),
-    background: linear-gradient(45deg, #4b2128 10%, #b84d2d 100%),
+    background: linear-gradient(45deg, var(--house-roof) 10%, var(--house-church-accent) 100%),
     z-index: 2,
   ));
 
@@ -357,7 +336,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
   &::after {
     content: '';
     @include mx.house-block-layer(church, windows, png, (
-      background: #f8bd7e,
+      background: var(--window-lit),
       opacity: 0.9,
     ));
   }
@@ -371,13 +350,13 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 
   &--roofs {
     @include mx.house-block-layer(left, roofs, svg, (
-      background: color.scale(#4a2229, $lightness: 10%),
+      background: var(--house-roof-light),
       mask-position: center top,
     ));
   }
   &--windows {
     @include mx.house-block-layer(left, windows, png, (
-      background: #f8bd7e,
+      background: var(--window-lit),
       opacity: 0.9,
     ));
   }
@@ -391,7 +370,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 
   &--windows {
     @include mx.house-block-layer(small, windows, svg, (
-      background: #f8bd7e,
+      background: var(--window-lit),
       opacity: 0.9,
     ));
   }
@@ -405,13 +384,13 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 
   &--windows {
     @include mx.house-block-layer(main, windows, png, (
-      background: #f8bd7e,
+      background: var(--window-lit),
       opacity: 0.9,
     ));
   }
   &--roofs {
     @include mx.house-block-layer(main, roofs, png, (
-      background: color.scale(#4a2229, $lightness: 20%),
+      background: var(--house-roof-lighter),
       mask-position: center -2px,
     ));
   }
@@ -438,9 +417,9 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
     inset: 0;
     border-radius: 50%;
     background: radial-gradient(
-      circle at center, 
-      rgba(255, 255, 255, 0.5) 0%, 
-      rgba(255, 255, 255, 0) 100%);
+      circle at center,
+      rgb(var(--moon-glow-rgb) / 0.5) 0%,
+      rgb(var(--moon-glow-rgb) / 0)   100%);
     mix-blend-mode: soft-light;
     opacity: 0.5;
     filter: blur(5px);
@@ -451,7 +430,7 @@ $sky--bkg: linear-gradient(to bottom, $stormyNight--darkest 0%, $stormyNight--me
 $clouds: (
   1: (
     dimensions: (width: inherit, height: inherit),
-    bkg: linear-gradient(to bottom, #595a6c 0%, #7b7d88 100%),
+    bkg: linear-gradient(to bottom, var(--cloud-shadow) 0%, var(--cloud-mid-dark) 100%),
     mask-type: svg,
     opacity: 1,
     z-index: 4,
@@ -460,7 +439,7 @@ $clouds: (
   2: (
     dimensions: (width: calc(260px / 2), height: calc(108px / 2)),
     position: (left: 0, top: 40%),
-    bkg: linear-gradient(to left, #b4b5a9 0%, #868793 100%),
+    bkg: linear-gradient(to left, var(--cloud-warm) 0%, var(--cloud-mid) 100%),
     mask-type: svg,
     opacity: 0.8,
     z-index: 3,
@@ -469,25 +448,25 @@ $clouds: (
   3: (
     dimensions: (width: calc(317px / 2), height: calc(148px / 2)),
     position: (right: -7%, top: 41%),
-    bkg: linear-gradient(0deg, #878795 0%, #535161 50%),
+    bkg: linear-gradient(0deg, var(--cloud-mid) 0%, var(--cloud-shadow-deep) 50%),
     mask-type: svg,
     z-index: 3,
   ),
   4: (
     dimensions: (width: calc(673px / 2), height: calc(208px / 2)),
     position: (right: -15%, top: 46%),
-    bkg: #74747b,
+    bkg: var(--cloud-mid-dark),
     mask-type: svg,
     opacity: 0.75,
     z-index: 1,
-    filter: blur(8px),  
+    filter: blur(8px),
   ),
 );
 $clouds--low: (
   1: (
     dimensions: (width: calc(521px / 2), height: calc(332px / 2)),
     position: (right: -8%, bottom: 8%),
-    bkg: radial-gradient(circle at 40% 30%, #8f8d93 10%, #56505b 62%),
+    bkg: radial-gradient(circle at 40% 30%, var(--cloud-light) 10%, var(--cloud-shadow) 62%),
     mask-type: png,
     opacity: 1,
     z-index: auto,
@@ -495,7 +474,7 @@ $clouds--low: (
   2: (
     dimensions: (width: calc(694px / 2), height: calc(265px / 2)),
     position: (right: -8%, bottom: -6%),
-    bkg: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%),
+    bkg: radial-gradient(circle at 45% 15%, var(--cloud-light) 0%, var(--cloud-mid-dark) 60%),
     mask-type: svg,
     opacity: 1,
     z-index: 3,
@@ -503,7 +482,7 @@ $clouds--low: (
   3: (
     dimensions: (width: calc(546px / 2), height: calc(229px / 2)),
     position: (left: -5%, bottom: 0),
-    bkg: radial-gradient(circle at 45% 15%, #96949d 0%, #716b79 60%),
+    bkg: radial-gradient(circle at 45% 15%, var(--cloud-light) 0%, var(--cloud-mid-dark) 60%),
     mask-type: svg,
     opacity: 0.25,
     z-index: 3,
@@ -512,7 +491,7 @@ $clouds--low: (
   4: (
     dimensions: (width: calc(608px / 2), height: calc(334px / 2)),
     position: (left: -15%, bottom: -5%),
-    bkg: radial-gradient(circle at 46% 40%, #96949d 0%, #6d6775 46%),
+    bkg: radial-gradient(circle at 46% 40%, var(--cloud-light) 0%, var(--cloud-mid-dark) 46%),
     mask-type: svg,
     opacity: 1,
     z-index: 1,
@@ -536,7 +515,7 @@ $clouds--low: (
   z-index: 2;
 }
 .top-clouds { z-index: 3 }
-.bottom-clouds { opacity: 0.8}
+.bottom-clouds { opacity: 0.7}
 
 .cloud-1-wrap {
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
@@ -560,18 +539,12 @@ $clouds--low: (
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrain-5--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-5--gradient.png');
-  --layer-bkg: #{map.get($terrain-5-colors, darkBrown)};
-  --accent-color: #{map.get($terrain-5-colors, accent)};
+  --layer-bkg: var(--terrain-5-deep);
+  --accent-color: var(--terrain-5-accent);
   --blend-mode: color;
   --layer-opacity: 1;
 
-/*   background: linear-gradient(
-    -45deg,
-    #{map.get($terrain-5-colors, accent)} 65%,
-    #{map.get($terrain-5-colors, medBrown)} 45%, 
-    #{map.get($terrain-5-colors, darkBrown)} 75%
-  ); */
-  background-color: #80391a;
+  background-color: var(--terrain-5-deep);
   -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
           mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
   z-index: 7;
@@ -579,8 +552,8 @@ $clouds--low: (
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrain-4--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-4--gradient.png');
-  --layer-bkg: #{map.get($terrain-4-colors, darkBrown)};
-  --accent-color: #{map.get($terrain-4-colors, accent)};
+  --layer-bkg: var(--terrain-4-deep);
+  --accent-color: var(--terrain-4-accent);
   --blend-mode: color;
   --layer-opacity: 1;
   z-index: 7;
@@ -588,8 +561,8 @@ $clouds--low: (
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrain-3--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrain-3--gradient.png');
-  --layer-bkg: #{map.get($terrain-3-colors, darkBrown)};
-  --accent-color: #{map.get($terrain-3-colors, accent)};
+  --layer-bkg: var(--terrain-3-deep);
+  --accent-color: var(--terrain-3-accent);
   --blend-mode: overlay;
   --layer-opacity: 1;
   top: 4%;
@@ -600,10 +573,10 @@ $clouds--low: (
   --mask-gradient: url('~/assets/images/masks/Terrain-2--gradient.png');
   --layer-bkg: linear-gradient(
     -45deg,
-    #{map.get($terrain-2-colors, darkBrown)} 20%,
-    #{map.get($terrain-2-colors, medBrown)} 100%
-  );  
-  --accent-color: #{map.get($terrain-2-colors, accent)};
+    var(--terrain-2-deep) 20%,
+    var(--terrain-2-mid) 100%
+  );
+  --accent-color: var(--terrain-2-accent);
   --blend-mode: color;
   --layer-opacity: 1;
   top: 4%;
@@ -614,10 +587,10 @@ $clouds--low: (
   --mask-gradient: url('~/assets/images/masks/Terrain-1--gradient.png');
   --layer-bkg: linear-gradient(
     45deg,
-    #{map.get($terrain-1-colors, darkBrown)} 0%,
-    #{map.get($terrain-1-colors, medBrown)} 100%
+    var(--terrain-1-deep) 0%,
+    var(--terrain-1-mid) 100%
   );
-  --accent-color: #{map.get($terrain-1-colors, accent)};
+  --accent-color: var(--terrain-1-accent);
   --blend-mode: overlay;
   --layer-opacity: 1;
   top: 8%;
@@ -632,14 +605,14 @@ $clouds--low: (
   width: 100%;
   height: 100%;
 }
-.bushes-1 { 
+.bushes-1 {
   z-index: 11;
   width: calc(141px / 2);
   height: calc(62px / 2);
   background: linear-gradient(
     160deg,
-    #{map.get($autumn-palette, bushes, "1-lighter")} 25%,
-    #{map.get($autumn-palette, bushes, "1-dark")} 85%
+    var(--bush-light) 25%,
+    var(--bush-dark) 85%
   );
   position: absolute;
   right: 0%;
@@ -662,8 +635,8 @@ $clouds--low: (
   position: absolute;
   background: linear-gradient(
     160deg,
-    #{map.get($autumn-palette, bushes, "1-lighter")} 0%,
-    #{map.get($autumn-palette, bushes, "1-med")} 50%
+    var(--bush-light) 0%,
+    var(--bush-mid) 50%
   );
   left: 0%;
   top: 10%;
@@ -684,8 +657,8 @@ $clouds--low: (
   height: calc(49px / 2);
   background: linear-gradient(
     160deg,
-    #{map.get($autumn-palette, bushes, "1-lighter")} 30%,
-    #{map.get($autumn-palette, bushes, "1-med")} 60%
+    var(--bush-light) 30%,
+    var(--bush-mid) 60%
   );
   position: absolute;
   left: 60%;
@@ -694,7 +667,12 @@ $clouds--low: (
 }
 
 .foreground-haze {
-  background: linear-gradient(to top, rgba(28, 19, 31, 0.75) 0%, rgba(28, 19, 31, 0.22) 38%, rgba(28, 19, 31, 0) 62%);
+  background: linear-gradient(
+    to top,
+    rgb(var(--haze-rgb) / 0.75) 0%,
+    rgb(var(--haze-rgb) / 0.22) 38%,
+    rgb(var(--haze-rgb) / 0)    62%
+  );
   mix-blend-mode: multiply;
   opacity: 0.95;
   z-index: 15;
@@ -707,6 +685,6 @@ $clouds--low: (
   z-index: 20;
   border-radius: 1rem;
   padding: 0.9rem 1.2rem;
-  background: rgba(26, 20, 31, 0.22);
+  background: rgb(var(--haze-rgb) / 0.22);
 }
 </style>

@@ -1,0 +1,245 @@
+// =============================================================================
+// Scene theme (Tier 2 — semantic CSS custom properties)
+// =============================================================================
+// Reads the per-group palettes from `_palette.scss` and exposes them as CSS
+// custom properties on `:root`, organized by scene group. Components reference
+// `var(--…)` only — they should never see a raw hex.
+//
+// Dynamic theming is layered as attribute selectors on the root element:
+//
+//   <body data-season="autumn" data-time="night" data-weather="storm" data-temp="cold">
+//
+// Each axis overrides the subset of tokens it owns:
+//   • season  → terrain / foliage / bushes ramps
+//   • time    → sky stops + cloud tints + moon/sun
+//   • weather → cloud density tones + atmosphere haze
+//   • temp    → handled separately as a global tint overlay (see `--temp-tint`),
+//               not by re-coloring every token.
+//
+// Variant blocks below are stubs — fill them in as new states are designed.
+// =============================================================================
+
+@use 'sass:map';
+@use 'palette' as p;
+
+
+// -----------------------------------------------------------------------------
+// Defaults — current scene (autumn / night / stormy)
+// -----------------------------------------------------------------------------
+:root {
+
+  // ---- Sky --------------------------------------------------------------
+  --sky-top:        #{map.get(p.$sky--autumn, top)};
+  --sky-upper-mid:  #{map.get(p.$sky--autumn, upper-mid)};
+  --sky-lower-mid:  #{map.get(p.$sky--autumn, lower-mid)};
+  --sky-bottom:     #{map.get(p.$sky--autumn, bottom)};
+
+  --sky-gradient: linear-gradient(
+    to bottom,
+    var(--sky-top)       0%,
+    var(--sky-upper-mid) 50%,
+    var(--sky-lower-mid) 66%,
+    var(--sky-bottom)    100%
+  );
+
+  // ---- Clouds -----------------------------------------------------------
+  --cloud-warm:        #{map.get(p.$clouds--autumn, warm)};
+  --cloud-light:       #{map.get(p.$clouds--autumn, light)};
+  --cloud-mid:         #{map.get(p.$clouds--autumn, mid)};
+  --cloud-mid-dark:    #{map.get(p.$clouds--autumn, mid-dark)};
+  --cloud-shadow:      #{map.get(p.$clouds--autumn, shadow)};
+  --cloud-shadow-deep: #{map.get(p.$clouds--autumn, shadow-deep)};
+
+  // ---- Terrain ----------------------------------------------------------
+  // Shared primitives — flipping these reskins the warm-toned terrains in one place
+  --terrain-mid-warm:    #{map.get(p.$terrain--autumn, mid-warm)};
+  --terrain-accent-warm: #{map.get(p.$terrain--autumn, accent-warm)};
+  --terrain-warm-deep:   #{map.get(p.$terrain--autumn, warm-deep)};
+
+  // Per-layer tokens (null entries fall back to the shared primitives)
+  --terrain-1-deep:   #{map.get(p.$terrain--autumn, layer-1, deep)};
+  --terrain-1-mid:    #{map.get(p.$terrain--autumn, layer-1, mid)};
+  --terrain-1-accent: #{map.get(p.$terrain--autumn, layer-1, accent)};
+
+  --terrain-2-deep:   #{map.get(p.$terrain--autumn, layer-2, deep)};
+  --terrain-2-mid:    var(--terrain-mid-warm);
+  --terrain-2-accent: #{map.get(p.$terrain--autumn, layer-2, accent)};
+
+  --terrain-3-deep:   #{map.get(p.$terrain--autumn, layer-3, deep)};
+  --terrain-3-mid:    var(--terrain-mid-warm);
+  --terrain-3-accent: var(--terrain-accent-warm);
+
+  --terrain-4-deep:   #{map.get(p.$terrain--autumn, layer-4, deep)};
+  --terrain-4-mid:    var(--terrain-mid-warm);
+  --terrain-4-accent: var(--terrain-accent-warm);
+
+  --terrain-5-deep:   var(--terrain-warm-deep);
+  --terrain-5-mid:    var(--terrain-warm-deep);
+  --terrain-5-accent: #{map.get(p.$terrain--autumn, layer-5, accent)};
+
+  // ---- Foliage / trees --------------------------------------------------
+  --trunk-base:        #{map.get(p.$foliage--autumn, trunk-base)};
+  --trunk-tip:         #{map.get(p.$foliage--autumn, trunk-tip)};
+  --trunk-base-accent: #{map.get(p.$foliage--autumn, trunk-base-accent)};
+
+  --foliage-warm:        #{map.get(p.$foliage--autumn, warm)};
+  --foliage-warm-accent: #{map.get(p.$foliage--autumn, warm-accent)};
+  --foliage-warm-deep:   #{map.get(p.$foliage--autumn, warm-deep)};
+  --foliage-cool:        #{map.get(p.$foliage--autumn, cool)};
+
+  // ---- Bushes -----------------------------------------------------------
+  --bush-light:     #{map.get(p.$bushes--autumn, light)};
+  --bush-mid-light: #{map.get(p.$bushes--autumn, mid-light)};
+  --bush-mid:       #{map.get(p.$bushes--autumn, mid)};
+  --bush-dark:      #{map.get(p.$bushes--autumn, dark)};
+
+  --bush-3-light: #{map.get(p.$bushes--autumn, three-light)};
+  --bush-3-dark:  #{map.get(p.$bushes--autumn, three-dark)};
+
+  // ---- Houses -----------------------------------------------------------
+  --house-shell:         #{map.get(p.$houses--autumn, shell)};
+  --house-roof:          #{map.get(p.$houses--autumn, roof)};
+  // Lit roof tones — pre-computed equivalents of:
+  //   color.scale(--house-roof, $lightness: 10%)  → #662f38
+  //   color.scale(--house-roof, $lightness: 20%)  → #813b48
+  // Keep these in sync if `--house-roof` is re-tuned, or convert to a
+  // CSS `color-mix()` if runtime theming of these specific shades is needed.
+  --house-roof-light:    #662f38;
+  --house-roof-lighter:  #813b48;
+  --house-church-accent: #{map.get(p.$houses--autumn, church-accent)};
+  --window-lit:          #{map.get(p.$houses--autumn, window-lit)};
+
+  // ---- Atmosphere -------------------------------------------------------
+  // Stored as space-separated RGB so the consumer can compose alpha:
+  //   background: rgb(var(--haze-rgb) / 0.75);
+  --haze-rgb:      #{map.get(p.$atmosphere--autumn, haze-rgb)};
+  --moon-glow-rgb: #{map.get(p.$atmosphere--autumn, moon-glow-rgb)};
+
+  // ---- Temperature tint (global overlay) --------------------------------
+  // Applied as a fullscreen `mix-blend-mode` layer; defaults to no-op.
+  --temp-tint-rgb:     0 0 0;
+  --temp-tint-opacity: 0;
+  --temp-tint-blend:   color;
+}
+
+
+// -----------------------------------------------------------------------------
+// Variant axes (stubs — fill in as states are designed)
+// -----------------------------------------------------------------------------
+//
+// SEASON — terrain / foliage / bushes
+// -----------------------------------------------------------------------------
+[data-season='winter'] {
+  // TODO: define $terrain--winter, $foliage--winter, $bushes--winter in
+  // _palette.scss and remap the relevant tokens here.
+}
+
+[data-season='spring'] {
+  // TODO
+}
+
+[data-season='summer'] {
+  // TODO
+}
+
+
+// TIME — sky / clouds / moon / haze
+// (vocabulary matches `mapWeatherToUI > getTimeOfDay`: morning|afternoon|evening|night)
+// -----------------------------------------------------------------------------
+[data-time='morning'] {
+  // TODO
+}
+
+[data-time='afternoon'] {
+  // TODO
+}
+
+[data-time='evening'] {
+  // Autumn sunset — deep indigo zenith descending through burnt rose
+  // and burnt orange to a golden-amber horizon. The 50% / 66% stops in
+  // `--sky-gradient` push most of the warm range into the lower third,
+  // giving the sky the characteristic sunset weighting.
+  --sky-top:       #1a1530;
+  --sky-upper-mid: #804155;
+  --sky-lower-mid: #d75f3a;
+  --sky-bottom:    #f6b042;
+
+  // Cloud highlights pick up warm reflections from the horizon.
+  --cloud-warm:  #d6a486;
+  --cloud-light: #b08576;
+}
+
+[data-time='night'] {
+  // Current default scene already represents night — no overrides needed.
+  // Retained as an explicit selector for when defaults shift to another time.
+}
+
+
+// WEATHER — cloud density / haze / sky tint
+// (vocabulary matches `mapWeatherToUI > mapCondition`:
+//  clear | partly_cloudy | cloudy | fog | drizzle | rain | heavy_rain | storm | snow)
+// -----------------------------------------------------------------------------
+[data-weather='clear'] {
+  // TODO
+}
+
+[data-weather='partly_cloudy'] {
+  // TODO
+}
+
+[data-weather='cloudy'] {
+  // TODO
+}
+
+[data-weather='fog'] {
+  // TODO
+}
+
+[data-weather='drizzle'] {
+  // TODO
+}
+
+[data-weather='rain'] {
+  // TODO
+}
+
+[data-weather='heavy_rain'] {
+  // TODO
+}
+
+[data-weather='storm'] {
+  // Current default scene already represents stormy — no overrides needed.
+  // Retained as an explicit selector for when defaults shift to another condition.
+}
+
+[data-weather='snow'] {
+  // TODO
+}
+
+
+// TEMPERATURE — single global tint (no per-token overrides)
+// -----------------------------------------------------------------------------
+[data-temp='frosty'] {
+  --temp-tint-rgb:     180 220 240;
+  --temp-tint-opacity: 0.18;
+  --temp-tint-blend:   color;
+}
+
+[data-temp='cold'] {
+  --temp-tint-rgb:     150 190 220;
+  --temp-tint-opacity: 0.10;
+}
+
+[data-temp='mild'] {
+  --temp-tint-opacity: 0;
+}
+
+[data-temp='warm'] {
+  --temp-tint-rgb:     230 160 90;
+  --temp-tint-opacity: 0.08;
+}
+
+[data-temp='hot'] {
+  --temp-tint-rgb:     240 130 60;
+  --temp-tint-opacity: 0.16;
+}

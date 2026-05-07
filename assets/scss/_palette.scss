@@ -1,0 +1,125 @@
+// =============================================================================
+// Scene palette (Tier 1 — primitives)
+// =============================================================================
+// Raw color data, organized by scene group. No CSS is emitted from this file;
+// it's consumed by `_theme.scss`, which exposes each entry as a CSS custom
+// property on `:root` so that components can read them via `var(--…)`.
+//
+// Future seasons / weather moods are added as alternative maps next to each
+// group (e.g. `$sky--winter`, `$foliage--summer`) and selected by `_theme.scss`
+// via attribute selectors on the root element.
+//
+// Sub-channel rounding has been applied where the original scene used several
+// near-identical hex values. The notes after each token list the raw values
+// it absorbs so the regularization is auditable.
+// =============================================================================
+
+
+// ----- Sky --------------------------------------------------------------------
+// Vertical gradient stops (top → horizon) for the static sky.
+$sky--autumn: (
+  top:        #2b2238,  // was $stormyNight--darkest
+  upper-mid:  #4e4e56,  // was $stormyNight--med (absorbs unused #4b4856)
+  lower-mid:  #5b5a73,  // was $stormyNight--lighter (note: name was inverted)
+  bottom:     #66617e,  // was $stormyNight--light
+);
+
+
+// ----- Clouds -----------------------------------------------------------------
+// Six tones cover all eight cloud bodies; minor sub-channel rounding folds
+// the eleven original highlights/shadows into this set.
+$clouds--autumn: (
+  warm:         #b4b5a9,  // outlier warm grey (cloud-2 highlight)
+  light:        #96949d,  // canonical low-cloud highlight (also #8f8d93)
+  mid:          #878795,  // mid (also #868793, #7b7d88)
+  mid-dark:     #74747b,  // mid-dark (also #716b79, #6d6775)
+  shadow:       #595a6c,  // canonical shadow (also #56505b)
+  shadow-deep:  #535161,  // deepest shadow
+);
+
+
+// ----- Terrain ----------------------------------------------------------------
+// Three values per layer (deep / mid / accent). Shared autumn primitives
+// `mid-warm` and `accent-warm` collapse the duplicated `#8d4828` and `#ba581f`
+// across terrains 2/3/4. Terrain-5's three near-identical values
+// (#7f3918 / #80391a / #813a1a) are unified to `--terrain-5-warm`.
+$terrain--autumn: (
+  // Shared primitives (autumn-only; per-season overrides flip the warm tones)
+  mid-warm:    #8d4828,
+  accent-warm: #ba581f,
+  warm-deep:   #80391a,  // unified terrain-5 triplet
+
+  layer-1: (
+    deep:   #3b1924,
+    mid:    #503229,
+    accent: #db801b,
+  ),
+  layer-2: (
+    deep:   #421513,
+    mid:    null,        // → mid-warm
+    accent: #be622d,
+  ),
+  layer-3: (
+    deep:   #743a24,
+    mid:    null,        // → mid-warm
+    accent: null,        // → accent-warm
+  ),
+  layer-4: (
+    deep:   #58211d,
+    mid:    null,        // → mid-warm
+    accent: null,        // → accent-warm
+  ),
+  layer-5: (
+    deep:   null,        // → warm-deep
+    mid:    null,        // → warm-deep
+    accent: #af6a2c,
+  ),
+);
+
+
+// ----- Foliage / trees --------------------------------------------------------
+// Trunks and foliage gradients. `cool` (the dark red-brown gradient end)
+// folds #421f20 and #4c2220 to a single canonical value.
+$foliage--autumn: (
+  trunk-base:        #2c1313,  // tree-2..5 trunk start
+  trunk-tip:         #281416,  // canonical trunk end
+  trunk-base-accent: #5f1203,  // tree-1 trunk start (unique)
+
+  warm:        #ec8b1b,  // tree-2..4 foliage start (canonical warm)
+  warm-accent: #d06c33,  // tree-1 foliage start
+  warm-deep:   #984022,  // tree-5 foliage start
+  cool:        #421f20,  // canonical foliage end (also #4c2220)
+);
+
+
+// ----- Bushes -----------------------------------------------------------------
+$bushes--autumn: (
+  light:      #c17122,  // bush-1 highlight
+  mid-light:  #ae5e19,  // bush-1 light
+  mid:        #673611,  // bush-1 med
+  dark:       #412415,  // bush-1 dark
+
+  three-light: #432616,
+  three-dark:  #81481a,
+);
+
+
+// ----- Houses -----------------------------------------------------------------
+// `roof` absorbs both the roof base (#4a2229) and church gradient base
+// (#4b2128); they were Δ ≤ 2 per channel.
+$houses--autumn: (
+  shell:         #3f1c22,  // default house silhouette fill
+  roof:          #4a2229,  // also church gradient base
+  church-accent: #b84d2d,  // church gradient end (orange-red)
+  window-lit:    #f8bd7e,  // warm window glow
+);
+
+
+// ----- Atmosphere -------------------------------------------------------------
+// Stored as space-separated RGB triplets so consumers can compose alpha at
+// the call site via `rgb(var(--…) / <alpha>)`. `haze-rgb` absorbs the two
+// near-identical foreground/panel inks (#1c131f and #1a141f).
+$atmosphere--autumn: (
+  haze-rgb:      (28 19 31),
+  moon-glow-rgb: (255 255 255),
+);
