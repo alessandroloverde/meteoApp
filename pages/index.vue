@@ -70,6 +70,7 @@ const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: scene
     >
       <div class="scene-layer sky-base">
         <aside class="scene-layer sky-base-overlay">
+          <div class="sky-base-overlay--night-wash"></div>
           <div class="sky-base-overlay--sun-glow"></div>
           <div class="sky-base-overlay--cloudy-overlay"></div>
         </aside>
@@ -95,6 +96,9 @@ const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: scene
 
 
       <div class="scene-layer mask-layer terrain">
+        <aside class="scene-layer terrain-overlay">
+          <div class="test-terrain"></div>
+        </aside>
 
         <section class="scene-layer mask-layer bushes-in-front" style="z-index: 10">
           <div class="bushes-1"></div>
@@ -158,6 +162,14 @@ const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: scene
         </section>
 
       </div>
+
+      <!--
+        Ambient grade: multiply + soft-light stack over the whole illustration.
+        Strengths tied to `[data-time]` via `--scene-grade-*` in _theme.scss
+        (no raw hex here).
+      -->
+      <div class="scene-grade scene-grade--multiply" aria-hidden="true"></div>
+      <div class="scene-grade scene-grade--softlight" aria-hidden="true"></div>
     </div>
 
     <div class="main-content">
@@ -217,11 +229,11 @@ $trees: (
     width: calc(79px / 2),
     height: calc(100px / 2),
     offset: (right: 21%, top: -6%),
-    z-index: auto,
+    z-index: 8,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
-    foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
+    foliage-colors: linear-gradient(125deg, var(--foliage-warm) 8%, var(--foliage-warm-deep) 52%, var(--foliage-cool) 96%),
     trunk-mask-size: 50% auto,
-    trunk-mask-position: 55% 150%,
+    trunk-mask-position: 40% bottom,
   ),
   4: (
     width: calc(51px / 2),
@@ -253,6 +265,25 @@ $trees: (
 
 .main-content { display: none }
 
+// Full-scene tonal grade — tokens from `_theme.scss` (`--scene-grade-*`).
+.scene-grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: rgb(var(--scene-grade-rgb) / 1);
+}
+
+.scene-grade--multiply {
+  z-index: 100;
+  mix-blend-mode: multiply;
+  opacity: var(--scene-grade-multiply-opacity);
+}
+
+.scene-grade--softlight {
+  z-index: 101;
+  mix-blend-mode: soft-light;
+  opacity: var(--scene-grade-softlight-opacity);
+}
 
 .page-bg {
   position: relative;
@@ -322,6 +353,26 @@ $trees: (
     position: absolute;
     inset: 0;
     opacity: var(--cloudy-overlay-opacity);
+  }
+
+  .sky-base-overlay--night-wash {
+    // Deep navy pane that "pushes" the sky toward a colder, denser
+    // nighttime mood via a `hard-light` blend. Painted as a vertical
+    // gradient — heavy at the zenith, lighter toward the horizon — so
+    // the sky keeps its top-down depth instead of going flat. Anchored
+    // to z 1 so it sits above the sun-glow but below clouds, moon, and
+    // the cloudy overlay. Off by default; `[data-time='night']` engages it.
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--night-wash-rgb) / 1)    0%,
+      rgb(var(--night-wash-rgb) / 0.5) 100%
+    );
+    mix-blend-mode: var(--night-wash-blend);
+    opacity: var(--night-wash-opacity);
   }
 }
 .sky-base {

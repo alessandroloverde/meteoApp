@@ -11,7 +11,7 @@
 //
 // Each axis overrides the subset of tokens it owns:
 //   • season  → terrain / foliage / bushes ramps
-//   • time    → sky stops + cloud tints + moon/sun
+//   • time    → sky / clouds / moon + grade + terrain + foliage + bushes (night…)
 //   • weather → cloud density tones + atmosphere haze
 //   • temp    → handled separately as a global tint overlay (see `--temp-tint`),
 //               not by re-coloring every token.
@@ -129,7 +129,7 @@
   // Full-bleed panes inside `.sky-base-overlay`. Defaults assume an
   // average daytime read; per-time / per-weather variants below dial
   // these up or down.
-  --cloudy-overlay-opacity: 0.5;
+  --cloudy-overlay-opacity: 0.4;
 
   // Warm halo around the sun, radiating up into the upper sky. Off by
   // default (opacity 0) so the layer is invisible whenever the disc is
@@ -137,6 +137,25 @@
   --sun-glow-rgb:     255 200 120;
   --sun-glow-opacity: 0;
   --sun-glow-blend:   screen;
+
+  // Night wash: a deep-navy vertical gradient on `hard-light` that
+  // pushes the sky toward a colder, denser nighttime read. The pane
+  // itself bakes in a top-to-bottom alpha falloff so the zenith stays
+  // heaviest and the horizon breathes. Off by default (opacity 0);
+  // `[data-time='night']` turns it on.
+  --night-wash-rgb:     #{map.get(p.$atmosphere--autumn, night-wash-rgb)};
+  --night-wash-opacity: 0;
+  --night-wash-blend:   hard-light;
+
+  // ---- Full-scene nocturne grade ----------------------------------------
+  // Two stacked full-bleed panes on `.scene` (multiply, then soft-light) that
+  // cool and unify sky + terrain. Same idea as pairing #1e1e41 @ 25% multiply
+  // + 25% soft-light. Opacity 0 = disabled (`morning` / `afternoon`, etc.);
+  // `evening` / `night` below dial strengths. RGB stays one mood anchor so both
+  // layers read as one light model — primitive from `_palette.scss`.
+  --scene-grade-rgb:               #{map.get(p.$atmosphere--autumn, scene-grade-rgb)};
+  --scene-grade-multiply-opacity:  0;
+  --scene-grade-softlight-opacity: 0;
 
   // ---- Temperature tint (global overlay) --------------------------------
   // Applied as a fullscreen `mix-blend-mode` layer; defaults to no-op.
@@ -206,13 +225,66 @@
   // low so it reads as atmosphere, not as a hard light source.
   --sun-glow-rgb:     255 180 90;
   --sun-glow-opacity: 0.35;
+
+  // Lighter-than-night full-scene grade so dusk warmth still reads.
+  --scene-grade-multiply-opacity:  0.10;
+  --scene-grade-softlight-opacity: 0.12;
 }
 
 [data-time='night'] {
-  // Current default scene already represents night — sky/clouds/moon need
-  // no overrides yet. The cloudy overlay reads a touch heavy on the
-  // darker sky though, so dial it back slightly.
-  --cloudy-overlay-opacity: 0.4;
+  // Atmospheric intensifiers opt-in only for explicit `night` (so shifting
+  // the base `:root` palette elsewhere does not pull these in unintentionally).
+
+  --cloudy-overlay-opacity: 0.4;        // overlay slightly lighter on the darker sky
+  --night-wash-opacity:     1;          // engage the deep-navy hard-light wash
+
+  // Matches the archived #castoro / #criceto overlay stack (~#1e1e41 × 25% each).
+  --scene-grade-multiply-opacity:  0.25;
+  --scene-grade-softlight-opacity: 0.25;
+
+  // Terrain — `$terrain--night` in `_palette.scss`: darker, less saturated browns.
+  --terrain-mid-warm:    #{map.get(p.$terrain--night, mid-warm)};
+  --terrain-accent-warm: #{map.get(p.$terrain--night, accent-warm)};
+  --terrain-warm-deep:   #{map.get(p.$terrain--night, warm-deep)};
+
+  --terrain-1-deep:   #{map.get(p.$terrain--night, layer-1, deep)};
+  --terrain-1-mid:    #{map.get(p.$terrain--night, layer-1, mid)};
+  --terrain-1-accent: #{map.get(p.$terrain--night, layer-1, accent)};
+
+  --terrain-2-deep:   #{map.get(p.$terrain--night, layer-2, deep)};
+  --terrain-2-mid:    var(--terrain-mid-warm);
+  --terrain-2-accent: #{map.get(p.$terrain--night, layer-2, accent)};
+
+  --terrain-3-deep:   #{map.get(p.$terrain--night, layer-3, deep)};
+  --terrain-3-mid:    var(--terrain-mid-warm);
+  --terrain-3-accent: var(--terrain-accent-warm);
+
+  --terrain-4-deep:   #{map.get(p.$terrain--night, layer-4, deep)};
+  --terrain-4-mid:    var(--terrain-mid-warm);
+  --terrain-4-accent: var(--terrain-accent-warm);
+
+  --terrain-5-deep:   var(--terrain-warm-deep);
+  --terrain-5-mid:    var(--terrain-warm-deep);
+  --terrain-5-accent: #{map.get(p.$terrain--night, layer-5, accent)};
+
+  // Trees — `$foliage--night`: between autumn brilliance and terrain-night dusk.
+  --trunk-base:        #{map.get(p.$foliage--night, trunk-base)};
+  --trunk-tip:         #{map.get(p.$foliage--night, trunk-tip)};
+  --trunk-base-accent: #{map.get(p.$foliage--night, trunk-base-accent)};
+
+  --foliage-warm:        #{map.get(p.$foliage--night, warm)};
+  --foliage-warm-accent: #{map.get(p.$foliage--night, warm-accent)};
+  --foliage-warm-deep:   #{map.get(p.$foliage--night, warm-deep)};
+  --foliage-cool:        #{map.get(p.$foliage--night, cool)};
+
+  // Bushes — `$bushes--night`
+  --bush-light:     #{map.get(p.$bushes--night, light)};
+  --bush-mid-light: #{map.get(p.$bushes--night, mid-light)};
+  --bush-mid:       #{map.get(p.$bushes--night, mid)};
+  --bush-dark:      #{map.get(p.$bushes--night, dark)};
+
+  --bush-3-light: #{map.get(p.$bushes--night, three-light)};
+  --bush-3-dark:  #{map.get(p.$bushes--night, three-dark)};
 }
 
 

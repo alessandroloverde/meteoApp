@@ -68,6 +68,7 @@
     position: absolute;
     inset: 0;
     width: 100%;
+    isolation: isolate;
     background: map.get($config, foliage-colors);
     mask: $foliage-url  center top / 100% auto no-repeat;
 

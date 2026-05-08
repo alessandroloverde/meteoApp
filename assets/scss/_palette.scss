@@ -76,6 +76,40 @@ $terrain--autumn: (
   ),
 );
 
+// Moonlit ground read: darker and duller than `$terrain--autumn`, but not a
+// full crush to charcoal — mids stay in the rusty-brown family so ridges read.
+$terrain--night: (
+  mid-warm:    #6e4a39,
+  accent-warm: #9c5f35,
+  warm-deep:   #6f3a21,
+
+  layer-1: (
+    deep:   #342028,
+    mid:    #4a392f,
+    accent: #a87432,
+  ),
+  layer-2: (
+    deep:   #3d1714,
+    mid:    null,
+    accent: #9d5532,
+  ),
+  layer-3: (
+    deep:   #65382a,
+    mid:    null,
+    accent: null,
+  ),
+  layer-4: (
+    deep:   #4f241f,
+    mid:    null,
+    accent: null,
+  ),
+  layer-5: (
+    deep:   null,
+    mid:    null,
+    accent: #8c5c36,
+  ),
+);
+
 
 // ----- Foliage / trees --------------------------------------------------------
 // Trunks and foliage gradients. `cool` (the dark red-brown gradient end)
@@ -91,6 +125,19 @@ $foliage--autumn: (
   cool:        #421f20,  // canonical foliage end (also #4c2220)
 );
 
+// Midpoint between `$foliage--autumn` and the tonal range of `$terrain--night`:
+// oranges pulled down/chroma shaved, shadows nudged toward terrain vio-brown.
+$foliage--night: (
+  trunk-base:        #291514,
+  trunk-tip:         #251817,
+  trunk-base-accent: #4f221a,
+
+  warm:        #ca7828,
+  warm-accent: #b56634,
+  warm-deep:   #924b2e,
+  cool:        #3d221f,
+);
+
 
 // ----- Bushes -----------------------------------------------------------------
 $bushes--autumn: (
@@ -101,6 +148,18 @@ $bushes--autumn: (
 
   three-light: #432616,
   three-dark:  #81481a,
+);
+
+// Mirrors `$foliage--night`: highlights less loud than `$bushes--autumn`, mids
+// tied to `$terrain--night` warm-deep / mid strip.
+$bushes--night: (
+  light:      #b26926,
+  mid-light:  #a15d21,
+  mid:        #5f3e22,
+  dark:       #3a261c,
+
+  three-light: #40261c,
+  three-dark:  #765032,
 );
 
 
@@ -120,6 +179,9 @@ $houses--autumn: (
 // the call site via `rgb(var(--…) / <alpha>)`. `haze-rgb` absorbs the two
 // near-identical foreground/panel inks (#1c131f and #1a141f).
 $atmosphere--autumn: (
-  haze-rgb:      (28 19 31),
-  moon-glow-rgb: (255 255 255),
+  haze-rgb:       (28 19 31),
+  moon-glow-rgb:  (255 255 255),
+  night-wash-rgb: (11 19 73),  // deep navy used by the night-wash hard-light pane
+  // Full-scene multiply + soft-light grade pairing (historic #castoro/#criceto base)
+  scene-grade-rgb: (30 30 65),
 );
