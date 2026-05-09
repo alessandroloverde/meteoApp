@@ -11,7 +11,7 @@
 //
 // Each axis overrides the subset of tokens it owns:
 //   • season  → terrain / foliage / bushes ramps
-//   • time    → sky / clouds / moon + grade + terrain + foliage + bushes (night…)
+//   • time    → sky / clouds / moon + overlays; terrain/foliage/bushes remap (afternoon, night…)
 //   • weather → cloud density tones + atmosphere haze
 //   • temp    → handled separately as a global tint overlay (see `--temp-tint`),
 //               not by re-coloring every token.
@@ -189,11 +189,106 @@
 // (vocabulary matches `mapWeatherToUI > getTimeOfDay`: morning|afternoon|evening|night)
 // -----------------------------------------------------------------------------
 [data-time='morning'] {
-  // TODO
+  --window-lit: #{map.get(p.$houses--autumn, window-unlit)};
 }
 
 [data-time='afternoon'] {
-  // TODO
+  // **`$sky--afternoon` + `--sky-gradient` intentionally unchanged** —
+  // everything else pulls afternoon back from glare.
+
+  --sky-top:        #{map.get(p.$sky--afternoon, top)};
+  --sky-upper-mid:  #{map.get(p.$sky--afternoon, upper-mid)};
+  --sky-lower-mid:  #{map.get(p.$sky--afternoon, lower-mid)};
+  --sky-bottom:     #{map.get(p.$sky--afternoon, bottom)};
+
+  --sky-gradient: linear-gradient(
+    to bottom,
+    var(--sky-top)       0%,
+    var(--sky-upper-mid) 48%,
+    var(--sky-lower-mid) 64%,
+    var(--sky-bottom)    100%
+  );
+
+  --cloud-warm:        #{map.get(p.$clouds--afternoon, warm)};
+  --cloud-light:       #{map.get(p.$clouds--afternoon, light)};
+  --cloud-mid:         #{map.get(p.$clouds--afternoon, mid)};
+  --cloud-mid-dark:    #{map.get(p.$clouds--afternoon, mid-dark)};
+  --cloud-shadow:      #{map.get(p.$clouds--afternoon, shadow)};
+  --cloud-shadow-deep: #{map.get(p.$clouds--afternoon, shadow-deep)};
+
+  // Terrain — `$terrain--afternoon`
+  --terrain-mid-warm:    #{map.get(p.$terrain--afternoon, mid-warm)};
+  --terrain-accent-warm: #{map.get(p.$terrain--afternoon, accent-warm)};
+  --terrain-warm-deep:   #{map.get(p.$terrain--afternoon, warm-deep)};
+
+  --terrain-1-deep:   #{map.get(p.$terrain--afternoon, layer-1, deep)};
+  --terrain-1-mid:    #{map.get(p.$terrain--afternoon, layer-1, mid)};
+  --terrain-1-accent: #{map.get(p.$terrain--afternoon, layer-1, accent)};
+
+  --terrain-2-deep:   #{map.get(p.$terrain--afternoon, layer-2, deep)};
+  --terrain-2-mid:    var(--terrain-mid-warm);
+  --terrain-2-accent: #{map.get(p.$terrain--afternoon, layer-2, accent)};
+
+  --terrain-3-deep:   #{map.get(p.$terrain--afternoon, layer-3, deep)};
+  --terrain-3-mid:    var(--terrain-mid-warm);
+  --terrain-3-accent: var(--terrain-accent-warm);
+
+  --terrain-4-deep:   #{map.get(p.$terrain--afternoon, layer-4, deep)};
+  --terrain-4-mid:    var(--terrain-mid-warm);
+  --terrain-4-accent: var(--terrain-accent-warm);
+
+  --terrain-5-deep:   var(--terrain-warm-deep);
+  --terrain-5-mid:    var(--terrain-warm-deep);
+  --terrain-5-accent: #{map.get(p.$terrain--afternoon, layer-5, accent)};
+
+  // Trees & bushes — `$foliage--afternoon` / `$bushes--afternoon`
+  --trunk-base:        #{map.get(p.$foliage--afternoon, trunk-base)};
+  --trunk-tip:         #{map.get(p.$foliage--afternoon, trunk-tip)};
+  --trunk-base-accent: #{map.get(p.$foliage--afternoon, trunk-base-accent)};
+
+  --foliage-warm:        #{map.get(p.$foliage--afternoon, warm)};
+  --foliage-warm-accent: #{map.get(p.$foliage--afternoon, warm-accent)};
+  --foliage-warm-deep:   #{map.get(p.$foliage--afternoon, warm-deep)};
+  --foliage-cool:        #{map.get(p.$foliage--afternoon, cool)};
+
+  --bush-light:     #{map.get(p.$bushes--afternoon, light)};
+  --bush-mid-light: #{map.get(p.$bushes--afternoon, mid-light)};
+  --bush-mid:       #{map.get(p.$bushes--afternoon, mid)};
+  --bush-dark:      #{map.get(p.$bushes--afternoon, dark)};
+
+  --bush-3-light: #{map.get(p.$bushes--afternoon, three-light)};
+  --bush-3-dark:  #{map.get(p.$bushes--afternoon, three-dark)};
+
+  // Mock sun (`Moon` bitmap) — less punchy filtration & glow (`$sky-*` above).
+  --moon-top:         16%;
+  --moon-left:        82%;
+  --moon-translate-x: -50%;
+  --moon-filter:      blur(1px) sepia(0.28) saturate(1.04) brightness(1.02);
+  --moon-opacity:     0.85;
+  --moon-glow-rgb:    236 226 206;
+
+  // Softer halo so the sky slab keeps its authored stops.
+  --sun-glow-rgb:     242 232 216;
+  --sun-glow-opacity: 0.10;
+
+  --cloudy-overlay-opacity: 0.22;
+
+  // Daytime — suppress night-stack entirely.
+  --night-wash-opacity: 0;
+
+  --scene-grade-multiply-opacity:  0;
+  --scene-grade-softlight-opacity: 0;
+
+  // Slightly duskier violet dust vs previous afternoon (+ less chroma bleed into UI chrome).
+  --haze-rgb:         78 78 93;
+
+  // Façades — `$houses--afternoon`: grey-brown reference read vs plum autumn walls.
+  --house-shell:         #{map.get(p.$houses--afternoon, shell)};
+  --house-roof:          #{map.get(p.$houses--afternoon, roof)};
+  --house-roof-light:    #{map.get(p.$houses--afternoon, roof-light)};
+  --house-roof-lighter:  #{map.get(p.$houses--afternoon, roof-lighter)};
+  --house-church-accent: #{map.get(p.$houses--afternoon, church-accent)};
+  --window-lit:          #{map.get(p.$houses--afternoon, window-unlit)};
 }
 
 [data-time='evening'] {

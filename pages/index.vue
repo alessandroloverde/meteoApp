@@ -153,7 +153,7 @@ const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: scene
 
         <div class="scene-layer mask-layer terrain-4" style="z-index: 3"></div>
 
-        <div class="scene-layer terrain-5" style="z-index: 3"></div>
+        <div class="scene-layer mask-layer terrain-5" style="z-index: 3"></div>
 
         <section class="scene-layer" style="z-index: 1">
           <div class="houseBlock--small">
