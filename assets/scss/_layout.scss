@@ -35,11 +35,18 @@
   padding: v.$space-md;
 }
 
-// Side-by-side reference + live phone frames
+// Side-by-side reference + app phone; each column stacks controls above its frame
 .phoneRow {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: v.$space-md;
+}
+
+.phoneColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$space-sm;
 }
 
 // Mobile UI frame: all app chrome (scroll + bottom nav) lives inside this box.
@@ -52,7 +59,10 @@
 }
 
 .phoneContainer--reference {
-  background: #000 url('~/assets/images/Modello.png') center / cover no-repeat;
+  background-color: #000;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .phoneContainer__main {
