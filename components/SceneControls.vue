@@ -52,7 +52,8 @@ const {
   border-radius: 12px;
   color: #fff;
   font: 12px/1.4 system-ui, sans-serif;
-  backdrop-filter: blur(10px);
+  // Heavy when composited over the GPU‑masked scene; keep blur subtle for INP/LCP.
+  backdrop-filter: blur(4px);
 }
 
 .scene-controls__field {

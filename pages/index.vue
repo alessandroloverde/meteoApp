@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useWeatherStore } from '@/stores/weather.store'
 import { useLocation } from '@/composables/useLocation'
 import { fetchWeather } from '@/composables/useWeather'
@@ -52,6 +52,43 @@ const ui = computed(() => {
 // Replace these bindings with the live `ui.*` values when wiring real data.
 const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: sceneTemp } = useSceneControls()
 
+// Scene `data-*` attributes drive a large subtree of masks, filters, and CSS vars.
+// Updating them in the same frame as a native <select> change hurts INP. Mirror
+// shared `useState` into these refs on the next animation frame (client only).
+const sceneDisplaySeason = ref(sceneSeason.value)
+const sceneDisplayTime = ref(sceneTime.value)
+const sceneDisplayWeather = ref(sceneWeather.value)
+const sceneDisplayTemp = ref(sceneTemp.value)
+
+function flushSceneDisplayAttrs() {
+  sceneDisplaySeason.value = sceneSeason.value
+  sceneDisplayTime.value = sceneTime.value
+  sceneDisplayWeather.value = sceneWeather.value
+  sceneDisplayTemp.value = sceneTemp.value
+}
+
+let sceneAttrRaf = null
+function queueSceneDisplayAttrs() {
+  if (import.meta.server) {
+    flushSceneDisplayAttrs()
+    return
+  }
+  if (sceneAttrRaf != null) return
+  sceneAttrRaf = requestAnimationFrame(() => {
+    sceneAttrRaf = null
+    flushSceneDisplayAttrs()
+  })
+}
+
+watch([sceneSeason, sceneTime, sceneWeather, sceneTemp], queueSceneDisplayAttrs, { flush: 'post' })
+
+onBeforeUnmount(() => {
+  if (sceneAttrRaf != null) {
+    cancelAnimationFrame(sceneAttrRaf)
+    sceneAttrRaf = null
+  }
+})
+
 </script>
 
 <template>
@@ -63,10 +100,10 @@ const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: scene
     -->
     <div
       class="scene"
-      :data-season="sceneSeason"
-      :data-time="sceneTime"
-      :data-weather="sceneWeather"
-      :data-temp="sceneTemp"
+      :data-season="sceneDisplaySeason"
+      :data-time="sceneDisplayTime"
+      :data-weather="sceneDisplayWeather"
+      :data-temp="sceneDisplayTemp"
     >
       <div class="scene-layer sky-base">
         <aside class="scene-layer sky-base-overlay">
@@ -306,6 +343,9 @@ $trees: (
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  // Limit style/layout invalidation to the illustration when `data-time` etc. change.
+  contain: layout style;
+  isolation: isolate;
 }
 
 .scene-layer {
