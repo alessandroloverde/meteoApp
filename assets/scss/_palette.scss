@@ -66,6 +66,24 @@ $clouds--afternoon: (
   shadow-deep:  #{color.scale(#626578, $saturation: -10%, $lightness: -2%)},
 );
 
+// Morning sky — consumed by `[data-time='morning']` in `_theme.scss` (overrides shared daytime slab).
+$sky--morning: (
+  top:        #c3bdb1,
+  upper-mid:  #c3bdb1,
+  lower-mid:  #c3bdb1,
+  bottom:     #c3bdb1,
+);
+
+// Morning clouds — consumed by `[data-time='morning']` in `_theme.scss`.
+$clouds--morning: (
+  warm:         #{color.scale(#eee6db, $saturation: 5%, $lightness: -4%)},
+  light:        #{color.scale(#f5eae0, $saturation: 5%, $lightness: -3%)},
+  mid:          #{color.scale(#dacdbf, $saturation: 5%, $lightness: -3%)},
+  mid-dark:     #{color.scale(#cec2b7, $saturation: 5%, $lightness: -2%)},
+  shadow:       #{color.scale(#bbab9a, $saturation: -5%, $lightness: -10%)},
+  shadow-deep:  #{color.scale(#b2a18f, $saturation: 5%, $lightness: -5%)},
+);
+
 
 // ----- Terrain ----------------------------------------------------------------
 // Three values per layer (deep / mid / accent). Shared autumn primitives
@@ -173,6 +191,39 @@ $terrain--afternoon: (
   ),
 );
 
+// Morning — lighter ochre / sunrise strip vs `$terrain--afternoon` (Milano mock guideline).
+$terrain--morning: (
+  mid-warm:    #9d6b4f,
+  accent-warm: #c9955a,
+  warm-deep:   #755340,
+
+  layer-1: (
+    deep:   #5a4334,
+    mid:    #6f5644,
+    accent: #{_muted-land(#e4a050)},
+  ),
+  layer-2: (
+    deep:   #5c4638,
+    mid:    null,
+    accent: #c47d40,
+  ),
+  layer-3: (
+    deep:   #7a5c48,
+    mid:    null,
+    accent: null,
+  ),
+  layer-4: (
+    deep:   #6e5545,
+    mid:    null,
+    accent: null,
+  ),
+  layer-5: (
+    deep:   null,
+    mid:    null,
+    accent: #c4a88c,
+  ),
+);
+
 
 // ----- Foliage / trees --------------------------------------------------------
 // Trunks and foliage gradients. `cool` (the dark red-brown gradient end)
@@ -198,6 +249,18 @@ $foliage--afternoon: (
   warm-accent: #{_muted-land(#c9893a)},
   warm-deep:   #{_muted-land(#985f34)},
   cool:        #{_muted-land(#4a3d36)},
+);
+
+// Morning canopy — warmer highlights, softer shadow end vs `$foliage--afternoon`.
+$foliage--morning: (
+  trunk-base:        #{_muted-land(#3d2e28)},
+  trunk-tip:         #{_muted-land(#342622)},
+  trunk-base-accent: #{_muted-land(#5a4334)},
+
+  warm:        #{_muted-land(#f0c45a)},
+  warm-accent: #{_muted-land(#e0a84a)},
+  warm-deep:   #{_muted-land(#b0783c)},
+  cool:        #{_muted-land(#5a463c)},
 );
 
 // Midpoint between `$foliage--autumn` and the tonal range of `$terrain--night`:
@@ -234,6 +297,17 @@ $bushes--afternoon: (
 
   three-light: #{_muted-land(#4a3c31)},
   three-dark:  #{_muted-land(#7d5638)},
+);
+
+// Morning — matches `$terrain--morning` / `$foliage--morning` strip (lighter mids).
+$bushes--morning: (
+  light:      #{_muted-land(#d49a48)},
+  mid-light:  #{_muted-land(#c48a3c)},
+  mid:        #{_muted-land(#7e5a3c)},
+  dark:       #{_muted-land(#4a3a30)},
+
+  three-light: #{_muted-land(#5c4a3c)},
+  three-dark:  #{_muted-land(#8f6642)},
 );
 
 // Mirrors `$foliage--night`: highlights less loud than `$bushes--autumn`, mids

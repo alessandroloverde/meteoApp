@@ -188,14 +188,10 @@
 // TIME — sky / clouds / moon / haze
 // (vocabulary matches `mapWeatherToUI > getTimeOfDay`: morning|afternoon|evening|night)
 // -----------------------------------------------------------------------------
-[data-time='morning'] {
-  --window-lit: #{map.get(p.$houses--autumn, window-unlit)};
-}
-
+// Daytime (`morning` + `afternoon`). Shared terrain/foliage/bushes from `$terrain--afternoon` etc.;
+// `[data-time='morning']` overrides sky/clouds plus land tokens from `$terrain--morning` / `$foliage--morning` / `$bushes--morning`.
+[data-time='morning'],
 [data-time='afternoon'] {
-  // **`$sky--afternoon` + `--sky-gradient` intentionally unchanged** —
-  // everything else pulls afternoon back from glare.
-
   --sky-top:        #{map.get(p.$sky--afternoon, top)};
   --sky-upper-mid:  #{map.get(p.$sky--afternoon, upper-mid)};
   --sky-lower-mid:  #{map.get(p.$sky--afternoon, lower-mid)};
@@ -289,6 +285,75 @@
   --house-roof-lighter:  #{map.get(p.$houses--afternoon, roof-lighter)};
   --house-church-accent: #{map.get(p.$houses--afternoon, church-accent)};
   --window-lit:          #{map.get(p.$houses--afternoon, window-unlit)};
+}
+
+[data-time='morning'] {
+  --sky-top:        #{map.get(p.$sky--morning, top)};
+  --sky-upper-mid:  #{map.get(p.$sky--morning, upper-mid)};
+  --sky-lower-mid:  #{map.get(p.$sky--morning, lower-mid)};
+  --sky-bottom:     #{map.get(p.$sky--morning, bottom)};
+
+  --sky-gradient: linear-gradient(
+    to bottom,
+    var(--sky-top)       0%,
+    var(--sky-upper-mid) 48%,
+    var(--sky-lower-mid) 64%,
+    var(--sky-bottom)    100%
+  );
+
+  --cloud-warm:        #{map.get(p.$clouds--morning, warm)};
+  --cloud-light:       #{map.get(p.$clouds--morning, light)};
+  --cloud-mid:         #{map.get(p.$clouds--morning, mid)};
+  --cloud-mid-dark:    #{map.get(p.$clouds--morning, mid-dark)};
+  --cloud-shadow:      #{map.get(p.$clouds--morning, shadow)};
+  --cloud-shadow-deep: #{map.get(p.$clouds--morning, shadow-deep)};
+
+  // Land — `$terrain--morning` / `$foliage--morning` / `$bushes--morning` in `_palette.scss`.
+  --terrain-mid-warm:    #{map.get(p.$terrain--morning, mid-warm)};
+  --terrain-accent-warm: #{map.get(p.$terrain--morning, accent-warm)};
+  --terrain-warm-deep:   #{map.get(p.$terrain--morning, warm-deep)};
+
+  --terrain-1-deep:   #{map.get(p.$terrain--morning, layer-1, deep)};
+  --terrain-1-mid:    #{map.get(p.$terrain--morning, layer-1, mid)};
+  --terrain-1-accent: #{map.get(p.$terrain--morning, layer-1, accent)};
+
+  --terrain-2-deep:   #{map.get(p.$terrain--morning, layer-2, deep)};
+  --terrain-2-mid:    var(--terrain-mid-warm);
+  --terrain-2-accent: #{map.get(p.$terrain--morning, layer-2, accent)};
+
+  --terrain-3-deep:   #{map.get(p.$terrain--morning, layer-3, deep)};
+  --terrain-3-mid:    var(--terrain-mid-warm);
+  --terrain-3-accent: var(--terrain-accent-warm);
+
+  --terrain-4-deep:   #{map.get(p.$terrain--morning, layer-4, deep)};
+  --terrain-4-mid:    var(--terrain-mid-warm);
+  --terrain-4-accent: var(--terrain-accent-warm);
+
+  --terrain-5-deep:   var(--terrain-warm-deep);
+  --terrain-5-mid:    var(--terrain-warm-deep);
+  --terrain-5-accent: #{map.get(p.$terrain--morning, layer-5, accent)};
+
+  --trunk-base:        #{map.get(p.$foliage--morning, trunk-base)};
+  --trunk-tip:         #{map.get(p.$foliage--morning, trunk-tip)};
+  --trunk-base-accent: #{map.get(p.$foliage--morning, trunk-base-accent)};
+
+  --foliage-warm:        #{map.get(p.$foliage--morning, warm)};
+  --foliage-warm-accent: #{map.get(p.$foliage--morning, warm-accent)};
+  --foliage-warm-deep:   #{map.get(p.$foliage--morning, warm-deep)};
+  --foliage-cool:        #{map.get(p.$foliage--morning, cool)};
+
+  --bush-light:     #{map.get(p.$bushes--morning, light)};
+  --bush-mid-light: #{map.get(p.$bushes--morning, mid-light)};
+  --bush-mid:       #{map.get(p.$bushes--morning, mid)};
+  --bush-dark:      #{map.get(p.$bushes--morning, dark)};
+
+  --bush-3-light: #{map.get(p.$bushes--morning, three-light)};
+  --bush-3-dark:  #{map.get(p.$bushes--morning, three-dark)};
+
+  // Rising sun — east (left); lower than afternoon’s west / high sun (`16%` / `82%`).
+  --moon-top:         40%;
+  --moon-left:        14%;
+  --moon-translate-x: -50%;
 }
 
 [data-time='evening'] {
