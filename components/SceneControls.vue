@@ -1,8 +1,20 @@
 <script setup>
+import { computed } from 'vue'
+import { buildSceneIdentifier } from '@/utils/sceneIdentifier'
+
 const {
   season, time, weather, temp,
   SCENE_SEASONS, SCENE_TIMES, SCENE_WEATHERS, SCENE_TEMPS,
 } = useSceneControls()
+
+const sceneId = computed(() =>
+  buildSceneIdentifier({
+    weather: weather.value,
+    season: season.value,
+    time: time.value,
+    temp: temp.value,
+  }),
+)
 </script>
 
 <template>
@@ -11,6 +23,9 @@ const {
     role="group"
     aria-label="Scene theming controls (development)"
   >
+    <p class="scene-controls__scene-id" title="weather--season--time--temp">
+      {{ sceneId }}
+    </p>
     <div class="scene-controls__row">
       <label class="scene-controls__field">
         <span class="scene-controls__label">Season</span>
@@ -57,6 +72,16 @@ const {
   color: #fff;
   font: 12px/1.4 system-ui, sans-serif;
   backdrop-filter: blur(4px);
+}
+
+.scene-controls__scene-id {
+  margin: 0;
+  padding: 0 2px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  line-height: 1.35;
+  word-break: break-all;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .scene-controls__row {

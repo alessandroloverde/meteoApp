@@ -5,9 +5,13 @@
 // custom properties on `:root`, organized by scene group. Components reference
 // `var(--…)` only — they should never see a raw hex.
 //
-// Dynamic theming is layered as attribute selectors on the root element:
+// Dynamic theming is layered as attribute selectors on `.scene`:
 //
-//   <body data-season="autumn" data-time="night" data-weather="storm" data-temp="cold">
+//   data-scene-id="cloudy--autumn--morning--mild"   (weather--season--time--temp)
+//   data-season="autumn" data-time="night" data-weather="cloudy" data-temp="mild"
+//
+// Prefer the four axes + existing `[data-temp='…']` blocks for temperature bands.
+// Use `data-scene-id` when a combination needs overrides that a single axis cannot express.
 //
 // Each axis overrides the subset of tokens it owns:
 //   • season  → terrain / foliage / bushes ramps
@@ -24,7 +28,7 @@
 
 
 // -----------------------------------------------------------------------------
-// Defaults — current scene (autumn / night / stormy)
+// Defaults — current scene (cloudy / autumn / night / mild baseline; storm = legacy note)
 // -----------------------------------------------------------------------------
 :root {
 
@@ -515,4 +519,60 @@
 [data-temp='hot'] {
   --temp-tint-rgb:     240 130 60;
   --temp-tint-opacity: 0.16;
+}
+
+
+// =============================================================================
+// Combo scenes (reference art) — wins over single-axis `[data-*]` blocks
+// =============================================================================
+// Guideline (Milano / overcast autumn): cool slate sky + neutral cloud ramp.
+// Terrain / trees / bushes / houses inherit default `[data-time='morning']`
+// (and shared daytime) tokens — only sky stack + atmosphere are overridden here.
+.scene[data-scene-id='cloudy--autumn--morning--cold'] {
+  --sky-top:        #b5c1c9;
+  --sky-upper-mid:  #b9c5cd;
+  --sky-lower-mid:  #c8d1d6;
+  --sky-bottom:     #d9e0e4;
+
+  --sky-gradient: linear-gradient(
+    to bottom,
+    var(--sky-top)       0%,
+    var(--sky-upper-mid) 38%,
+    var(--sky-lower-mid) 72%,
+    var(--sky-bottom)    100%
+  );
+
+  --cloud-warm:        #e5e7eb;
+  --cloud-light:       #d1d5db;
+  --cloud-mid:         #9ca3af;
+  --cloud-mid-dark:    #8b939d;
+  --cloud-shadow:      #6b7280;
+  --cloud-shadow-deep: #575e68;
+
+  // Overcast: lift haze, soften sun disc
+  --haze-rgb:               118 126 136;
+  --cloudy-overlay-opacity: 0.36;
+  --sun-glow-rgb:           230 236 242;
+  --sun-glow-opacity:       0.06;
+
+  --moon-filter:  blur(1.2px) sepia(0.08) saturate(0.85) brightness(1.02);
+  --moon-opacity: 0.62;
+
+  --night-wash-opacity: 0;
+
+  // Light grade so UI cards stay legible on cool base
+  --scene-grade-multiply-opacity:  0.04;
+  --scene-grade-softlight-opacity: 0.05;
+
+  // Cold tint already baked into sky/clouds — keep global temp layer subtle
+  --temp-tint-rgb:     145 178 202;
+  --temp-tint-opacity: 0.05;
+  --temp-tint-blend:   color;
+}
+
+
+// Afternoon + cold — reference still blended over `--sky-gradient` (see `index.vue` `.sky-base::before`).
+.scene[data-time='afternoon'][data-temp='cold'] {
+  --sky-ref-afternoon-cold-opacity: 0.42;
+  --sky-ref-afternoon-cold-blend: soft-light;
 }

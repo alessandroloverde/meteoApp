@@ -4,6 +4,7 @@ import { useWeatherStore } from '@/stores/weather.store'
 import { useLocation } from '@/composables/useLocation'
 import { fetchWeather } from '@/composables/useWeather'
 import { mapWeatherToUI } from '@/utils/weatherMapper'
+import { buildSceneIdentifier } from '@/utils/sceneIdentifier'
 import { reverseGeocode } from '@/composables/useReverseGeocoding'
 
 const store = useWeatherStore()
@@ -82,6 +83,16 @@ function queueSceneDisplayAttrs() {
 
 watch([sceneSeason, sceneTime, sceneWeather, sceneTemp], queueSceneDisplayAttrs, { flush: 'post' })
 
+// Single key for combo-specific SCSS / assets: weather--season--time--temp
+const sceneDisplayId = computed(() =>
+  buildSceneIdentifier({
+    weather: sceneDisplayWeather.value,
+    season: sceneDisplaySeason.value,
+    time: sceneDisplayTime.value,
+    temp: sceneDisplayTemp.value,
+  }),
+)
+
 onBeforeUnmount(() => {
   if (sceneAttrRaf != null) {
     cancelAnimationFrame(sceneAttrRaf)
@@ -94,12 +105,12 @@ onBeforeUnmount(() => {
 <template>
   <div class="page-bg">
     <!--
-      Scene theming attributes are driven by <SceneControls> (dev panel above
-      the phones) via the `useSceneControls` composable. To swap to live data,
-      replace the bindings with: :data-season="ui?.season" etc.
+      Scene: four axes on `.scene` plus `data-scene-id` (weather--season--time--temp).
+      Dev panel: SceneControls. For live API, bind axes from `ui` / `buildSceneIdentifier`.
     -->
     <div
       class="scene"
+      :data-scene-id="sceneDisplayId"
       :data-season="sceneDisplaySeason"
       :data-time="sceneDisplayTime"
       :data-weather="sceneDisplayWeather"
@@ -109,7 +120,11 @@ onBeforeUnmount(() => {
         <aside class="scene-layer sky-base-overlay">
           <div class="sky-base-overlay--night-wash"></div>
           <div class="sky-base-overlay--sun-glow"></div>
+          <div class="sky-base-overlay--topClouds-overlay"></div>
           <div class="sky-base-overlay--cloudy-overlay"></div>
+          <div class="sky-base-overlay--morning-overlay"></div>
+          <div class="sky-base-overlay--afternoon-overlay"></div>
+          <div class="sky-base-overlay--evening-overlay"></div>
         </aside>
         <div class="scene-layer moon"></div>
         <section class="top-clouds">
@@ -234,7 +249,29 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 @use 'sass:map';
+@use 'sass:list';
 @use '~/assets/scss/mixins' as mx;
+
+// Returns a CSS four-value mask-position string for a cloud config map.
+// Four-value syntax (`left 0 top 40%`) means "top edge of image at 40% from
+// top of container" — exactly the same as `top: 40%` on the element, with no
+// percentage-scaling maths needed. Cloud 1 has no `position` key → top center.
+@function cloud-mask-pos($config) {
+  @if not map.has-key($config, position) {
+    @return top center;
+  }
+  $pos:   map.get($config, position);
+  $keys:  map.keys($pos);
+  $x-key: list.nth($keys, 1);
+  $x-val: map.get($pos, $x-key);
+  $y-key: list.nth($keys, 2);
+  $y-val: map.get($pos, $y-key);
+  // Interpolate into a single string so Sass treats it as one list item
+  // and doesn't split it across the comma-separated mask-position list.
+  @return unquote('#{$x-key} #{$x-val} #{$y-key} #{$y-val}');
+}
+
+
 
 // Color tokens come from `_theme.scss` (loaded globally via base.scss) as
 // CSS custom properties on `:root`. This file references them via `var(--…)`
@@ -394,6 +431,7 @@ $trees: (
     inset: 0;
     opacity: var(--cloudy-overlay-opacity);
   }
+  
 
   .sky-base-overlay--night-wash {
     // Deep navy pane that "pushes" the sky toward a colder, denser
@@ -420,6 +458,23 @@ $trees: (
   background: var(--sky-gradient);
   z-index: 1;
   position: relative;
+}
+
+// Afternoon + cold: blend procedural sky with `References/Autumn | Cloudy | Afternoon | Cold.png`.
+.scene[data-time='afternoon'][data-temp='cold'] .sky-base {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: var(--sky-ref-afternoon-cold-blend, soft-light);
+    opacity: var(--sky-ref-afternoon-cold-opacity, 0.42);
+  }
+
+  > .sky-base-overlay {
+    z-index: 1;
+  }
 }
 .terrain {
   height: 55%;
@@ -577,7 +632,7 @@ $clouds: (
   3: (
     dimensions: (width: calc(317px / 2), height: calc(148px / 2)),
     position: (right: -7%, top: 41%),
-    bkg: linear-gradient(0deg, var(--cloud-mid) 0%, var(--cloud-shadow-deep) 50%),
+    bkg: radial-gradient(circle at 45% 15%, var(--cloud-mid) 0%, var(--cloud-shadow-deep) 90%),
     mask-type: svg,
     z-index: 3,
   ),
@@ -635,6 +690,30 @@ $clouds--low: (
   .cloud-#{$key}--low { @include mx.cloud($key, $config, '--low'); }
 }
 
+.sky-base-overlay--topClouds-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: #3559a1;
+    mix-blend-mode: overlay;
+    z-index: 10;
+    opacity: 0.5;
+
+    mask-image:
+      url('~/assets/images/masks/Cloud-1--mask.svg'),
+      url('~/assets/images/masks/Cloud-3--mask.svg'),
+      url('~/assets/images/masks/Cloud-4--mask.svg');
+
+    mask-size:
+      100% auto,
+      map.get($clouds, 3, dimensions, width) map.get($clouds, 3, dimensions, height),
+      map.get($clouds, 4, dimensions, width) map.get($clouds, 4, dimensions, height);
+
+    mask-position: top center, right -12% top 26.5%, right -145% top 33.5%;
+    mask-repeat: no-repeat;
+    mask-composite: add;
+    -webkit-mask-composite: source-over;
+  }
+
 .top-clouds,
 .bottom-clouds {
   position: relative;
@@ -644,7 +723,7 @@ $clouds--low: (
   z-index: 2;
 }
 .top-clouds { z-index: 3 }
-.bottom-clouds { opacity: 0.7}
+.bottom-clouds { opacity: 0.7 }
 
 .cloud-1-wrap {
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
@@ -724,6 +803,42 @@ $clouds--low: (
   --layer-opacity: 1;
   top: 8%;
   z-index: 10;
+}
+
+// Terrain layers — `data-temp='cold'` only (scene / API temp band).
+.scene[data-temp='cold'] .terrain-1 {
+  --layer-bkg: linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--terrain-1-deep) 50%, transparent) 0%,
+    color-mix(in srgb, var(--terrain-1-mid) 50%, transparent) 100%
+  );
+}
+
+.scene[data-time='morning'][data-temp='cold'] .terrain-1 {
+  --accent-color: rgb(172 157 96);
+}
+
+.scene[data-time='evening'][data-temp='cold'] .terrain-1 {
+  --accent-color: rgb(113 72 20);
+}
+
+.scene[data-time='evening'][data-temp='cold'] .terrain-2 {
+  --accent-color: rgb(113 72 20);
+  --blend-mode: color;
+}
+
+.scene[data-temp='cold'] .terrain-2 {
+  --accent-color: #c4af78;
+  --blend-mode: overlay;
+}
+
+.scene[data-temp='cold'] .terrain-4 {
+  --layer-bkg: transparent;
+}
+
+// Cloud-4 (top) — morning + cold only.
+.scene[data-time='morning'][data-temp='cold'] .cloud-4 {
+  background: #9fa9b4;
 }
 
 .bushes-in-front {

@@ -8,6 +8,9 @@
 // Vocabularies match `mapWeatherToUI` in `utils/weatherMapper.js` and the
 // variant selectors in `assets/scss/_theme.scss`. Keep all three in sync
 // when adding/removing values.
+//
+// Canonical string key (dev / references): `buildSceneIdentifier` in
+// `utils/sceneIdentifier.js` → weather--season--time--temp
 
 export const SCENE_SEASONS = ['spring', 'summer', 'autumn', 'winter']
 
@@ -30,10 +33,11 @@ export const SCENE_TEMPS = ['frosty', 'cold', 'mild', 'warm', 'hot']
 export function useSceneControls() {
   // `useState` (Nuxt) shares the value across all components on the page,
   // so the dev dropdowns and the consuming `<div class="scene">` stay in sync.
+  // Defaults align with reference art (Modello): cloudy, autumn, night, mild.
   const season = useState('scene-season', () => 'autumn')
-  const time = useState('scene-time', () => 'evening')
-  const weather = useState('scene-weather', () => 'partly_cloudy')
-  const temp = useState('scene-temp', () => 'warm')
+  const time = useState('scene-time', () => 'night')
+  const weather = useState('scene-weather', () => 'cloudy')
+  const temp = useState('scene-temp', () => 'mild')
 
   return {
     season,

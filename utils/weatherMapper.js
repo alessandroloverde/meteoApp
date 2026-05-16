@@ -1,3 +1,5 @@
+import { buildSceneIdentifier } from './sceneIdentifier'
+
 // ---- SEASON ----
 function getSeason(dateStr) {
    const month = new Date(dateStr).getMonth() + 1
@@ -41,17 +43,22 @@ function getSeason(dateStr) {
  
    return 'clear'
  }
- 
- // ---- MAIN MAPPER ----
- export function mapWeatherToUI(weather) {
-   const season = getSeason(weather.time)
-   const time = getTimeOfDay(weather.time)
-   const condition = mapCondition(weather.weathercode)
-   const tempRange = mapTemperature(weather.temperature)
- 
-   const key = `${season}_${time}_${condition}_${tempRange}`
- 
-   return {
+
+// ---- MAIN MAPPER ----
+export function mapWeatherToUI(weather) {
+  const season = getSeason(weather.time)
+  const time = getTimeOfDay(weather.time)
+  const condition = mapCondition(weather.weathercode)
+  const tempRange = mapTemperature(weather.temperature)
+
+  const key = buildSceneIdentifier({
+    weather: condition,
+    season,
+    time,
+    temp: tempRange,
+  })
+
+  return {
      season,
      time,
      condition,
