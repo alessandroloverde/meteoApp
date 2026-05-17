@@ -120,7 +120,9 @@ onBeforeUnmount(() => {
         <aside class="scene-layer sky-base-overlay">
           <div class="sky-base-overlay--night-wash"></div>
           <div class="sky-base-overlay--sun-glow"></div>
-          <div class="sky-base-overlay--topClouds-overlay"></div>
+          <div class="sky-base-overlay--topClouds-overlay">
+            <div class="sky-base-overlay--topClouds-overlay__paint"></div>
+          </div>
           <div class="sky-base-overlay--cloudy-overlay"></div>
           <div class="sky-base-overlay--morning-overlay"></div>
           <div class="sky-base-overlay--afternoon-overlay"></div>
@@ -690,29 +692,43 @@ $clouds--low: (
   .cloud-#{$key}--low { @include mx.cloud($key, $config, '--low'); }
 }
 
+// Mask container — always present, holds the cloud-shape masks.
+// Children provide the color/blend per scene condition.
 .sky-base-overlay--topClouds-overlay {
-    position: absolute;
-    inset: 0;
-    background-color: #3559a1;
-    mix-blend-mode: overlay;
-    z-index: 10;
-    opacity: 0.5;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
 
-    mask-image:
-      url('~/assets/images/masks/Cloud-1--mask.svg'),
-      url('~/assets/images/masks/Cloud-3--mask.svg'),
-      url('~/assets/images/masks/Cloud-4--mask.svg');
+  mask-image:
+    url('~/assets/images/masks/Cloud-1--mask.svg'),
+    url('~/assets/images/masks/Cloud-3--mask.svg'),
+    url('~/assets/images/masks/Cloud-4--mask.svg');
 
-    mask-size:
-      100% auto,
-      map.get($clouds, 3, dimensions, width) map.get($clouds, 3, dimensions, height),
-      map.get($clouds, 4, dimensions, width) map.get($clouds, 4, dimensions, height);
+  mask-size:
+    100% auto,
+    map.get($clouds, 3, dimensions, width) map.get($clouds, 3, dimensions, height),
+    map.get($clouds, 4, dimensions, width) map.get($clouds, 4, dimensions, height);
 
-    mask-position: top center, right -12% top 26.5%, right -145% top 33.5%;
-    mask-repeat: no-repeat;
-    mask-composite: add;
-    -webkit-mask-composite: source-over;
-  }
+  mask-position: top center, right -12% top 26.5%, right -145% top 33.5%;
+  mask-repeat: no-repeat;
+  mask-composite: add;
+  -webkit-mask-composite: source-over;
+}
+
+// Paint layer — hidden by default, shown per scene condition.
+.sky-base-overlay--topClouds-overlay__paint {
+  display: none;
+  position: absolute;
+  inset: 0;
+}
+
+// cold + night
+.scene[data-time='night'][data-temp='cold'] .sky-base-overlay--topClouds-overlay__paint {
+  display: block;
+  background-color: #3559a1;
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
 
 .top-clouds,
 .bottom-clouds {
