@@ -141,6 +141,10 @@
   --sun-glow-rgb:     255 200 120;
   --sun-glow-opacity: 0;
   --sun-glow-blend:   screen;
+  // Ellipse + falloff for `.sky-base-overlay--sun-glow` (index.vue).
+  --sun-glow-size-x:  50%;
+  --sun-glow-size-y:  130%;
+  --sun-glow-falloff: 60%;
 
   // Night wash: a deep-navy vertical gradient on `hard-light` that
   // pushes the sky toward a colder, denser nighttime read. The pane
@@ -575,4 +579,17 @@
 .scene[data-time='afternoon'][data-temp='cold'] {
   --sky-ref-afternoon-cold-opacity: 0.42;
   --sky-ref-afternoon-cold-blend: soft-light;
+}
+
+
+// cloudy / autumn / evening / cold — sun lower + wider halo vs base `[data-time='evening']`.
+.scene[data-scene-id='cloudy--autumn--evening--cold'] {
+  --moon-top:         66%;
+  --moon-left:        50%;
+  --moon-translate-x: -50%;
+
+  --sun-glow-size-x:  72%;
+  --sun-glow-size-y:  200%;
+  --sun-glow-falloff: 78%;
+  --sun-glow-opacity: 0.48;
 }

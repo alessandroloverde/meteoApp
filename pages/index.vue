@@ -418,9 +418,9 @@ $trees: (
     z-index: 0;
     pointer-events: none;
     background: radial-gradient(
-      ellipse 50% 130% at var(--moon-left) var(--moon-top),
+      ellipse var(--sun-glow-size-x) var(--sun-glow-size-y) at var(--moon-left) var(--moon-top),
       rgb(var(--sun-glow-rgb) / 1)   0%,
-      rgb(var(--sun-glow-rgb) / 0) 60%
+      rgb(var(--sun-glow-rgb) / 0) var(--sun-glow-falloff)
     );
     mix-blend-mode: var(--sun-glow-blend);
     opacity: var(--sun-glow-opacity);
@@ -725,7 +725,7 @@ $clouds--low: (
 // cold + night
 .scene[data-time='night'][data-temp='cold'] .sky-base-overlay--topClouds-overlay__paint {
   display: block;
-  background-color: #3559a1;
+  background: linear-gradient(45deg, #010f63, transparent);
   mix-blend-mode: overlay;
   opacity: 0.5;
 }
