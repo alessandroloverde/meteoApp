@@ -487,6 +487,75 @@ $trees: (
   background-color: transparent;
 }
 
+.terrain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+// Full-bleed terrain grade — off unless `.scene` sets `--terrain-overlay-opacity`.
+// All five `Terrain-*--bkg` masks unioned (back → front: 5…1). Positions mirror
+// each `.terrain-N` slab (`top` / `mask-position`); tune in DevTools as needed.
+.test-terrain {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: linear-gradient(
+    to bottom,
+    var(--terrain-warm-top),
+    var(--terrain-warm-bottom)
+  );
+  background: blue;
+  mix-blend-mode: var(--terrain-overlay-blend-mode);
+  opacity: var(--terrain-overlay-opacity);
+
+  -webkit-mask-image:
+/*     url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg'), */
+    url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
+  mask-image:
+/*     url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg'), */
+    url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
+
+  -webkit-mask-size: 
+/*     100% auto, 
+    100% auto, 
+    100% auto, 
+    100% auto,  */
+    100% auto;
+  mask-size: 
+/*     100% auto, 
+    100% auto, 
+    100% auto, 
+    100% auto,  */
+    100% auto;
+
+  // terrain-5: bottom center · 4: top center · 3/2: top 4% · 1: top 8%
+  -webkit-mask-position: 
+/*     center bottom, 
+    top center, 
+    center top 4%, 
+    center top 4%,  */
+    center -124%;
+  mask-position: 
+/*     center bottom, 
+    top center, 
+    center top 4%, 
+    center top 4%,  */
+    center -124%;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+}
+
 [class*='terrain-'] {
   position: absolute;
   --mask-size: 100% auto;
@@ -508,7 +577,7 @@ $trees: (
     content: '';
     position: absolute;
     inset: 0;
-    background: url('~/assets/images/masks/HouseBlock--church.svg') center center / 100% auto no-repeat;
+    background: url('~/assets/images/masks/Buildings/HouseBlock--church.svg') center center / 100% auto no-repeat;
     mix-blend-mode: soft-light;
     opacity: 0.7;
   }
@@ -700,9 +769,9 @@ $clouds--low: (
   z-index: 10;
 
   mask-image:
-    url('~/assets/images/masks/Cloud-1--mask.svg'),
-    url('~/assets/images/masks/Cloud-3--mask.svg'),
-    url('~/assets/images/masks/Cloud-4--mask.svg');
+    url('~/assets/images/masks/Clouds/Cloud-1--mask.svg'),
+    url('~/assets/images/masks/Clouds/Cloud-3--mask.svg'),
+    url('~/assets/images/masks/Clouds/Cloud-4--mask.svg');
 
   mask-size:
     100% auto,
@@ -761,8 +830,8 @@ $clouds--low: (
 
 
 .terrain-5 {
-  --mask-image: url('~/assets/images/masks/Terrain-5--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrain-5--gradient.png');
+  --mask-image: url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-5--gradient.png');
   --layer-bkg: var(--terrain-5-deep);
   --accent-color: var(--terrain-5-accent);
   --blend-mode: color;
@@ -774,8 +843,8 @@ $clouds--low: (
   z-index: 7;
 }
 .terrain-4 {
-  --mask-image: url('~/assets/images/masks/Terrain-4--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrain-4--gradient.png');
+  --mask-image: url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-4--gradient.png');
   --layer-bkg: var(--terrain-4-deep);
   --accent-color: var(--terrain-4-accent);
   --blend-mode: color;
@@ -783,8 +852,8 @@ $clouds--low: (
   z-index: 7;
 }
 .terrain-3 {
-  --mask-image: url('~/assets/images/masks/Terrain-3--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrain-3--gradient.png');
+  --mask-image: url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-3--gradient.png');
   --layer-bkg: var(--terrain-3-deep);
   --accent-color: var(--terrain-3-accent);
   --blend-mode: overlay;
@@ -793,8 +862,8 @@ $clouds--low: (
   z-index: auto;
 }
 .terrain-2 {
-  --mask-image: url('~/assets/images/masks/Terrain-2--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrain-2--gradient.png');
+  --mask-image: url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-2--gradient.png');
   --layer-bkg: linear-gradient(
     -45deg,
     var(--terrain-2-deep) 20%,
@@ -807,8 +876,8 @@ $clouds--low: (
   z-index: 9;
 }
 .terrain-1 {
-  --mask-image: url('~/assets/images/masks/Terrain-1--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrain-1--gradient.png');
+  --mask-image: url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
+  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-1--gradient.png');
   --layer-bkg: linear-gradient(
     45deg,
     var(--terrain-1-deep) 0%,
@@ -857,6 +926,35 @@ $clouds--low: (
   background: #9fa9b4;
 }
 
+// cloudy / autumn / morning / warm — terrain accents reuse `--terrain-warm-*`.
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .terrain-1,
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .terrain-2,
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .terrain-4,
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .terrain-5 {
+  --accent-color: var(--terrain-warm-top);
+}
+
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .terrain-3 {
+  --accent-color: var(--terrain-warm-bottom);
+}
+
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-1--foliage,
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-2--foliage {
+  background: linear-gradient(125deg, var(--terrain-warm-canopy) 10%, var(--terrain-warm-bottom) 95%);
+}
+
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-3--foliage {
+  background: linear-gradient(125deg, var(--terrain-warm-bottom) 8%, var(--terrain-warm-bottom) 52%, var(--terrain-warm-bottom) 96%);
+}
+
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-4--foliage {
+  background: linear-gradient(125deg, var(--terrain-warm-bottom) 10%, var(--terrain-warm-bottom) 95%);
+}
+
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-5--foliage {
+  background: linear-gradient(-90deg, var(--terrain-warm-bottom) 10%, var(--terrain-warm-bottom) 95%);
+}
+
 .bushes-in-front {
   z-index: 15;
   position: absolute;
@@ -877,13 +975,13 @@ $clouds--low: (
   position: absolute;
   right: 0%;
   top: 6%;
-  mask-image: url('~/assets/images/masks/Bush-1--bkg.svg');
+  mask-image: url('~/assets/images/masks/Trees&bushes/Bush-1--bkg.svg');
 
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('~/assets/images/masks/Bush-1--gradient.png') center center / 100% auto no-repeat;
+    background: url('~/assets/images/masks/Trees&bushes/Bush-1--gradient.png') center center / 100% auto no-repeat;
     mix-blend-mode: soft-light;
     opacity: 0.5;
   }
@@ -900,13 +998,13 @@ $clouds--low: (
   );
   left: 0%;
   top: 10%;
-  mask-image: url('~/assets/images/masks/Bush-2--bkg.svg');
+  mask-image: url('~/assets/images/masks/Trees&bushes/Bush-2--bkg.svg');
 
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: url('~/assets/images/masks/Bush-2--gradient.png') center center / 100% auto no-repeat;
+    background: url('~/assets/images/masks/Trees&bushes/Bush-2--gradient.png') center center / 100% auto no-repeat;
     mix-blend-mode: soft-light;
     opacity: 0.65;
   }
@@ -923,7 +1021,7 @@ $clouds--low: (
   position: absolute;
   left: 60%;
   top: 6%;
-  mask-image: url('~/assets/images/masks/Bush-3--bkg.svg');
+  mask-image: url('~/assets/images/masks/Trees&bushes/Bush-3--bkg.svg');
 }
 
 .foreground-haze {

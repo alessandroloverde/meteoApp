@@ -165,6 +165,14 @@
   --scene-grade-multiply-opacity:  0;
   --scene-grade-softlight-opacity: 0;
 
+  // ---- Terrain warm grade (`.terrain-overlay .test-terrain`) -------------
+  // Top / bottom reused for morning–warm accents on terrain + trees.
+  --terrain-warm-top:           #d79d1f;
+  --terrain-warm-bottom:        #923f1a;
+  --terrain-warm-canopy:        #e59d37;
+  --terrain-overlay-opacity:    0;
+  --terrain-overlay-blend-mode: overlay;
+
   // ---- Temperature tint (global overlay) --------------------------------
   // Applied as a fullscreen `mix-blend-mode` layer; defaults to no-op.
   --temp-tint-rgb:     0 0 0;
@@ -572,6 +580,12 @@
   --temp-tint-rgb:     145 178 202;
   --temp-tint-opacity: 0.05;
   --temp-tint-blend:   color;
+}
+
+
+// cloudy / autumn / morning / warm — terrain grade + accent reuse.
+.scene[data-scene-id='cloudy--autumn--morning--warm'] {
+  --terrain-overlay-opacity: 0.5;
 }
 
 

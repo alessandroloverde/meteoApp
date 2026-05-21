@@ -39,7 +39,7 @@
 
 
 // Renders a single tree composed of two layered elements (trunk + foliage),
-// each painted by masking SVG/PNG silhouettes from `assets/images/masks/Tree-#{$key}--*`.
+// each painted by masking SVG/PNG silhouettes from `assets/images/masks/Trees&bushes/Tree-#{$key}--*`.
 @mixin tree($key, $config) {
   position: absolute;
   width: map.get($config, width);
@@ -51,14 +51,14 @@
   }
 
   $trunk: map.get($config, trunk-colors);
-  $foliage-url: url('~/assets/images/masks/Tree-#{$key}--foliage.png');
+  $foliage-url: url('~/assets/images/masks/Trees&bushes/Tree-#{$key}--foliage.png');
 
   &--trunk {
     position: absolute;
     inset: 0;
     z-index: 2;
     background: linear-gradient(90deg, list.nth($trunk, 1) 0%, list.nth($trunk, 2) 100%);
-    mask-image: url('~/assets/images/masks/Tree-#{$key}--trunk.svg');
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-#{$key}--trunk.svg');
     mask-position: map.get($config, trunk-mask-position);
     mask-size: map.get($config, trunk-mask-size);
     mask-repeat: no-repeat;
@@ -84,7 +84,7 @@
 }
 
 // Renders the silhouette of a building block, masked from
-// `assets/images/masks/HouseBlock--#{$name}.svg` and stamped with the
+// `assets/images/masks/Buildings/HouseBlock--#{$name}.svg` and stamped with the
 // configured fill.
 //
 // $name    identifier matching the asset filename and the
@@ -115,7 +115,7 @@
     #{$prop}: $value;
   }
 
-  mask-image: url('~/assets/images/masks/HouseBlock--#{$name}.svg');
+  mask-image: url('~/assets/images/masks/Buildings/HouseBlock--#{$name}.svg');
   mask-position: top center;
   mask-size: 100% auto;
   mask-repeat: no-repeat;
@@ -139,7 +139,7 @@
   z-index: 1;
   right: 0%;
   top: 0%;
-  mask-image: url('~/assets/images/masks/HouseBlock--#{$name}--#{$suffix}.#{$ext}');
+  mask-image: url('~/assets/images/masks/Buildings/HouseBlock--#{$name}--#{$suffix}.#{$ext}');
 
   @if map.has-key($config, mask-position) {
     mask-position: map.get($config, mask-position);
@@ -156,12 +156,12 @@
 // Renders a cloud silhouette layer.
 //
 // Base mask (silhouette) is loaded from
-//   assets/images/masks/Cloud-#{$key}#{$variant}--mask.#{mask-type}
+//   assets/images/masks/Clouds/Cloud-#{$key}#{$variant}--mask.#{mask-type}
 // where `mask-type` per cloud is either `svg` (default) or `png`.
 //
 // If `has-gradient-mask: true`, a soft-light PNG overlay is painted on
 // `&::after` from
-//   assets/images/masks/Cloud-#{$key}#{$variant}--gradient.png
+//   assets/images/masks/Clouds/Cloud-#{$key}#{$variant}--gradient.png
 //
 // $key      identifier matching the asset filename (1..n).
 // $config   map describing the cloud:
@@ -183,7 +183,7 @@
   background: map.get($config, bkg);
   z-index: map.get($config, z-index);
 
-  mask-image: url('~/assets/images/masks/Cloud-#{$key}#{$variant}--mask.#{$mask-ext}');
+  mask-image: url('~/assets/images/masks/Clouds/Cloud-#{$key}#{$variant}--mask.#{$mask-ext}');
   mask-position: top center;
   mask-size: 100% auto;
   mask-repeat: no-repeat;
@@ -214,7 +214,7 @@
       position: absolute;
       inset: 0;
       background:
-        url('~/assets/images/masks/Cloud-#{$key}#{$variant}--gradient.png')
+        url('~/assets/images/masks/Clouds/Cloud-#{$key}#{$variant}--gradient.png')
         center center / 100% auto no-repeat;
       mix-blend-mode: soft-light;
     }
