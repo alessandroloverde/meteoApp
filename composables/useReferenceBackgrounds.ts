@@ -1,6 +1,9 @@
 /**
  * Reference phone backgrounds: assets under `assets/images/References/`.
  * Build-time glob + `?url`; dropdown uses the file basename.
+ *
+ * Last-selected filename is restored from localStorage on the client by
+ * `plugins/scene-dev-persist.client.js` (key: `meteo-reference-bg`).
  */
 const referenceModules = import.meta.glob<string>('~/assets/images/References/*.{png,jpg,jpeg,webp,svg}', {
   eager: true,

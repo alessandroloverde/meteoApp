@@ -5,6 +5,9 @@
 //   • <SceneControls> (the dev/test dropdowns above the phones)
 //   • pages/index.vue (binds `.scene`'s data-* attributes to these refs)
 //
+// Last-selected values are restored from localStorage on the client by
+// `plugins/scene-dev-persist.client.js` (key: `meteo-scene-controls`).
+//
 // Vocabularies match `mapWeatherToUI` in `utils/weatherMapper.js` and the
 // variant selectors in `assets/scss/_theme.scss`. Keep all three in sync
 // when adding/removing values.
