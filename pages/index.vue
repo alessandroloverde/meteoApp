@@ -154,26 +154,14 @@ onBeforeUnmount(() => {
           <div class="test-terrain"></div>
         </aside>
 
-        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 10">
+        <section class="scene-layer mask-layer trees-bushes">
           <div class="bushes-1"></div>
           <div class="trees-1">
             <div class="trees-1--trunk"></div>
             <div class="trees-1--foliage"></div>
           </div>
           <div class="bushes-2"></div>
-          <div class="trees-4">
-            <div class="trees-4--trunk"></div>
-            <div class="trees-4--foliage"></div>
-          </div>
-        </section>
-
-        <div class="scene-layer mask-layer terrain-1" style="z-index: 9"></div>
-
-        <div class="scene-layer mask-layer terrain-2" style="z-index: 8">
           <div class="bushes-3"></div>
-        </div>
-
-        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 7">
           <div class="trees-2">
             <div class="trees-2--trunk"></div>
             <div class="trees-2--foliage"></div>
@@ -182,15 +170,18 @@ onBeforeUnmount(() => {
             <div class="trees-3--trunk"></div>
             <div class="trees-3--foliage"></div>
           </div>
-        </section>
-
-        <section class="scene-layer mask-layer bushes-in-front" style="z-index: 6;">
+          <div class="trees-4">
+            <div class="trees-4--trunk"></div>
+            <div class="trees-4--foliage"></div>
+          </div>
           <div class="trees-5">
             <div class="trees-5--trunk"></div>
             <div class="trees-5--foliage"></div>
           </div>
         </section>
 
+        <div class="scene-layer mask-layer terrain-1" style="z-index: 9"></div>
+        <div class="scene-layer mask-layer terrain-2" style="z-index: 8"></div>
         <div class="scene-layer mask-layer terrain-3" style="z-index: 5"></div>
 
         <section class="scene-layer" style="z-index: 4">
@@ -206,7 +197,6 @@ onBeforeUnmount(() => {
         </section>
 
         <div class="scene-layer mask-layer terrain-4" style="z-index: 3"></div>
-
         <div class="scene-layer mask-layer terrain-5" style="z-index: 3"></div>
 
         <section class="scene-layer" style="z-index: 1">
@@ -278,7 +268,6 @@ onBeforeUnmount(() => {
 // Color tokens come from `_theme.scss` (loaded globally via base.scss) as
 // CSS custom properties on `:root`. This file references them via `var(--…)`
 // and never declares raw hex values.
-
 // Per-tree config. Add a new entry here to render a new tree;
 $trees: (
   1: (
@@ -294,7 +283,7 @@ $trees: (
   2: (
     width: calc(52px / 2),
     height: calc(102px / 2),
-    offset: (right: 13%, top: -6%),
+    offset: (right: 13%, top: -5%),
     z-index: 9,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
     foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
@@ -314,7 +303,7 @@ $trees: (
   4: (
     width: calc(51px / 2),
     height: calc(99px / 2),
-    offset: (left: 8%, top: -5%),
+    offset: (left: 8%, top: -4%),
     z-index: 7,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
     foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
@@ -325,7 +314,7 @@ $trees: (
     width: calc(64px / 2),
     height: calc(122px / 2),
     offset: (left: 1.5%, top: -11%),
-    z-index: 6,
+    z-index: 5,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
     foliage-colors: linear-gradient(-90deg, var(--foliage-warm-deep) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
@@ -955,8 +944,8 @@ $clouds--low: (
   background: linear-gradient(-90deg, var(--terrain-warm-bottom) 10%, var(--terrain-warm-bottom) 95%);
 }
 
-.bushes-in-front {
-  z-index: 15;
+.trees-bushes {
+  z-index: auto;
   position: absolute;
   top: 0;
   right: 0;
@@ -1010,7 +999,7 @@ $clouds--low: (
   }
 }
 .bushes-3 {
-  z-index: 13;
+  z-index: 9;
   width: calc(119px / 2);
   height: calc(49px / 2);
   background: linear-gradient(
@@ -1020,7 +1009,7 @@ $clouds--low: (
   );
   position: absolute;
   left: 60%;
-  top: 6%;
+  top: 10%;
   mask-image: url('~/assets/images/masks/Trees&bushes/Bush-3--bkg.svg');
 }
 
