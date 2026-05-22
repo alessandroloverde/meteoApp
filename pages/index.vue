@@ -150,10 +150,6 @@ onBeforeUnmount(() => {
 
 
       <div class="scene-layer mask-layer terrain">
-        <aside class="scene-layer terrain-overlay">
-          <div class="test-terrain"></div>
-        </aside>
-
         <section class="scene-layer mask-layer trees-bushes">
           <div class="bushes-1"></div>
           <div class="trees-1">
@@ -179,6 +175,10 @@ onBeforeUnmount(() => {
             <div class="trees-5--foliage"></div>
           </div>
         </section>
+
+        <aside class="scene-layer terrain-overlay">
+          <div class="test-terrain"></div>
+        </aside>
 
         <div class="scene-layer mask-layer terrain-1" style="z-index: 9"></div>
         <div class="scene-layer mask-layer terrain-2" style="z-index: 8"></div>
@@ -499,44 +499,22 @@ $trees: (
   opacity: var(--terrain-overlay-opacity);
 
   -webkit-mask-image:
-/*     url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg'),
-    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
-    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg'),
-    url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg'), */
-    url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
+   url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
   mask-image:
-/*     url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg'),
     url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
-    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg'),
-    url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg'), */
-    url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
+    url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
 
   -webkit-mask-size: 
-/*     100% auto, 
     100% auto, 
-    100% auto, 
-    100% auto,  */
     100% auto;
   mask-size: 
-/*     100% auto, 
     100% auto, 
-    100% auto, 
-    100% auto,  */
     100% auto;
 
   // terrain-5: bottom center · 4: top center · 3/2: top 4% · 1: top 8%
-  -webkit-mask-position: 
-/*     center bottom, 
-    top center, 
-    center top 4%, 
-    center top 4%,  */
-    center -124%;
-  mask-position: 
-/*     center bottom, 
-    top center, 
-    center top 4%, 
-    center top 4%,  */
-    center -124%;
+  -webkit-mask-position: center top, center top;
+  mask-position: center top, center top;
 
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;

@@ -1,1 +1,8 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 738 784"><polygon points="539 83 0 83 0 785 739 785 739 83 539 83"/><path d="M308,22C268.057,10.738,211.809-4.584,142,2A364.958,364.958,0,0,0,50,23a80.646,80.646,0,0,0-30.75-9.5A79.579,79.579,0,0,0,0,13.978V83l539,0A705.667,705.667,0,0,1,411,58C359.753,42.965,356.168,35.581,308,22Z"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 738 1200" style="enable-background:new 0 0 738 1200;" xml:space="preserve">
+<polygon points="539,83 0,83 0,1200 739,1200 739,83 "/>
+<path d="M308,22C268.1,10.7,211.8-4.6,142,2c-31.4,3-62.4,10-92,21c-9.5-5.2-20-8.4-30.8-9.5C12.8,12.9,6.4,13,0,14v69h539
+	c-43.3-4.4-86.2-12.7-128-25C359.8,43,356.2,35.6,308,22z"/>
+</svg>
