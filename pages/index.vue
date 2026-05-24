@@ -150,14 +150,11 @@ onBeforeUnmount(() => {
 
 
       <div class="scene-layer mask-layer terrain">
-        <section class="scene-layer mask-layer trees-bushes">
-          <div class="bushes-1"></div>
+        <section class="scene-layer mask-layer trees">
           <div class="trees-1">
             <div class="trees-1--trunk"></div>
             <div class="trees-1--foliage"></div>
           </div>
-          <div class="bushes-2"></div>
-          <div class="bushes-3"></div>
           <div class="trees-2">
             <div class="trees-2--trunk"></div>
             <div class="trees-2--foliage"></div>
@@ -177,34 +174,36 @@ onBeforeUnmount(() => {
         </section>
 
         <aside class="scene-layer terrain-overlay">
-          <div class="test-terrain"></div>
+          <div class="terrain-overlay--morning"></div>
         </aside>
 
-        <div class="scene-layer mask-layer terrain-1" style="z-index: 9"></div>
-        <div class="scene-layer mask-layer terrain-2" style="z-index: 8"></div>
-        <div class="scene-layer mask-layer terrain-3" style="z-index: 5"></div>
+        <div class="scene-layer bushes">
+          <div class="bushes-1"></div>
+          <div class="bushes-2"></div>
+          <div class="bushes-3"></div>
+        </div>
 
-        <section class="scene-layer" style="z-index: 4">
+        <div class="scene-layer mask-layer terrain-1"></div>
+        <div class="scene-layer mask-layer terrain-2"></div>
+        <div class="scene-layer mask-layer terrain-3"></div>
+
+        <section class="scene-layer city">
+          <div class="houseBlock--church"></div>
           <div class="houseBlock--main">
             <div class="houseBlock--main--windows"></div>
             <div class="houseBlock--main--roofs"></div>
           </div>
-          <div class="houseBlock--church"></div>
           <div class="houseBlock--left">
             <div class="houseBlock--left--roofs"></div>
             <div class="houseBlock--left--windows"></div>
           </div>
-        </section>
-
-        <div class="scene-layer mask-layer terrain-4" style="z-index: 3"></div>
-        <div class="scene-layer mask-layer terrain-5" style="z-index: 3"></div>
-
-        <section class="scene-layer" style="z-index: 1">
           <div class="houseBlock--small">
             <div class="houseBlock--small--windows"></div>
           </div>
         </section>
 
+        <div class="scene-layer mask-layer terrain-4"></div>
+        <div class="scene-layer mask-layer terrain-5"></div>
       </div>
 
       <!--
@@ -274,7 +273,7 @@ $trees: (
     width: calc(112px / 2),
     height: calc(194px / 2),
     offset: (right: 0%, top: -19%),
-    z-index: 10,
+    z-index: 13,
     trunk-colors: (var(--trunk-base-accent), var(--trunk-tip)),
     foliage-colors: linear-gradient(125deg, var(--foliage-warm-accent) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 100% auto,
@@ -283,8 +282,8 @@ $trees: (
   2: (
     width: calc(52px / 2),
     height: calc(102px / 2),
-    offset: (right: 13%, top: -5%),
-    z-index: 9,
+    offset: (right: 13%, top: -6%),
+    z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
     foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
@@ -294,9 +293,14 @@ $trees: (
     width: calc(79px / 2),
     height: calc(100px / 2),
     offset: (right: 21%, top: -6%),
-    z-index: 8,
+    z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
-    foliage-colors: linear-gradient(125deg, var(--foliage-warm) 8%, var(--foliage-warm-deep) 52%, var(--foliage-cool) 96%),
+    foliage-colors: linear-gradient(
+      125deg, 
+      var(--foliage-warm) 8%, 
+      var(--foliage-warm-deep) 52%, 
+      var(--foliage-cool) 96%
+    ),
     trunk-mask-size: 50% auto,
     trunk-mask-position: 40% bottom,
   ),
@@ -304,7 +308,7 @@ $trees: (
     width: calc(51px / 2),
     height: calc(99px / 2),
     offset: (left: 8%, top: -4%),
-    z-index: 7,
+    z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
     foliage-colors: linear-gradient(125deg, var(--foliage-warm) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
@@ -314,7 +318,7 @@ $trees: (
     width: calc(64px / 2),
     height: calc(122px / 2),
     offset: (left: 1.5%, top: -11%),
-    z-index: 5,
+    z-index: 8,
     trunk-colors: (var(--trunk-base), var(--trunk-tip)),
     foliage-colors: linear-gradient(-90deg, var(--foliage-warm-deep) 10%, var(--foliage-cool) 95%),
     trunk-mask-size: 50% auto,
@@ -416,7 +420,7 @@ $trees: (
   }
 
   .sky-base-overlay--cloudy-overlay {
-    background: grey;
+    background: var(--cloudy-overlay-color);
     z-index: 10;
     position: absolute;
     inset: 0;
@@ -469,11 +473,17 @@ $trees: (
 }
 .terrain {
   height: 55%;
-  z-index: 2;
+  z-index: auto;
   opacity: 1;
   position: relative;
   top:-8%;
   background-color: transparent;
+
+ /*  .scene-layer,
+  .mask-layer,
+  * {
+    z-index: auto;
+  } */
 }
 
 .terrain-overlay {
@@ -485,25 +495,24 @@ $trees: (
 // Full-bleed terrain grade — off unless `.scene` sets `--terrain-overlay-opacity`.
 // All five `Terrain-*--bkg` masks unioned (back → front: 5…1). Positions mirror
 // each `.terrain-N` slab (`top` / `mask-position`); tune in DevTools as needed.
-.test-terrain {
+.terrain-overlay--morning {
   position: absolute;
   inset: 0;
-  z-index: 10;
+  z-index: 15;
   background: linear-gradient(
     to bottom,
     var(--terrain-warm-top),
     var(--terrain-warm-bottom)
   );
-  background: blue;
   mix-blend-mode: var(--terrain-overlay-blend-mode);
   opacity: var(--terrain-overlay-opacity);
 
   -webkit-mask-image:
    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
-    url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
   mask-image:
     url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
-    url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
 
   -webkit-mask-size: 
     100% auto, 
@@ -513,8 +522,8 @@ $trees: (
     100% auto;
 
   // terrain-5: bottom center · 4: top center · 3/2: top 4% · 1: top 8%
-  -webkit-mask-position: center top, center top;
-  mask-position: center top, center top;
+  -webkit-mask-position: center top, center -5.5%;
+  mask-position: center top, center -5.5%;
 
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
@@ -531,6 +540,7 @@ $trees: (
 }
 
 /* ––– Buildings ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+.city { z-index: 6 }
 .houseBlock--church {
   @include mx.house-block(church, (
     width: calc(68px / 2),
@@ -779,6 +789,7 @@ $clouds--low: (
 
 .cloud-1-wrap {
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
+  opacity: 0.65;
   width: 100%;
   height:  calc(288px / 2);
   position: absolute;
@@ -807,7 +818,7 @@ $clouds--low: (
   background-color: var(--terrain-5-deep);
   -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
           mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
-  z-index: 7;
+  z-index: 5;
 }
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg');
@@ -816,7 +827,7 @@ $clouds--low: (
   --accent-color: var(--terrain-4-accent);
   --blend-mode: color;
   --layer-opacity: 1;
-  z-index: 7;
+  z-index: 6;
 }
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
@@ -826,7 +837,7 @@ $clouds--low: (
   --blend-mode: overlay;
   --layer-opacity: 1;
   top: 4%;
-  z-index: auto;
+  z-index: 8;
 }
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg');
@@ -905,24 +916,24 @@ $clouds--low: (
   --accent-color: var(--terrain-warm-bottom);
 }
 
-.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-1--foliage,
-.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-2--foliage {
-  background: linear-gradient(125deg, var(--terrain-warm-canopy) 10%, var(--terrain-warm-bottom) 95%);
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-1--foliage {
+  background: linear-gradient(125deg, #9c482d 10%, #d7873f 95%);
+}
+
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-2--foliage,
+.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-4--foliage {
+  background: linear-gradient(125deg, #9e5f26 10%, #eba43e 95%);
 }
 
 .scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-3--foliage {
-  background: linear-gradient(125deg, var(--terrain-warm-bottom) 8%, var(--terrain-warm-bottom) 52%, var(--terrain-warm-bottom) 96%);
-}
-
-.scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-4--foliage {
-  background: linear-gradient(125deg, var(--terrain-warm-bottom) 10%, var(--terrain-warm-bottom) 95%);
+  background: linear-gradient(125deg, #9e5f26 8%, #d7873f 52%, #eba43e 96%);
 }
 
 .scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-5--foliage {
-  background: linear-gradient(-90deg, var(--terrain-warm-bottom) 10%, var(--terrain-warm-bottom) 95%);
+  background: linear-gradient(-90deg, #9c482d 10%, #d7873f 95%);
 }
 
-.trees-bushes {
+.trees, .bushes {
   z-index: auto;
   position: absolute;
   top: 0;
@@ -931,7 +942,7 @@ $clouds--low: (
   height: 100%;
 }
 .bushes-1 {
-  z-index: 11;
+  z-index: 14;
   width: calc(141px / 2);
   height: calc(62px / 2);
   background: linear-gradient(
@@ -954,7 +965,7 @@ $clouds--low: (
   }
 }
 .bushes-2 {
-  z-index: 12;
+  z-index: 13;
   width: calc(160px / 2);
   height: calc(58px / 2);
   position: absolute;
@@ -977,7 +988,7 @@ $clouds--low: (
   }
 }
 .bushes-3 {
-  z-index: 9;
+  z-index: 10;
   width: calc(119px / 2);
   height: calc(49px / 2);
   background: linear-gradient(
