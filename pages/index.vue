@@ -175,11 +175,16 @@ onBeforeUnmount(() => {
 
         <aside class="scene-layer terrain-overlay">
           <div class="terrain-overlay--morning"></div>
+          <div class="terrain-overlay--afternoon"></div>
         </aside>
 
         <div class="scene-layer bushes">
           <div class="bushes-1"></div>
           <div class="bushes-2"></div>
+          <aside class="bushes-overlay">
+            <div class="bushes-overlay--morning-warm"></div>
+            <div class="bushes-overlay--afternoon-warm"></div>
+          </aside>
           <div class="bushes-3"></div>
         </div>
 
@@ -455,6 +460,60 @@ $trees: (
   position: relative;
 }
 
+// Bushes tint overlays — color/mask on ::before; blend on pane via `_theme.scss` (global).
+.bushes-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+[class*='bushes-overlay--'] {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: color-mix(
+      in srgb,
+      var(--bushes-overlay-pane-color) calc(var(--bushes-overlay-pane-opacity) * 100%),
+      transparent
+    );
+    pointer-events: none;
+
+    -webkit-mask-image:
+      url('~/assets/images/masks/Trees&bushes/Bush-1--bkg.svg'),
+      url('~/assets/images/masks/Trees&bushes/Bush-2--bkg.svg');
+    mask-image:
+      url('~/assets/images/masks/Trees&bushes/Bush-1--bkg.svg'),
+      url('~/assets/images/masks/Trees&bushes/Bush-2--bkg.svg');
+    -webkit-mask-size:
+      calc(141px / 2) auto,
+      calc(160px / 2) auto;
+    mask-size:
+      calc(141px / 2) auto,
+      calc(160px / 2) auto;
+    -webkit-mask-position: right 6.5%, left 11%;
+    mask-position: right 6.5%, left 11%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-composite: source-over;
+    mask-composite: add;
+  }
+}
+
+.bushes-overlay--morning-warm {
+  --bushes-overlay-pane-color: var(--bushes-morning-warm-overlay-color);
+  --bushes-overlay-pane-opacity: var(--bushes-morning-warm-overlay-opacity);
+}
+
+.bushes-overlay--afternoon-warm {
+  --bushes-overlay-pane-color: var(--bushes-afternoon-warm-overlay-color);
+  --bushes-overlay-pane-opacity: var(--bushes-afternoon-warm-overlay-opacity);
+}
+
 // Afternoon + cold: blend procedural sky with `References/Autumn | Cloudy | Afternoon | Cold.png`.
 .scene[data-time='afternoon'][data-temp='cold'] .sky-base {
   &::before {
@@ -522,6 +581,42 @@ $trees: (
     100% auto;
 
   // terrain-5: bottom center · 4: top center · 3/2: top 4% · 1: top 8%
+  -webkit-mask-position: center top, center -5.5%;
+  mask-position: center top, center -5.5%;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+}
+
+.terrain-overlay--afternoon {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  background: linear-gradient(
+    to bottom,
+    var(--terrain-warm-top),
+    var(--terrain-warm-bottom)
+  );
+  mix-blend-mode: soft-light;
+  opacity: var(--terrain-afternoon-overlay-opacity);
+
+  -webkit-mask-image:
+    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
+  mask-image:
+    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
+
+  -webkit-mask-size:
+    100% auto,
+    100% auto;
+  mask-size:
+    100% auto,
+    100% auto;
+
   -webkit-mask-position: center top, center -5.5%;
   mask-position: center top, center -5.5%;
 
@@ -766,6 +861,18 @@ $clouds--low: (
   display: none;
   position: absolute;
   inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--top-clouds-paint-light) 0%,
+    var(--top-clouds-paint-dark)  100%
+  );
+  mix-blend-mode: var(--top-clouds-paint-blend-mode);
+  opacity: var(--top-clouds-paint-opacity);
+}
+
+// Afternoon + warm — masked top-cloud tint (clouds 1, 3, 4 shapes).
+.scene[data-time='afternoon'][data-temp='warm'] .sky-base-overlay--topClouds-overlay__paint {
+  display: block;
 }
 
 // cold + night
@@ -931,6 +1038,24 @@ $clouds--low: (
 
 .scene[data-scene-id='cloudy--autumn--morning--warm'] .trees-5--foliage {
   background: linear-gradient(-90deg, #9c482d 10%, #d7873f 95%);
+}
+
+// Afternoon + warm — trees 1&5 darker ramp, 2&4 lighter, 3 mid (terrain overlay hues).
+.scene[data-time='afternoon'][data-temp='warm'] .trees-1--foliage {
+  background: linear-gradient(125deg, #9e4125 10%, #d7842e 95%);
+}
+
+.scene[data-time='afternoon'][data-temp='warm'] .trees-2--foliage,
+.scene[data-time='afternoon'][data-temp='warm'] .trees-4--foliage {
+  background: linear-gradient(125deg, #d7842e 10%, #f0b858 95%);
+}
+
+.scene[data-time='afternoon'][data-temp='warm'] .trees-3--foliage {
+  background: linear-gradient(125deg, #9e4125 8%, #d7842e 52%, #f0b858 96%);
+}
+
+.scene[data-time='afternoon'][data-temp='warm'] .trees-5--foliage {
+  background: linear-gradient(-90deg, #9e4125 10%, #d7842e 95%);
 }
 
 .trees, .bushes {

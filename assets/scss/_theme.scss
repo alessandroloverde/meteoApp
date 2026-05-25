@@ -26,6 +26,19 @@
 @use 'sass:map';
 @use 'palette' as p;
 
+// Lets mix-blend-mode consume theme tokens via var() (otherwise some engines ignore it).
+@property --bushes-morning-warm-overlay-blend-mode {
+  syntax: '*';
+  inherits: true;
+  initial-value: normal;
+}
+
+@property --bushes-afternoon-warm-overlay-blend-mode {
+  syntax: '*';
+  inherits: true;
+  initial-value: normal;
+}
+
 
 // -----------------------------------------------------------------------------
 // Defaults — current scene (cloudy / autumn / night / mild baseline; storm = legacy note)
@@ -171,8 +184,24 @@
   --terrain-warm-top:           #d79d1f;
   --terrain-warm-bottom:        #923f1a;
   --terrain-warm-canopy:        #e59d37;
-  --terrain-overlay-opacity:    0;
+  --terrain-overlay-opacity:            0;
+  --terrain-afternoon-overlay-opacity:  0;
   --terrain-overlay-blend-mode: overlay;
+
+  // ---- Bushes tint overlay (`.bushes-overlay--*`) -------------------------
+  --bushes-morning-warm-overlay-color:      transparent;
+  --bushes-morning-warm-overlay-blend-mode: normal;
+  --bushes-morning-warm-overlay-opacity:    0;
+
+  --bushes-afternoon-warm-overlay-color:      transparent;
+  --bushes-afternoon-warm-overlay-blend-mode: normal;
+  --bushes-afternoon-warm-overlay-opacity:    0;
+
+  // ---- Top clouds paint (`.sky-base-overlay--topClouds-overlay__paint`) ----
+  --top-clouds-paint-light:       #fff;
+  --top-clouds-paint-dark:        #ccc;
+  --top-clouds-paint-blend-mode:  soft-light;
+  --top-clouds-paint-opacity:     0;
 
   // ---- Temperature tint (global overlay) --------------------------------
   // Applied as a fullscreen `mix-blend-mode` layer; defaults to no-op.
@@ -590,8 +619,47 @@
   --cloudy-overlay-color: #7ca6b6;
   --moon-filter: blur(5px) sepia(0.28) saturate(1.04) brightness(1.02);
   --terrain-overlay-opacity: 0.5;
+  --bushes-morning-warm-overlay-color: #db821b;
+  --bushes-morning-warm-overlay-blend-mode: color;
+  --bushes-morning-warm-overlay-opacity: 0.5;
 }
 
+
+// Afternoon + warm — sky, clouds, terrain grade, bushes (see `index.vue` overlays).
+.scene[data-time='afternoon'][data-temp='warm'] {
+  --sky-top:        #a89166;
+  --sky-upper-mid:  #c9c0a8;
+  --sky-lower-mid:  #d5cfbb;
+  --sky-bottom:     #e1dcc5;
+
+  --cloud-warm:        #f8f1df;
+  --cloud-light:       #f8f1df;
+  --cloud-mid:         #f0e6ca;
+  --cloud-mid-dark:    #e9d3a5;
+  --cloud-shadow:      #e9d3a5;
+  --cloud-shadow-deep: #e9d3a5;
+
+  --top-clouds-paint-light:      #f8f1df;
+  --top-clouds-paint-dark:       #e9d3a5;
+  --top-clouds-paint-blend-mode: soft-light;
+  --top-clouds-paint-opacity:    0.55;
+
+  --terrain-warm-top: #d7842e;
+  --terrain-warm-bottom: #9e4125;
+  --terrain-afternoon-overlay-opacity: 0.5;
+  --bushes-afternoon-warm-overlay-color: #c1621e;
+  --bushes-afternoon-warm-overlay-blend-mode: color;
+  --bushes-afternoon-warm-overlay-opacity: 0.5;
+}
+
+// Bushes tint panes — blend on the pane in global CSS (not scoped / not via pane alias vars).
+.bushes-overlay--morning-warm {
+  mix-blend-mode: var(--bushes-morning-warm-overlay-blend-mode);
+}
+
+.bushes-overlay--afternoon-warm {
+  mix-blend-mode: var(--bushes-afternoon-warm-overlay-blend-mode);
+}
 
 // Afternoon + cold — reference still blended over `--sky-gradient` (see `index.vue` `.sky-base::before`).
 .scene[data-time='afternoon'][data-temp='cold'] {
