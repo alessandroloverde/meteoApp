@@ -120,13 +120,14 @@ onBeforeUnmount(() => {
         <aside class="scene-layer sky-base-overlay">
           <div class="sky-base-overlay--night-wash"></div>
           <div class="sky-base-overlay--sun-glow"></div>
-          <div class="sky-base-overlay--topClouds-overlay">
+<!--           <div class="sky-base-overlay--topClouds-overlay">
             <div class="sky-base-overlay--topClouds-overlay__paint"></div>
-          </div>
+          </div> -->
           <div class="sky-base-overlay--cloudy-overlay"></div>
           <div class="sky-base-overlay--morning-overlay"></div>
           <div class="sky-base-overlay--afternoon-overlay"></div>
           <div class="sky-base-overlay--evening-overlay"></div>
+          <div class="sky-base-overlay--night-overlay"></div>
         </aside>
         <div class="scene-layer moon"></div>
         <section class="top-clouds">
@@ -176,6 +177,7 @@ onBeforeUnmount(() => {
         <aside class="scene-layer terrain-overlay">
           <div class="terrain-overlay--morning"></div>
           <div class="terrain-overlay--afternoon"></div>
+          <div class="terrain-overlay--night-warm"></div>
         </aside>
 
         <div class="scene-layer bushes">
@@ -452,6 +454,20 @@ $trees: (
     mix-blend-mode: var(--night-wash-blend);
     opacity: var(--night-wash-opacity);
   }
+
+  .sky-base-overlay--night-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--sky-night-overlay-top) 0%,
+      var(--sky-night-overlay-bottom) 100%
+    );
+    mix-blend-mode: var(--sky-night-overlay-blend-mode);
+    opacity: var(--sky-night-overlay-opacity);
+  }
 }
 .sky-base {
   height: 55%;
@@ -602,6 +618,42 @@ $trees: (
   );
   mix-blend-mode: soft-light;
   opacity: var(--terrain-afternoon-overlay-opacity);
+
+  -webkit-mask-image:
+    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
+  mask-image:
+    url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
+    url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
+
+  -webkit-mask-size:
+    100% auto,
+    100% auto;
+  mask-size:
+    100% auto,
+    100% auto;
+
+  -webkit-mask-position: center top, center -5.5%;
+  mask-position: center top, center -5.5%;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+}
+
+.terrain-overlay--night-warm {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  background: linear-gradient(
+    to bottom,
+    var(--terrain-night-warm-overlay-top),
+    var(--terrain-night-warm-overlay-bottom)
+  );
+  mix-blend-mode: var(--terrain-night-warm-overlay-blend-mode);
+  opacity: var(--terrain-night-warm-overlay-opacity);
 
   -webkit-mask-image:
     url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg'),
@@ -901,6 +953,10 @@ $clouds--low: (
   height:  calc(288px / 2);
   position: absolute;
   z-index: 4;
+}
+
+.scene[data-time='night'][data-temp='warm'] .cloud-1-wrap {
+  opacity: 1;
 }
 .cloud-1--low-wrap {
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));

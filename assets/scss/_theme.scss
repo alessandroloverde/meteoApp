@@ -169,6 +169,12 @@
   --night-wash-opacity: 0;
   --night-wash-blend:   hard-light;
 
+  // Optional extra sky tint for `[data-time='night']` (`.sky-base-overlay--night-overlay`).
+  --sky-night-overlay-top:        #17236f;
+  --sky-night-overlay-bottom:     #b69795;
+  --sky-night-overlay-blend-mode: hard-light;
+  --sky-night-overlay-opacity:    0;
+
   // ---- Full-scene nocturne grade ----------------------------------------
   // Two stacked full-bleed panes on `.scene` (multiply, then soft-light) that
   // cool and unify sky + terrain. Same idea as pairing #1e1e41 @ 25% multiply
@@ -186,6 +192,10 @@
   --terrain-warm-canopy:        #e59d37;
   --terrain-overlay-opacity:            0;
   --terrain-afternoon-overlay-opacity:  0;
+  --terrain-night-warm-overlay-top:        #6e4a39;
+  --terrain-night-warm-overlay-bottom:     #3d1714;
+  --terrain-night-warm-overlay-blend-mode: soft-light;
+  --terrain-night-warm-overlay-opacity:    0;
   --terrain-overlay-blend-mode: overlay;
 
   // ---- Bushes tint overlay (`.bushes-overlay--*`) -------------------------
@@ -444,6 +454,8 @@
   --cloudy-overlay-opacity: 0.4;        // overlay slightly lighter on the darker sky
   --night-wash-opacity:     1;          // engage the deep-navy hard-light wash
 
+  // `.sky-base-overlay--night-overlay`: toggle per `[data-temp]` (e.g. night + cold).
+
   // Matches the archived #castoro / #criceto overlay stack (~#1e1e41 × 25% each).
   --scene-grade-multiply-opacity:  0.25;
   --scene-grade-softlight-opacity: 0.25;
@@ -650,6 +662,40 @@
   --bushes-afternoon-warm-overlay-color: #c1621e;
   --bushes-afternoon-warm-overlay-blend-mode: color;
   --bushes-afternoon-warm-overlay-opacity: 0.5;
+}
+
+// Night + warm — procedural sky gradient.
+.scene[data-time='night'][data-temp='warm'] {
+  --sky-top:       #17236f;
+  --sky-upper-mid: #15226f;
+  --sky-lower-mid: #3e4ba4;
+  --sky-bottom:    #a38f98;
+
+  --sky-gradient: linear-gradient(
+    to bottom,
+    var(--sky-top)       0%,
+    var(--sky-upper-mid) 50%,
+    var(--sky-lower-mid) 66%,
+    var(--sky-bottom)    100%
+  );
+
+  // Use procedural sky stops only; `.sky-base-overlay--night-overlay` stays off unless you tune it here.
+  --sky-night-overlay-opacity: 0;
+
+  // Terrain grade — morning/afternoon panes off.
+  --terrain-night-warm-overlay-top:        #c58634;
+  --terrain-night-warm-overlay-bottom:     #511b05;
+  --terrain-night-warm-overlay-blend-mode: soft-light;
+  --terrain-night-warm-overlay-opacity:    1;
+  --terrain-overlay-opacity:              0;
+  --terrain-afternoon-overlay-opacity:    0;
+}
+
+// Night + cold — sky night overlay gradient.
+.scene[data-time='night'][data-temp='cold'] {
+  --sky-night-overlay-top:     #141b2e;
+  --sky-night-overlay-bottom:  #536b7b;
+  --sky-night-overlay-opacity: 1;
 }
 
 // Bushes tint panes — blend on the pane in global CSS (not scoped / not via pane alias vars).
