@@ -114,27 +114,29 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   // Terrain — per-layer gradient stops (a = highlight, b = mid, c = deep)
   // --------------------------------------------------------------------------
-  // Layer 1 — foreground ridge; radial top-lit.
-  --terrain-1-a: #e1771d;
-  --terrain-1-b: #653923;
-  --terrain-1-c: #331e25;
+  // Layer 1 — foreground ridge; radial top-lit + linear base.
+  --terrain-1-a: #e1771d; // orange highlight
+  --terrain-1-b: #502b27; // radial mid-dark
+  --terrain-1-c: #503229; // ⚠ nearly identical to --terrain-1-b (#502b27): R=80 G±7 B±2 — unification candidate
+  --terrain-1-d: #3d1c25; // linear-gradient end (deep dark)
+  // #401f2547 semi-transparent stop intentionally hardcoded (alpha is part of the effect)
 
   // Layers 2–5 — gray stubs; fill in as each layer is designed.
-  --terrain-2-a: #{$gray};
-  --terrain-2-b: #{$gray};
+  --terrain-2-a: #be612d;
+  --terrain-2-b: #6f3825; // ⚠ very close to --terrain-1-b (#653923) — consider unifying
   --terrain-2-c: #{$gray};
 
-  --terrain-3-a: #{$gray};
-  --terrain-3-b: #{$gray};
+  --terrain-3-a: #d5692a; // ⚠ close to --terrain-1-a (#e1771d) and --terrain-2-a (#be612d) — orange highlight cluster
+  --terrain-3-b: #5f2f22; // ⚠ close to --terrain-1-b (#653923) and --terrain-2-b (#6f3825) — dark brown cluster
   --terrain-3-c: #{$gray};
 
-  --terrain-4-a: #{$gray};
-  --terrain-4-b: #{$gray};
-  --terrain-4-c: #{$gray};
+  --terrain-4-a: #4d1d12;
+  --terrain-4-b: #8e4029;
+  --terrain-4-c: #c0632d; // ⚠ nearly identical to --terrain-2-a (#be612d) — 2-unit delta, strong unification candidate
 
-  --terrain-5-a: #{$gray};
-  --terrain-5-b: #{$gray};
-  --terrain-5-c: #{$gray};
+  --terrain-5-a: #8b4418;
+  --terrain-5-b: #80381a;
+  --terrain-5-c: #864019; // ⚠ midpoint of T5-a/T5-b — consider color-mix(in srgb, var(--terrain-5-a) 50%, var(--terrain-5-b))
 
   // Shared fallback — used by overlay containers and anything that needs a
   // single terrain color without layer specificity.

@@ -677,11 +677,15 @@ $clouds--low: (
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-5--gradient.png');
-  --layer-bkg: var(--terrain-5-a);
-  --accent-color: var(--terrain-5-b);
-  --blend-mode: color;
+  --layer-bkg: linear-gradient(
+    to right,
+    var(--terrain-5-a)   0%,
+    var(--terrain-5-b) 100%
+  );
+  --accent-color: var(--terrain-5-c);
+  --blend-mode: normal;
   --layer-opacity: 1;
-  background-color: var(--terrain-5-a);
+  background-color: var(--terrain-5-b); // fallback behind gradient
   -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
           mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
   z-index: 5;
@@ -689,8 +693,12 @@ $clouds--low: (
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-4--gradient.png');
-  --layer-bkg: var(--terrain-4-a);
-  --accent-color: var(--terrain-4-b);
+  --layer-bkg: radial-gradient(
+    circle at 72% 0%,
+    var(--terrain-4-a)  0%,
+    var(--terrain-4-b) 25%
+  );
+  --accent-color: var(--terrain-4-c);
   --blend-mode: color;
   --layer-opacity: 1;
   z-index: 6;
@@ -698,8 +706,12 @@ $clouds--low: (
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-3--gradient.png');
-  --layer-bkg: var(--terrain-3-a);
-  --accent-color: var(--terrain-3-b);
+  --layer-bkg: radial-gradient(
+    circle at 28% 0,
+    var(--terrain-3-a) -1%,
+    var(--terrain-3-b) 15%
+  );
+  --accent-color: var(--terrain-3-a);
   --blend-mode: overlay;
   --layer-opacity: 1;
   top: 4%;
@@ -708,8 +720,12 @@ $clouds--low: (
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-2--gradient.png');
-  --layer-bkg: var(--terrain-2-a);
-  --accent-color: var(--terrain-2-b);
+  --layer-bkg: radial-gradient(
+    circle at 55% 0%,
+    var(--terrain-2-a)  5%,
+    var(--terrain-2-b) 11%
+  );
+  --accent-color: var(--terrain-2-a);
   --blend-mode: color;
   --layer-opacity: 1;
   top: 4%;
@@ -718,12 +734,7 @@ $clouds--low: (
 .terrain-1 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-1--gradient.png');
-  --layer-bkg: radial-gradient(
-    circle at 60% 0%,
-    var(--terrain-1-a)  0%,
-    var(--terrain-1-b) 30%,
-    var(--terrain-1-c) 60%
-  );
+  --layer-bkg: linear-gradient(to right, var(--terrain-1-c), var(--terrain-1-d) 90%);
   --accent-color: var(--terrain-1-a);
   --blend-mode: overlay;
   --layer-opacity: 1;
