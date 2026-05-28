@@ -1,727 +1,309 @@
 // =============================================================================
-// Scene theme (Tier 2 — semantic CSS custom properties)
+// Scene theme — overlay-based color system
 // =============================================================================
-// Reads the per-group palettes from `_palette.scss` and exposes them as CSS
-// custom properties on `:root`, organized by scene group. Components reference
-// `var(--…)` only — they should never see a raw hex.
+// Each scene element (sky, clouds, terrain, foliage, bushes, buildings) has a
+// neutral-gray base. Color is introduced exclusively through four stacked
+// overlay panes per element group:
 //
-// Dynamic theming is layered as attribute selectors on `.scene`:
+//   • season  — hue identity (spring / summer / autumn / winter)
+//   • time    — luminosity / warmth shift (morning / afternoon / evening / night)
+//   • temp    — warm / cool tint (frosty … hot)
+//   • weather — saturation / haze / density (clear … storm)
 //
-//   data-scene-id="cloudy--autumn--morning--mild"   (weather--season--time--temp)
-//   data-season="autumn" data-time="night" data-weather="cloudy" data-temp="mild"
+// All overlay tokens default to transparent / opacity 0 so the gray base
+// renders until a variant block turns an overlay on. Combination scenes
+// can add a `data-scene-id` block for edge-case overrides.
 //
-// Prefer the four axes + existing `[data-temp='…']` blocks for temperature bands.
-// Use `data-scene-id` when a combination needs overrides that a single axis cannot express.
+// Token naming:
+//   --<group>-<axis>-overlay-color   hex or CSS color
+//   --<group>-<axis>-overlay-opacity 0–1
+//   --<group>-<axis>-overlay-blend   mix-blend-mode keyword
 //
-// Each axis overrides the subset of tokens it owns:
-//   • season  → terrain / foliage / bushes ramps
-//   • time    → sky / clouds / moon + overlays; terrain/foliage/bushes remap (afternoon, night…)
-//   • weather → cloud density tones + atmosphere haze
-//   • temp    → handled separately as a global tint overlay (see `--temp-tint`),
-//               not by re-coloring every token.
-//
-// Variant blocks below are stubs — fill them in as new states are designed.
+// Groups: sky | cloud | terrain | foliage | bush | building
 // =============================================================================
 
 @use 'sass:map';
-@use 'palette' as p;
 
-// Lets mix-blend-mode consume theme tokens via var() (otherwise some engines ignore it).
-@property --bushes-morning-warm-overlay-blend-mode {
-  syntax: '*';
-  inherits: true;
-  initial-value: normal;
-}
-
-@property --bushes-afternoon-warm-overlay-blend-mode {
-  syntax: '*';
-  inherits: true;
-  initial-value: normal;
-}
+$gray: #808080;
 
 
-// -----------------------------------------------------------------------------
-// Defaults — current scene (cloudy / autumn / night / mild baseline; storm = legacy note)
-// -----------------------------------------------------------------------------
+// =============================================================================
+// :root — neutral-gray base + all overlay defaults (off)
+// =============================================================================
 :root {
 
-  // ---- Sky --------------------------------------------------------------
-  --sky-top:        #{map.get(p.$sky--autumn, top)};
-  --sky-upper-mid:  #{map.get(p.$sky--autumn, upper-mid)};
-  --sky-lower-mid:  #{map.get(p.$sky--autumn, lower-mid)};
-  --sky-bottom:     #{map.get(p.$sky--autumn, bottom)};
+  // --------------------------------------------------------------------------
+  // Sky
+  // --------------------------------------------------------------------------
+  --sky-base:   #{$gray};
+
+  // 4-stop gradient — all stops start at the same gray; time axis will spread them.
+  --sky-stop-0: #{$gray};
+  --sky-stop-1: #{$gray};
+  --sky-stop-2: #{$gray};
+  --sky-stop-3: #{$gray};
 
   --sky-gradient: linear-gradient(
     to bottom,
-    var(--sky-top)       0%,
-    var(--sky-upper-mid) 50%,
-    var(--sky-lower-mid) 66%,
-    var(--sky-bottom)    100%
+    var(--sky-stop-0)  0%,
+    var(--sky-stop-1) 40%,
+    var(--sky-stop-2) 70%,
+    var(--sky-stop-3) 100%
   );
 
-  // ---- Clouds -----------------------------------------------------------
-  --cloud-warm:        #{map.get(p.$clouds--autumn, warm)};
-  --cloud-light:       #{map.get(p.$clouds--autumn, light)};
-  --cloud-mid:         #{map.get(p.$clouds--autumn, mid)};
-  --cloud-mid-dark:    #{map.get(p.$clouds--autumn, mid-dark)};
-  --cloud-shadow:      #{map.get(p.$clouds--autumn, shadow)};
-  --cloud-shadow-deep: #{map.get(p.$clouds--autumn, shadow-deep)};
+  // Sky overlay defaults (off).
+  --sky-season-overlay-color:   #{$gray};
+  --sky-season-overlay-opacity: 0;
+  --sky-season-overlay-blend:   color;
 
-  // ---- Terrain ----------------------------------------------------------
-  // Shared primitives — flipping these reskins the warm-toned terrains in one place
-  --terrain-mid-warm:    #{map.get(p.$terrain--autumn, mid-warm)};
-  --terrain-accent-warm: #{map.get(p.$terrain--autumn, accent-warm)};
-  --terrain-warm-deep:   #{map.get(p.$terrain--autumn, warm-deep)};
+  --sky-time-overlay-color:   #{$gray};
+  --sky-time-overlay-opacity: 0;
+  --sky-time-overlay-blend:   soft-light;
 
-  // Per-layer tokens (null entries fall back to the shared primitives)
-  --terrain-1-deep:   #{map.get(p.$terrain--autumn, layer-1, deep)};
-  --terrain-1-mid:    #{map.get(p.$terrain--autumn, layer-1, mid)};
-  --terrain-1-accent: #{map.get(p.$terrain--autumn, layer-1, accent)};
+  --sky-temp-overlay-color:   #{$gray};
+  --sky-temp-overlay-opacity: 0;
+  --sky-temp-overlay-blend:   color;
 
-  --terrain-2-deep:   #{map.get(p.$terrain--autumn, layer-2, deep)};
-  --terrain-2-mid:    var(--terrain-mid-warm);
-  --terrain-2-accent: #{map.get(p.$terrain--autumn, layer-2, accent)};
+  --sky-weather-overlay-color:   #{$gray};
+  --sky-weather-overlay-opacity: 0;
+  --sky-weather-overlay-blend:   saturation;
 
-  --terrain-3-deep:   #{map.get(p.$terrain--autumn, layer-3, deep)};
-  --terrain-3-mid:    var(--terrain-mid-warm);
-  --terrain-3-accent: var(--terrain-accent-warm);
-
-  --terrain-4-deep:   #{map.get(p.$terrain--autumn, layer-4, deep)};
-  --terrain-4-mid:    var(--terrain-mid-warm);
-  --terrain-4-accent: var(--terrain-accent-warm);
-
-  --terrain-5-deep:   var(--terrain-warm-deep);
-  --terrain-5-mid:    var(--terrain-warm-deep);
-  --terrain-5-accent: #{map.get(p.$terrain--autumn, layer-5, accent)};
-
-  // ---- Foliage / trees --------------------------------------------------
-  --trunk-base:        #{map.get(p.$foliage--autumn, trunk-base)};
-  --trunk-tip:         #{map.get(p.$foliage--autumn, trunk-tip)};
-  --trunk-base-accent: #{map.get(p.$foliage--autumn, trunk-base-accent)};
-
-  --foliage-warm:        #{map.get(p.$foliage--autumn, warm)};
-  --foliage-warm-accent: #{map.get(p.$foliage--autumn, warm-accent)};
-  --foliage-warm-deep:   #{map.get(p.$foliage--autumn, warm-deep)};
-  --foliage-cool:        #{map.get(p.$foliage--autumn, cool)};
-
-  // ---- Bushes -----------------------------------------------------------
-  --bush-light:     #{map.get(p.$bushes--autumn, light)};
-  --bush-mid-light: #{map.get(p.$bushes--autumn, mid-light)};
-  --bush-mid:       #{map.get(p.$bushes--autumn, mid)};
-  --bush-dark:      #{map.get(p.$bushes--autumn, dark)};
-
-  --bush-3-light: #{map.get(p.$bushes--autumn, three-light)};
-  --bush-3-dark:  #{map.get(p.$bushes--autumn, three-dark)};
-
-  // ---- Houses -----------------------------------------------------------
-  --house-shell:         #{map.get(p.$houses--autumn, shell)};
-  --house-roof:          #{map.get(p.$houses--autumn, roof)};
-  // Lit roof tones — pre-computed equivalents of:
-  //   color.scale(--house-roof, $lightness: 10%)  → #662f38
-  //   color.scale(--house-roof, $lightness: 20%)  → #813b48
-  // Keep these in sync if `--house-roof` is re-tuned, or convert to a
-  // CSS `color-mix()` if runtime theming of these specific shades is needed.
-  --house-roof-light:    #662f38;
-  --house-roof-lighter:  #813b48;
-  --house-church-accent: #{map.get(p.$houses--autumn, church-accent)};
-  --window-lit:          #{map.get(p.$houses--autumn, window-lit)};
-
-  // ---- Atmosphere -------------------------------------------------------
-  // Stored as space-separated RGB so the consumer can compose alpha:
-  //   background: rgb(var(--haze-rgb) / 0.75);
-  --haze-rgb:      #{map.get(p.$atmosphere--autumn, haze-rgb)};
-  --moon-glow-rgb: #{map.get(p.$atmosphere--autumn, moon-glow-rgb)};
-
-  // ---- Moon / sun disc --------------------------------------------------
-  // Position + look defaults are inherited by `.moon`; per-time variants
-  // override them on `.scene[data-time='…']` so the cascade reaches `.moon`.
-  // (Don't redeclare these on `.moon` itself — that would block inheritance.)
+  // --------------------------------------------------------------------------
+  // Sun / moon disc
+  // --------------------------------------------------------------------------
   --moon-top:         18%;
   --moon-left:        4%;
   --moon-translate-x: 0;
-  --moon-filter:      blur(2px);
+  --moon-filter:      none;
   --moon-opacity:     1;
+  --moon-glow-rgb:    128 128 128;
 
-  // ---- Sky overlays -----------------------------------------------------
-  // Full-bleed panes inside `.sky-base-overlay`. Defaults assume an
-  // average daytime read; per-time / per-weather variants below dial
-  // these up or down.
-  --cloudy-overlay-color:   grey;
-  --cloudy-overlay-opacity: 0.4;
-
-  // Warm halo around the sun, radiating up into the upper sky. Off by
-  // default (opacity 0) so the layer is invisible whenever the disc is
-  // acting as a moon. Evening / sunset variants below dial it in.
-  --sun-glow-rgb:     255 200 120;
+  // --------------------------------------------------------------------------
+  // Sun glow (radial halo behind disc)
+  // --------------------------------------------------------------------------
+  --sun-glow-rgb:     128 128 128;
   --sun-glow-opacity: 0;
   --sun-glow-blend:   screen;
-  // Ellipse + falloff for `.sky-base-overlay--sun-glow` (index.vue).
   --sun-glow-size-x:  50%;
   --sun-glow-size-y:  130%;
   --sun-glow-falloff: 60%;
 
-  // Night wash: a deep-navy vertical gradient on `hard-light` that
-  // pushes the sky toward a colder, denser nighttime read. The pane
-  // itself bakes in a top-to-bottom alpha falloff so the zenith stays
-  // heaviest and the horizon breathes. Off by default (opacity 0);
-  // `[data-time='night']` turns it on.
-  --night-wash-rgb:     #{map.get(p.$atmosphere--autumn, night-wash-rgb)};
-  --night-wash-opacity: 0;
-  --night-wash-blend:   hard-light;
+  // --------------------------------------------------------------------------
+  // Clouds (top + bottom share the same overlay tokens)
+  // --------------------------------------------------------------------------
+  --cloud-base-light:  #{$gray};
+  --cloud-base-mid:    #{$gray};
+  --cloud-base-shadow: #{$gray};
 
-  // Optional extra sky tint for `[data-time='night']` (`.sky-base-overlay--night-overlay`).
-  --sky-night-overlay-top:        #17236f;
-  --sky-night-overlay-bottom:     #b69795;
-  --sky-night-overlay-blend-mode: hard-light;
-  --sky-night-overlay-opacity:    0;
+  --cloud-season-overlay-color:   #{$gray};
+  --cloud-season-overlay-opacity: 0;
+  --cloud-season-overlay-blend:   color;
 
-  // ---- Full-scene nocturne grade ----------------------------------------
-  // Two stacked full-bleed panes on `.scene` (multiply, then soft-light) that
-  // cool and unify sky + terrain. Same idea as pairing #1e1e41 @ 25% multiply
-  // + 25% soft-light. Opacity 0 = disabled (`morning` / `afternoon`, etc.);
-  // `evening` / `night` below dial strengths. RGB stays one mood anchor so both
-  // layers read as one light model — primitive from `_palette.scss`.
-  --scene-grade-rgb:               #{map.get(p.$atmosphere--autumn, scene-grade-rgb)};
+  --cloud-time-overlay-color:   #{$gray};
+  --cloud-time-overlay-opacity: 0;
+  --cloud-time-overlay-blend:   soft-light;
+
+  --cloud-temp-overlay-color:   #{$gray};
+  --cloud-temp-overlay-opacity: 0;
+  --cloud-temp-overlay-blend:   color;
+
+  --cloud-weather-overlay-color:   #{$gray};
+  --cloud-weather-overlay-opacity: 0;
+  --cloud-weather-overlay-blend:   saturation;
+
+  // --------------------------------------------------------------------------
+  // Terrain — per-layer gradient stops (a = highlight, b = mid, c = deep)
+  // --------------------------------------------------------------------------
+  // Layer 1 — foreground ridge; radial top-lit.
+  --terrain-1-a: #e1771d;
+  --terrain-1-b: #653923;
+  --terrain-1-c: #331e25;
+
+  // Layers 2–5 — gray stubs; fill in as each layer is designed.
+  --terrain-2-a: #{$gray};
+  --terrain-2-b: #{$gray};
+  --terrain-2-c: #{$gray};
+
+  --terrain-3-a: #{$gray};
+  --terrain-3-b: #{$gray};
+  --terrain-3-c: #{$gray};
+
+  --terrain-4-a: #{$gray};
+  --terrain-4-b: #{$gray};
+  --terrain-4-c: #{$gray};
+
+  --terrain-5-a: #{$gray};
+  --terrain-5-b: #{$gray};
+  --terrain-5-c: #{$gray};
+
+  // Shared fallback — used by overlay containers and anything that needs a
+  // single terrain color without layer specificity.
+  --terrain-base: #{$gray};
+
+  --terrain-season-overlay-color:   #{$gray};
+  --terrain-season-overlay-opacity: 0;
+  --terrain-season-overlay-blend:   color;
+
+  --terrain-time-overlay-color:   #{$gray};
+  --terrain-time-overlay-opacity: 0;
+  --terrain-time-overlay-blend:   soft-light;
+
+  --terrain-temp-overlay-color:   #{$gray};
+  --terrain-temp-overlay-opacity: 0;
+  --terrain-temp-overlay-blend:   color;
+
+  --terrain-weather-overlay-color:   #{$gray};
+  --terrain-weather-overlay-opacity: 0;
+  --terrain-weather-overlay-blend:   saturation;
+
+  // --------------------------------------------------------------------------
+  // Foliage / trees (trunk + canopy)
+  // --------------------------------------------------------------------------
+  --foliage-base:  #{$gray};
+  --trunk-base:    #{$gray};
+
+  --foliage-season-overlay-color:   #{$gray};
+  --foliage-season-overlay-opacity: 0;
+  --foliage-season-overlay-blend:   color;
+
+  --foliage-time-overlay-color:   #{$gray};
+  --foliage-time-overlay-opacity: 0;
+  --foliage-time-overlay-blend:   soft-light;
+
+  --foliage-temp-overlay-color:   #{$gray};
+  --foliage-temp-overlay-opacity: 0;
+  --foliage-temp-overlay-blend:   color;
+
+  --foliage-weather-overlay-color:   #{$gray};
+  --foliage-weather-overlay-opacity: 0;
+  --foliage-weather-overlay-blend:   saturation;
+
+  // --------------------------------------------------------------------------
+  // Bushes
+  // --------------------------------------------------------------------------
+  --bush-base: #{$gray};
+
+  --bush-season-overlay-color:   #{$gray};
+  --bush-season-overlay-opacity: 0;
+  --bush-season-overlay-blend:   color;
+
+  --bush-time-overlay-color:   #{$gray};
+  --bush-time-overlay-opacity: 0;
+  --bush-time-overlay-blend:   soft-light;
+
+  --bush-temp-overlay-color:   #{$gray};
+  --bush-temp-overlay-opacity: 0;
+  --bush-temp-overlay-blend:   color;
+
+  --bush-weather-overlay-color:   #{$gray};
+  --bush-weather-overlay-opacity: 0;
+  --bush-weather-overlay-blend:   saturation;
+
+  // --------------------------------------------------------------------------
+  // Buildings (walls + roofs + windows)
+  // --------------------------------------------------------------------------
+  --building-wall-base:   #{$gray};
+  --building-roof-base:   #{$gray};
+  --building-window-base: #{$gray};
+
+  --building-season-overlay-color:   #{$gray};
+  --building-season-overlay-opacity: 0;
+  --building-season-overlay-blend:   color;
+
+  --building-time-overlay-color:   #{$gray};
+  --building-time-overlay-opacity: 0;
+  --building-time-overlay-blend:   soft-light;
+
+  --building-temp-overlay-color:   #{$gray};
+  --building-temp-overlay-opacity: 0;
+  --building-temp-overlay-blend:   color;
+
+  --building-weather-overlay-color:   #{$gray};
+  --building-weather-overlay-opacity: 0;
+  --building-weather-overlay-blend:   saturation;
+
+  // --------------------------------------------------------------------------
+  // Full-scene grade (multiply + soft-light stack — off by default)
+  // --------------------------------------------------------------------------
+  --scene-grade-rgb:               128 128 128;
   --scene-grade-multiply-opacity:  0;
   --scene-grade-softlight-opacity: 0;
-
-  // ---- Terrain warm grade (`.terrain-overlay .test-terrain`) -------------
-  // Top / bottom reused for morning–warm accents on terrain + trees.
-  --terrain-warm-top:           #d79d1f;
-  --terrain-warm-bottom:        #923f1a;
-  --terrain-warm-canopy:        #e59d37;
-  --terrain-overlay-opacity:            0;
-  --terrain-afternoon-overlay-opacity:  0;
-  --terrain-night-warm-overlay-top:        #6e4a39;
-  --terrain-night-warm-overlay-bottom:     #3d1714;
-  --terrain-night-warm-overlay-blend-mode: soft-light;
-  --terrain-night-warm-overlay-opacity:    0;
-  --terrain-overlay-blend-mode: overlay;
-
-  // ---- Bushes tint overlay (`.bushes-overlay--*`) -------------------------
-  --bushes-morning-warm-overlay-color:      transparent;
-  --bushes-morning-warm-overlay-blend-mode: normal;
-  --bushes-morning-warm-overlay-opacity:    0;
-
-  --bushes-afternoon-warm-overlay-color:      transparent;
-  --bushes-afternoon-warm-overlay-blend-mode: normal;
-  --bushes-afternoon-warm-overlay-opacity:    0;
-
-  // ---- Top clouds paint (`.sky-base-overlay--topClouds-overlay__paint`) ----
-  --top-clouds-paint-light:       #fff;
-  --top-clouds-paint-dark:        #ccc;
-  --top-clouds-paint-blend-mode:  soft-light;
-  --top-clouds-paint-opacity:     0;
-
-  // ---- Temperature tint (global overlay) --------------------------------
-  // Applied as a fullscreen `mix-blend-mode` layer; defaults to no-op.
-  --temp-tint-rgb:     0 0 0;
-  --temp-tint-opacity: 0;
-  --temp-tint-blend:   color;
 }
 
 
-// -----------------------------------------------------------------------------
-// Variant axes (stubs — fill in as states are designed)
-// -----------------------------------------------------------------------------
-//
-// SEASON — terrain / foliage / bushes
-// -----------------------------------------------------------------------------
-[data-season='winter'] {
-  // TODO: define $terrain--winter, $foliage--winter, $bushes--winter in
-  // _palette.scss and remap the relevant tokens here.
-}
+// =============================================================================
+// SEASON axis — color identity per season (all gray stubs to start)
+// =============================================================================
 
-[data-season='spring'] {
-  // TODO
-}
-
-[data-season='summer'] {
-  // TODO
-}
+[data-season='spring']  { --_season: spring;  }
+[data-season='summer']  { --_season: summer;  }
+[data-season='autumn']  { --_season: autumn;  }
+[data-season='winter']  { --_season: winter;  }
 
 
-// TIME — sky / clouds / moon / haze
-// (vocabulary matches `mapWeatherToUI > getTimeOfDay`: morning|afternoon|evening|night)
-// -----------------------------------------------------------------------------
-// Daytime (`morning` + `afternoon`). Shared terrain/foliage/bushes from `$terrain--afternoon` etc.;
-// `[data-time='morning']` overrides sky/clouds plus land tokens from `$terrain--morning` / `$foliage--morning` / `$bushes--morning`.
-[data-time='morning'],
-[data-time='afternoon'] {
-  --sky-top:        #{map.get(p.$sky--afternoon, top)};
-  --sky-upper-mid:  #{map.get(p.$sky--afternoon, upper-mid)};
-  --sky-lower-mid:  #{map.get(p.$sky--afternoon, lower-mid)};
-  --sky-bottom:     #{map.get(p.$sky--afternoon, bottom)};
-
-  --sky-gradient: linear-gradient(
-    to bottom,
-    var(--sky-top)       0%,
-    var(--sky-upper-mid) 48%,
-    var(--sky-lower-mid) 64%,
-    var(--sky-bottom)    100%
-  );
-
-  --cloud-warm:        #{map.get(p.$clouds--afternoon, warm)};
-  --cloud-light:       #{map.get(p.$clouds--afternoon, light)};
-  --cloud-mid:         #{map.get(p.$clouds--afternoon, mid)};
-  --cloud-mid-dark:    #{map.get(p.$clouds--afternoon, mid-dark)};
-  --cloud-shadow:      #{map.get(p.$clouds--afternoon, shadow)};
-  --cloud-shadow-deep: #{map.get(p.$clouds--afternoon, shadow-deep)};
-
-  // Terrain — `$terrain--afternoon`
-  --terrain-mid-warm:    #{map.get(p.$terrain--afternoon, mid-warm)};
-  --terrain-accent-warm: #{map.get(p.$terrain--afternoon, accent-warm)};
-  --terrain-warm-deep:   #{map.get(p.$terrain--afternoon, warm-deep)};
-
-  --terrain-1-deep:   #{map.get(p.$terrain--afternoon, layer-1, deep)};
-  --terrain-1-mid:    #{map.get(p.$terrain--afternoon, layer-1, mid)};
-  --terrain-1-accent: #{map.get(p.$terrain--afternoon, layer-1, accent)};
-
-  --terrain-2-deep:   #{map.get(p.$terrain--afternoon, layer-2, deep)};
-  --terrain-2-mid:    var(--terrain-mid-warm);
-  --terrain-2-accent: #{map.get(p.$terrain--afternoon, layer-2, accent)};
-
-  --terrain-3-deep:   #{map.get(p.$terrain--afternoon, layer-3, deep)};
-  --terrain-3-mid:    var(--terrain-mid-warm);
-  --terrain-3-accent: var(--terrain-accent-warm);
-
-  --terrain-4-deep:   #{map.get(p.$terrain--afternoon, layer-4, deep)};
-  --terrain-4-mid:    var(--terrain-mid-warm);
-  --terrain-4-accent: var(--terrain-accent-warm);
-
-  --terrain-5-deep:   var(--terrain-warm-deep);
-  --terrain-5-mid:    var(--terrain-warm-deep);
-  --terrain-5-accent: #{map.get(p.$terrain--afternoon, layer-5, accent)};
-
-  // Trees & bushes — `$foliage--afternoon` / `$bushes--afternoon`
-  --trunk-base:        #{map.get(p.$foliage--afternoon, trunk-base)};
-  --trunk-tip:         #{map.get(p.$foliage--afternoon, trunk-tip)};
-  --trunk-base-accent: #{map.get(p.$foliage--afternoon, trunk-base-accent)};
-
-  --foliage-warm:        #{map.get(p.$foliage--afternoon, warm)};
-  --foliage-warm-accent: #{map.get(p.$foliage--afternoon, warm-accent)};
-  --foliage-warm-deep:   #{map.get(p.$foliage--afternoon, warm-deep)};
-  --foliage-cool:        #{map.get(p.$foliage--afternoon, cool)};
-
-  --bush-light:     #{map.get(p.$bushes--afternoon, light)};
-  --bush-mid-light: #{map.get(p.$bushes--afternoon, mid-light)};
-  --bush-mid:       #{map.get(p.$bushes--afternoon, mid)};
-  --bush-dark:      #{map.get(p.$bushes--afternoon, dark)};
-
-  --bush-3-light: #{map.get(p.$bushes--afternoon, three-light)};
-  --bush-3-dark:  #{map.get(p.$bushes--afternoon, three-dark)};
-
-  // Mock sun (`Moon` bitmap) — less punchy filtration & glow (`$sky-*` above).
-  --moon-top:         16%;
-  --moon-left:        82%;
-  --moon-translate-x: -50%;
-  --moon-filter:      blur(1px) sepia(0.28) saturate(1.04) brightness(1.02);
-  --moon-opacity:     0.85;
-  --moon-glow-rgb:    236 226 206;
-
-  // Softer halo so the sky slab keeps its authored stops.
-  --sun-glow-rgb:     242 232 216;
-  --sun-glow-opacity: 0.10;
-
-  --cloudy-overlay-opacity: 0.22;
-
-  // Daytime — suppress night-stack entirely.
-  --night-wash-opacity: 0;
-
-  --scene-grade-multiply-opacity:  0;
-  --scene-grade-softlight-opacity: 0;
-
-  // Slightly duskier violet dust vs previous afternoon (+ less chroma bleed into UI chrome).
-  --haze-rgb:         78 78 93;
-
-  // Façades — `$houses--afternoon`: grey-brown reference read vs plum autumn walls.
-  --house-shell:         #{map.get(p.$houses--afternoon, shell)};
-  --house-roof:          #{map.get(p.$houses--afternoon, roof)};
-  --house-roof-light:    #{map.get(p.$houses--afternoon, roof-light)};
-  --house-roof-lighter:  #{map.get(p.$houses--afternoon, roof-lighter)};
-  --house-church-accent: #{map.get(p.$houses--afternoon, church-accent)};
-  --window-lit:          #{map.get(p.$houses--afternoon, window-unlit)};
-}
+// =============================================================================
+// TIME axis — luminosity / warmth shift
+// =============================================================================
 
 [data-time='morning'] {
-  --sky-top:        #{map.get(p.$sky--morning, top)};
-  --sky-upper-mid:  #{map.get(p.$sky--morning, upper-mid)};
-  --sky-lower-mid:  #{map.get(p.$sky--morning, lower-mid)};
-  --sky-bottom:     #{map.get(p.$sky--morning, bottom)};
-
-  --sky-gradient: linear-gradient(
-    to bottom,
-    var(--sky-top)       0%,
-    var(--sky-upper-mid) 48%,
-    var(--sky-lower-mid) 64%,
-    var(--sky-bottom)    100%
-  );
-
-  --cloud-warm:        #{map.get(p.$clouds--morning, warm)};
-  --cloud-light:       #{map.get(p.$clouds--morning, light)};
-  --cloud-mid:         #{map.get(p.$clouds--morning, mid)};
-  --cloud-mid-dark:    #{map.get(p.$clouds--morning, mid-dark)};
-  --cloud-shadow:      #{map.get(p.$clouds--morning, shadow)};
-  --cloud-shadow-deep: #{map.get(p.$clouds--morning, shadow-deep)};
-
-  // Land — `$terrain--morning` / `$foliage--morning` / `$bushes--morning` in `_palette.scss`.
-  --terrain-mid-warm:    #{map.get(p.$terrain--morning, mid-warm)};
-  --terrain-accent-warm: #{map.get(p.$terrain--morning, accent-warm)};
-  --terrain-warm-deep:   #{map.get(p.$terrain--morning, warm-deep)};
-
-  --terrain-1-deep:   #{map.get(p.$terrain--morning, layer-1, deep)};
-  --terrain-1-mid:    #{map.get(p.$terrain--morning, layer-1, mid)};
-  --terrain-1-accent: #{map.get(p.$terrain--morning, layer-1, accent)};
-
-  --terrain-2-deep:   #{map.get(p.$terrain--morning, layer-2, deep)};
-  --terrain-2-mid:    var(--terrain-mid-warm);
-  --terrain-2-accent: #{map.get(p.$terrain--morning, layer-2, accent)};
-
-  --terrain-3-deep:   #{map.get(p.$terrain--morning, layer-3, deep)};
-  --terrain-3-mid:    var(--terrain-mid-warm);
-  --terrain-3-accent: var(--terrain-accent-warm);
-
-  --terrain-4-deep:   #{map.get(p.$terrain--morning, layer-4, deep)};
-  --terrain-4-mid:    var(--terrain-mid-warm);
-  --terrain-4-accent: var(--terrain-accent-warm);
-
-  --terrain-5-deep:   var(--terrain-warm-deep);
-  --terrain-5-mid:    var(--terrain-warm-deep);
-  --terrain-5-accent: #{map.get(p.$terrain--morning, layer-5, accent)};
-
-  --trunk-base:        #{map.get(p.$foliage--morning, trunk-base)};
-  --trunk-tip:         #{map.get(p.$foliage--morning, trunk-tip)};
-  --trunk-base-accent: #{map.get(p.$foliage--morning, trunk-base-accent)};
-
-  --foliage-warm:        #{map.get(p.$foliage--morning, warm)};
-  --foliage-warm-accent: #{map.get(p.$foliage--morning, warm-accent)};
-  --foliage-warm-deep:   #{map.get(p.$foliage--morning, warm-deep)};
-  --foliage-cool:        #{map.get(p.$foliage--morning, cool)};
-
-  --bush-light:     #{map.get(p.$bushes--morning, light)};
-  --bush-mid-light: #{map.get(p.$bushes--morning, mid-light)};
-  --bush-mid:       #{map.get(p.$bushes--morning, mid)};
-  --bush-dark:      #{map.get(p.$bushes--morning, dark)};
-
-  --bush-3-light: #{map.get(p.$bushes--morning, three-light)};
-  --bush-3-dark:  #{map.get(p.$bushes--morning, three-dark)};
-
-  // Rising sun — east (left); lower than afternoon’s west / high sun (`16%` / `82%`).
+  // TODO: morning time overlays
   --moon-top:         40%;
   --moon-left:        14%;
   --moon-translate-x: -50%;
 }
 
+[data-time='afternoon'] {
+  // TODO: afternoon time overlays
+  --moon-top:         16%;
+  --moon-left:        82%;
+  --moon-translate-x: -50%;
+}
+
 [data-time='evening'] {
-  // Autumn sunset — deep indigo zenith descending through burnt rose
-  // and burnt orange to a golden-amber horizon. The 50% / 66% stops in
-  // `--sky-gradient` push most of the warm range into the lower third,
-  // giving the sky the characteristic sunset weighting.
-  --sky-top:       #1a1530;
-  --sky-upper-mid: #804155;
-  --sky-lower-mid: #d75f3a;
-  --sky-bottom:    #f6b042;
-
-  // Cloud highlights pick up warm reflections from the horizon.
-  --cloud-warm:  #d6a486;
-  --cloud-light: #b08576;
-
-  // The moon becomes a fading sun: centered horizontally, dropped to mid-sky
-  // (just above the horizon), warm-tinted via filter, and softened. The disc
-  // image stays the same — we only change CSS vars consumed by `.moon`.
+  // TODO: evening time overlays
   --moon-top:         50%;
   --moon-left:        50%;
   --moon-translate-x: -50%;
-  --moon-filter:      blur(3px) sepia(0.7) hue-rotate(-15deg) saturate(1.5) brightness(1.05);
-  --moon-glow-rgb:    255 200 120;
-  --moon-opacity:     0.9;
 
-  // Faint warm halo radiating from the sun upward through the sky,
-  // anchored to the disc's position via `--moon-*` tokens. Kept very
-  // low so it reads as atmosphere, not as a hard light source.
-  --sun-glow-rgb:     255 180 90;
-  --sun-glow-opacity: 0.35;
-
-  // Lighter-than-night full-scene grade so dusk warmth still reads.
   --scene-grade-multiply-opacity:  0.10;
   --scene-grade-softlight-opacity: 0.12;
 }
 
 [data-time='night'] {
-  // Atmospheric intensifiers opt-in only for explicit `night` (so shifting
-  // the base `:root` palette elsewhere does not pull these in unintentionally).
-
-  --cloudy-overlay-opacity: 0.4;        // overlay slightly lighter on the darker sky
-  --night-wash-opacity:     1;          // engage the deep-navy hard-light wash
-
-  // `.sky-base-overlay--night-overlay`: toggle per `[data-temp]` (e.g. night + cold).
-
-  // Matches the archived #castoro / #criceto overlay stack (~#1e1e41 × 25% each).
+  // TODO: night time overlays
   --scene-grade-multiply-opacity:  0.25;
   --scene-grade-softlight-opacity: 0.25;
-
-  // Terrain — `$terrain--night` in `_palette.scss`: darker, less saturated browns.
-  --terrain-mid-warm:    #{map.get(p.$terrain--night, mid-warm)};
-  --terrain-accent-warm: #{map.get(p.$terrain--night, accent-warm)};
-  --terrain-warm-deep:   #{map.get(p.$terrain--night, warm-deep)};
-
-  --terrain-1-deep:   #{map.get(p.$terrain--night, layer-1, deep)};
-  --terrain-1-mid:    #{map.get(p.$terrain--night, layer-1, mid)};
-  --terrain-1-accent: #{map.get(p.$terrain--night, layer-1, accent)};
-
-  --terrain-2-deep:   #{map.get(p.$terrain--night, layer-2, deep)};
-  --terrain-2-mid:    var(--terrain-mid-warm);
-  --terrain-2-accent: #{map.get(p.$terrain--night, layer-2, accent)};
-
-  --terrain-3-deep:   #{map.get(p.$terrain--night, layer-3, deep)};
-  --terrain-3-mid:    var(--terrain-mid-warm);
-  --terrain-3-accent: var(--terrain-accent-warm);
-
-  --terrain-4-deep:   #{map.get(p.$terrain--night, layer-4, deep)};
-  --terrain-4-mid:    var(--terrain-mid-warm);
-  --terrain-4-accent: var(--terrain-accent-warm);
-
-  --terrain-5-deep:   var(--terrain-warm-deep);
-  --terrain-5-mid:    var(--terrain-warm-deep);
-  --terrain-5-accent: #{map.get(p.$terrain--night, layer-5, accent)};
-
-  // Trees — `$foliage--night`: between autumn brilliance and terrain-night dusk.
-  --trunk-base:        #{map.get(p.$foliage--night, trunk-base)};
-  --trunk-tip:         #{map.get(p.$foliage--night, trunk-tip)};
-  --trunk-base-accent: #{map.get(p.$foliage--night, trunk-base-accent)};
-
-  --foliage-warm:        #{map.get(p.$foliage--night, warm)};
-  --foliage-warm-accent: #{map.get(p.$foliage--night, warm-accent)};
-  --foliage-warm-deep:   #{map.get(p.$foliage--night, warm-deep)};
-  --foliage-cool:        #{map.get(p.$foliage--night, cool)};
-
-  // Bushes — `$bushes--night`
-  --bush-light:     #{map.get(p.$bushes--night, light)};
-  --bush-mid-light: #{map.get(p.$bushes--night, mid-light)};
-  --bush-mid:       #{map.get(p.$bushes--night, mid)};
-  --bush-dark:      #{map.get(p.$bushes--night, dark)};
-
-  --bush-3-light: #{map.get(p.$bushes--night, three-light)};
-  --bush-3-dark:  #{map.get(p.$bushes--night, three-dark)};
-}
-
-
-// WEATHER — cloud density / haze / sky tint
-// (vocabulary matches `mapWeatherToUI > mapCondition`:
-//  clear | partly_cloudy | cloudy | fog | drizzle | rain | heavy_rain | storm | snow)
-// -----------------------------------------------------------------------------
-[data-weather='clear'] {
-  // TODO
-}
-
-[data-weather='partly_cloudy'] {
-  // TODO
-}
-
-[data-weather='cloudy'] {
-  // TODO
-}
-
-[data-weather='fog'] {
-  // TODO
-}
-
-[data-weather='drizzle'] {
-  // TODO
-}
-
-[data-weather='rain'] {
-  // TODO
-}
-
-[data-weather='heavy_rain'] {
-  // TODO
-}
-
-[data-weather='storm'] {
-  // Current default scene already represents stormy — no overrides needed.
-  // Retained as an explicit selector for when defaults shift to another condition.
-}
-
-[data-weather='snow'] {
-  // TODO
-}
-
-
-// TEMPERATURE — single global tint (no per-token overrides)
-// -----------------------------------------------------------------------------
-[data-temp='frosty'] {
-  --temp-tint-rgb:     180 220 240;
-  --temp-tint-opacity: 0.18;
-  --temp-tint-blend:   color;
-}
-
-[data-temp='cold'] {
-  --temp-tint-rgb:     150 190 220;
-  --temp-tint-opacity: 0.10;
-}
-
-[data-temp='mild'] {
-  --temp-tint-opacity: 0;
-}
-
-[data-temp='warm'] {
-  --temp-tint-rgb:     230 160 90;
-  --temp-tint-opacity: 0.08;
-}
-
-[data-temp='hot'] {
-  --temp-tint-rgb:     240 130 60;
-  --temp-tint-opacity: 0.16;
 }
 
 
 // =============================================================================
-// Combo scenes (reference art) — wins over single-axis `[data-*]` blocks
+// TEMPERATURE axis — warm / cool tint
 // =============================================================================
-// Guideline (Milano / overcast autumn): cool slate sky + neutral cloud ramp.
-// Terrain / trees / bushes / houses inherit default `[data-time='morning']`
-// (and shared daytime) tokens — only sky stack + atmosphere are overridden here.
-.scene[data-scene-id='cloudy--autumn--morning--cold'] {
-  --sky-top:        #b5c1c9;
-  --sky-upper-mid:  #b9c5cd;
-  --sky-lower-mid:  #c8d1d6;
-  --sky-bottom:     #d9e0e4;
 
-  --sky-gradient: linear-gradient(
-    to bottom,
-    var(--sky-top)       0%,
-    var(--sky-upper-mid) 38%,
-    var(--sky-lower-mid) 72%,
-    var(--sky-bottom)    100%
-  );
-
-  --cloud-warm:        #e5e7eb;
-  --cloud-light:       #d1d5db;
-  --cloud-mid:         #9ca3af;
-  --cloud-mid-dark:    #8b939d;
-  --cloud-shadow:      #6b7280;
-  --cloud-shadow-deep: #575e68;
-
-  // Overcast: lift haze, soften sun disc
-  --haze-rgb:               118 126 136;
-  --cloudy-overlay-opacity: 0.36;
-  --sun-glow-rgb:           230 236 242;
-  --sun-glow-opacity:       0.06;
-
-  --moon-filter:  blur(1.2px) sepia(0.08) saturate(0.85) brightness(1.02);
-  --moon-opacity: 0.62;
-
-  --night-wash-opacity: 0;
-
-  // Light grade so UI cards stay legible on cool base
-  --scene-grade-multiply-opacity:  0.04;
-  --scene-grade-softlight-opacity: 0.05;
-
-  // Cold tint already baked into sky/clouds — keep global temp layer subtle
-  --temp-tint-rgb:     145 178 202;
-  --temp-tint-opacity: 0.05;
-  --temp-tint-blend:   color;
-}
+[data-temp='frosty'] { --_temp: frosty; }
+[data-temp='cold']   { --_temp: cold;   }
+[data-temp='mild']   { --_temp: mild;   }
+[data-temp='warm']   { --_temp: warm;   }
+[data-temp='hot']    { --_temp: hot;    }
 
 
-// cloudy / autumn / morning / warm — terrain grade + accent reuse.
-.scene[data-scene-id='cloudy--autumn--morning--warm'] {
-  --sky-top: #7ca6b6;
-  --cloudy-overlay-color: #7ca6b6;
-  --moon-filter: blur(5px) sepia(0.28) saturate(1.04) brightness(1.02);
-  --terrain-overlay-opacity: 0.5;
-  --bushes-morning-warm-overlay-color: #db821b;
-  --bushes-morning-warm-overlay-blend-mode: color;
-  --bushes-morning-warm-overlay-opacity: 0.5;
-}
+// =============================================================================
+// WEATHER axis — saturation / haze / density
+// =============================================================================
+
+[data-weather='clear']        { --_weather: clear;        }
+[data-weather='partly_cloudy'] { --_weather: partly_cloudy; }
+[data-weather='cloudy']       { --_weather: cloudy;       }
+[data-weather='fog']          { --_weather: fog;          }
+[data-weather='drizzle']      { --_weather: drizzle;      }
+[data-weather='rain']         { --_weather: rain;         }
+[data-weather='heavy_rain']   { --_weather: heavy_rain;   }
+[data-weather='storm']        { --_weather: storm;        }
+[data-weather='snow']         { --_weather: snow;         }
 
 
-// Afternoon + warm — sky, clouds, terrain grade, bushes (see `index.vue` overlays).
-.scene[data-time='afternoon'][data-temp='warm'] {
-  --sky-top:        #a89166;
-  --sky-upper-mid:  #c9c0a8;
-  --sky-lower-mid:  #d5cfbb;
-  --sky-bottom:     #e1dcc5;
-
-  --cloud-warm:        #f8f1df;
-  --cloud-light:       #f8f1df;
-  --cloud-mid:         #f0e6ca;
-  --cloud-mid-dark:    #e9d3a5;
-  --cloud-shadow:      #e9d3a5;
-  --cloud-shadow-deep: #e9d3a5;
-
-  --top-clouds-paint-light:      #f8f1df;
-  --top-clouds-paint-dark:       #e9d3a5;
-  --top-clouds-paint-blend-mode: soft-light;
-  --top-clouds-paint-opacity:    0.55;
-
-  --terrain-warm-top: #d7842e;
-  --terrain-warm-bottom: #9e4125;
-  --terrain-afternoon-overlay-opacity: 0.5;
-  --bushes-afternoon-warm-overlay-color: #c1621e;
-  --bushes-afternoon-warm-overlay-blend-mode: color;
-  --bushes-afternoon-warm-overlay-opacity: 0.5;
-}
-
-// Night + warm — procedural sky gradient.
-.scene[data-time='night'][data-temp='warm'] {
-  --sky-top:       #17236f;
-  --sky-upper-mid: #15226f;
-  --sky-lower-mid: #3e4ba4;
-  --sky-bottom:    #a38f98;
-
-  --sky-gradient: linear-gradient(
-    to bottom,
-    var(--sky-top)       0%,
-    var(--sky-upper-mid) 50%,
-    var(--sky-lower-mid) 66%,
-    var(--sky-bottom)    100%
-  );
-
-  // Use procedural sky stops only; `.sky-base-overlay--night-overlay` stays off unless you tune it here.
-  --sky-night-overlay-opacity: 0;
-
-  // Terrain grade — morning/afternoon panes off.
-  --terrain-night-warm-overlay-top:        #c58634;
-  --terrain-night-warm-overlay-bottom:     #511b05;
-  --terrain-night-warm-overlay-blend-mode: soft-light;
-  --terrain-night-warm-overlay-opacity:    1;
-  --terrain-overlay-opacity:              0;
-  --terrain-afternoon-overlay-opacity:    0;
-}
-
-// Night + cold — sky night overlay gradient.
-.scene[data-time='night'][data-temp='cold'] {
-  --sky-night-overlay-top:     #141b2e;
-  --sky-night-overlay-bottom:  #536b7b;
-  --sky-night-overlay-opacity: 1;
-}
-
-// Bushes tint panes — blend on the pane in global CSS (not scoped / not via pane alias vars).
-.bushes-overlay--morning-warm {
-  mix-blend-mode: var(--bushes-morning-warm-overlay-blend-mode);
-}
-
-.bushes-overlay--afternoon-warm {
-  mix-blend-mode: var(--bushes-afternoon-warm-overlay-blend-mode);
-}
-
-// Afternoon + cold — reference still blended over `--sky-gradient` (see `index.vue` `.sky-base::before`).
-.scene[data-time='afternoon'][data-temp='cold'] {
-  --sky-ref-afternoon-cold-opacity: 0.42;
-  --sky-ref-afternoon-cold-blend: soft-light;
-}
-
-
-// cloudy / autumn / evening / cold — sun lower + wider halo vs base `[data-time='evening']`.
-.scene[data-scene-id='cloudy--autumn--evening--cold'] {
-  --moon-top:         66%;
-  --moon-left:        50%;
-  --moon-translate-x: -50%;
-
-  --sun-glow-size-x:  72%;
-  --sun-glow-size-y:  200%;
-  --sun-glow-falloff: 78%;
-  --sun-glow-opacity: 0.48;
-}
+// =============================================================================
+// Combo overrides — data-scene-id wins over all single-axis blocks
+// =============================================================================
+// Add rules here only for combinations that single-axis overlays cannot
+// produce correctly on their own.

@@ -1,359 +1,146 @@
 // =============================================================================
-// Scene palette (Tier 1 — primitives)
+// Palette — season color primitives
 // =============================================================================
-// Raw color data, organized by scene group. No CSS is emitted from this file;
-// it's consumed by `_theme.scss`, which exposes each entry as a CSS custom
-// property on `:root` so that components can read them via `var(--…)`.
+// These maps hold the raw hex values for each season's color identity.
+// _theme.scss reads them and assigns them to overlay tokens on [data-season='*'].
 //
-// Future seasons / weather moods are added as alternative maps next to each
-// group (e.g. `$sky--winter`, `$foliage--summer`) and selected by `_theme.scss`
-// via attribute selectors on the root element.
+// All values are neutral gray stubs until the season palettes are designed.
+// Replace the stubs with real colors one season at a time.
 //
-// Sub-channel rounding has been applied where the original scene used several
-// near-identical hex values. The notes after each token list the raw values
-// it absorbs so the regularization is auditable.
+// Structure per season:
+//   sky       — 4 gradient stops (top, upper-mid, lower-mid, bottom)
+//   cloud     — 3 tones (light, mid, shadow)
+//   terrain   — base color (depth is encoded in mask-gradient PNGs)
+//   foliage   — base canopy color
+//   trunk     — base trunk color
+//   bush      — base color
+//   building  — wall, roof, window
+//   atmosphere — haze-rgb (space-separated), moon-glow-rgb
 // =============================================================================
 
-@use 'sass:color';
+$gray: #808080;
+$gray-rgb: 128 128 128;
 
 
-// Mild chroma shave for terrain / vegetation ramps (applied to Autumn + Night
-// land maps below so daytime ↔ moonlit parity is preserved).
-@function _muted-land($c) {
-  @return color.scale($c, $saturation: -9%);
-}
-
-
-// ----- Sky --------------------------------------------------------------------
-// Vertical gradient stops (top → horizon) for the static sky.
-$sky--autumn: (
-  top:        #2b2238,  // was $stormyNight--darkest
-  upper-mid:  #4e4e56,  // was $stormyNight--med (absorbs unused #4b4856)
-  lower-mid:  #5b5a73,  // was $stormyNight--lighter (note: name was inverted)
-  bottom:     #66617e,  // was $stormyNight--light
-);
-
-// Late-morning / afternoon read — softer zenith, brighter stops than `$sky--autumn`
-// but kept in the illustration’s violet–grey vocabulary (no flat cyan noon).
-$sky--afternoon: (
-  top:        #627184,
-  upper-mid:  #707d92,
-  lower-mid:  #81899b,
-  bottom:     #9096a8,
-);
-
-
-// ----- Clouds -----------------------------------------------------------------
-// Six tones cover all eight cloud bodies; minor sub-channel rounding folds
-// the eleven original highlights/shadows into this set.
-$clouds--autumn: (
-  warm:         #b4b5a9,  // outlier warm grey (cloud-2 highlight)
-  light:        #96949d,  // canonical low-cloud highlight (also #8f8d93)
-  mid:          #878795,  // mid (also #868793, #7b7d88)
-  mid-dark:     #74747b,  // mid-dark (also #716b79, #6d6775)
-  shadow:       #595a6c,  // canonical shadow (also #56505b)
-  shadow-deep:  #63616f,  // deepest shadow
-);
-
-// Daytime cloud ramp — keyed off the previous lifts; chroma/lightness shaved
-// so clouds read calmer beneath `$sky--afternoon` (**sky tokens untouched**).
-$clouds--afternoon: (
-  warm:         #{color.scale(#bcbbb0, $saturation: -16%, $lightness: -4%)},
-  light:        #{color.scale(#a8a3ad, $saturation: -14%, $lightness: -3%)},
-  mid:          #{color.scale(#9697a6, $saturation: -14%, $lightness: -3%)},
-  mid-dark:     #{color.scale(#838594, $saturation: -12%, $lightness: -2%)},
-  shadow:       #{color.scale(#6a6b7d, $saturation: -12%, $lightness: -2%)},
-  shadow-deep:  #{color.scale(#626578, $saturation: -10%, $lightness: -2%)},
-);
-
-// Morning sky — consumed by `[data-time='morning']` in `_theme.scss` (overrides shared daytime slab).
-$sky--morning: (
-  top:        #c3bdb1,
-  upper-mid:  #c3bdb1,
-  lower-mid:  #c3bdb1,
-  bottom:     #c3bdb1,
-);
-
-// Morning clouds — consumed by `[data-time='morning']` in `_theme.scss`.
-$clouds--morning: (
-  warm:         #{color.scale(#eee6db, $saturation: 5%, $lightness: -4%)},
-  light:        #{color.scale(#f5eae0, $saturation: 5%, $lightness: -3%)},
-  mid:          #{color.scale(#dacdbf, $saturation: 5%, $lightness: -3%)},
-  mid-dark:     #{color.scale(#cec2b7, $saturation: 5%, $lightness: -2%)},
-  shadow:       #{color.scale(#bbab9a, $saturation: -5%, $lightness: -10%)},
-  shadow-deep:  #{color.scale(#b2a18f, $saturation: 5%, $lightness: -5%)},
-);
-
-
-// ----- Terrain ----------------------------------------------------------------
-// Three values per layer (deep / mid / accent). Shared autumn primitives
-// `mid-warm` and `accent-warm` collapse the duplicated `#8d4828` and `#ba581f`
-// across terrains 2/3/4. Terrain-5's three near-identical values
-// (#7f3918 / #80391a / #813a1a) are unified to `--terrain-5-warm`.
-$terrain--autumn: (
-  // Shared primitives (autumn-only; per-season overrides flip the warm tones)
-  mid-warm:    #{_muted-land(#8d4828)},
-  accent-warm: #{_muted-land(#ba581f)},
-  warm-deep:   #{_muted-land(#80391a)},  // unified terrain-5 triplet
-
-  layer-1: (
-    deep:   #{_muted-land(#3b1924)},
-    mid:    #{_muted-land(#503229)},
-    accent: #{_muted-land(#db801b)},
+// =============================================================================
+// Autumn
+// =============================================================================
+$autumn: (
+  sky: (
+    top:        $gray,
+    upper-mid:  $gray,
+    lower-mid:  $gray,
+    bottom:     $gray,
   ),
-  layer-2: (
-    deep:   #{_muted-land(#421513)},
-    mid:    null,        // → mid-warm
-    accent: #{_muted-land(#be622d)},
+  cloud: (
+    light:  $gray,
+    mid:    $gray,
+    shadow: $gray,
   ),
-  layer-3: (
-    deep:   #{_muted-land(#743a24)},
-    mid:    null,        // → mid-warm
-    accent: null,        // → accent-warm
+  terrain:  $gray,
+  foliage:  $gray,
+  trunk:    $gray,
+  bush:     $gray,
+  building: (
+    wall:   $gray,
+    roof:   $gray,
+    window: $gray,
   ),
-  layer-4: (
-    deep:   #{_muted-land(#58211d)},
-    mid:    null,        // → mid-warm
-    accent: null,        // → accent-warm
-  ),
-  layer-5: (
-    deep:   null,        // → warm-deep
-    mid:    null,        // → warm-deep
-    accent: #{_muted-land(#af6a2c)},
-  ),
-);
-
-// Moonlit ground read: darker and duller than `$terrain--autumn`, but not a
-// full crush to charcoal — mids stay in the rusty-brown family so ridges read.
-$terrain--night: (
-  mid-warm:    #{_muted-land(#6e4a39)},
-  accent-warm: #{_muted-land(#9c5f35)},
-  warm-deep:   #{_muted-land(#6f3a21)},
-
-  layer-1: (
-    deep:   #{_muted-land(#342028)},
-    mid:    #{_muted-land(#4a392f)},
-    accent: #{_muted-land(#a87432)},
-  ),
-  layer-2: (
-    deep:   #{_muted-land(#3d1714)},
-    mid:    null,
-    accent: #{_muted-land(#9d5532)},
-  ),
-  layer-3: (
-    deep:   #{_muted-land(#65382a)},
-    mid:    null,
-    accent: null,
-  ),
-  layer-4: (
-    deep:   #{_muted-land(#4f241f)},
-    mid:    null,
-    accent: null,
-  ),
-  layer-5: (
-    deep:   null,
-    mid:    null,
-    accent: #{_muted-land(#8c5c36)},
-  ),
-);
-
-// `data-time='afternoon'` only — dusty sun-lit hills. Distant layers read
-// lighter/greige; nearest ridge (`layer-1` / `.terrain-1`) keeps warm terracotta.
-$terrain--afternoon: (
-  mid-warm:    #8c5e44,
-  accent-warm: #aa7344,
-  warm-deep:   #67402f,
-
-  layer-1: (
-    deep:   #402822,
-    mid:    #564036,
-    accent: #{_muted-land(#cf7f32)},
-  ),
-  layer-2: (
-    deep:   #4a3329,
-    mid:    null,
-    accent: #a96236,
-  ),
-  layer-3: (
-    deep:   #694a39,
-    mid:    null,
-    accent: null,
-  ),
-  layer-4: (
-    deep:   #604537,
-    mid:    null,
-    accent: null,
-  ),
-  layer-5: (
-    deep:   null,
-    mid:    null,
-    accent: #a2856c,
-  ),
-);
-
-// Morning — lighter ochre / sunrise strip vs `$terrain--afternoon` (Milano mock guideline).
-$terrain--morning: (
-  mid-warm:    #9d6b4f,
-  accent-warm: #c9955a,
-  warm-deep:   #755340,
-
-  layer-1: (
-    deep:   #5a4334,
-    mid:    #6f5644,
-    accent: #{_muted-land(#e4a050)},
-  ),
-  layer-2: (
-    deep:   #5c4638,
-    mid:    null,
-    accent: #c47d40,
-  ),
-  layer-3: (
-    deep:   #7a5c48,
-    mid:    null,
-    accent: null,
-  ),
-  layer-4: (
-    deep:   #6e5545,
-    mid:    null,
-    accent: null,
-  ),
-  layer-5: (
-    deep:   null,
-    mid:    null,
-    accent: #c4a88c,
+  atmosphere: (
+    haze-rgb:       $gray-rgb,
+    moon-glow-rgb:  $gray-rgb,
   ),
 );
 
 
-// ----- Foliage / trees --------------------------------------------------------
-// Trunks and foliage gradients. `cool` (the dark red-brown gradient end)
-// folds #421f20 and #4c2220 to a single canonical value.
-$foliage--autumn: (
-  trunk-base:        #{_muted-land(#2c1313)},  // tree-2..5 trunk start
-  trunk-tip:         #{_muted-land(#281416)},  // canonical trunk end
-  trunk-base-accent: #{_muted-land(#5f1203)},  // tree-1 trunk start (unique)
-
-  warm:        #{_muted-land(#ec8b1b)},  // tree-2..4 foliage start (canonical warm)
-  warm-accent: #{_muted-land(#d06c33)},  // tree-1 foliage start
-  warm-deep:   #{_muted-land(#984022)},  // tree-5 foliage start
-  cool:        #{_muted-land(#421f20)},  // canonical foliage end (also #4c2220)
-);
-
-// Dusty sun-lit canopy — keyed to `$terrain--afternoon` (honey amber, not night).
-$foliage--afternoon: (
-  trunk-base:        #{_muted-land(#332622)},
-  trunk-tip:         #{_muted-land(#2c211f)},
-  trunk-base-accent: #{_muted-land(#4f3828)},
-
-  warm:        #{_muted-land(#ddb040)},
-  warm-accent: #{_muted-land(#c9893a)},
-  warm-deep:   #{_muted-land(#985f34)},
-  cool:        #{_muted-land(#4a3d36)},
-);
-
-// Morning canopy — warmer highlights, softer shadow end vs `$foliage--afternoon`.
-$foliage--morning: (
-  trunk-base:        #{_muted-land(#3d2e28)},
-  trunk-tip:         #{_muted-land(#342622)},
-  trunk-base-accent: #{_muted-land(#5a4334)},
-
-  warm:        #{_muted-land(#f0c45a)},
-  warm-accent: #{_muted-land(#e0a84a)},
-  warm-deep:   #{_muted-land(#b0783c)},
-  cool:        #{_muted-land(#5a463c)},
-);
-
-// Midpoint between `$foliage--autumn` and the tonal range of `$terrain--night`:
-// oranges pulled down/chroma shaved, shadows nudged toward terrain vio-brown.
-$foliage--night: (
-  trunk-base:        #{_muted-land(#291514)},
-  trunk-tip:         #{_muted-land(#251817)},
-  trunk-base-accent: #{_muted-land(#4f221a)},
-
-  warm:        #{_muted-land(#ca7828)},
-  warm-accent: #{_muted-land(#b56634)},
-  warm-deep:   #{_muted-land(#924b2e)},
-  cool:        #{_muted-land(#3d221f)},
+// =============================================================================
+// Spring
+// =============================================================================
+$spring: (
+  sky: (
+    top:        $gray,
+    upper-mid:  $gray,
+    lower-mid:  $gray,
+    bottom:     $gray,
+  ),
+  cloud: (
+    light:  $gray,
+    mid:    $gray,
+    shadow: $gray,
+  ),
+  terrain:  $gray,
+  foliage:  $gray,
+  trunk:    $gray,
+  bush:     $gray,
+  building: (
+    wall:   $gray,
+    roof:   $gray,
+    window: $gray,
+  ),
+  atmosphere: (
+    haze-rgb:       $gray-rgb,
+    moon-glow-rgb:  $gray-rgb,
+  ),
 );
 
 
-// ----- Bushes -----------------------------------------------------------------
-$bushes--autumn: (
-  light:      #{_muted-land(#c17122)},  // bush-1 highlight
-  mid-light:  #{_muted-land(#ae5e19)},  // bush-1 light
-  mid:        #{_muted-land(#673611)},  // bush-1 med
-  dark:       #{_muted-land(#412415)},  // bush-1 dark
-
-  three-light: #{_muted-land(#432616)},
-  three-dark:  #{_muted-land(#81481a)},
-);
-
-// `data-time='afternoon'` — same dusty orange strip as terrain + foliage.
-$bushes--afternoon: (
-  light:      #{_muted-land(#be7828)},
-  mid-light:  #{_muted-land(#a86d24)},
-  mid:        #{_muted-land(#6d462e)},
-  dark:       #{_muted-land(#3f3028)},
-
-  three-light: #{_muted-land(#4a3c31)},
-  three-dark:  #{_muted-land(#7d5638)},
-);
-
-// Morning — matches `$terrain--morning` / `$foliage--morning` strip (lighter mids).
-$bushes--morning: (
-  light:      #{_muted-land(#d49a48)},
-  mid-light:  #{_muted-land(#c48a3c)},
-  mid:        #{_muted-land(#7e5a3c)},
-  dark:       #{_muted-land(#4a3a30)},
-
-  three-light: #{_muted-land(#5c4a3c)},
-  three-dark:  #{_muted-land(#8f6642)},
-);
-
-// Mirrors `$foliage--night`: highlights less loud than `$bushes--autumn`, mids
-// tied to `$terrain--night` warm-deep / mid strip.
-$bushes--night: (
-  light:      #{_muted-land(#b26926)},
-  mid-light:  #{_muted-land(#a15d21)},
-  mid:        #{_muted-land(#5f3e22)},
-  dark:       #{_muted-land(#3a261c)},
-
-  three-light: #{_muted-land(#40261c)},
-  three-dark:  #{_muted-land(#765032)},
+// =============================================================================
+// Summer
+// =============================================================================
+$summer: (
+  sky: (
+    top:        $gray,
+    upper-mid:  $gray,
+    lower-mid:  $gray,
+    bottom:     $gray,
+  ),
+  cloud: (
+    light:  $gray,
+    mid:    $gray,
+    shadow: $gray,
+  ),
+  terrain:  $gray,
+  foliage:  $gray,
+  trunk:    $gray,
+  bush:     $gray,
+  building: (
+    wall:   $gray,
+    roof:   $gray,
+    window: $gray,
+  ),
+  atmosphere: (
+    haze-rgb:       $gray-rgb,
+    moon-glow-rgb:  $gray-rgb,
+  ),
 );
 
 
-// ----- Houses -----------------------------------------------------------------
-// `roof` absorbs both the roof base (#4a2229) and church gradient base
-// (#4b2128); they were Δ ≤ 2 per channel.
-$houses--autumn: (
-  shell:         #3f1c22,  // default house silhouette fill
-  roof:          #4a2229,  // also church gradient base
-  church-accent: #b84d2d,  // church gradient end (orange-red)
-  window-lit:    #f8bd7e,  // warm window glow
-  window-unlit:  #24171a,  // dark glazing — daytime; mapped via `--window-lit` in `_theme.scss`
-);
-
-// Reference-style afternoon façades — neutral grey-brown, darker than mid-grey
-// so blocks read anchored against sunny terrain (Milano mock).
-$houses--afternoon: (
-  shell:         #4d4846,
-  roof:          #3f3c3a,
-  church-accent: #56524f,
-  roof-light:    #494542,
-  roof-lighter:  #544f4c,
-  window-unlit:  #2a2826,
-);
-
-
-// ----- Atmosphere -------------------------------------------------------------
-// Stored as space-separated RGB triplets so consumers can compose alpha at
-// the call site via `rgb(var(--…) / <alpha>)`. `haze-rgb` absorbs the two
-// near-identical foreground/panel inks (#1c131f and #1a141f).
-$atmosphere--autumn: (
-  haze-rgb:       (28 19 31),
-  moon-glow-rgb:  (255 255 255),
-  night-wash-rgb: (11 19 73),  // deep navy used by the night-wash hard-light pane
-  // Full-scene multiply + soft-light grade pairing (historic #castoro/#criceto base)
-  scene-grade-rgb: (30 30 65),
+// =============================================================================
+// Winter
+// =============================================================================
+$winter: (
+  sky: (
+    top:        $gray,
+    upper-mid:  $gray,
+    lower-mid:  $gray,
+    bottom:     $gray,
+  ),
+  cloud: (
+    light:  $gray,
+    mid:    $gray,
+    shadow: $gray,
+  ),
+  terrain:  $gray,
+  foliage:  $gray,
+  trunk:    $gray,
+  bush:     $gray,
+  building: (
+    wall:   $gray,
+    roof:   $gray,
+    window: $gray,
+  ),
+  atmosphere: (
+    haze-rgb:       $gray-rgb,
+    moon-glow-rgb:  $gray-rgb,
+  ),
 );
