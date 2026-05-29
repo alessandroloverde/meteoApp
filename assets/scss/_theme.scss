@@ -26,6 +26,41 @@
 
 $gray: #808080;
 
+// =============================================================================
+// @property — blend-mode custom properties
+// =============================================================================
+// mix-blend-mode ignores var() unless the custom property is registered.
+// syntax:'*' + inherits:true lets the value cascade normally.
+@property --sky-season-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --sky-time-overlay-blend      { syntax: '*'; inherits: true; initial-value: normal; }
+@property --sky-temp-overlay-blend      { syntax: '*'; inherits: true; initial-value: normal; }
+@property --sky-weather-overlay-blend   { syntax: '*'; inherits: true; initial-value: normal; }
+
+@property --cloud-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+@property --cloud-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --cloud-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --cloud-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+
+@property --terrain-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+@property --terrain-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --terrain-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --terrain-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+
+@property --foliage-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+@property --foliage-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --foliage-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --foliage-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+
+@property --bush-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+@property --bush-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --bush-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --bush-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+
+@property --building-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+@property --building-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --building-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --building-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+
 
 // =============================================================================
 // :root — neutral-gray base + all overlay defaults (off)
@@ -146,9 +181,9 @@ $gray: #808080;
   --terrain-season-overlay-opacity: 0;
   --terrain-season-overlay-blend:   color;
 
-  --terrain-time-overlay-color:   #{$gray};
+  --terrain-time-overlay-color:   #1a2a6c;
   --terrain-time-overlay-opacity: 0;
-  --terrain-time-overlay-blend:   soft-light;
+  --terrain-time-overlay-blend:   multiply;
 
   --terrain-temp-overlay-color:   #{$gray};
   --terrain-temp-overlay-opacity: 0;
@@ -272,9 +307,10 @@ $gray: #808080;
 }
 
 [data-time='night'] {
-  // TODO: night time overlays
   --scene-grade-multiply-opacity:  0.25;
   --scene-grade-softlight-opacity: 0.25;
+
+  --terrain-time-overlay-opacity: 0.3;
 }
 
 
