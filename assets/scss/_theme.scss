@@ -280,9 +280,9 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   // Buildings (walls + roofs + windows)
   // --------------------------------------------------------------------------
-  --building-wall-base:   #{$gray};
-  --building-roof-base:   #{$gray};
-  --building-window-base: #{$gray};
+  --building-wall-base:   #42222b;
+  --building-roof-base:   #30191e;
+  --building-window-base: #fbbe7f; // warm lit-window glow (night / winter evening)
 
   --building-season-overlay-color:   #{$gray};
   --building-season-overlay-opacity: 0;

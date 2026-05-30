@@ -503,10 +503,10 @@ $trees: (
   opacity: var(--layer-opacity, 1);
 }
 
+
 // =============================================================================
 // Full-scene grade
 // =============================================================================
-
 .scene-grade {
   position: absolute;
   inset: 0;
@@ -524,10 +524,10 @@ $trees: (
   opacity: var(--scene-grade-softlight-opacity);
 }
 
+
 // =============================================================================
 // SKY
 // =============================================================================
-
 .sky-base {
   height: 55%;
   background: var(--sky-gradient);
@@ -561,10 +561,10 @@ $trees: (
   &__weather { @include overlay-pane('sky-weather'); }
 }
 
+
 // =============================================================================
 // Moon / sun disc
 // =============================================================================
-
 .moon {
   background-image: url('~/assets/images//Moon--full.png');
   background-size: 100% auto;
@@ -597,10 +597,10 @@ $trees: (
   }
 }
 
+
 // =============================================================================
 // Clouds
 // =============================================================================
-
 $clouds: (
   1: (
     dimensions: (width: inherit, height: inherit),
@@ -803,10 +803,10 @@ $clouds--low: (
 
 }
 
+
 // =============================================================================
 // Terrain
 // =============================================================================
-
 .terrain {
   height: 55%;
   z-index: auto;
@@ -917,10 +917,10 @@ $clouds--low: (
 .foliage-overlays__temp    { @include overlay-pane('foliage-temp'); }
 .foliage-overlays__weather { @include overlay-pane('foliage-weather'); }
 
+
 // =============================================================================
 // Bushes
 // =============================================================================
-
 .bushes-1 {
   z-index: 14;
   width: calc(141px / 2);
@@ -960,7 +960,7 @@ $clouds--low: (
   }
 }
 .bushes-3 {
-  z-index: 10;
+  z-index: 9;
   width: calc(119px / 2);
   height: calc(49px / 2);
   background: var(--bush-base);
@@ -980,12 +980,12 @@ $clouds--low: (
 // Per-bush background overrides.
 .bushes-1 { background: linear-gradient(160deg, var(--bush-1-a) 35%, var(--bush-1-b) 85%); }
 .bushes-2 { background: radial-gradient(ellipse at 40% 100%, var(--bush-2-a) 10%, var(--bush-2-b) 80%); }
-.bushes-3 { background: linear-gradient(155deg, var(--bush-3-a) 40%, var(--bush-3-b) 75%); }
+.bushes-3 { background: linear-gradient(160deg, var(--bush-3-a) 30%, var(--bush-3-b) 70%); }
+
 
 // =============================================================================
 // Buildings
 // =============================================================================
-
 .city { z-index: 6; }
 
 .houseBlock--church {
@@ -993,7 +993,7 @@ $clouds--low: (
     width: calc(68px / 2),
     height: calc(44px / 2),
     offset: (top: -2%, left: 17%),
-    background: var(--building-roof-base),
+    background: #8f432a,
     z-index: 2,
   ));
 
@@ -1002,8 +1002,8 @@ $clouds--low: (
     position: absolute;
     inset: 0;
     background: url('~/assets/images/masks/Buildings/HouseBlock--church.svg') center center / 100% auto no-repeat;
-    mix-blend-mode: soft-light;
-    opacity: 0.7;
+    mix-blend-mode: overlay;
+    opacity: 0.6;
   }
   &::after {
     content: '';
@@ -1082,10 +1082,10 @@ $clouds--low: (
   &__weather { @include overlay-pane('building-weather'); }
 }
 
+
 // =============================================================================
 // UI card
 // =============================================================================
-
 .main-content {
   position: relative;
   z-index: 20;
