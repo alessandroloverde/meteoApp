@@ -197,7 +197,39 @@ $gray: #808080;
   // Foliage / trees (trunk + canopy)
   // --------------------------------------------------------------------------
   --foliage-base:  #{$gray};
+
+  --foliage-1-a: #d36e35;
+  --foliage-1-b: #722b15;
+
+  --foliage-5-a: #562321;
+  --foliage-5-b: #903b20;
+
+  --foliage-2-a: #d57c1f;
+  --foliage-2-b: #855435;
+
+  // Same hues as foliage-2, different radial shape — keep separate for independent control.
+  --foliage-3-a: #d57c1f;
+  --foliage-3-b: #855435;
+
+  // Same hues as foliage-2/3, different radial shape.
+  --foliage-4-a: #d57c1f;
+  --foliage-4-b: #855435;
   --trunk-base:    #{$gray};
+
+  --trunk-1-a: #611507;
+  --trunk-1-b: #2b151a;
+
+  --trunk-2-a: #5e1307;
+  --trunk-2-b: #2a161a;
+
+  --trunk-3-a: #2a151a;
+  --trunk-3-b: #753e13;
+
+  --trunk-4-a: #2a151a;
+  --trunk-4-b: #753e13;
+
+  --trunk-5-a: #5f1307;
+  --trunk-5-b: #30161a;
 
   --foliage-season-overlay-color:   #{$gray};
   --foliage-season-overlay-opacity: 0;

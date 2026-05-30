@@ -450,6 +450,20 @@ $trees: (
   }
 }
 
+// Per-tree trunk overrides — custom gradients that don't fit the two-stop mixin default.
+.trees-1--trunk { background: linear-gradient(83deg, var(--trunk-1-a) 40%, var(--trunk-1-b) 70%); }
+.trees-2--trunk { background: linear-gradient(90deg, var(--trunk-2-a) 42%, var(--trunk-2-b) 54%); }
+.trees-3--trunk { background: linear-gradient(0deg,  var(--trunk-3-a)  0%, var(--trunk-3-b) 100%); }
+.trees-4--trunk { background: linear-gradient(0deg,  var(--trunk-4-a)  0%, var(--trunk-4-b) 100%); }
+.trees-5--trunk { background: linear-gradient(90deg, var(--trunk-5-a) 44%, var(--trunk-5-b)  57%); }
+
+// Per-tree foliage overrides — custom gradients replacing the flat foliage-base.
+.trees-1--foliage { background: linear-gradient(45deg, var(--foliage-1-a) 40%, var(--foliage-1-b)); }
+.trees-2--foliage { background: radial-gradient(var(--foliage-2-a), var(--foliage-2-b)); }
+.trees-3--foliage { background: radial-gradient(80% 70%, var(--foliage-3-a), var(--foliage-3-b) 80%); }
+.trees-4--foliage { background: radial-gradient(80% 90%, var(--foliage-4-a), var(--foliage-4-b) 80%); }
+.trees-5--foliage { background: linear-gradient(90deg, var(--foliage-5-a) 30%, var(--foliage-5-b) 90%); }
+
 // =============================================================================
 // Page shell
 // =============================================================================
