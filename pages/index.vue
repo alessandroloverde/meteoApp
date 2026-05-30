@@ -977,6 +977,11 @@ $clouds--low: (
 .bush-overlays__temp    { @include overlay-pane('bush-temp'); }
 .bush-overlays__weather { @include overlay-pane('bush-weather'); }
 
+// Per-bush background overrides.
+.bushes-1 { background: linear-gradient(160deg, var(--bush-1-a) 35%, var(--bush-1-b) 85%); }
+.bushes-2 { background: radial-gradient(ellipse at 40% 100%, var(--bush-2-a) 10%, var(--bush-2-b) 80%); }
+.bushes-3 { background: linear-gradient(155deg, var(--bush-3-a) 40%, var(--bush-3-b) 75%); }
+
 // =============================================================================
 // Buildings
 // =============================================================================
