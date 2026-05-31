@@ -70,13 +70,13 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   // Sky
   // --------------------------------------------------------------------------
-  --sky-base:   #{$gray};
+  --sky-base:   #4e4d57;
 
   // 4-stop gradient — all stops start at the same gray; time axis will spread them.
-  --sky-stop-0: #{$gray};
-  --sky-stop-1: #{$gray};
-  --sky-stop-2: #{$gray};
-  --sky-stop-3: #{$gray};
+  --sky-stop-0: #4e4d57;
+  --sky-stop-1: #4e4d57;
+  --sky-stop-2: #4e4d57;
+  --sky-stop-3: #4e4d57;
 
   --sky-gradient: linear-gradient(
     to bottom,
@@ -130,13 +130,23 @@ $gray: #808080;
   --cloud-base-mid:    #{$gray};
   --cloud-base-shadow: #{$gray};
 
+  --cloud-1-a: #55576a;
+  --cloud-1-b: #827f88;
+
+  --cloud-2: #969290;
+
+  --cloud-4: #74747c;
+
+  --cloud-3-a: #555564;
+  --cloud-3-b: #8f8f9c;
+
   --cloud-season-overlay-color:   #{$gray};
   --cloud-season-overlay-opacity: 0;
   --cloud-season-overlay-blend:   color;
 
-  --cloud-time-overlay-color:   #{$gray};
+  --cloud-time-overlay-color:   #1a2a6c;
   --cloud-time-overlay-opacity: 0;
-  --cloud-time-overlay-blend:   soft-light;
+  --cloud-time-overlay-blend:   multiply;
 
   --cloud-temp-overlay-color:   #{$gray};
   --cloud-temp-overlay-opacity: 0;
@@ -235,9 +245,9 @@ $gray: #808080;
   --foliage-season-overlay-opacity: 0;
   --foliage-season-overlay-blend:   color;
 
-  --foliage-time-overlay-color:   #{$gray};
+  --foliage-time-overlay-color:   #1a2a6c;
   --foliage-time-overlay-opacity: 0;
-  --foliage-time-overlay-blend:   soft-light;
+  --foliage-time-overlay-blend:   multiply;
 
   --foliage-temp-overlay-color:   #{$gray};
   --foliage-temp-overlay-opacity: 0;
@@ -265,9 +275,9 @@ $gray: #808080;
   --bush-season-overlay-opacity: 0;
   --bush-season-overlay-blend:   color;
 
-  --bush-time-overlay-color:   #{$gray};
+  --bush-time-overlay-color:   #1a2a6c;
   --bush-time-overlay-opacity: 0;
-  --bush-time-overlay-blend:   soft-light;
+  --bush-time-overlay-blend:   multiply;
 
   --bush-temp-overlay-color:   #{$gray};
   --bush-temp-overlay-opacity: 0;
@@ -352,6 +362,9 @@ $gray: #808080;
   --scene-grade-softlight-opacity: 0.25;
 
   --terrain-time-overlay-opacity: 0.3;
+  --foliage-time-overlay-opacity: 0.3;
+  --bush-time-overlay-opacity:    0.3;
+  --cloud-time-overlay-opacity:   0.3;
 }
 
 

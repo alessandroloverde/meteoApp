@@ -139,33 +139,61 @@ onBeforeUnmount(() => {
         <!-- Top clouds + their overlays -->
         <section class="top-clouds">
           <div class="cloud-1-wrap">
-            <div class="scene-layer cloud-1"></div>
+            <div class="scene-layer cloud-1">
+              <div class="cloud-overlays__season"></div>
+              <div class="cloud-overlays__time"></div>
+              <div class="cloud-overlays__temp"></div>
+              <div class="cloud-overlays__weather"></div>
+            </div>
           </div>
-          <div class="scene-layer cloud-2"></div>
-          <div class="scene-layer cloud-3"></div>
-          <div class="scene-layer cloud-4"></div>
-          <aside class="cloud-overlays cloud-overlays--top" aria-hidden="true">
+          <div class="scene-layer cloud-2">
             <div class="cloud-overlays__season"></div>
             <div class="cloud-overlays__time"></div>
             <div class="cloud-overlays__temp"></div>
             <div class="cloud-overlays__weather"></div>
-          </aside>
+          </div>
+          <div class="scene-layer cloud-3">
+            <div class="cloud-overlays__season"></div>
+            <div class="cloud-overlays__time"></div>
+            <div class="cloud-overlays__temp"></div>
+            <div class="cloud-overlays__weather"></div>
+          </div>
+          <div class="scene-layer cloud-4">
+            <div class="cloud-overlays__season"></div>
+            <div class="cloud-overlays__time"></div>
+            <div class="cloud-overlays__temp"></div>
+            <div class="cloud-overlays__weather"></div>
+          </div>
         </section>
 
         <!-- Bottom clouds + their overlays -->
         <section class="bottom-clouds">
           <div class="cloud-1--low-wrap">
-            <div class="scene-layer cloud-1--low"></div>
+            <div class="scene-layer cloud-1--low">
+              <div class="cloud-overlays__season"></div>
+              <div class="cloud-overlays__time"></div>
+              <div class="cloud-overlays__temp"></div>
+              <div class="cloud-overlays__weather"></div>
+            </div>
           </div>
-          <div class="scene-layer cloud-2--low"></div>
-          <div class="scene-layer cloud-3--low"></div>
-          <div class="scene-layer cloud-4--low"></div>
-          <aside class="cloud-overlays cloud-overlays--bottom" aria-hidden="true">
+          <div class="scene-layer cloud-2--low">
             <div class="cloud-overlays__season"></div>
             <div class="cloud-overlays__time"></div>
             <div class="cloud-overlays__temp"></div>
             <div class="cloud-overlays__weather"></div>
-          </aside>
+          </div>
+          <div class="scene-layer cloud-3--low">
+            <div class="cloud-overlays__season"></div>
+            <div class="cloud-overlays__time"></div>
+            <div class="cloud-overlays__temp"></div>
+            <div class="cloud-overlays__weather"></div>
+          </div>
+          <div class="scene-layer cloud-4--low">
+            <div class="cloud-overlays__season"></div>
+            <div class="cloud-overlays__time"></div>
+            <div class="cloud-overlays__temp"></div>
+            <div class="cloud-overlays__weather"></div>
+          </div>
         </section>
 
       </div>
@@ -679,6 +707,12 @@ $clouds--low: (
   .cloud-#{$key}--low { @include mx.cloud($key, $config, '--low'); }
 }
 
+// Per-cloud background overrides.
+.cloud-1 { background: linear-gradient(to bottom, var(--cloud-1-a), var(--cloud-1-b)); }
+.cloud-2 { background: var(--cloud-2); }
+.cloud-3 { background: radial-gradient(var(--cloud-3-a), var(--cloud-3-b)); }
+.cloud-4 { background: var(--cloud-4); }
+
 .top-clouds,
 .bottom-clouds {
   position: relative;
@@ -692,7 +726,7 @@ $clouds--low: (
 
 .cloud-1-wrap {
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
-  opacity: 0.65;
+  opacity: 0.85;
   width: 100%;
   height: calc(288px / 2);
   position: absolute;
@@ -711,97 +745,14 @@ $clouds--low: (
 // Cloud overlay containers — top + bottom each get four panes.
 // Panes are masked to the cloud silhouettes by the parent `section`
 // when needed; otherwise they sit full-bleed over the cloud group.
-// Cloud overlay containers — clipped to the union of cloud silhouettes.
-// Top-cloud masks: Cloud-1 (full-width wrap), Cloud-2, Cloud-3, Cloud-4.
-// mask-size / mask-position mirror the $clouds config.
-.cloud-overlays--top {
-  @include overlay-container;
-  z-index: 10;
+// Cloud overlay panes live inside each cloud element as children.
+// The cloud element's own mask clips them automatically.
 
-  -webkit-mask-image:
-    url('~/assets/images/masks/Clouds/Cloud-1--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-2--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-3--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-4--mask.svg');
-  mask-image:
-    url('~/assets/images/masks/Clouds/Cloud-1--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-2--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-3--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-4--mask.svg');
-  -webkit-mask-size:
-    100% auto,
-    calc(260px / 2) auto,
-    calc(317px / 2) auto,
-    calc(673px / 2) auto;
-  mask-size:
-    100% auto,
-    calc(260px / 2) auto,
-    calc(317px / 2) auto,
-    calc(673px / 2) auto;
-  -webkit-mask-position:
-    top center,
-    left 0 top 40%,
-    right -7% top 41%,
-    right -15% top 46%;
-  mask-position:
-    top center,
-    left 0 top 40%,
-    right -7% top 41%,
-    right -15% top 46%;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-composite: source-over;
-    mask-composite: add;
-
-}
-
-// Pane styles shared by both cloud overlay containers.
+// Pane styles shared by all cloud elements.
 .cloud-overlays__season  { @include overlay-pane('cloud-season'); }
 .cloud-overlays__time    { @include overlay-pane('cloud-time'); }
 .cloud-overlays__temp    { @include overlay-pane('cloud-temp'); }
 .cloud-overlays__weather { @include overlay-pane('cloud-weather'); }
-
-// Bottom-cloud masks: Cloud-1--low through Cloud-4--low.
-.cloud-overlays--bottom {
-  @include overlay-container;
-  z-index: 10;
-
-  -webkit-mask-image:
-    url('~/assets/images/masks/Clouds/Cloud-1--low--mask.png'),
-    url('~/assets/images/masks/Clouds/Cloud-2--low--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-3--low--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-4--low--mask.svg');
-  mask-image:
-    url('~/assets/images/masks/Clouds/Cloud-1--low--mask.png'),
-    url('~/assets/images/masks/Clouds/Cloud-2--low--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-3--low--mask.svg'),
-    url('~/assets/images/masks/Clouds/Cloud-4--low--mask.svg');
-  -webkit-mask-size:
-    calc(521px / 2) auto,
-    calc(694px / 2) auto,
-    calc(546px / 2) auto,
-    calc(608px / 2) auto;
-  mask-size:
-    calc(521px / 2) auto,
-    calc(694px / 2) auto,
-    calc(546px / 2) auto,
-    calc(608px / 2) auto;
-  -webkit-mask-position:
-    right -8% bottom 8%,
-    right -8% bottom -6%,
-    left  -5% bottom 0%,
-    left -15% bottom -5%;
-  mask-position:
-    right -8% bottom 8%,
-    right -8% bottom -6%,
-    left  -5% bottom 0%,
-    left -15% bottom -5%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-composite: source-over;
-  mask-composite: add;
-
-}
 
 
 // =============================================================================
