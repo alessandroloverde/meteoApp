@@ -93,6 +93,8 @@ const sceneDisplayId = computed(() =>
   }),
 )
 
+const { paintBundle: scenePaintBundle } = useScenePaint(sceneDisplayId)
+
 onBeforeUnmount(() => {
   if (sceneAttrRaf != null) {
     cancelAnimationFrame(sceneAttrRaf)
@@ -111,6 +113,7 @@ onBeforeUnmount(() => {
     <div
       class="scene"
       :data-scene-id="sceneDisplayId"
+      :data-paint-bundle="scenePaintBundle ?? undefined"
       :data-season="sceneDisplaySeason"
       :data-time="sceneDisplayTime"
       :data-weather="sceneDisplayWeather"
@@ -782,7 +785,7 @@ $clouds--low: (
     var(--terrain-5-b) 100%
   );
   --accent-color: var(--terrain-5-c);
-  --blend-mode: normal;
+  --blend-mode: var(--terrain-5-blend, normal);
   --layer-opacity: 1;
   background-color: var(--terrain-5-b); // fallback behind gradient
   -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
@@ -798,7 +801,7 @@ $clouds--low: (
     var(--terrain-4-b) 25%
   );
   --accent-color: var(--terrain-4-c);
-  --blend-mode: color;
+  --blend-mode: var(--terrain-4-blend, color);
   --layer-opacity: 1;
   z-index: 6;
 }
@@ -811,7 +814,7 @@ $clouds--low: (
     var(--terrain-3-b) 15%
   );
   --accent-color: var(--terrain-3-a);
-  --blend-mode: overlay;
+  --blend-mode: var(--terrain-3-blend, overlay);
   --layer-opacity: 1;
   top: 4%;
   z-index: 8;
@@ -825,7 +828,7 @@ $clouds--low: (
     var(--terrain-2-b) 11%
   );
   --accent-color: var(--terrain-2-a);
-  --blend-mode: color;
+  --blend-mode: var(--terrain-2-blend, color);
   --layer-opacity: 1;
   top: 4%;
   z-index: 9;
@@ -835,7 +838,7 @@ $clouds--low: (
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-1--gradient.png');
   --layer-bkg: linear-gradient(to right, var(--terrain-1-c), var(--terrain-1-d) 90%);
   --accent-color: var(--terrain-1-a);
-  --blend-mode: overlay;
+  --blend-mode: var(--terrain-1-blend, overlay);
   --layer-opacity: 1;
   top: 8%;
   z-index: 10;
@@ -944,7 +947,7 @@ $clouds--low: (
     width: calc(68px / 2),
     height: calc(44px / 2),
     offset: (top: -2%, left: 17%),
-    background: #8f432a,
+    background: var(--building-church),
     z-index: 2,
   ));
 

@@ -1,0 +1,61 @@
+// Autumn + cloudy — canonical base (Cloudy–Autumn–Evening–Mild reference).
+// Sparse variants under the same branch merge on top of `default`.
+
+$autumn-cloudy-default: (
+  sky: (
+    stops: (
+      0: #4e4d57,
+      1: #4e4d57,
+      2: #4e4d57,
+      3: #4e4d57,
+    ),
+  ),
+  terrain: (
+    1: (a: #e1771d, b: #502b27, c: #503229, d: #3d1c25, blend: overlay),
+    2: (a: #be612d, b: #6f3825, blend: color),
+    3: (a: #d5692a, b: #5f2f22, blend: overlay),
+    4: (a: #4d1d12, b: #8e4029, c: #c0632d, blend: color),
+    5: (a: #8b4418, b: #80381a, c: #864019, blend: normal),
+  ),
+  trunk: (
+    1: (a: #611507, b: #2b151a),
+    2: (a: #5e1307, b: #2a161a),
+    3: (a: #2a151a, b: #753e13),
+    4: (a: #2a151a, b: #753e13),
+    5: (a: #5f1307, b: #30161a),
+  ),
+  foliage: (
+    1: (a: #d36e35, b: #722b15),
+    2: (a: #d57c1f, b: #855435),
+    3: (a: #d57c1f, b: #855435),
+    4: (a: #d57c1f, b: #855435),
+    5: (a: #562321, b: #903b20),
+  ),
+  cloud: (
+    1: (a: #55576a, b: #827f88),
+    2: (solid: #969290),
+    3: (a: #555564, b: #8f8f9c),
+    4: (solid: #74747c),
+  ),
+  bush: (
+    1: (a: #af6018, b: #412515),
+    2: (a: #53301b, b: #af6018),
+    3: (a: #c57321, b: #663613),
+  ),
+  building: (
+    wall: #42222b,
+    roof: #30191e,
+    window: #fbbe7f,
+    church: #8f432a,
+  ),
+);
+
+// Sparse variants: only keys that differ from `default`.
+$paint-library: (
+  autumn: (
+    cloudy: (
+      default: $autumn-cloudy-default,
+      // overcast: ( sky: ( stops: ( 0: #…, … ) ) ),
+    ),
+  ),
+);

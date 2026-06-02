@@ -1,0 +1,50 @@
+// Deep-merge for sparse paint variants (patch keys override default; nested maps merge).
+@use 'sass:meta';
+@use 'sass:map';
+
+@function paint-deep-merge($base, $patch) {
+  @if $patch == null or meta.type-of($patch) != 'map' or $patch == () {
+    @return $base;
+  }
+
+  $result: $base;
+
+  @each $key, $patch-value in $patch {
+    $base-value: map.get($result, $key);
+
+    @if meta.type-of($patch-value) == 'map' and meta.type-of($base-value) == 'map' {
+      $result: map.set($result, $key, paint-deep-merge($base-value, $patch-value));
+    } @else {
+      $result: map.set($result, $key, $patch-value);
+    }
+  }
+
+  @return $result;
+}
+
+// Resolve season → weather → variant (always merges on top of `default`).
+@function paint-resolve($library, $season, $weather, $variant) {
+  $weather-branch: map.get($library, $season, $weather);
+  $default: map.get($weather-branch, default);
+
+  @if $default == null {
+    @error 'Paint library missing default for #{$season} / #{$weather}.';
+  }
+
+  @if $variant == default {
+    @return $default;
+  }
+
+  $patch: map.get($weather-branch, $variant);
+
+  @return paint-deep-merge($default, $patch);
+}
+
+// All variant keys under a weather branch (includes `default`).
+@function paint-variant-names($library, $season, $weather) {
+  @return map.keys(map.get($library, $season, $weather));
+}
+
+@function paint-bundle-id($season, $weather, $variant) {
+  @return '#{$season}--#{$weather}--#{$variant}';
+}

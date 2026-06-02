@@ -1,0 +1,14 @@
+// Generate [data-paint-bundle] rules for every variant in the library.
+@use 'sass:map';
+@use 'helpers' as paint;
+@use 'emit';
+@use 'library-autumn-cloudy' as lib;
+
+@each $variant in paint.paint-variant-names(lib.$paint-library, autumn, cloudy) {
+  $bundle-id: paint.paint-bundle-id(autumn, cloudy, $variant);
+  $merged: paint.paint-resolve(lib.$paint-library, autumn, cloudy, $variant);
+
+  [data-paint-bundle='#{$bundle-id}'] {
+    @include emit.paint-emit($merged);
+  }
+}

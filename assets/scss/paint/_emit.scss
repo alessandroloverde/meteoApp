@@ -1,0 +1,79 @@
+// Emit merged paint bundle → CSS custom properties consumed by index.vue.
+@use 'sass:map';
+
+@mixin paint-emit($bundle) {
+  $sky: map.get($bundle, sky);
+
+  @if $sky {
+    @each $stop, $color in map.get($sky, stops) {
+      --sky-stop-#{$stop}: #{$color};
+    }
+  }
+
+  $terrain: map.get($bundle, terrain);
+
+  @if $terrain {
+    @each $n, $layer in $terrain {
+      @each $slot, $val in $layer {
+        @if $slot == blend {
+          --terrain-#{$n}-blend: #{$val};
+        } @else {
+          --terrain-#{$n}-#{$slot}: #{$val};
+        }
+      }
+    }
+  }
+
+  $trunk: map.get($bundle, trunk);
+
+  @if $trunk {
+    @each $n, $colors in $trunk {
+      --trunk-#{$n}-a: #{map.get($colors, a)};
+      --trunk-#{$n}-b: #{map.get($colors, b)};
+    }
+  }
+
+  $foliage: map.get($bundle, foliage);
+
+  @if $foliage {
+    @each $n, $colors in $foliage {
+      --foliage-#{$n}-a: #{map.get($colors, a)};
+      --foliage-#{$n}-b: #{map.get($colors, b)};
+    }
+  }
+
+  $cloud: map.get($bundle, cloud);
+
+  @if $cloud {
+    @each $n, $layer in $cloud {
+      @if map.has-key($layer, solid) {
+        --cloud-#{$n}: #{map.get($layer, solid)};
+      }
+      @if map.has-key($layer, a) {
+        --cloud-#{$n}-a: #{map.get($layer, a)};
+        --cloud-#{$n}-b: #{map.get($layer, b)};
+      }
+    }
+  }
+
+  $bush: map.get($bundle, bush);
+
+  @if $bush {
+    @each $n, $colors in $bush {
+      --bush-#{$n}-a: #{map.get($colors, a)};
+      --bush-#{$n}-b: #{map.get($colors, b)};
+    }
+  }
+
+  $building: map.get($bundle, building);
+
+  @if $building {
+    --building-wall-base: #{map.get($building, wall)};
+    --building-roof-base: #{map.get($building, roof)};
+    --building-window-base: #{map.get($building, window)};
+
+    @if map.has-key($building, church) {
+      --building-church: #{map.get($building, church)};
+    }
+  }
+}

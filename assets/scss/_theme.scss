@@ -1,9 +1,11 @@
 // =============================================================================
-// Scene theme — overlay-based color system
+// Scene theme — paint bundles + overlay-based mood
 // =============================================================================
-// Each scene element (sky, clouds, terrain, foliage, bushes, buildings) has a
-// neutral-gray base. Color is introduced exclusively through four stacked
-// overlay panes per element group:
+// Base paint lives in `assets/scss/paint/` (season → weather → default + sparse
+// variants). Registered scenes set `data-paint-bundle` on `.scene` (see
+// `utils/scenePaint.js`). Unregistered scenes keep gray stubs below.
+//
+// Each scene element also has four stacked overlay panes per group:
 //
 //   • season  — hue identity (spring / summer / autumn / winter)
 //   • time    — luminosity / warmth shift (morning / afternoon / evening / night)
@@ -23,6 +25,7 @@
 // =============================================================================
 
 @use 'sass:map';
+@use 'paint/bundles';
 
 $gray: #808080;
 
@@ -68,15 +71,14 @@ $gray: #808080;
 :root {
 
   // --------------------------------------------------------------------------
-  // Sky
+  // Sky (paint stubs — overridden by data-paint-bundle)
   // --------------------------------------------------------------------------
-  --sky-base:   #4e4d57;
+  --sky-base:   #{$gray};
 
-  // 4-stop gradient — all stops start at the same gray; time axis will spread them.
-  --sky-stop-0: #4e4d57;
-  --sky-stop-1: #4e4d57;
-  --sky-stop-2: #4e4d57;
-  --sky-stop-3: #4e4d57;
+  --sky-stop-0: #{$gray};
+  --sky-stop-1: #{$gray};
+  --sky-stop-2: #{$gray};
+  --sky-stop-3: #{$gray};
 
   --sky-gradient: linear-gradient(
     to bottom,
@@ -130,15 +132,12 @@ $gray: #808080;
   --cloud-base-mid:    #{$gray};
   --cloud-base-shadow: #{$gray};
 
-  --cloud-1-a: #55576a;
-  --cloud-1-b: #827f88;
-
-  --cloud-2: #969290;
-
-  --cloud-4: #74747c;
-
-  --cloud-3-a: #555564;
-  --cloud-3-b: #8f8f9c;
+  --cloud-1-a: #{$gray};
+  --cloud-1-b: #{$gray};
+  --cloud-2: #{$gray};
+  --cloud-3-a: #{$gray};
+  --cloud-3-b: #{$gray};
+  --cloud-4: #{$gray};
 
   --cloud-season-overlay-color:   #{$gray};
   --cloud-season-overlay-opacity: 0;
@@ -159,29 +158,22 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   // Terrain — per-layer gradient stops (a = highlight, b = mid, c = deep)
   // --------------------------------------------------------------------------
-  // Layer 1 — foreground ridge; radial top-lit + linear base.
-  --terrain-1-a: #e1771d; // orange highlight
-  --terrain-1-b: #502b27; // radial mid-dark
-  --terrain-1-c: #503229; // ⚠ nearly identical to --terrain-1-b (#502b27): R=80 G±7 B±2 — unification candidate
-  --terrain-1-d: #3d1c25; // linear-gradient end (deep dark)
-  // #401f2547 semi-transparent stop intentionally hardcoded (alpha is part of the effect)
-
-  // Layers 2–5 — gray stubs; fill in as each layer is designed.
-  --terrain-2-a: #be612d;
-  --terrain-2-b: #6f3825; // ⚠ very close to --terrain-1-b (#653923) — consider unifying
+  --terrain-1-a: #{$gray};
+  --terrain-1-b: #{$gray};
+  --terrain-1-c: #{$gray};
+  --terrain-1-d: #{$gray};
+  --terrain-2-a: #{$gray};
+  --terrain-2-b: #{$gray};
   --terrain-2-c: #{$gray};
-
-  --terrain-3-a: #d5692a; // ⚠ close to --terrain-1-a (#e1771d) and --terrain-2-a (#be612d) — orange highlight cluster
-  --terrain-3-b: #5f2f22; // ⚠ close to --terrain-1-b (#653923) and --terrain-2-b (#6f3825) — dark brown cluster
+  --terrain-3-a: #{$gray};
+  --terrain-3-b: #{$gray};
   --terrain-3-c: #{$gray};
-
-  --terrain-4-a: #4d1d12;
-  --terrain-4-b: #8e4029;
-  --terrain-4-c: #c0632d; // ⚠ nearly identical to --terrain-2-a (#be612d) — 2-unit delta, strong unification candidate
-
-  --terrain-5-a: #8b4418;
-  --terrain-5-b: #80381a;
-  --terrain-5-c: #864019; // ⚠ midpoint of T5-a/T5-b — consider color-mix(in srgb, var(--terrain-5-a) 50%, var(--terrain-5-b))
+  --terrain-4-a: #{$gray};
+  --terrain-4-b: #{$gray};
+  --terrain-4-c: #{$gray};
+  --terrain-5-a: #{$gray};
+  --terrain-5-b: #{$gray};
+  --terrain-5-c: #{$gray};
 
   // Shared fallback — used by overlay containers and anything that needs a
   // single terrain color without layer specificity.
@@ -208,38 +200,27 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   --foliage-base:  #{$gray};
 
-  --foliage-1-a: #d36e35;
-  --foliage-1-b: #722b15;
-
-  --foliage-5-a: #562321;
-  --foliage-5-b: #903b20;
-
-  --foliage-2-a: #d57c1f;
-  --foliage-2-b: #855435;
-
-  // Same hues as foliage-2, different radial shape — keep separate for independent control.
-  --foliage-3-a: #d57c1f;
-  --foliage-3-b: #855435;
-
-  // Same hues as foliage-2/3, different radial shape.
-  --foliage-4-a: #d57c1f;
-  --foliage-4-b: #855435;
-  --trunk-base:    #{$gray};
-
-  --trunk-1-a: #611507;
-  --trunk-1-b: #2b151a;
-
-  --trunk-2-a: #5e1307;
-  --trunk-2-b: #2a161a;
-
-  --trunk-3-a: #2a151a;
-  --trunk-3-b: #753e13;
-
-  --trunk-4-a: #2a151a;
-  --trunk-4-b: #753e13;
-
-  --trunk-5-a: #5f1307;
-  --trunk-5-b: #30161a;
+  --foliage-1-a: #{$gray};
+  --foliage-1-b: #{$gray};
+  --foliage-2-a: #{$gray};
+  --foliage-2-b: #{$gray};
+  --foliage-3-a: #{$gray};
+  --foliage-3-b: #{$gray};
+  --foliage-4-a: #{$gray};
+  --foliage-4-b: #{$gray};
+  --foliage-5-a: #{$gray};
+  --foliage-5-b: #{$gray};
+  --trunk-base: #{$gray};
+  --trunk-1-a: #{$gray};
+  --trunk-1-b: #{$gray};
+  --trunk-2-a: #{$gray};
+  --trunk-2-b: #{$gray};
+  --trunk-3-a: #{$gray};
+  --trunk-3-b: #{$gray};
+  --trunk-4-a: #{$gray};
+  --trunk-4-b: #{$gray};
+  --trunk-5-a: #{$gray};
+  --trunk-5-b: #{$gray};
 
   --foliage-season-overlay-color:   #{$gray};
   --foliage-season-overlay-opacity: 0;
@@ -262,14 +243,12 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   --bush-base: #{$gray};
 
-  --bush-1-a: #af6018;
-  --bush-1-b: #412515;
-
-  --bush-2-a: #53301b;
-  --bush-2-b: #af6018;
-
-  --bush-3-a: #c57321;
-  --bush-3-b: #663613;
+  --bush-1-a: #{$gray};
+  --bush-1-b: #{$gray};
+  --bush-2-a: #{$gray};
+  --bush-2-b: #{$gray};
+  --bush-3-a: #{$gray};
+  --bush-3-b: #{$gray};
 
   --bush-season-overlay-color:   #{$gray};
   --bush-season-overlay-opacity: 0;
@@ -290,9 +269,10 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   // Buildings (walls + roofs + windows)
   // --------------------------------------------------------------------------
-  --building-wall-base:   #42222b;
-  --building-roof-base:   #30191e;
-  --building-window-base: #fbbe7f; // warm lit-window glow (night / winter evening)
+  --building-wall-base:   #{$gray};
+  --building-roof-base:   #{$gray};
+  --building-window-base: #{$gray};
+  --building-church:      #{$gray};
 
   --building-season-overlay-color:   #{$gray};
   --building-season-overlay-opacity: 0;

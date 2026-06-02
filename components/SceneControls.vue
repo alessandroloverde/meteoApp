@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { buildSceneIdentifier } from '@/utils/sceneIdentifier'
+import { resolveScenePaintBundle } from '@/utils/scenePaint'
 
 const {
   season, time, weather, temp,
@@ -15,6 +16,8 @@ const sceneId = computed(() =>
     temp: temp.value,
   }),
 )
+
+const paintBundle = computed(() => resolveScenePaintBundle(sceneId.value))
 </script>
 
 <template>
@@ -25,6 +28,16 @@ const sceneId = computed(() =>
   >
     <p class="scene-controls__scene-id" title="weather--season--time--temp">
       {{ sceneId }}
+    </p>
+    <p
+      v-if="paintBundle"
+      class="scene-controls__paint-bundle"
+      title="season--weather--variant (paint library)"
+    >
+      paint: {{ paintBundle }}
+    </p>
+    <p v-else class="scene-controls__paint-bundle scene-controls__paint-bundle--missing">
+      paint: (no library branch)
     </p>
     <div class="scene-controls__row">
       <label class="scene-controls__field">
@@ -72,6 +85,18 @@ const sceneId = computed(() =>
   color: #fff;
   font: 12px/1.4 system-ui, sans-serif;
   backdrop-filter: blur(4px);
+}
+
+.scene-controls__paint-bundle {
+  margin: 0;
+  padding: 0 2px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.scene-controls__paint-bundle--missing {
+  color: #f5a623;
 }
 
 .scene-controls__scene-id {
