@@ -80,14 +80,6 @@ $gray: #808080;
   --sky-stop-2: #{$gray};
   --sky-stop-3: #{$gray};
 
-  --sky-gradient: linear-gradient(
-    to bottom,
-    var(--sky-stop-0)  0%,
-    var(--sky-stop-1) 40%,
-    var(--sky-stop-2) 70%,
-    var(--sky-stop-3) 100%
-  );
-
   // Sky overlay defaults (off).
   --sky-season-overlay-color:   #{$gray};
   --sky-season-overlay-opacity: 0;
@@ -138,6 +130,17 @@ $gray: #808080;
   --cloud-3-a: #{$gray};
   --cloud-3-b: #{$gray};
   --cloud-4: #{$gray};
+
+  // Low (bottom) clouds — full background + opacity, painted per sky variant.
+  // Defaults fall back to the shared base tone with the original per-cloud opacity.
+  --cloud-1-low-bkg: var(--cloud-base-light);
+  --cloud-1-low-opacity: 1;
+  --cloud-2-low-bkg: var(--cloud-base-light);
+  --cloud-2-low-opacity: 1;
+  --cloud-3-low-bkg: var(--cloud-base-light);
+  --cloud-3-low-opacity: 0.25;
+  --cloud-4-low-bkg: var(--cloud-base-light);
+  --cloud-4-low-opacity: 1;
 
   --cloud-season-overlay-color:   #{$gray};
   --cloud-season-overlay-opacity: 0;
@@ -300,6 +303,24 @@ $gray: #808080;
 
 
 // =============================================================================
+// Scene shell — compose sky gradient from scene-local stop tokens
+// =============================================================================
+// `--sky-gradient` must live on `.scene`, not `:root`. Nested `var(--sky-stop-*)`
+// inside an inherited custom property resolve on the element where the property
+// is declared; `:root` stops would ignore paint-bundle / scene-id overrides.
+
+.scene {
+  --sky-gradient: linear-gradient(
+    to bottom,
+    var(--sky-stop-0)  0%,
+    var(--sky-stop-1) 40%,
+    var(--sky-stop-2) 70%,
+    var(--sky-stop-3) 100%
+  );
+}
+
+
+// =============================================================================
 // SEASON axis — color identity per season (all gray stubs to start)
 // =============================================================================
 
@@ -318,6 +339,12 @@ $gray: #808080;
   --moon-top:         40%;
   --moon-left:        14%;
   --moon-translate-x: -50%;
+
+  // Daytime buildings: dark neutral grey, roofs ~25% darker, dark (off) windows.
+  --building-wall-base:   #5e5e5e;
+  --building-roof-base:   #474747;
+  --building-church:      #5e5e5e;
+  --building-window-base: #2b2422;
 }
 
 [data-time='afternoon'] {
@@ -325,6 +352,12 @@ $gray: #808080;
   --moon-top:         16%;
   --moon-left:        82%;
   --moon-translate-x: -50%;
+
+  // Daytime buildings: dark neutral grey, roofs ~25% darker, dark (off) windows.
+  --building-wall-base:   #5e5e5e;
+  --building-roof-base:   #474747;
+  --building-church:      #5e5e5e;
+  --building-window-base: #2b2422;
 }
 
 [data-time='evening'] {
@@ -379,3 +412,7 @@ $gray: #808080;
 // =============================================================================
 // Add rules here only for combinations that single-axis overlays cannot
 // produce correctly on their own.
+//
+// Sky gradients live in the sky paint cluster (data-paint-sky); terrain, trees,
+// bushes and buildings in the terrain cluster (data-paint-terrain). See
+// `assets/scss/paint/` and `utils/scenePaint.js`.

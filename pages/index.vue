@@ -93,7 +93,7 @@ const sceneDisplayId = computed(() =>
   }),
 )
 
-const { paintBundle: scenePaintBundle } = useScenePaint(sceneDisplayId)
+const { paintBundles: scenePaint } = useScenePaint(sceneDisplayId)
 
 onBeforeUnmount(() => {
   if (sceneAttrRaf != null) {
@@ -113,7 +113,8 @@ onBeforeUnmount(() => {
     <div
       class="scene"
       :data-scene-id="sceneDisplayId"
-      :data-paint-bundle="scenePaintBundle ?? undefined"
+      :data-paint-sky="scenePaint?.sky ?? undefined"
+      :data-paint-terrain="scenePaint?.terrain ?? undefined"
       :data-season="sceneDisplaySeason"
       :data-time="sceneDisplayTime"
       :data-weather="sceneDisplayWeather"
@@ -726,6 +727,12 @@ $clouds--low: (
 .cloud-2 { background: var(--cloud-2); }
 .cloud-3 { background: radial-gradient(var(--cloud-3-a), var(--cloud-3-b)); }
 .cloud-4 { background: var(--cloud-4); }
+
+// Per-low-cloud background + opacity overrides (token-driven; see sky paint cluster).
+.cloud-1--low { background: var(--cloud-1-low-bkg); opacity: var(--cloud-1-low-opacity); }
+.cloud-2--low { background: var(--cloud-2-low-bkg); opacity: var(--cloud-2-low-opacity); }
+.cloud-3--low { background: var(--cloud-3-low-bkg); opacity: var(--cloud-3-low-opacity); }
+.cloud-4--low { background: var(--cloud-4-low-bkg); opacity: var(--cloud-4-low-opacity); }
 
 .top-clouds,
 .bottom-clouds {

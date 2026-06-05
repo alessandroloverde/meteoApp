@@ -1,14 +1,23 @@
-// Generate [data-paint-bundle] rules for every variant in the library.
+// Generate paint rules for every cluster + variant in the library.
+// Each cluster maps to its own `.scene` attribute so variants are selectable
+// independently (e.g. sky variant-1 + terrain default).
 @use 'sass:map';
 @use 'helpers' as paint;
 @use 'emit';
 @use 'library-autumn-cloudy' as lib;
 
-@each $variant in paint.paint-variant-names(lib.$paint-library, autumn, cloudy) {
-  $bundle-id: paint.paint-bundle-id(autumn, cloudy, $variant);
-  $merged: paint.paint-resolve(lib.$paint-library, autumn, cloudy, $variant);
+$paint-clusters: (
+  sky: 'data-paint-sky',
+  terrain: 'data-paint-terrain',
+);
 
-  [data-paint-bundle='#{$bundle-id}'] {
-    @include emit.paint-emit($merged);
+@each $cluster, $attr in $paint-clusters {
+  @each $variant in paint.paint-variant-names(lib.$paint-library, autumn, cloudy, $cluster) {
+    $bundle-id: paint.paint-bundle-id(autumn, cloudy, $variant);
+    $merged: paint.paint-resolve(lib.$paint-library, autumn, cloudy, $cluster, $variant);
+
+    [#{$attr}='#{$bundle-id}'] {
+      @include emit.paint-emit($merged);
+    }
   }
 }

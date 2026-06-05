@@ -55,6 +55,13 @@
         --cloud-#{$n}-a: #{map.get($layer, a)};
         --cloud-#{$n}-b: #{map.get($layer, b)};
       }
+      // Low (bottom) cloud layer — full background expression + opacity.
+      @if map.has-key($layer, low-bkg) {
+        --cloud-#{$n}-low-bkg: #{map.get($layer, low-bkg)};
+      }
+      @if map.has-key($layer, low-opacity) {
+        --cloud-#{$n}-low-opacity: #{map.get($layer, low-opacity)};
+      }
     }
   }
 

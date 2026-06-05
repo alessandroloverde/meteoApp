@@ -22,13 +22,13 @@
   @return $result;
 }
 
-// Resolve season → weather → variant (always merges on top of `default`).
-@function paint-resolve($library, $season, $weather, $variant) {
-  $weather-branch: map.get($library, $season, $weather);
-  $default: map.get($weather-branch, default);
+// Resolve season → weather → cluster → variant (always merges on top of `default`).
+@function paint-resolve($library, $season, $weather, $cluster, $variant) {
+  $cluster-branch: map.get($library, $season, $weather, $cluster);
+  $default: map.get($cluster-branch, default);
 
   @if $default == null {
-    @error 'Paint library missing default for #{$season} / #{$weather}.';
+    @error 'Paint library missing default for #{$season} / #{$weather} / #{$cluster}.';
   }
 
   // `default` is a Sass map key — compare as a string to avoid ambiguity.
@@ -36,18 +36,18 @@
     @return $default;
   }
 
-  $patch: map.get($weather-branch, $variant);
+  $patch: map.get($cluster-branch, $variant);
 
   @if $patch == null {
-    @error 'Paint library missing variant `#{$variant}` for #{$season} / #{$weather}.';
+    @error 'Paint library missing variant `#{$variant}` for #{$season} / #{$weather} / #{$cluster}.';
   }
 
   @return paint-deep-merge($default, $patch);
 }
 
-// All variant keys under a weather branch (includes `default`).
-@function paint-variant-names($library, $season, $weather) {
-  @return map.keys(map.get($library, $season, $weather));
+// All variant keys under a cluster branch (includes `default`).
+@function paint-variant-names($library, $season, $weather, $cluster) {
+  @return map.keys(map.get($library, $season, $weather, $cluster));
 }
 
 @function paint-bundle-id($season, $weather, $variant) {

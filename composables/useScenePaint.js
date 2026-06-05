@@ -1,25 +1,28 @@
 import { computed, watch } from 'vue'
-import { resolveScenePaintBundle } from '@/utils/scenePaint'
+import { resolveScenePaintBundles } from '@/utils/scenePaint'
 
 /**
- * Resolves `data-paint-bundle` for the current scene id.
- * Autumn + cloudy (and other `PAINT_LIBRARY_BRANCHES`) use `default` automatically.
- * Returns null when no library branch exists (gray :root paint stubs).
+ * Resolves per-cluster paint bundles (`data-paint-sky` / `data-paint-terrain`)
+ * for the current scene id. Autumn + cloudy (and other `PAINT_LIBRARY_BRANCHES`)
+ * use `default` automatically. Returns null when no library branch exists
+ * (gray :root paint stubs).
+ *
+ * @returns {{ paintBundles: import('vue').ComputedRef<{ sky: string, terrain: string } | null> }}
  */
 export function useScenePaint(sceneIdRef) {
-  const paintBundle = computed(() => {
-    const id = typeof sceneIdRef === 'function' ? sceneIdRef() : sceneIdRef?.value ?? sceneIdRef
-    return resolveScenePaintBundle(id) ?? null
-  })
+  const resolveId = () =>
+    typeof sceneIdRef === 'function' ? sceneIdRef() : sceneIdRef?.value ?? sceneIdRef
+
+  const paintBundles = computed(() => resolveScenePaintBundles(resolveId()) ?? null)
 
   if (import.meta.client) {
-    watch(paintBundle, (bundle) => {
-      const id = typeof sceneIdRef === 'function' ? sceneIdRef() : sceneIdRef?.value ?? sceneIdRef
-      if (id && bundle == null) {
+    watch(paintBundles, (bundles) => {
+      const id = resolveId()
+      if (id && bundles == null) {
         console.warn(`[scene-paint] No paint library for "${id}" — using gray stubs.`)
       }
     })
   }
 
-  return { paintBundle }
+  return { paintBundles }
 }

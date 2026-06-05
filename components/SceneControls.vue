@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { buildSceneIdentifier } from '@/utils/sceneIdentifier'
-import { resolveScenePaintBundle } from '@/utils/scenePaint'
+import { resolveScenePaintBundles } from '@/utils/scenePaint'
 
 const {
   season, time, weather, temp,
@@ -17,7 +17,7 @@ const sceneId = computed(() =>
   }),
 )
 
-const paintBundle = computed(() => resolveScenePaintBundle(sceneId.value))
+const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
 </script>
 
 <template>
@@ -29,13 +29,20 @@ const paintBundle = computed(() => resolveScenePaintBundle(sceneId.value))
     <p class="scene-controls__scene-id" title="weather--season--time--temp">
       {{ sceneId }}
     </p>
-    <p
-      v-if="paintBundle"
-      class="scene-controls__paint-bundle"
-      title="season--weather--variant (paint library)"
-    >
-      paint: {{ paintBundle }}
-    </p>
+    <template v-if="paintBundles">
+      <p
+        class="scene-controls__paint-bundle"
+        title="sky cluster — season--weather--variant"
+      >
+        sky: {{ paintBundles.sky }}
+      </p>
+      <p
+        class="scene-controls__paint-bundle"
+        title="terrain cluster — season--weather--variant"
+      >
+        terrain: {{ paintBundles.terrain }}
+      </p>
+    </template>
     <p v-else class="scene-controls__paint-bundle scene-controls__paint-bundle--missing">
       paint: (no library branch)
     </p>
