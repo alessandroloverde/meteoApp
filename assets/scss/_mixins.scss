@@ -2,7 +2,26 @@
 @use 'sass:list';
 @use 'variables' as v;
 
-// A gradient-masked scene layer.
+// Silhouette mask + background gradient only (terrain 2–5).
+//   --layer-bkg       background gradient
+//   --mask-image      silhouette mask
+//   --mask-size       (default: 100% auto)
+//   --mask-position   (default: bottom center)
+@mixin masked-gradient-layer {
+  background: var(--layer-bkg);
+  // Longhand — mask shorthand + var() is unreliable in WebKit for multi-token positions.
+  -webkit-mask-image: var(--mask-image);
+  -webkit-mask-position: var(--mask-position, bottom center);
+  -webkit-mask-size: var(--mask-size, 100% auto);
+  -webkit-mask-repeat: no-repeat;
+  mask-image: var(--mask-image);
+  mask-position: var(--mask-position, bottom center);
+  mask-size: var(--mask-size, 100% auto);
+  mask-repeat: no-repeat;
+}
+
+// Full terrain accent stack (terrain 1 only): base mask + ::before gradient
+// texture + ::after accent through gradient mask.
 // Configure via CSS custom properties on the element:
 //   --layer-bkg         background of the base layer
 //   --mask-image        mask applied to the base layer

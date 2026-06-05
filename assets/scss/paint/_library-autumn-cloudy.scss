@@ -11,11 +11,13 @@ $autumn-cloudy-default: (
     ),
   ),
   terrain: (
+    // Layer 1 — full accent stack (::before texture + ::after blend).
     1: (a: #e1771d, b: #502b27, c: #503229, d: #3d1c25, blend: overlay),
-    2: (a: #be612d, b: #6f3825, blend: color),
-    3: (a: #d5692a, b: #5f2f22, blend: overlay),
-    4: (a: #4d1d12, b: #8e4029, c: #c0632d, blend: color),
-    5: (a: #8b4418, b: #80381a, c: #864019, blend: normal),
+    // Layers 2–5 — silhouette mask + gradient only.
+    2: (a: #be612d, b: #6f3825, b-stop: 11%),
+    3: (a: #d5692a, b: #5f2f22),
+    4: (a: #4d1d12, b: #8e4029),
+    5: (a: #8b4418, b: #80381a),
   ),
   trunk: (
     1: (a: #611507, b: #2b151a),
@@ -51,11 +53,33 @@ $autumn-cloudy-default: (
 );
 
 // Sparse variants: only keys that differ from `default`.
+// `variant-1` — Cloudy–Autumn–Afternoon–Mild (register per scene in scenePaint.js).
+$autumn-cloudy-variant-1: (
+  terrain: (
+    1: (a: #c49047, c: #8a4525, d: #804531),
+    2: (a: #c5a072, b: #805a31, b-stop: 13%),
+    3: (a: #b7926e, b: #7c4f2d),
+    4: (a: #af703a, b: #654328),
+    5: (a: #7b4b21, b: #6f4412),
+  ),
+  bush: (
+    1: (b: #793e20),
+    2: (a: #7c4830),
+  ),
+  foliage: (
+    1: (a: #a47f54, b: #c0742e),
+    2: (a: #ae763c, b: #1c3d34),
+    3: (a: #ae763c, b: #1c3d34),
+    4: (a: #ae763c, b: #1c3d34),
+    5: (a: #a47f54, b: #c0742e),
+  ),
+);
+
 $paint-library: (
   autumn: (
     cloudy: (
       default: $autumn-cloudy-default,
-      // overcast: ( sky: ( stops: ( 0: #…, … ) ) ),
+      variant-1: $autumn-cloudy-variant-1,
     ),
   ),
 );

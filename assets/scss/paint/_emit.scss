@@ -17,6 +17,8 @@
       @each $slot, $val in $layer {
         @if $slot == blend {
           --terrain-#{$n}-blend: #{$val};
+        } @else if $slot == b-stop {
+          --terrain-#{$n}-b-stop: #{$val};
         } @else {
           --terrain-#{$n}-#{$slot}: #{$val};
         }

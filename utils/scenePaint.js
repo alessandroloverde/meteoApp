@@ -18,8 +18,12 @@ export const PAINT_LIBRARY_BRANCHES = [
 
 /** @type {Record<string, ScenePaintEntry>} */
 export const SCENE_PAINT = {
-  // Example override when a scene needs more than the shared default:
-  // 'cloudy--autumn--morning--mild': { season: 'autumn', weather: 'cloudy', variant: 'morning-lit' },
+  // Only this scene uses variant-1; all other Autumn–Cloudy combos keep `default`.
+  'cloudy--autumn--afternoon--mild': {
+    season: 'autumn',
+    weather: 'cloudy',
+    variant: 'variant-1',
+  },
 }
 
 function hasPaintLibraryBranch(season, weather) {

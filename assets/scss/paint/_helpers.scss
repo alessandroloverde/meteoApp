@@ -31,11 +31,16 @@
     @error 'Paint library missing default for #{$season} / #{$weather}.';
   }
 
-  @if $variant == default {
+  // `default` is a Sass map key — compare as a string to avoid ambiguity.
+  @if #{$variant} == 'default' {
     @return $default;
   }
 
   $patch: map.get($weather-branch, $variant);
+
+  @if $patch == null {
+    @error 'Paint library missing variant `#{$variant}` for #{$season} / #{$weather}.';
+  }
 
   @return paint-deep-merge($default, $patch);
 }

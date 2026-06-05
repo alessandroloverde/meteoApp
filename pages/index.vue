@@ -205,7 +205,7 @@ onBeforeUnmount(() => {
         TERRAIN — trees, bushes, ridges, buildings.
         Each group has its own overlay container above it.
       -->
-      <div class="scene-layer mask-layer terrain">
+      <div class="scene-layer terrain">
 
         <!-- Trees + overlays -->
         <section class="scene-layer mask-layer trees">
@@ -257,19 +257,19 @@ onBeforeUnmount(() => {
         </section>
 
         <!-- Terrain ridges (1–3, behind buildings) + overlays -->
-        <div class="scene-layer mask-layer terrain-1">
+        <div class="scene-layer terrain-layer--accent terrain-1">
           <div class="terrain-overlays__season"></div>
           <div class="terrain-overlays__time"></div>
           <div class="terrain-overlays__temp"></div>
           <div class="terrain-overlays__weather"></div>
         </div>
-        <div class="scene-layer mask-layer terrain-2">
+        <div class="scene-layer terrain-layer terrain-2">
           <div class="terrain-overlays__season"></div>
           <div class="terrain-overlays__time"></div>
           <div class="terrain-overlays__temp"></div>
           <div class="terrain-overlays__weather"></div>
         </div>
-        <div class="scene-layer mask-layer terrain-3">
+        <div class="scene-layer terrain-layer terrain-3">
           <div class="terrain-overlays__season"></div>
           <div class="terrain-overlays__time"></div>
           <div class="terrain-overlays__temp"></div>
@@ -321,13 +321,13 @@ onBeforeUnmount(() => {
         </section>
 
         <!-- Terrain ridges (4–5, in front of buildings) + overlays -->
-        <div class="scene-layer mask-layer terrain-4">
+        <div class="scene-layer terrain-layer terrain-4">
           <div class="terrain-overlays__season"></div>
           <div class="terrain-overlays__time"></div>
           <div class="terrain-overlays__temp"></div>
           <div class="terrain-overlays__weather"></div>
         </div>
-        <div class="scene-layer mask-layer terrain-5">
+        <div class="scene-layer terrain-layer terrain-5">
           <div class="terrain-overlays__season"></div>
           <div class="terrain-overlays__time"></div>
           <div class="terrain-overlays__temp"></div>
@@ -530,6 +530,17 @@ $trees: (
 }
 
 .mask-layer {
+  @include mx.gradient-mask-layer;
+  opacity: var(--layer-opacity, 1);
+}
+
+// Terrain ridges: mask + gradient. Terrain-1 adds accent stack via --accent modifier.
+.terrain-layer {
+  @include mx.masked-gradient-layer;
+  opacity: var(--layer-opacity, 1);
+}
+
+.terrain-layer--accent {
   @include mx.gradient-mask-layer;
   opacity: var(--layer-opacity, 1);
 }
@@ -769,66 +780,62 @@ $clouds--low: (
   background-color: transparent;
 }
 
-[class*='terrain-'] {
+.terrain-1,
+.terrain-2,
+.terrain-3,
+.terrain-4,
+.terrain-5 {
   position: absolute;
   --mask-size: 100% auto;
-  --mask-position: top center;
   --mask-repeat: no-repeat;
+}
+
+.terrain-1,
+.terrain-2,
+.terrain-3,
+.terrain-4,
+.terrain-5 {
+  --mask-position: top center;
 }
 
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-5--gradient.png');
   --layer-bkg: linear-gradient(
     to right,
     var(--terrain-5-a)   0%,
     var(--terrain-5-b) 100%
   );
-  --accent-color: var(--terrain-5-c);
-  --blend-mode: var(--terrain-5-blend, normal);
   --layer-opacity: 1;
-  background-color: var(--terrain-5-b); // fallback behind gradient
-  -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
-          mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
   z-index: 5;
 }
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-4--gradient.png');
   --layer-bkg: radial-gradient(
     circle at 72% 0%,
     var(--terrain-4-a)  0%,
     var(--terrain-4-b) 25%
   );
-  --accent-color: var(--terrain-4-c);
-  --blend-mode: var(--terrain-4-blend, color);
   --layer-opacity: 1;
   z-index: 6;
 }
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-3--gradient.png');
   --layer-bkg: radial-gradient(
     circle at 28% 0,
     var(--terrain-3-a) -1%,
     var(--terrain-3-b) 15%
   );
-  --accent-color: var(--terrain-3-a);
-  --blend-mode: var(--terrain-3-blend, overlay);
   --layer-opacity: 1;
   top: 4%;
   z-index: 8;
 }
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg');
-  --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-2--gradient.png');
   --layer-bkg: radial-gradient(
     circle at 55% 0%,
     var(--terrain-2-a)  5%,
-    var(--terrain-2-b) 11%
+    var(--terrain-2-b) var(--terrain-2-b-stop, 11%)
   );
-  --accent-color: var(--terrain-2-a);
-  --blend-mode: var(--terrain-2-blend, color);
   --layer-opacity: 1;
   top: 4%;
   z-index: 9;
@@ -933,7 +940,7 @@ $clouds--low: (
 
 // Per-bush background overrides.
 .bushes-1 { background: linear-gradient(160deg, var(--bush-1-a) 35%, var(--bush-1-b) 85%); }
-.bushes-2 { background: radial-gradient(ellipse at 40% 100%, var(--bush-2-a) 10%, var(--bush-2-b) 80%); }
+.bushes-2 { background: radial-gradient(ellipse at 20% 100%, var(--bush-2-a) 10%, var(--bush-2-b) 50%); }
 .bushes-3 { background: linear-gradient(160deg, var(--bush-3-a) 30%, var(--bush-3-b) 70%); }
 
 
