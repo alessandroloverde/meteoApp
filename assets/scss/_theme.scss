@@ -16,10 +16,16 @@
 // renders until a variant block turns an overlay on. Combination scenes
 // can add a `data-scene-id` block for edge-case overrides.
 //
-// Token naming:
-//   --<group>-<axis>-overlay-color   hex or CSS color
-//   --<group>-<axis>-overlay-opacity 0–1
-//   --<group>-<axis>-overlay-blend   mix-blend-mode keyword
+// Token naming (cloud, terrain, foliage, bush, building):
+//   --<group>-<axis>-overlay-color    hex or CSS color
+//   --<group>-<axis>-overlay-opacity  0–1
+//   --<group>-<axis>-overlay-blend    mix-blend-mode keyword
+//
+// Sky overlays (gradient panes inside .sky-overlays):
+//   --sky-overlay-blend               mix-blend-mode on the container
+//   --sky-<axis>-overlay-stop-0/1/2   gradient stops (top → bottom)
+//   --sky-<axis>-overlay-opacity      0–1
+//   --sky-<axis>-overlay-z-index      stack order (default auto)
 //
 // Groups: sky | cloud | terrain | foliage | bush | building
 // =============================================================================
@@ -34,10 +40,7 @@ $gray: #808080;
 // =============================================================================
 // mix-blend-mode ignores var() unless the custom property is registered.
 // syntax:'*' + inherits:true lets the value cascade normally.
-@property --sky-season-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --sky-time-overlay-blend      { syntax: '*'; inherits: true; initial-value: normal; }
-@property --sky-temp-overlay-blend      { syntax: '*'; inherits: true; initial-value: normal; }
-@property --sky-weather-overlay-blend   { syntax: '*'; inherits: true; initial-value: normal; }
+@property --sky-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
 
 @property --cloud-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --cloud-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
@@ -80,22 +83,32 @@ $gray: #808080;
   --sky-stop-2: #{$gray};
   --sky-stop-3: #{$gray};
 
-  // Sky overlay defaults (off).
-  --sky-season-overlay-color:   #{$gray};
+  // Sky overlays — gradient panes stack inside .sky-overlays; container owns blend.
+  --sky-overlay-blend: soft-light;
+
+  --sky-season-overlay-stop-0:  #{$gray};
+  --sky-season-overlay-stop-1:  #{$gray};
+  --sky-season-overlay-stop-2:  #{$gray};
   --sky-season-overlay-opacity: 0;
-  --sky-season-overlay-blend:   color;
+  --sky-season-overlay-z-index: auto;
 
-  --sky-time-overlay-color:   #{$gray};
-  --sky-time-overlay-opacity: 0;
-  --sky-time-overlay-blend:   soft-light;
+  --sky-time-overlay-stop-0:    #{$gray};
+  --sky-time-overlay-stop-1:    #{$gray};
+  --sky-time-overlay-stop-2:    #{$gray};
+  --sky-time-overlay-opacity:   0;
+  --sky-time-overlay-z-index:   auto;
 
-  --sky-temp-overlay-color:   #{$gray};
-  --sky-temp-overlay-opacity: 0;
-  --sky-temp-overlay-blend:   color;
+  --sky-temp-overlay-stop-0:    #{$gray};
+  --sky-temp-overlay-stop-1:    #{$gray};
+  --sky-temp-overlay-stop-2:    #{$gray};
+  --sky-temp-overlay-opacity:   0;
+  --sky-temp-overlay-z-index:   auto;
 
-  --sky-weather-overlay-color:   #{$gray};
+  --sky-weather-overlay-stop-0:  #{$gray};
+  --sky-weather-overlay-stop-1:  #{$gray};
+  --sky-weather-overlay-stop-2:  #{$gray};
   --sky-weather-overlay-opacity: 0;
-  --sky-weather-overlay-blend:   saturation;
+  --sky-weather-overlay-z-index: auto;
 
   // --------------------------------------------------------------------------
   // Sun / moon disc
@@ -334,30 +347,53 @@ $gray: #808080;
 // TIME axis — luminosity / warmth shift
 // =============================================================================
 
-[data-time='morning'] {
-  // TODO: morning time overlays
-  --moon-top:         40%;
-  --moon-left:        14%;
-  --moon-translate-x: -50%;
-
-  // Daytime buildings: dark neutral grey, roofs ~25% darker, dark (off) windows.
+// Daylight buildings — shared by morning and afternoon (same base as afternoon).
+[data-time='morning'],
+[data-time='afternoon'] {
   --building-wall-base:   #5e5e5e;
   --building-roof-base:   #474747;
   --building-church:      #5e5e5e;
   --building-window-base: #2b2422;
 }
 
+[data-time='morning'] {
+  // Shares variant-1 paint base with afternoon — mood via time overlays only.
+  --moon-top:         40%;
+  --moon-left:        14%;
+  --moon-translate-x: -50%;
+
+  // Morning overlay experiment (tune stops / opacity / z-index per group).
+  --sky-time-overlay-stop-0:    #365fb0;
+  --sky-time-overlay-stop-1:    #9ba834;
+  --sky-time-overlay-stop-2:    #dfce06;
+  --sky-time-overlay-opacity:   1;
+
+  --cloud-time-overlay-color:     #ffd4a3;
+  --cloud-time-overlay-opacity:   0;
+  --cloud-time-overlay-blend:     soft-light;
+
+  --terrain-time-overlay-color:   #e8c4a0;
+  --terrain-time-overlay-opacity: 0;
+  --terrain-time-overlay-blend:   soft-light;
+
+  --foliage-time-overlay-color:   #e8c4a0;
+  --foliage-time-overlay-opacity: 0;
+  --foliage-time-overlay-blend:   soft-light;
+
+  --bush-time-overlay-color:      #e8c4a0;
+  --bush-time-overlay-opacity:    0;
+  --bush-time-overlay-blend:      soft-light;
+
+  --building-time-overlay-color:   #e8c4a0;
+  --building-time-overlay-opacity: 0;
+  --building-time-overlay-blend:   soft-light;
+}
+
 [data-time='afternoon'] {
-  // TODO: afternoon time overlays
+  // Authored afternoon reference on top of variant-1 base.
   --moon-top:         16%;
   --moon-left:        82%;
   --moon-translate-x: -50%;
-
-  // Daytime buildings: dark neutral grey, roofs ~25% darker, dark (off) windows.
-  --building-wall-base:   #5e5e5e;
-  --building-roof-base:   #474747;
-  --building-church:      #5e5e5e;
-  --building-window-base: #2b2422;
 }
 
 [data-time='evening'] {

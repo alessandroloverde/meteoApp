@@ -394,6 +394,33 @@ onBeforeUnmount(() => {
   // opacity is intentionally absent — see note above
 }
 
+// Sky axis panes — top→bottom gradient; blend lives on .sky-overlays container.
+@mixin sky-overlay-pane($axis) {
+  position: absolute;
+  inset: 0;
+  z-index: var(--sky-#{$axis}-overlay-z-index, auto);
+  pointer-events: none;
+  mix-blend-mode: normal;
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(
+      in srgb,
+      var(--sky-#{$axis}-overlay-stop-0) calc(var(--sky-#{$axis}-overlay-opacity) * 100%),
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--sky-#{$axis}-overlay-stop-1) calc(var(--sky-#{$axis}-overlay-opacity) * 100%),
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--sky-#{$axis}-overlay-stop-2) calc(var(--sky-#{$axis}-overlay-opacity) * 100%),
+      transparent
+    )
+  );
+}
+
 // =============================================================================
 // Overlay container mixin
 // =============================================================================
@@ -594,14 +621,16 @@ $trees: (
 }
 
 // Sky overlay container + panes.
+// Container owns mix-blend-mode; panes stack gradients with normal compositing.
 .sky-overlays {
   @include overlay-container;
   z-index: 5;
+  mix-blend-mode: var(--sky-overlay-blend);
 
-  &__season  { @include overlay-pane('sky-season'); }
-  &__time    { @include overlay-pane('sky-time'); }
-  &__temp    { @include overlay-pane('sky-temp'); }
-  &__weather { @include overlay-pane('sky-weather'); }
+  &__season  { @include sky-overlay-pane('season'); }
+  &__time    { @include sky-overlay-pane('time'); }
+  &__temp    { @include sky-overlay-pane('temp'); }
+  &__weather { @include sky-overlay-pane('weather'); }
 }
 
 

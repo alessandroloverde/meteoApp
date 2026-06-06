@@ -24,16 +24,19 @@ export const PAINT_LIBRARY_BRANCHES = [
 
 export const PAINT_CLUSTERS = ['sky', 'terrain']
 
+/** Shared variant-1 paint for authored Autumn–Cloudy daylight references. */
+const AUTUMN_CLOUDY_VARIANT_1 = {
+  season: 'autumn',
+  weather: 'cloudy',
+  sky: 'variant-1',
+  terrain: 'variant-1',
+}
+
 /** @type {Record<string, ScenePaintEntry>} */
 export const SCENE_PAINT = {
-  // sky + terrain both on variant-1 for the afternoon reference.
-  // Other Autumn–Cloudy combos keep `default` for both clusters.
-  'cloudy--autumn--afternoon--mild': {
-    season: 'autumn',
-    weather: 'cloudy',
-    sky: 'variant-1',
-    terrain: 'variant-1',
-  },
+  // Same variant-1 base for both; morning mood is tuned via time overlays only.
+  'cloudy--autumn--morning--mild': AUTUMN_CLOUDY_VARIANT_1,
+  'cloudy--autumn--afternoon--mild': AUTUMN_CLOUDY_VARIANT_1,
 }
 
 function hasPaintLibraryBranch(season, weather) {
