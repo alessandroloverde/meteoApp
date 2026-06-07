@@ -381,11 +381,21 @@ $gray: #808080;
   --building-time-overlay-blend:   soft-light;
 }
 
+[data-time='morning'][data-temp='warm'] {
+  --scene-grade-softlight-bg:       linear-gradient(to bottom, #79a6b5 30%, #e27a5f 41%, #d79d1a 60%);
+  --scene-grade-softlight-opacity:  1;
+}
+
 [data-time='afternoon'] {
   // Authored afternoon reference on top of variant-1 base.
   --moon-top:         16%;
   --moon-left:        82%;
   --moon-translate-x: -50%;
+}
+
+[data-time='afternoon'][data-temp='warm'] {
+  --scene-grade-multiply-bg:       linear-gradient(to bottom, #efc05e 40%, #ca5c32);
+  --scene-grade-multiply-opacity:  0.4;
 }
 
 [data-time='evening'] {

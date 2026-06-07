@@ -24,7 +24,6 @@ export const PAINT_LIBRARY_BRANCHES = [
 
 export const PAINT_CLUSTERS = ['sky', 'terrain']
 
-/** Shared variant-1 paint for authored Autumn–Cloudy daylight references. */
 const AUTUMN_CLOUDY_VARIANT_1 = {
   season: 'autumn',
   weather: 'cloudy',
@@ -32,11 +31,34 @@ const AUTUMN_CLOUDY_VARIANT_1 = {
   terrain: 'variant-1',
 }
 
+const AUTUMN_CLOUDY_DEFAULT = {
+  season: 'autumn',
+  weather: 'cloudy',
+  sky: 'default',
+  terrain: 'default',
+}
+
+/**
+ * Register Autumn–Cloudy scenes for a temperature band.
+ * Daylight (morning, afternoon) → variant-1; evening / night → default.
+ * Matches the mild authoring baseline until a temp-specific variant exists.
+ *
+ * @param {string} temp
+ * @returns {Record<string, ScenePaintEntry>}
+ */
+function autumnCloudyScenesForTemp(temp) {
+  return {
+    [`cloudy--autumn--morning--${temp}`]: AUTUMN_CLOUDY_VARIANT_1,
+    [`cloudy--autumn--afternoon--${temp}`]: AUTUMN_CLOUDY_VARIANT_1,
+    [`cloudy--autumn--evening--${temp}`]: AUTUMN_CLOUDY_DEFAULT,
+    [`cloudy--autumn--night--${temp}`]: AUTUMN_CLOUDY_DEFAULT,
+  }
+}
+
 /** @type {Record<string, ScenePaintEntry>} */
 export const SCENE_PAINT = {
-  // Same variant-1 base for both; morning mood is tuned via time overlays only.
-  'cloudy--autumn--morning--mild': AUTUMN_CLOUDY_VARIANT_1,
-  'cloudy--autumn--afternoon--mild': AUTUMN_CLOUDY_VARIANT_1,
+  ...autumnCloudyScenesForTemp('mild'),
+  ...autumnCloudyScenesForTemp('warm'),
 }
 
 function hasPaintLibraryBranch(season, weather) {

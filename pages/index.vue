@@ -586,11 +586,13 @@ $trees: (
 .scene-grade--multiply {
   z-index: 100;
   mix-blend-mode: multiply;
+  background: var(--scene-grade-multiply-bg, rgb(var(--scene-grade-rgb) / 1));
   opacity: var(--scene-grade-multiply-opacity);
 }
 .scene-grade--softlight {
   z-index: 101;
   mix-blend-mode: soft-light;
+  background: var(--scene-grade-softlight-bg, rgb(var(--scene-grade-rgb) / 1));
   opacity: var(--scene-grade-softlight-opacity);
 }
 
