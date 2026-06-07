@@ -517,11 +517,21 @@ $trees: (
 .trees-5--trunk { background: linear-gradient(90deg, var(--trunk-5-a) 44%, var(--trunk-5-b)  57%); }
 
 // Per-tree foliage overrides — custom gradients replacing the flat foliage-base.
-.trees-1--foliage { background: linear-gradient(45deg, var(--foliage-1-a) 40%, var(--foliage-1-b)); }
-.trees-2--foliage { background: radial-gradient(var(--foliage-2-a), var(--foliage-2-b)); }
-.trees-3--foliage { background: radial-gradient(80% 70%, var(--foliage-3-a), var(--foliage-3-b) 80%); }
-.trees-4--foliage { background: radial-gradient(80% 90%, var(--foliage-4-a), var(--foliage-4-b) 80%); }
-.trees-5--foliage { background: linear-gradient(90deg, var(--foliage-5-a) 30%, var(--foliage-5-b) 90%); }
+.trees-1--foliage {
+  background: radial-gradient(ellipse 100% 50% at 0% 25%, #d36e35 10%, #73301a 60%, #762c1b 90%);
+}
+.trees-2--foliage {
+  background: radial-gradient(at 30% 35%, #ef8d1a 20%, #542c29 70%);
+}
+.trees-3--foliage {
+  background: radial-gradient(at 10% 30%, #ef8d1a 20%, #88470d 60%);
+}
+.trees-4--foliage {
+  background: radial-gradient(at 0 30%, #ef8d1a 25%, #542c29 80%);
+}
+.trees-5--foliage {
+  background: radial-gradient(at 80% 20%, #c16531 10%, #562321 60%);
+}
 
 // =============================================================================
 // Page shell

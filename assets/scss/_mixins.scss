@@ -89,16 +89,7 @@
     width: 100%;
     isolation: isolate;
     background: map.get($config, foliage-colors);
-    mask: $foliage-url  center top / 100% auto no-repeat;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      inset: 0;
-      background: $foliage-url center top / 100% auto no-repeat;
-      mix-blend-mode: luminosity;
-    }
+    mask: $foliage-url center top / 100% auto no-repeat;
   }
 }
 
