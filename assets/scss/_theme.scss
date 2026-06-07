@@ -216,16 +216,11 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   --foliage-base:  #{$gray};
 
-  --foliage-1-a: #{$gray};
-  --foliage-1-b: #{$gray};
-  --foliage-2-a: #{$gray};
-  --foliage-2-b: #{$gray};
-  --foliage-3-a: #{$gray};
-  --foliage-3-b: #{$gray};
-  --foliage-4-a: #{$gray};
-  --foliage-4-b: #{$gray};
-  --foliage-5-a: #{$gray};
-  --foliage-5-b: #{$gray};
+  --foliage-1-bg: #{$gray};
+  --foliage-2-bg: #{$gray};
+  --foliage-3-bg: #{$gray};
+  --foliage-4-bg: #{$gray};
+  --foliage-5-bg: #{$gray};
   --trunk-base: #{$gray};
   --trunk-1-a: #{$gray};
   --trunk-1-b: #{$gray};
@@ -259,12 +254,9 @@ $gray: #808080;
   // --------------------------------------------------------------------------
   --bush-base: #{$gray};
 
-  --bush-1-a: #{$gray};
-  --bush-1-b: #{$gray};
-  --bush-2-a: #{$gray};
-  --bush-2-b: #{$gray};
-  --bush-3-a: #{$gray};
-  --bush-3-b: #{$gray};
+  --bush-1-bg: #{$gray};
+  --bush-2-bg: #{$gray};
+  --bush-3-bg: #{$gray};
 
   --bush-season-overlay-color:   #{$gray};
   --bush-season-overlay-opacity: 0;

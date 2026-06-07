@@ -516,22 +516,12 @@ $trees: (
 .trees-4--trunk { background: linear-gradient(0deg,  var(--trunk-4-a)  0%, var(--trunk-4-b) 100%); }
 .trees-5--trunk { background: linear-gradient(90deg, var(--trunk-5-a) 44%, var(--trunk-5-b)  57%); }
 
-// Per-tree foliage overrides — custom gradients replacing the flat foliage-base.
-.trees-1--foliage {
-  background: radial-gradient(ellipse 100% 50% at 0% 25%, #d36e35 10%, #73301a 60%, #762c1b 90%);
-}
-.trees-2--foliage {
-  background: radial-gradient(at 30% 35%, #ef8d1a 20%, #542c29 70%);
-}
-.trees-3--foliage {
-  background: radial-gradient(at 10% 30%, #ef8d1a 20%, #88470d 60%);
-}
-.trees-4--foliage {
-  background: radial-gradient(at 0 30%, #ef8d1a 25%, #542c29 80%);
-}
-.trees-5--foliage {
-  background: radial-gradient(at 80% 20%, #c16531 10%, #562321 60%);
-}
+// Per-tree foliage — full gradient from terrain paint cluster (--foliage-N-bg).
+.trees-1--foliage { background: var(--foliage-1-bg); }
+.trees-2--foliage { background: var(--foliage-2-bg); }
+.trees-3--foliage { background: var(--foliage-3-bg); }
+.trees-4--foliage { background: var(--foliage-4-bg); }
+.trees-5--foliage { background: var(--foliage-5-bg); }
 
 // =============================================================================
 // Page shell
@@ -984,10 +974,10 @@ $clouds--low: (
 .bush-overlays__temp    { @include overlay-pane('bush-temp'); }
 .bush-overlays__weather { @include overlay-pane('bush-weather'); }
 
-// Per-bush background overrides.
-.bushes-1 { background: linear-gradient(160deg, var(--bush-1-a) 35%, var(--bush-1-b) 85%); }
-.bushes-2 { background: radial-gradient(ellipse at 20% 100%, var(--bush-2-a) 10%, var(--bush-2-b) 50%); }
-.bushes-3 { background: linear-gradient(160deg, var(--bush-3-a) 30%, var(--bush-3-b) 70%); }
+// Per-bush background — full gradient from terrain paint cluster (--bush-N-bg).
+.bushes-1 { background: var(--bush-1-bg); }
+.bushes-2 { background: var(--bush-2-bg); }
+.bushes-3 { background: var(--bush-3-bg); }
 
 
 // =============================================================================

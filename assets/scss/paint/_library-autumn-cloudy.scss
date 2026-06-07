@@ -85,16 +85,16 @@ $autumn-cloudy-terrain-default: (
     5: (a: #5f1307, b: #30161a),
   ),
   foliage: (
-    1: (a: #d36e35, b: #722b15),
-    2: (a: #d57c1f, b: #855435),
-    3: (a: #d57c1f, b: #855435),
-    4: (a: #d57c1f, b: #855435),
-    5: (a: #562321, b: #903b20),
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #d36e35 10%, #73301a 60%, #762c1b 90%)),
+    2: (gradient: radial-gradient(at 30% 35%, #ef8d1a 20%, #542c29 70%)),
+    3: (gradient: radial-gradient(at 10% 30%, #ef8d1a 20%, #88470d 60%)),
+    4: (gradient: radial-gradient(at 0 30%, #ef8d1a 25%, #542c29 80%)),
+    5: (gradient: radial-gradient(at 80% 20%, #c16531 10%, #562321 60%)),
   ),
   bush: (
-    1: (a: #af6018, b: #412515),
-    2: (a: #53301b, b: #af6018),
-    3: (a: #c57321, b: #663613),
+    1: (gradient: linear-gradient(160deg, #af6018 35%, #412515 85%)),
+    2: (gradient: radial-gradient(ellipse at 20% 100%, #53301b 10%, #af6018 50%)),
+    3: (gradient: linear-gradient(160deg, #c57321 30%, #663613 70%)),
   ),
   building: (
     wall: #42222b,
@@ -114,15 +114,16 @@ $autumn-cloudy-terrain-variant-1: (
     5: (a: #7b4b21, b: #6f4412),
   ),
   bush: (
-    1: (b: #793e20),
-    2: (a: #7c4830),
+    1: (gradient: linear-gradient(160deg, #b58b22 35%, #8d4d0f 85%)),
+    2: (gradient: radial-gradient(ellipse at 0% 100%, #82430b 0%, #b68c27 50%)),
+    3: (gradient: linear-gradient(160deg, #a78156 30%, #8a4328 70%)),
   ),
   foliage: (
-    1: (a: #a47f54, b: #c0742e),
-    2: (a: #ae763c, b: #1c3d34),
-    3: (a: #ae763c, b: #1c3d34),
-    4: (a: #ae763c, b: #1c3d34),
-    5: (a: #a47f54, b: #c0742e),
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #e9a339 10%, #b96b29 60%, #8a4328 90%)),
+    2: (gradient: radial-gradient(at 30% 35%, #a68155 20%, #542c29 70%)),
+    3: (gradient: radial-gradient(at 10% 30%, #8c8f47 20%, #76542f 60%)),
+    4: (gradient: radial-gradient(at 0 30%, #a68155 25%, #542c29 80%)),
+    5: (gradient: radial-gradient(at 80% 20%, #df9736 10%, #8b4429 60%)),
   ),
 );
 

@@ -38,9 +38,10 @@
   $foliage: map.get($bundle, foliage);
 
   @if $foliage {
-    @each $n, $colors in $foliage {
-      --foliage-#{$n}-a: #{map.get($colors, a)};
-      --foliage-#{$n}-b: #{map.get($colors, b)};
+    @each $n, $layer in $foliage {
+      @if map.has-key($layer, gradient) {
+        --foliage-#{$n}-bg: #{map.get($layer, gradient)};
+      }
     }
   }
 
@@ -68,9 +69,10 @@
   $bush: map.get($bundle, bush);
 
   @if $bush {
-    @each $n, $colors in $bush {
-      --bush-#{$n}-a: #{map.get($colors, a)};
-      --bush-#{$n}-b: #{map.get($colors, b)};
+    @each $n, $layer in $bush {
+      @if map.has-key($layer, gradient) {
+        --bush-#{$n}-bg: #{map.get($layer, gradient)};
+      }
     }
   }
 
