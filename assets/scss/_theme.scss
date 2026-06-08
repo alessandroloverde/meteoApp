@@ -454,3 +454,18 @@ $gray: #808080;
 // Sky gradients live in the sky paint cluster (data-paint-sky); terrain, trees,
 // bushes and buildings in the terrain cluster (data-paint-terrain). See
 // `assets/scss/paint/` and `utils/scenePaint.js`.
+
+[data-scene-id='cloudy--autumn--evening--warm'] {
+  --scene-grade-multiply-bg:       linear-gradient(#322b59, #f4d060, #6f150d);
+  --scene-grade-multiply-opacity:  0.5;
+  --scene-grade-softlight-bg:      linear-gradient(#322b59, #f4d060, #6f150d);
+  --scene-grade-softlight-opacity: 0.5;
+}
+
+[data-scene-id='cloudy--autumn--night--warm'] {
+  --sky-temp-overlay-bg:      linear-gradient(0deg, #ddb896, #17226e);
+  --sky-temp-overlay-opacity: 1;
+
+  --terrain-temp-overlay-bg:      radial-gradient(closest-corner circle at 50% 0%, #b17d30 -10%, #b16102 30%, #551f03);
+  --terrain-temp-overlay-opacity: 1;
+}

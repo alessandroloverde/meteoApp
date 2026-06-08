@@ -385,10 +385,13 @@ onBeforeUnmount(() => {
   // Without it, ::after (z-index: auto, last in DOM order) would paint on top.
   z-index: 1;
   pointer-events: none;
-  background-color: color-mix(
-    in srgb,
-    var(--#{$prefix}-overlay-color) calc(var(--#{$prefix}-overlay-opacity) * 100%),
-    transparent
+  background: var(
+    --#{$prefix}-overlay-bg,
+    #{color-mix(
+      in srgb,
+      var(--#{$prefix}-overlay-color) calc(var(--#{$prefix}-overlay-opacity) * 100%),
+      transparent
+    )}
   );
   mix-blend-mode: var(--#{$prefix}-overlay-blend);
   // opacity is intentionally absent — see note above
@@ -401,7 +404,7 @@ onBeforeUnmount(() => {
   z-index: var(--sky-#{$axis}-overlay-z-index, auto);
   pointer-events: none;
   mix-blend-mode: normal;
-  background-image: linear-gradient(
+  background-image: var(--sky-#{$axis}-overlay-bg, linear-gradient(
     to bottom,
     color-mix(
       in srgb,
@@ -418,7 +421,7 @@ onBeforeUnmount(() => {
       var(--sky-#{$axis}-overlay-stop-2) calc(var(--sky-#{$axis}-overlay-opacity) * 100%),
       transparent
     )
-  );
+  ));
 }
 
 // =============================================================================
