@@ -469,3 +469,50 @@ $gray: #808080;
   --terrain-temp-overlay-bg:      radial-gradient(closest-corner circle at 50% 0%, #b17d30 -10%, #b16102 30%, #551f03);
   --terrain-temp-overlay-opacity: 1;
 }
+
+// Hot morning — clean overlay slate (general sky stack + local per-element panes).
+[data-scene-id='cloudy--autumn--morning--hot'] {
+  --sky-season-overlay-opacity:  0;
+  --sky-time-overlay-opacity:    0;
+  --sky-temp-overlay-opacity:    0;
+  --sky-weather-overlay-opacity: 0;
+  --sky-temp-overlay-bg:         unset;
+
+  --cloud-season-overlay-opacity:    0;
+  --cloud-time-overlay-opacity:      0;
+  --cloud-temp-overlay-opacity:      0;
+  --cloud-weather-overlay-opacity:   0;
+  --cloud-temp-overlay-bg:           unset;
+
+  --terrain-season-overlay-opacity:  0;
+  --terrain-time-overlay-color:      #e9884c;
+  --terrain-time-overlay-opacity:    1;
+  --terrain-time-overlay-filter:     brightness(1.25) saturate(0.75) hue-rotate(-20deg) contrast(1.5);
+  --terrain-temp-overlay-opacity:    0;
+  --terrain-weather-overlay-opacity: 0;
+  --terrain-temp-overlay-bg:         unset;
+
+  --foliage-season-overlay-opacity:  0;
+  --foliage-time-overlay-bg:         linear-gradient(90deg, aquamarine, #d58819);
+  --foliage-time-overlay-opacity:    1;
+  --foliage-temp-overlay-opacity:    0;
+  --foliage-weather-overlay-opacity: 0;
+  --foliage-temp-overlay-bg:         unset;
+
+  --bush-season-overlay-opacity:     0;
+  --bush-time-overlay-bg:            linear-gradient(
+    90deg,
+    color-mix(in srgb, #b6cc91 75%, transparent),
+    color-mix(in srgb, #ad5722 75%, transparent)
+  );
+  --bush-time-overlay-opacity:       1;
+  --bush-temp-overlay-opacity:       0;
+  --bush-weather-overlay-opacity:    0;
+  --bush-temp-overlay-bg:            unset;
+
+  --building-season-overlay-opacity:   0;
+  --building-time-overlay-opacity:     0;
+  --building-temp-overlay-opacity:     0;
+  --building-weather-overlay-opacity:  0;
+  --building-temp-overlay-bg:          unset;
+}

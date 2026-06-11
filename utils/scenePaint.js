@@ -38,6 +38,14 @@ const AUTUMN_CLOUDY_DEFAULT = {
   terrain: 'default',
 }
 
+/** Daylight hot — sky variant-1 only; terrain stays on default. */
+const AUTUMN_CLOUDY_HOT_DAYLIGHT = {
+  season: 'autumn',
+  weather: 'cloudy',
+  sky: 'variant-1',
+  terrain: 'default',
+}
+
 /**
  * Register Autumn–Cloudy scenes for a temperature band.
  * Daylight (morning, afternoon) → variant-1; evening / night → default.
@@ -55,10 +63,25 @@ function autumnCloudyScenesForTemp(temp) {
   }
 }
 
+function autumnCloudyScenesForHot() {
+  return {
+    'cloudy--autumn--morning--hot': {
+      season: 'autumn',
+      weather: 'cloudy',
+      sky: 'variant-2',
+      terrain: 'default',
+    },
+    'cloudy--autumn--afternoon--hot': AUTUMN_CLOUDY_HOT_DAYLIGHT,
+    'cloudy--autumn--evening--hot': AUTUMN_CLOUDY_DEFAULT,
+    'cloudy--autumn--night--hot': AUTUMN_CLOUDY_DEFAULT,
+  }
+}
+
 /** @type {Record<string, ScenePaintEntry>} */
 export const SCENE_PAINT = {
   ...autumnCloudyScenesForTemp('mild'),
   ...autumnCloudyScenesForTemp('warm'),
+  ...autumnCloudyScenesForHot(),
 }
 
 function hasPaintLibraryBranch(season, weather) {

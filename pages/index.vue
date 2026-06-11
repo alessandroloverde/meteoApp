@@ -394,6 +394,7 @@ onBeforeUnmount(() => {
     )}
   );
   mix-blend-mode: var(--#{$prefix}-overlay-blend);
+  filter: var(--#{$prefix}-overlay-filter, none);
   // opacity is intentionally absent — see note above
 }
 

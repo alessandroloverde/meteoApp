@@ -64,6 +64,42 @@ $autumn-cloudy-sky-variant-1: (
   ),
 );
 
+// Hot morning sky — cool zenith warming toward horizon; inverted cloud ramps top vs bottom.
+$autumn-cloudy-sky-variant-2: (
+  sky: (
+    stops: (
+      0: #adbfcc,
+      1: #bcbcbc,
+      2: #fcd6b9,
+      3: #fee4bf,
+    ),
+  ),
+  cloud: (
+    1: (
+      a: #edf1f4,
+      b: #efd6c0,
+      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
+      low-opacity: 1,
+    ),
+    2: (
+      solid: linear-gradient(to bottom, #edf1f4, #efd6c0),
+      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
+      low-opacity: 1,
+    ),
+    3: (
+      a: #edf1f4,
+      b: #efd6c0,
+      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
+      low-opacity: 1,
+    ),
+    4: (
+      solid: linear-gradient(to bottom, #edf1f4, #efd6c0),
+      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
+      low-opacity: 1,
+    ),
+  ),
+);
+
 // =============================================================================
 // TERRAIN cluster — terrain + trunks + foliage + bushes + buildings
 // =============================================================================
@@ -136,6 +172,7 @@ $paint-library: (
       sky: (
         default: $autumn-cloudy-sky-default,
         variant-1: $autumn-cloudy-sky-variant-1,
+        variant-2: $autumn-cloudy-sky-variant-2,
       ),
       terrain: (
         default: $autumn-cloudy-terrain-default,
