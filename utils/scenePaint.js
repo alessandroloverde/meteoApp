@@ -81,6 +81,7 @@ function autumnCloudyScenesForHot() {
 export const SCENE_PAINT = {
   ...autumnCloudyScenesForTemp('mild'),
   ...autumnCloudyScenesForTemp('warm'),
+  ...autumnCloudyScenesForTemp('cold'),
   ...autumnCloudyScenesForHot(),
 }
 

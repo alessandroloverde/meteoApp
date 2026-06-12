@@ -5,67 +5,43 @@
 // variants). Registered scenes set `data-paint-bundle` on `.scene` (see
 // `utils/scenePaint.js`). Unregistered scenes keep gray stubs below.
 //
-// Each scene element also has four stacked overlay panes per group:
+// Layer 1 — element backgrounds (required): paint library via data-paint-*.
+// Layer 2 — block overlays (optional): one corrective pane per group.
+// Layer 3 — global grade (optional): .scene-grade multiply + soft-light.
 //
-//   • season  — hue identity (spring / summer / autumn / winter)
-//   • time    — luminosity / warmth shift (morning / afternoon / evening / night)
-//   • temp    — warm / cool tint (frosty … hot)
-//   • weather — saturation / haze / density (clear … storm)
+// Block overlay tokens (off by default — opacity 0):
+//   --<group>-overlay-color    solid fallback when --overlay-bg unset
+//   --<group>-overlay-bg       full background (gradient / radial)
+//   --<group>-overlay-opacity  0–1 (baked into color-mix or gradient stops)
+//   --<group>-overlay-blend    mix-blend-mode
+//   --<group>-overlay-filter   CSS filter (optional)
 //
-// All overlay tokens default to transparent / opacity 0 so the gray base
-// renders until a variant block turns an overlay on. Combination scenes
-// can add a `data-scene-id` block for edge-case overrides.
-//
-// Token naming (cloud, terrain, foliage, bush, building):
-//   --<group>-<axis>-overlay-color    hex or CSS color
-//   --<group>-<axis>-overlay-opacity  0–1
-//   --<group>-<axis>-overlay-blend    mix-blend-mode keyword
-//
-// Sky overlays (gradient panes inside .sky-overlays):
-//   --sky-overlay-blend               mix-blend-mode on the container
-//   --sky-<axis>-overlay-stop-0/1/2   gradient stops (top → bottom)
-//   --sky-<axis>-overlay-opacity      0–1
-//   --sky-<axis>-overlay-z-index      stack order (default auto)
+// Sky overlay (inside .sky-overlays; container owns --sky-overlay-blend):
+//   --sky-overlay-stop-0/1/2   3-stop top→bottom gradient fallback
+//   --sky-overlay-bg           overrides the 3-stop gradient when set
 //
 // Groups: sky | cloud | terrain | foliage | bush | building
+// Per-scene overrides: `data-scene-id` combo block at file end.
 // =============================================================================
 
+@use 'sass:color';
 @use 'sass:map';
 @use 'paint/bundles';
 
 $gray: #808080;
+$morning-building-wall: #d1ab92;
 
 // =============================================================================
 // @property — blend-mode custom properties
 // =============================================================================
 // mix-blend-mode ignores var() unless the custom property is registered.
 // syntax:'*' + inherits:true lets the value cascade normally.
-@property --sky-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
-
-@property --cloud-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
-@property --cloud-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --cloud-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --cloud-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
-
-@property --terrain-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
-@property --terrain-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --terrain-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --terrain-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
-
-@property --foliage-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
-@property --foliage-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --foliage-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --foliage-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
-
-@property --bush-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
-@property --bush-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --bush-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --bush-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
-
-@property --building-season-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
-@property --building-time-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --building-temp-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
-@property --building-weather-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+@property --sky-overlay-blend      { syntax: '*'; inherits: true; initial-value: normal; }
+@property --cloud-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --terrain-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+@property --foliage-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+@property --bush-overlay-blend     { syntax: '*'; inherits: true; initial-value: normal; }
+@property --building-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
 
 
 // =============================================================================
@@ -83,32 +59,13 @@ $gray: #808080;
   --sky-stop-2: #{$gray};
   --sky-stop-3: #{$gray};
 
-  // Sky overlays — gradient panes stack inside .sky-overlays; container owns blend.
-  --sky-overlay-blend: soft-light;
-
-  --sky-season-overlay-stop-0:  #{$gray};
-  --sky-season-overlay-stop-1:  #{$gray};
-  --sky-season-overlay-stop-2:  #{$gray};
-  --sky-season-overlay-opacity: 0;
-  --sky-season-overlay-z-index: auto;
-
-  --sky-time-overlay-stop-0:    #{$gray};
-  --sky-time-overlay-stop-1:    #{$gray};
-  --sky-time-overlay-stop-2:    #{$gray};
-  --sky-time-overlay-opacity:   0;
-  --sky-time-overlay-z-index:   auto;
-
-  --sky-temp-overlay-stop-0:    #{$gray};
-  --sky-temp-overlay-stop-1:    #{$gray};
-  --sky-temp-overlay-stop-2:    #{$gray};
-  --sky-temp-overlay-opacity:   0;
-  --sky-temp-overlay-z-index:   auto;
-
-  --sky-weather-overlay-stop-0:  #{$gray};
-  --sky-weather-overlay-stop-1:  #{$gray};
-  --sky-weather-overlay-stop-2:  #{$gray};
-  --sky-weather-overlay-opacity: 0;
-  --sky-weather-overlay-z-index: auto;
+  // Sky block overlay — container owns blend; pane stacks with normal compositing.
+  --sky-overlay-blend:    soft-light;
+  --sky-overlay-stop-0:   #{$gray};
+  --sky-overlay-stop-1:   #{$gray};
+  --sky-overlay-stop-2:   #{$gray};
+  --sky-overlay-opacity:  0;
+  --sky-overlay-z-index:  auto;
 
   // --------------------------------------------------------------------------
   // Sun / moon disc
@@ -155,21 +112,9 @@ $gray: #808080;
   --cloud-4-low-bkg: var(--cloud-base-light);
   --cloud-4-low-opacity: 1;
 
-  --cloud-season-overlay-color:   #{$gray};
-  --cloud-season-overlay-opacity: 0;
-  --cloud-season-overlay-blend:   color;
-
-  --cloud-time-overlay-color:   #1a2a6c;
-  --cloud-time-overlay-opacity: 0;
-  --cloud-time-overlay-blend:   multiply;
-
-  --cloud-temp-overlay-color:   #{$gray};
-  --cloud-temp-overlay-opacity: 0;
-  --cloud-temp-overlay-blend:   color;
-
-  --cloud-weather-overlay-color:   #{$gray};
-  --cloud-weather-overlay-opacity: 0;
-  --cloud-weather-overlay-blend:   saturation;
+  --cloud-overlay-color:   #{$gray};
+  --cloud-overlay-opacity: 0;
+  --cloud-overlay-blend:   color;
 
   // --------------------------------------------------------------------------
   // Terrain — per-layer gradient stops (a = highlight, b = mid, c = deep)
@@ -195,21 +140,9 @@ $gray: #808080;
   // single terrain color without layer specificity.
   --terrain-base: #{$gray};
 
-  --terrain-season-overlay-color:   #{$gray};
-  --terrain-season-overlay-opacity: 0;
-  --terrain-season-overlay-blend:   color;
-
-  --terrain-time-overlay-color:   #1a2a6c;
-  --terrain-time-overlay-opacity: 0;
-  --terrain-time-overlay-blend:   multiply;
-
-  --terrain-temp-overlay-color:   #{$gray};
-  --terrain-temp-overlay-opacity: 0;
-  --terrain-temp-overlay-blend:   color;
-
-  --terrain-weather-overlay-color:   #{$gray};
-  --terrain-weather-overlay-opacity: 0;
-  --terrain-weather-overlay-blend:   saturation;
+  --terrain-overlay-color:   #{$gray};
+  --terrain-overlay-opacity: 0;
+  --terrain-overlay-blend:   color;
 
   // --------------------------------------------------------------------------
   // Foliage / trees (trunk + canopy)
@@ -233,21 +166,9 @@ $gray: #808080;
   --trunk-5-a: #{$gray};
   --trunk-5-b: #{$gray};
 
-  --foliage-season-overlay-color:   #{$gray};
-  --foliage-season-overlay-opacity: 0;
-  --foliage-season-overlay-blend:   color;
-
-  --foliage-time-overlay-color:   #1a2a6c;
-  --foliage-time-overlay-opacity: 0;
-  --foliage-time-overlay-blend:   multiply;
-
-  --foliage-temp-overlay-color:   #{$gray};
-  --foliage-temp-overlay-opacity: 0;
-  --foliage-temp-overlay-blend:   color;
-
-  --foliage-weather-overlay-color:   #{$gray};
-  --foliage-weather-overlay-opacity: 0;
-  --foliage-weather-overlay-blend:   saturation;
+  --foliage-overlay-color:   #{$gray};
+  --foliage-overlay-opacity: 0;
+  --foliage-overlay-blend:   color;
 
   // --------------------------------------------------------------------------
   // Bushes
@@ -258,21 +179,9 @@ $gray: #808080;
   --bush-2-bg: #{$gray};
   --bush-3-bg: #{$gray};
 
-  --bush-season-overlay-color:   #{$gray};
-  --bush-season-overlay-opacity: 0;
-  --bush-season-overlay-blend:   color;
-
-  --bush-time-overlay-color:   #1a2a6c;
-  --bush-time-overlay-opacity: 0;
-  --bush-time-overlay-blend:   multiply;
-
-  --bush-temp-overlay-color:   #{$gray};
-  --bush-temp-overlay-opacity: 0;
-  --bush-temp-overlay-blend:   color;
-
-  --bush-weather-overlay-color:   #{$gray};
-  --bush-weather-overlay-opacity: 0;
-  --bush-weather-overlay-blend:   saturation;
+  --bush-overlay-color:   #{$gray};
+  --bush-overlay-opacity: 0;
+  --bush-overlay-blend:   color;
 
   // --------------------------------------------------------------------------
   // Buildings (walls + roofs + windows)
@@ -282,21 +191,9 @@ $gray: #808080;
   --building-window-base: #{$gray};
   --building-church:      #{$gray};
 
-  --building-season-overlay-color:   #{$gray};
-  --building-season-overlay-opacity: 0;
-  --building-season-overlay-blend:   color;
-
-  --building-time-overlay-color:   #{$gray};
-  --building-time-overlay-opacity: 0;
-  --building-time-overlay-blend:   soft-light;
-
-  --building-temp-overlay-color:   #{$gray};
-  --building-temp-overlay-opacity: 0;
-  --building-temp-overlay-blend:   color;
-
-  --building-weather-overlay-color:   #{$gray};
-  --building-weather-overlay-opacity: 0;
-  --building-weather-overlay-blend:   saturation;
+  --building-overlay-color:   #{$gray};
+  --building-overlay-opacity: 0;
+  --building-overlay-blend:   soft-light;
 
   // --------------------------------------------------------------------------
   // Full-scene grade (multiply + soft-light stack — off by default)
@@ -349,36 +246,9 @@ $gray: #808080;
 }
 
 [data-time='morning'] {
-  // Shares variant-1 paint base with afternoon — mood via time overlays only.
   --moon-top:         40%;
   --moon-left:        14%;
   --moon-translate-x: -50%;
-
-  // Morning overlay experiment (tune stops / opacity / z-index per group).
-  --sky-time-overlay-stop-0:    #365fb0;
-  --sky-time-overlay-stop-1:    #9ba834;
-  --sky-time-overlay-stop-2:    #dfce06;
-  --sky-time-overlay-opacity:   1;
-
-  --cloud-time-overlay-color:     #ffd4a3;
-  --cloud-time-overlay-opacity:   0;
-  --cloud-time-overlay-blend:     soft-light;
-
-  --terrain-time-overlay-color:   #e8c4a0;
-  --terrain-time-overlay-opacity: 0;
-  --terrain-time-overlay-blend:   soft-light;
-
-  --foliage-time-overlay-color:   #e8c4a0;
-  --foliage-time-overlay-opacity: 0;
-  --foliage-time-overlay-blend:   soft-light;
-
-  --bush-time-overlay-color:      #e8c4a0;
-  --bush-time-overlay-opacity:    0;
-  --bush-time-overlay-blend:      soft-light;
-
-  --building-time-overlay-color:   #e8c4a0;
-  --building-time-overlay-opacity: 0;
-  --building-time-overlay-blend:   soft-light;
 }
 
 [data-time='morning'][data-temp='warm'] {
@@ -412,10 +282,19 @@ $gray: #808080;
   --scene-grade-multiply-opacity:  0.25;
   --scene-grade-softlight-opacity: 0.25;
 
-  --terrain-time-overlay-opacity: 0.3;
-  --foliage-time-overlay-opacity: 0.3;
-  --bush-time-overlay-opacity:    0.3;
-  --cloud-time-overlay-opacity:   0.3;
+  // Generic night wash — override per scene in data-scene-id when needed.
+  --terrain-overlay-color:   #1a2a6c;
+  --terrain-overlay-opacity: 0.3;
+  --terrain-overlay-blend:   multiply;
+  --foliage-overlay-color:   #1a2a6c;
+  --foliage-overlay-opacity: 0.3;
+  --foliage-overlay-blend:   multiply;
+  --bush-overlay-color:      #1a2a6c;
+  --bush-overlay-opacity:    0.3;
+  --bush-overlay-blend:      multiply;
+  --cloud-overlay-color:     #1a2a6c;
+  --cloud-overlay-opacity:   0.3;
+  --cloud-overlay-blend:     multiply;
 }
 
 
@@ -446,14 +325,54 @@ $gray: #808080;
 
 
 // =============================================================================
-// Combo overrides — data-scene-id wins over all single-axis blocks
+// Scene recipes — data-scene-id wins over axis presets
 // =============================================================================
-// Add rules here only for combinations that single-axis overlays cannot
-// produce correctly on their own.
-//
-// Sky gradients live in the sky paint cluster (data-paint-sky); terrain, trees,
-// bushes and buildings in the terrain cluster (data-paint-terrain). See
-// `assets/scss/paint/` and `utils/scenePaint.js`.
+// Layer 1 backgrounds: paint library (data-paint-sky / data-paint-terrain).
+// Layer 2 block overlays + layer 3 global grade: set here per authored scene.
+
+[data-scene-id='cloudy--autumn--morning--mild'],
+[data-scene-id='cloudy--autumn--morning--warm'] {
+  --sky-overlay-stop-0:   #365fb0;
+  --sky-overlay-stop-1:   #9ba834;
+  --sky-overlay-stop-2:   #dfce06;
+  --sky-overlay-opacity:  1;
+
+  --foliage-overlay-bg:      initial;
+  --foliage-overlay-opacity: 0;
+  --foliage-overlay-blend:   color;
+}
+
+[data-scene-id='cloudy--autumn--morning--warm'],
+[data-scene-id='cloudy--autumn--morning--hot'] {
+  --building-wall-base:   #{$morning-building-wall};
+  --building-roof-base:   #{$morning-building-wall};
+  --building-church:      #{$morning-building-wall};
+  --building-window-base: #{color.scale($morning-building-wall, $lightness: 12%)};
+}
+
+// Full scene id — foliage / terrain overlays below are not shared with other cold temps.
+.scene[data-scene-id='cloudy--autumn--morning--cold'] {
+  --sky-gradient: linear-gradient(
+    to bottom,
+    #b2b9c4 0%,
+    #b5bcc7 40%,
+    #ccdde5 70%,
+    var(--sky-stop-3) 100%
+  );
+
+  --cloud-overlay-bg:       linear-gradient(184deg, #fdfefd, #a4a9b0);
+  --cloud-overlay-opacity:  1;
+  --cloud-overlay-blend:    normal;
+
+  --terrain-overlay-bg:       linear-gradient(0deg, #a1763f 30%, #b5783a, #dea84c);
+  --terrain-overlay-opacity:  1;
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   saturate(0.5) hue-rotate(30deg);
+
+  --foliage-overlay-bg:       radial-gradient(#dab67a 20%, #bf7a3e 36%, #96794f 75%);
+  --foliage-overlay-opacity:  1;
+  --foliage-overlay-blend:    darken;
+}
 
 [data-scene-id='cloudy--autumn--evening--warm'] {
   --scene-grade-multiply-bg:       linear-gradient(#322b59, #f4d060, #6f150d);
@@ -463,56 +382,46 @@ $gray: #808080;
 }
 
 [data-scene-id='cloudy--autumn--night--warm'] {
-  --sky-temp-overlay-bg:      linear-gradient(0deg, #ddb896, #17226e);
-  --sky-temp-overlay-opacity: 1;
+  --sky-overlay-bg:       linear-gradient(0deg, #ddb896, #17226e);
+  --sky-overlay-opacity:  1;
 
-  --terrain-temp-overlay-bg:      radial-gradient(closest-corner circle at 50% 0%, #b17d30 -10%, #b16102 30%, #551f03);
-  --terrain-temp-overlay-opacity: 1;
+  --terrain-overlay-bg:       radial-gradient(closest-corner circle at 50% 0%, #b17d30 -10%, #b16102 30%, #551f03);
+  --terrain-overlay-opacity:  1;
+  --terrain-overlay-blend:    color;
+
+  // Clear generic night wash from the time axis.
+  --foliage-overlay-bg:      initial;
+  --foliage-overlay-opacity: 0;
+  --foliage-overlay-blend:   color;
+  --bush-overlay-opacity:    0;
+  --cloud-overlay-opacity:   0;
 }
 
-// Hot morning — clean overlay slate (general sky stack + local per-element panes).
+[data-scene-id='cloudy--autumn--afternoon--cold'],
+[data-scene-id='cloudy--autumn--evening--cold'] {
+  --foliage-overlay-bg:      unset;
+  --foliage-overlay-opacity: 0;
+  --foliage-overlay-blend:   color;
+  --terrain-overlay-bg:      unset;
+  --terrain-overlay-opacity: 0;
+  --terrain-overlay-filter:  none;
+}
+
 [data-scene-id='cloudy--autumn--morning--hot'] {
-  --sky-season-overlay-opacity:  0;
-  --sky-time-overlay-opacity:    0;
-  --sky-temp-overlay-opacity:    0;
-  --sky-weather-overlay-opacity: 0;
-  --sky-temp-overlay-bg:         unset;
+  --terrain-overlay-color:   #e9884c;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   soft-light;
+  --terrain-overlay-filter:  brightness(1.25) saturate(0.75) hue-rotate(-20deg) contrast(1.5);
 
-  --cloud-season-overlay-opacity:    0;
-  --cloud-time-overlay-opacity:      0;
-  --cloud-temp-overlay-opacity:      0;
-  --cloud-weather-overlay-opacity:   0;
-  --cloud-temp-overlay-bg:           unset;
+  --foliage-overlay-bg:       linear-gradient(90deg, aquamarine, #d58819);
+  --foliage-overlay-opacity:  1;
+  --foliage-overlay-blend:    soft-light;
 
-  --terrain-season-overlay-opacity:  0;
-  --terrain-time-overlay-color:      #e9884c;
-  --terrain-time-overlay-opacity:    1;
-  --terrain-time-overlay-filter:     brightness(1.25) saturate(0.75) hue-rotate(-20deg) contrast(1.5);
-  --terrain-temp-overlay-opacity:    0;
-  --terrain-weather-overlay-opacity: 0;
-  --terrain-temp-overlay-bg:         unset;
-
-  --foliage-season-overlay-opacity:  0;
-  --foliage-time-overlay-bg:         linear-gradient(90deg, aquamarine, #d58819);
-  --foliage-time-overlay-opacity:    1;
-  --foliage-temp-overlay-opacity:    0;
-  --foliage-weather-overlay-opacity: 0;
-  --foliage-temp-overlay-bg:         unset;
-
-  --bush-season-overlay-opacity:     0;
-  --bush-time-overlay-bg:            linear-gradient(
+  --bush-overlay-bg: linear-gradient(
     90deg,
     color-mix(in srgb, #b6cc91 75%, transparent),
     color-mix(in srgb, #ad5722 75%, transparent)
   );
-  --bush-time-overlay-opacity:       1;
-  --bush-temp-overlay-opacity:       0;
-  --bush-weather-overlay-opacity:    0;
-  --bush-temp-overlay-bg:            unset;
-
-  --building-season-overlay-opacity:   0;
-  --building-time-overlay-opacity:     0;
-  --building-temp-overlay-opacity:     0;
-  --building-weather-overlay-opacity:  0;
-  --building-temp-overlay-bg:          unset;
+  --bush-overlay-opacity: 1;
+  --bush-overlay-blend:   soft-light;
 }

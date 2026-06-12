@@ -129,12 +129,9 @@ onBeforeUnmount(() => {
         <!-- Sun glow (radial halo behind disc, tracks --moon-* position) -->
         <div class="sky-sun-glow" aria-hidden="true"></div>
 
-        <!-- Sky overlays: season → time → temp → weather -->
+        <!-- Sky block overlay (optional corrective) -->
         <aside class="sky-overlays" aria-hidden="true">
-          <div class="sky-overlays__season"></div>
-          <div class="sky-overlays__time"></div>
-          <div class="sky-overlays__temp"></div>
-          <div class="sky-overlays__weather"></div>
+          <div class="sky-overlay"></div>
         </aside>
 
         <!-- Moon / sun disc -->
@@ -144,29 +141,17 @@ onBeforeUnmount(() => {
         <section class="top-clouds">
           <div class="cloud-1-wrap">
             <div class="scene-layer cloud-1">
-              <div class="cloud-overlays__season"></div>
-              <div class="cloud-overlays__time"></div>
-              <div class="cloud-overlays__temp"></div>
-              <div class="cloud-overlays__weather"></div>
+              <div class="cloud-overlay"></div>
             </div>
           </div>
           <div class="scene-layer cloud-2">
-            <div class="cloud-overlays__season"></div>
-            <div class="cloud-overlays__time"></div>
-            <div class="cloud-overlays__temp"></div>
-            <div class="cloud-overlays__weather"></div>
+            <div class="cloud-overlay"></div>
           </div>
           <div class="scene-layer cloud-3">
-            <div class="cloud-overlays__season"></div>
-            <div class="cloud-overlays__time"></div>
-            <div class="cloud-overlays__temp"></div>
-            <div class="cloud-overlays__weather"></div>
+            <div class="cloud-overlay"></div>
           </div>
           <div class="scene-layer cloud-4">
-            <div class="cloud-overlays__season"></div>
-            <div class="cloud-overlays__time"></div>
-            <div class="cloud-overlays__temp"></div>
-            <div class="cloud-overlays__weather"></div>
+            <div class="cloud-overlay"></div>
           </div>
         </section>
 
@@ -174,29 +159,17 @@ onBeforeUnmount(() => {
         <section class="bottom-clouds">
           <div class="cloud-1--low-wrap">
             <div class="scene-layer cloud-1--low">
-              <div class="cloud-overlays__season"></div>
-              <div class="cloud-overlays__time"></div>
-              <div class="cloud-overlays__temp"></div>
-              <div class="cloud-overlays__weather"></div>
+              <div class="cloud-overlay"></div>
             </div>
           </div>
           <div class="scene-layer cloud-2--low">
-            <div class="cloud-overlays__season"></div>
-            <div class="cloud-overlays__time"></div>
-            <div class="cloud-overlays__temp"></div>
-            <div class="cloud-overlays__weather"></div>
+            <div class="cloud-overlay"></div>
           </div>
           <div class="scene-layer cloud-3--low">
-            <div class="cloud-overlays__season"></div>
-            <div class="cloud-overlays__time"></div>
-            <div class="cloud-overlays__temp"></div>
-            <div class="cloud-overlays__weather"></div>
+            <div class="cloud-overlay"></div>
           </div>
           <div class="scene-layer cloud-4--low">
-            <div class="cloud-overlays__season"></div>
-            <div class="cloud-overlays__time"></div>
-            <div class="cloud-overlays__temp"></div>
-            <div class="cloud-overlays__weather"></div>
+            <div class="cloud-overlay"></div>
           </div>
         </section>
 
@@ -213,89 +186,56 @@ onBeforeUnmount(() => {
           <div class="trees-1">
             <div class="trees-1--trunk"></div>
             <div class="trees-1--foliage">
-              <div class="foliage-overlays__season"></div>
-              <div class="foliage-overlays__time"></div>
-              <div class="foliage-overlays__temp"></div>
-              <div class="foliage-overlays__weather"></div>
+              <div class="foliage-overlay"></div>
             </div>
           </div>
           <div class="trees-2">
             <div class="trees-2--trunk"></div>
             <div class="trees-2--foliage">
-              <div class="foliage-overlays__season"></div>
-              <div class="foliage-overlays__time"></div>
-              <div class="foliage-overlays__temp"></div>
-              <div class="foliage-overlays__weather"></div>
+              <div class="foliage-overlay"></div>
             </div>
           </div>
           <div class="trees-3">
             <div class="trees-3--trunk"></div>
             <div class="trees-3--foliage">
-              <div class="foliage-overlays__season"></div>
-              <div class="foliage-overlays__time"></div>
-              <div class="foliage-overlays__temp"></div>
-              <div class="foliage-overlays__weather"></div>
+              <div class="foliage-overlay"></div>
             </div>
           </div>
           <div class="trees-4">
             <div class="trees-4--trunk"></div>
             <div class="trees-4--foliage">
-              <div class="foliage-overlays__season"></div>
-              <div class="foliage-overlays__time"></div>
-              <div class="foliage-overlays__temp"></div>
-              <div class="foliage-overlays__weather"></div>
+              <div class="foliage-overlay"></div>
             </div>
           </div>
           <div class="trees-5">
             <div class="trees-5--trunk"></div>
             <div class="trees-5--foliage">
-              <div class="foliage-overlays__season"></div>
-              <div class="foliage-overlays__time"></div>
-              <div class="foliage-overlays__temp"></div>
-              <div class="foliage-overlays__weather"></div>
+              <div class="foliage-overlay"></div>
             </div>
           </div>
         </section>
 
         <!-- Terrain ridges (1–3, behind buildings) + overlays -->
         <div class="scene-layer terrain-layer--accent terrain-1">
-          <div class="terrain-overlays__season"></div>
-          <div class="terrain-overlays__time"></div>
-          <div class="terrain-overlays__temp"></div>
-          <div class="terrain-overlays__weather"></div>
+          <div class="terrain-overlay"></div>
         </div>
         <div class="scene-layer terrain-layer terrain-2">
-          <div class="terrain-overlays__season"></div>
-          <div class="terrain-overlays__time"></div>
-          <div class="terrain-overlays__temp"></div>
-          <div class="terrain-overlays__weather"></div>
+          <div class="terrain-overlay"></div>
         </div>
         <div class="scene-layer terrain-layer terrain-3">
-          <div class="terrain-overlays__season"></div>
-          <div class="terrain-overlays__time"></div>
-          <div class="terrain-overlays__temp"></div>
-          <div class="terrain-overlays__weather"></div>
+          <div class="terrain-overlay"></div>
         </div>
 
         <!-- Bushes + overlays -->
         <div class="scene-layer bushes">
           <div class="bushes-1">
-            <div class="bush-overlays__season"></div>
-            <div class="bush-overlays__time"></div>
-            <div class="bush-overlays__temp"></div>
-            <div class="bush-overlays__weather"></div>
+            <div class="bush-overlay"></div>
           </div>
           <div class="bushes-2">
-            <div class="bush-overlays__season"></div>
-            <div class="bush-overlays__time"></div>
-            <div class="bush-overlays__temp"></div>
-            <div class="bush-overlays__weather"></div>
+            <div class="bush-overlay"></div>
           </div>
           <div class="bushes-3">
-            <div class="bush-overlays__season"></div>
-            <div class="bush-overlays__time"></div>
-            <div class="bush-overlays__temp"></div>
-            <div class="bush-overlays__weather"></div>
+            <div class="bush-overlay"></div>
           </div>
         </div>
 
@@ -314,25 +254,16 @@ onBeforeUnmount(() => {
             <div class="houseBlock--small--windows"></div>
           </div>
           <aside class="building-overlays" aria-hidden="true">
-            <div class="building-overlays__season"></div>
-            <div class="building-overlays__time"></div>
-            <div class="building-overlays__temp"></div>
-            <div class="building-overlays__weather"></div>
+            <div class="building-overlay"></div>
           </aside>
         </section>
 
         <!-- Terrain ridges (4–5, in front of buildings) + overlays -->
         <div class="scene-layer terrain-layer terrain-4">
-          <div class="terrain-overlays__season"></div>
-          <div class="terrain-overlays__time"></div>
-          <div class="terrain-overlays__temp"></div>
-          <div class="terrain-overlays__weather"></div>
+          <div class="terrain-overlay"></div>
         </div>
         <div class="scene-layer terrain-layer terrain-5">
-          <div class="terrain-overlays__season"></div>
-          <div class="terrain-overlays__time"></div>
-          <div class="terrain-overlays__temp"></div>
-          <div class="terrain-overlays__weather"></div>
+          <div class="terrain-overlay"></div>
         </div>
 
       </div>
@@ -373,11 +304,12 @@ onBeforeUnmount(() => {
 // =============================================================================
 // Overlay pane mixin
 // =============================================================================
-// Opacity is baked into the background-color via color-mix() rather than set
-// on the element itself. Setting opacity < 1 on an element that also has
-// mix-blend-mode creates an isolated stacking context — the blend then
-// composites against a transparent parent instead of the content layers below,
-// making it a no-op. Encoding strength in the color's alpha avoids this.
+// Opacity is baked into the background via color-mix() rather than set on the
+// element itself. Setting opacity < 1 on an element that also has mix-blend-mode
+// creates an isolated stacking context — the blend then composites against a
+// transparent parent instead of the content layers below, making it a no-op.
+// When --*-overlay-bg is set, bake strength into the gradient stops (see bushes
+// on morning--hot); --*-overlay-opacity only drives the solid-color fallback.
 @mixin overlay-pane($prefix) {
   position: absolute;
   inset: 0;
@@ -398,28 +330,28 @@ onBeforeUnmount(() => {
   // opacity is intentionally absent — see note above
 }
 
-// Sky axis panes — top→bottom gradient; blend lives on .sky-overlays container.
-@mixin sky-overlay-pane($axis) {
+// Sky block overlay — top→bottom gradient; blend lives on .sky-overlays container.
+@mixin sky-overlay-pane {
   position: absolute;
   inset: 0;
-  z-index: var(--sky-#{$axis}-overlay-z-index, auto);
+  z-index: var(--sky-overlay-z-index, auto);
   pointer-events: none;
   mix-blend-mode: normal;
-  background-image: var(--sky-#{$axis}-overlay-bg, linear-gradient(
+  background-image: var(--sky-overlay-bg, linear-gradient(
     to bottom,
     color-mix(
       in srgb,
-      var(--sky-#{$axis}-overlay-stop-0) calc(var(--sky-#{$axis}-overlay-opacity) * 100%),
+      var(--sky-overlay-stop-0) calc(var(--sky-overlay-opacity) * 100%),
       transparent
     ),
     color-mix(
       in srgb,
-      var(--sky-#{$axis}-overlay-stop-1) calc(var(--sky-#{$axis}-overlay-opacity) * 100%),
+      var(--sky-overlay-stop-1) calc(var(--sky-overlay-opacity) * 100%),
       transparent
     ),
     color-mix(
       in srgb,
-      var(--sky-#{$axis}-overlay-stop-2) calc(var(--sky-#{$axis}-overlay-opacity) * 100%),
+      var(--sky-overlay-stop-2) calc(var(--sky-overlay-opacity) * 100%),
       transparent
     )
   ));
@@ -633,11 +565,9 @@ $trees: (
   z-index: 5;
   mix-blend-mode: var(--sky-overlay-blend);
 
-  &__season  { @include sky-overlay-pane('season'); }
-  &__time    { @include sky-overlay-pane('time'); }
-  &__temp    { @include sky-overlay-pane('temp'); }
-  &__weather { @include sky-overlay-pane('weather'); }
 }
+
+.sky-overlay { @include sky-overlay-pane; }
 
 
 // =============================================================================
@@ -805,10 +735,7 @@ $clouds--low: (
 // The cloud element's own mask clips them automatically.
 
 // Pane styles shared by all cloud elements.
-.cloud-overlays__season  { @include overlay-pane('cloud-season'); }
-.cloud-overlays__time    { @include overlay-pane('cloud-time'); }
-.cloud-overlays__temp    { @include overlay-pane('cloud-temp'); }
-.cloud-overlays__weather { @include overlay-pane('cloud-weather'); }
+.cloud-overlay { @include overlay-pane('cloud'); }
 
 
 // =============================================================================
@@ -895,10 +822,7 @@ $clouds--low: (
 
 // Terrain overlay panes live inside each .terrain-N element as children.
 // The parent's mask-image automatically clips descendants — no position math needed.
-.terrain-overlays__season  { @include overlay-pane('terrain-season'); }
-.terrain-overlays__time    { @include overlay-pane('terrain-time'); }
-.terrain-overlays__temp    { @include overlay-pane('terrain-temp'); }
-.terrain-overlays__weather { @include overlay-pane('terrain-weather'); }
+.terrain-overlay { @include overlay-pane('terrain'); }
 
 // =============================================================================
 // Trees / foliage
@@ -915,10 +839,7 @@ $clouds--low: (
 
 // Foliage overlay panes live inside each .trees-N--foliage element as children.
 // The foliage element's own mask clips them automatically.
-.foliage-overlays__season  { @include overlay-pane('foliage-season'); }
-.foliage-overlays__time    { @include overlay-pane('foliage-time'); }
-.foliage-overlays__temp    { @include overlay-pane('foliage-temp'); }
-.foliage-overlays__weather { @include overlay-pane('foliage-weather'); }
+.foliage-overlay { @include overlay-pane('foliage'); }
 
 
 // =============================================================================
@@ -975,10 +896,7 @@ $clouds--low: (
 
 // Bush overlay panes live inside each .bushes-N element as children.
 // The bush element's own mask clips them automatically.
-.bush-overlays__season  { @include overlay-pane('bush-season'); }
-.bush-overlays__time    { @include overlay-pane('bush-time'); }
-.bush-overlays__temp    { @include overlay-pane('bush-temp'); }
-.bush-overlays__weather { @include overlay-pane('bush-weather'); }
+.bush-overlay { @include overlay-pane('bush'); }
 
 // Per-bush background — full gradient from terrain paint cluster (--bush-N-bg).
 .bushes-1 { background: var(--bush-1-bg); }
@@ -1079,11 +997,9 @@ $clouds--low: (
   @include overlay-container;
   z-index: 20;
 
-  &__season  { @include overlay-pane('building-season'); }
-  &__time    { @include overlay-pane('building-time'); }
-  &__temp    { @include overlay-pane('building-temp'); }
-  &__weather { @include overlay-pane('building-weather'); }
 }
+
+.building-overlay { @include overlay-pane('building'); }
 
 
 // =============================================================================
