@@ -3,9 +3,9 @@ import { resolveScenePaintBundles } from '@/utils/scenePaint'
 
 /**
  * Resolves per-cluster paint bundles (`data-paint-sky` / `data-paint-terrain`)
- * for the current scene id. Autumn + cloudy (and other `PAINT_LIBRARY_BRANCHES`)
- * use `default` automatically. Returns null when no library branch exists
- * (gray :root paint stubs).
+ * for the current scene id. Terrain follows temp; sky follows branch default
+ * plus sparse `SCENE_PAINT_OVERRIDES`. Returns null when no library branch
+ * exists (gray :root paint stubs).
  *
  * @returns {{ paintBundles: import('vue').ComputedRef<{ sky: string, terrain: string } | null> }}
  */

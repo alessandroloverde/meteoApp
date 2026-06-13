@@ -1,165 +1,88 @@
-// Autumn + cloudy — canonical base (Cloudy–Autumn–Evening–Mild reference).
+// Autumn + cloudy — neutral-gray skeleton (re-author from here).
 //
-// Variants are selected independently per cluster (see scenePaint.js):
-//   • sky      — sky gradient stops + clouds
-//   • terrain  — terrain, trunks, foliage, bushes, buildings
+// Block 1 — branch defaults:
+//   • sky `default`     — sky gradient stops + clouds
+//   • terrain `default` — terrain, foliage, bushes, buildings
+//   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
 //
-// A scene may use e.g. sky `variant-1` with terrain `default`. Sparse variant
-// patches deep-merge on top of their cluster `default`.
-// NOTE: variant names (`variant-1`, …) are placeholders and will be renamed.
+// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
+//
+// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
+
+$neutral: #808080;
 
 // =============================================================================
-// SKY cluster — sky gradient stops + clouds
+// SKY cluster
 // =============================================================================
 $autumn-cloudy-sky-default: (
   sky: (
     stops: (
-      0: #4e4d57,
-      1: #4e4d57,
-      2: #4e4d57,
-      3: #4e4d57,
+      0: $neutral,
+      1: $neutral,
+      2: $neutral,
+      3: $neutral,
     ),
   ),
   cloud: (
-    1: (a: #55576a, b: #827f88),
-    2: (solid: #969290),
-    3: (a: #555564, b: #8f8f9c),
-    4: (solid: #74747c),
-  ),
-);
-
-// Sparse sky variant — only keys that differ from `default`.
-$autumn-cloudy-sky-variant-1: (
-  sky: (
-    stops: (
-      0: #aca096,
-      1: #cdbeae,
-      2: #f6ebe0,
-      3: #e9e1d6,
-    ),
-  ),
-  cloud: (
-    1: (
-      a: #8f8274,
-      b: #f4eee2,
-      low-bkg: radial-gradient(closest-side at 70% 60%, #ddcec1, #f3f0ec 75%),
-      low-opacity: 0.75,
-    ),
-    2: (
-      solid: #ead9cc,
-      low-bkg: radial-gradient(farthest-side at 70% 60%, #ccc6bb 30%, #ece7db 54%),
-      low-opacity: 0.75,
-    ),
-    3: (
-      a: #bcab9a,
-      b: #e8dfd1,
-      low-bkg: #f0dfd1,
-      low-opacity: 0.35,
-    ),
-    4: (
-      solid: #e2dacf,
-      low-bkg: radial-gradient(at 59% 61%, #cfc8be 25%, #fbf8f1 70%),
-      low-opacity: 0.75,
-    ),
-  ),
-);
-
-// Hot morning sky — cool zenith warming toward horizon; inverted cloud ramps top vs bottom.
-$autumn-cloudy-sky-variant-2: (
-  sky: (
-    stops: (
-      0: #adbfcc,
-      1: #bcbcbc,
-      2: #fcd6b9,
-      3: #fee4bf,
-    ),
-  ),
-  cloud: (
-    1: (
-      a: #edf1f4,
-      b: #efd6c0,
-      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
-      low-opacity: 1,
-    ),
-    2: (
-      solid: linear-gradient(to bottom, #edf1f4, #efd6c0),
-      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
-      low-opacity: 1,
-    ),
-    3: (
-      a: #edf1f4,
-      b: #efd6c0,
-      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
-      low-opacity: 1,
-    ),
-    4: (
-      solid: linear-gradient(to bottom, #edf1f4, #efd6c0),
-      low-bkg: linear-gradient(to bottom, #efd6c0, #edf1f4),
-      low-opacity: 1,
-    ),
+    1: (a: $neutral, b: $neutral),
+    2: (solid: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (solid: $neutral),
   ),
 );
 
 // =============================================================================
-// TERRAIN cluster — terrain + trunks + foliage + bushes + buildings
+// TERRAIN cluster
 // =============================================================================
 $autumn-cloudy-terrain-default: (
   terrain: (
-    // Layer 1 — full accent stack (::before texture + ::after blend).
-    1: (a: #e1771d, b: #502b27, c: #503229, d: #3d1c25, blend: overlay),
-    // Layers 2–5 — silhouette mask + gradient only.
-    2: (a: #be612d, b: #6f3825, b-stop: 11%),
-    3: (a: #d5692a, b: #5f2f22),
-    4: (a: #4d1d12, b: #8e4029),
-    5: (a: #8b4418, b: #80381a),
-  ),
-  trunk: (
-    1: (a: #611507, b: #2b151a),
-    2: (a: #5e1307, b: #2a161a),
-    3: (a: #2a151a, b: #753e13),
-    4: (a: #2a151a, b: #753e13),
-    5: (a: #5f1307, b: #30161a),
+    1: (a: $neutral, b: $neutral, c: $neutral, d: $neutral, blend: normal),
+    2: (a: $neutral, b: $neutral, b-stop: 50%),
+    3: (a: $neutral, b: $neutral),
+    4: (a: $neutral, b: $neutral),
+    5: (a: $neutral, b: $neutral),
   ),
   foliage: (
-    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #d36e35 10%, #73301a 60%, #762c1b 90%)),
-    2: (gradient: radial-gradient(at 30% 35%, #ef8d1a 20%, #542c29 70%)),
-    3: (gradient: radial-gradient(at 10% 30%, #ef8d1a 20%, #88470d 60%)),
-    4: (gradient: radial-gradient(at 0 30%, #ef8d1a 25%, #542c29 80%)),
-    5: (gradient: radial-gradient(at 80% 20%, #c16531 10%, #562321 60%)),
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #{$neutral} 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #{$neutral} 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #{$neutral} 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #{$neutral} 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #{$neutral} 100%)),
   ),
   bush: (
-    1: (gradient: linear-gradient(160deg, #af6018 35%, #412515 85%)),
-    2: (gradient: radial-gradient(ellipse at 20% 100%, #53301b 10%, #af6018 50%)),
-    3: (gradient: linear-gradient(160deg, #c57321 30%, #663613 70%)),
+    1: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
+    2: (gradient: radial-gradient(ellipse at 20% 100%, #{$neutral} 100%)),
+    3: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
   ),
   building: (
-    wall: #42222b,
-    roof: #30191e,
-    window: #fbbe7f,
-    church: #8f432a,
+    wall: $neutral,
+    roof: $neutral,
+    window: $neutral,
+    church: $neutral,
   ),
 );
 
-// Sparse terrain variant — only keys that differ from `default`.
-$autumn-cloudy-terrain-variant-1: (
+// Terrain temp patch — frosty (terrain layers, bushes, foliage).
+$autumn-cloudy-terrain-frosty: (
   terrain: (
-    1: (a: #c49047, c: #8a4525, d: #804531),
-    2: (a: #c5a072, b: #805a31, b-stop: 13%),
-    3: (a: #b7926e, b: #7c4f2d),
-    4: (a: #af703a, b: #654328),
-    5: (a: #7b4b21, b: #6f4412),
-  ),
-  bush: (
-    1: (gradient: linear-gradient(160deg, #b58b22 35%, #8d4d0f 85%)),
-    2: (gradient: radial-gradient(ellipse at 0% 100%, #82430b 0%, #b68c27 50%)),
-    3: (gradient: linear-gradient(160deg, #a78156 30%, #8a4328 70%)),
+    1: (a: #b49f5a, c: #967d4b, d: #97744a, blend: overlay),
+    2: (layer-bkg: linear-gradient(-7deg, #71472b 75%, #c98752 90%)),
+    3: (a: #8b7d64, b: #746754),
+    4: (a: #9d8c63, b: #826e50),
+    5: (a: #96a2a8, b: #515f67),
   ),
   foliage: (
-    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #e9a339 10%, #b96b29 60%, #8a4328 90%)),
-    2: (gradient: radial-gradient(at 30% 35%, #a68155 20%, #542c29 70%)),
-    3: (gradient: radial-gradient(at 10% 30%, #8c8f47 20%, #76542f 60%)),
-    4: (gradient: radial-gradient(at 0 30%, #a68155 25%, #542c29 80%)),
-    5: (gradient: radial-gradient(at 80% 20%, #df9736 10%, #8b4429 60%)),
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #bb7f40 12%, #7e532a)),
+    2: (gradient: radial-gradient(at 30% 35%, #a56948, #7f4934)),
+    3: (gradient: radial-gradient(at 10% 30%, #a56948, #7f4934)),
+    4: (gradient: radial-gradient(at 0 30%, #a56948, #7f4934)),
+    5: (gradient: radial-gradient(at 80% 20%, #bb7f40 12%, #7e532a)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-22deg, #774d2e, #968f58)),
+    2: (gradient: linear-gradient(25deg, #7b4e31, #948b54 60%)),
+    3: (gradient: linear-gradient(45deg, #6f5530, #af9056)),
   ),
 );
 
@@ -171,12 +94,10 @@ $paint-library: (
     cloudy: (
       sky: (
         default: $autumn-cloudy-sky-default,
-        variant-1: $autumn-cloudy-sky-variant-1,
-        variant-2: $autumn-cloudy-sky-variant-2,
       ),
       terrain: (
         default: $autumn-cloudy-terrain-default,
-        variant-1: $autumn-cloudy-terrain-variant-1,
+        frosty: $autumn-cloudy-terrain-frosty,
       ),
     ),
   ),

@@ -19,6 +19,8 @@
           --terrain-#{$n}-blend: #{$val};
         } @else if $slot == b-stop {
           --terrain-#{$n}-b-stop: #{$val};
+        } @else if $slot == layer-bkg {
+          --terrain-#{$n}-layer-bkg: #{$val};
         } @else {
           --terrain-#{$n}-#{$slot}: #{$val};
         }

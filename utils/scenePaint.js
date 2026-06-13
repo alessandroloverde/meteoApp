@@ -1,17 +1,22 @@
 import { parseSceneIdentifier } from './sceneIdentifier'
 
 /**
- * Paint variants are selected independently per cluster:
+ * Paint resolution model (see also `assets/scss/paint/` and `_theme.scss`):
+ *
+ *   1. Library branch (season + weather) — base sky + terrain `default` in SCSS
+ *   2. Terrain variant — season + weather + temp → data-paint-terrain bundle
+ *   3. Sky variant — branch default; sparse per-scene overrides when needed
+ *   4. Time + temp finishing — block overlays + global grades via data-scene-id
+ *
+ * Clusters:
  *   • sky      — sky gradient + clouds      → data-paint-sky
  *   • terrain  — terrain, trunks, foliage,
  *                bushes, buildings          → data-paint-terrain
  *
- * A scene may mix clusters (e.g. sky `variant-1` + terrain `default`).
- * Omitted clusters fall back to `default`. Variant names are placeholders and
- * will be renamed later.
+ * Re-enable branches in PAINT_LIBRARY_BRANCHES as each season+weather pair is authored.
  */
 
-/** @typedef {{ season: string, weather: string, sky?: string, terrain?: string }} ScenePaintEntry */
+/** @typedef {{ sky?: string, terrain?: string }} ScenePaintOverride */
 /** @typedef {{ sky: string, terrain: string }} ScenePaintBundles */
 
 /**
@@ -24,65 +29,36 @@ export const PAINT_LIBRARY_BRANCHES = [
 
 export const PAINT_CLUSTERS = ['sky', 'terrain']
 
-const AUTUMN_CLOUDY_VARIANT_1 = {
-  season: 'autumn',
-  weather: 'cloudy',
-  sky: 'variant-1',
-  terrain: 'variant-1',
-}
+/**
+ * Sparse per-scene overrides (full scene id). Only scenes that differ from
+ * branch + temp rules. Terrain usually comes from TERRAIN_VARIANT_BY_TEMP.
+ *
+ * @type {Record<string, ScenePaintOverride>}
+ */
+export const SCENE_PAINT_OVERRIDES = {}
 
-const AUTUMN_CLOUDY_DEFAULT = {
-  season: 'autumn',
-  weather: 'cloudy',
-  sky: 'default',
-  terrain: 'default',
-}
-
-/** Daylight hot — sky variant-1 only; terrain stays on default. */
-const AUTUMN_CLOUDY_HOT_DAYLIGHT = {
-  season: 'autumn',
-  weather: 'cloudy',
-  sky: 'variant-1',
-  terrain: 'default',
+/**
+ * Terrain variant key per temperature band. Omitted temps fall back to `default`.
+ *
+ * @type {Record<string, Record<string, Record<string, string>>>}
+ */
+const TERRAIN_VARIANT_BY_TEMP = {
+  autumn: {
+    cloudy: {
+      frosty: 'frosty',
+    },
+  },
 }
 
 /**
- * Register Autumn–Cloudy scenes for a temperature band.
- * Daylight (morning, afternoon) → variant-1; evening / night → default.
- * Matches the mild authoring baseline until a temp-specific variant exists.
+ * Sky variant per library branch (season + weather).
  *
- * @param {string} temp
- * @returns {Record<string, ScenePaintEntry>}
+ * @type {Record<string, Record<string, string>>}
  */
-function autumnCloudyScenesForTemp(temp) {
-  return {
-    [`cloudy--autumn--morning--${temp}`]: AUTUMN_CLOUDY_VARIANT_1,
-    [`cloudy--autumn--afternoon--${temp}`]: AUTUMN_CLOUDY_VARIANT_1,
-    [`cloudy--autumn--evening--${temp}`]: AUTUMN_CLOUDY_DEFAULT,
-    [`cloudy--autumn--night--${temp}`]: AUTUMN_CLOUDY_DEFAULT,
-  }
-}
-
-function autumnCloudyScenesForHot() {
-  return {
-    'cloudy--autumn--morning--hot': {
-      season: 'autumn',
-      weather: 'cloudy',
-      sky: 'variant-2',
-      terrain: 'default',
-    },
-    'cloudy--autumn--afternoon--hot': AUTUMN_CLOUDY_HOT_DAYLIGHT,
-    'cloudy--autumn--evening--hot': AUTUMN_CLOUDY_DEFAULT,
-    'cloudy--autumn--night--hot': AUTUMN_CLOUDY_DEFAULT,
-  }
-}
-
-/** @type {Record<string, ScenePaintEntry>} */
-export const SCENE_PAINT = {
-  ...autumnCloudyScenesForTemp('mild'),
-  ...autumnCloudyScenesForTemp('warm'),
-  ...autumnCloudyScenesForTemp('cold'),
-  ...autumnCloudyScenesForHot(),
+const SKY_VARIANT_BY_BRANCH = {
+  autumn: {
+    cloudy: 'default',
+  },
 }
 
 function hasPaintLibraryBranch(season, weather) {
@@ -96,23 +72,42 @@ export function buildPaintBundleId(season, weather, variant) {
 }
 
 /**
+ * @param {string} season
+ * @param {string} weather
+ * @param {string} temp
+ * @returns {string} variant key (`default`, `mild`, `warm`, …)
+ */
+export function resolveTerrainPaintVariant(season, weather, temp) {
+  return TERRAIN_VARIANT_BY_TEMP[season]?.[weather]?.[temp] ?? 'default'
+}
+
+/**
+ * @param {string} season
+ * @param {string} weather
+ * @param {ScenePaintOverride | undefined} sceneOverride
+ * @returns {string} variant key
+ */
+export function resolveSkyPaintVariant(season, weather, sceneOverride) {
+  if (sceneOverride?.sky) return sceneOverride.sky
+  return SKY_VARIANT_BY_BRANCH[season]?.[weather] ?? 'default'
+}
+
+/**
  * @param {string} sceneId — weather--season--time--temp
  * @returns {ScenePaintBundles | null} per-cluster bundle ids, or null when no library branch
  */
 export function resolveScenePaintBundles(sceneId) {
-  const override = SCENE_PAINT[sceneId]
-  if (override) {
-    return {
-      sky: buildPaintBundleId(override.season, override.weather, override.sky ?? 'default'),
-      terrain: buildPaintBundleId(override.season, override.weather, override.terrain ?? 'default'),
-    }
-  }
-
   const axes = parseSceneIdentifier(sceneId)
   if (!axes || !hasPaintLibraryBranch(axes.season, axes.weather)) return null
 
+  const override = SCENE_PAINT_OVERRIDES[sceneId]
+
+  const skyVariant = resolveSkyPaintVariant(axes.season, axes.weather, override)
+  const terrainVariant =
+    override?.terrain ?? resolveTerrainPaintVariant(axes.season, axes.weather, axes.temp)
+
   return {
-    sky: buildPaintBundleId(axes.season, axes.weather, 'default'),
-    terrain: buildPaintBundleId(axes.season, axes.weather, 'default'),
+    sky: buildPaintBundleId(axes.season, axes.weather, skyVariant),
+    terrain: buildPaintBundleId(axes.season, axes.weather, terrainVariant),
   }
 }

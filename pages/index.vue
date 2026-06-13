@@ -268,9 +268,10 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!-- Full-scene ambient grade (multiply + soft-light) -->
+      <!-- Full-scene ambient grade (multiply + soft-light + soft-haze) -->
       <div class="scene-grade scene-grade--multiply" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--softlight" aria-hidden="true"></div>
+      <div class="scene-grade scene-grade--soft-haze" aria-hidden="true"></div>
     </div>
 
     <div class="main-content">
@@ -530,6 +531,13 @@ $trees: (
   mix-blend-mode: soft-light;
   background: var(--scene-grade-softlight-bg, rgb(var(--scene-grade-rgb) / 1));
   opacity: var(--scene-grade-softlight-opacity);
+}
+.scene-grade--soft-haze {
+  z-index: 102;
+  mix-blend-mode: var(--scene-grade-soft-haze-blend);
+  background: var(--scene-grade-soft-haze-bg, transparent);
+  opacity: var(--scene-grade-soft-haze-opacity);
+  filter: var(--scene-grade-soft-haze-filter, none);
 }
 
 
@@ -800,10 +808,13 @@ $clouds--low: (
 }
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg');
-  --layer-bkg: radial-gradient(
-    circle at 55% 0%,
-    var(--terrain-2-a)  5%,
-    var(--terrain-2-b) var(--terrain-2-b-stop, 11%)
+  --layer-bkg: var(
+    --terrain-2-layer-bkg,
+    radial-gradient(
+      circle at 55% 0%,
+      var(--terrain-2-a)  5%,
+      var(--terrain-2-b) var(--terrain-2-b-stop, 11%)
+    )
   );
   --layer-opacity: 1;
   top: 4%;
