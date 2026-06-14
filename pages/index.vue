@@ -157,10 +157,8 @@ onBeforeUnmount(() => {
 
         <!-- Bottom clouds + their overlays -->
         <section class="bottom-clouds">
-          <div class="cloud-1--low-wrap">
-            <div class="scene-layer cloud-1--low">
-              <div class="cloud-overlay"></div>
-            </div>
+          <div class="scene-layer cloud-1--low">
+            <div class="cloud-overlay"></div>
           </div>
           <div class="scene-layer cloud-2--low">
             <div class="cloud-overlay"></div>
@@ -620,34 +618,30 @@ $trees: (
 $clouds: (
   1: (
     dimensions: (width: inherit, height: inherit),
-    bkg: var(--cloud-base-shadow),
+    bkg: transparent,
     mask-type: svg,
-    opacity: 1,
     z-index: 4,
-    has-gradient-mask: true,
   ),
   2: (
     dimensions: (width: calc(260px / 2), height: calc(108px / 2)),
     position: (left: 0, top: 40%),
-    bkg: var(--cloud-base-mid),
+    bkg: transparent,
     mask-type: svg,
-    opacity: 0.8,
     z-index: 3,
     filter: blur(8px),
   ),
   3: (
     dimensions: (width: calc(317px / 2), height: calc(148px / 2)),
     position: (right: -7%, top: 41%),
-    bkg: var(--cloud-base-mid),
+    bkg: transparent,
     mask-type: svg,
     z-index: 3,
   ),
   4: (
     dimensions: (width: calc(673px / 2), height: calc(208px / 2)),
     position: (right: -15%, top: 46%),
-    bkg: var(--cloud-base-shadow),
+    bkg: transparent,
     mask-type: svg,
-    opacity: 0.75,
     z-index: 1,
     filter: blur(8px),
   ),
@@ -655,35 +649,31 @@ $clouds: (
 $clouds--low: (
   1: (
     dimensions: (width: calc(521px / 2), height: calc(332px / 2)),
-    position: (right: -8%, bottom: 8%),
-    bkg: var(--cloud-base-light),
+    position: (right: -10%, bottom: 10%),
+    bkg: radial-gradient(circle at 20% 50%, #edf0e9 20%, #a3aeb7 80%),
     mask-type: png,
-    opacity: 1,
-    z-index: auto,
+    z-index: 2,
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3)),
   ),
   2: (
     dimensions: (width: calc(694px / 2), height: calc(265px / 2)),
     position: (right: -8%, bottom: -6%),
-    bkg: var(--cloud-base-light),
+    bkg: radial-gradient(circle at 30% 50%, #f2f3ee 20%, #b5c3c8 80%),
     mask-type: svg,
-    opacity: 1,
     z-index: 3,
   ),
   3: (
     dimensions: (width: calc(546px / 2), height: calc(229px / 2)),
     position: (left: -5%, bottom: 0),
-    bkg: var(--cloud-base-light),
+    bkg: radial-gradient(circle at 0% 50%, #cbd0d4 30%, #f2f3ee 60%),
     mask-type: svg,
-    opacity: 0.25,
     z-index: 3,
-    mix-blend-mode: screen,
   ),
   4: (
     dimensions: (width: calc(608px / 2), height: calc(334px / 2)),
     position: (left: -15%, bottom: -5%),
-    bkg: var(--cloud-base-light),
+    bkg: radial-gradient(circle at 0% 50%, #a9afb3 10%, #e8e9e4 60%),
     mask-type: svg,
-    opacity: 1,
     z-index: 1,
   ),
 );
@@ -695,17 +685,33 @@ $clouds--low: (
   .cloud-#{$key}--low { @include mx.cloud($key, $config, '--low'); }
 }
 
-// Per-cloud background overrides.
-.cloud-1 { background: linear-gradient(to bottom, var(--cloud-1-a), var(--cloud-1-b)); }
-.cloud-2 { background: var(--cloud-2); }
-.cloud-3 { background: radial-gradient(var(--cloud-3-a), var(--cloud-3-b)); }
-.cloud-4 { background: var(--cloud-4); }
-
-// Per-low-cloud background + opacity overrides (token-driven; see sky paint cluster).
-.cloud-1--low { background: var(--cloud-1-low-bkg); opacity: var(--cloud-1-low-opacity); }
-.cloud-2--low { background: var(--cloud-2-low-bkg); opacity: var(--cloud-2-low-opacity); }
-.cloud-3--low { background: var(--cloud-3-low-bkg); opacity: var(--cloud-3-low-opacity); }
-.cloud-4--low { background: var(--cloud-4-low-bkg); opacity: var(--cloud-4-low-opacity); }
+// Top + bottom cloud backgrounds.
+.cloud-1 {
+  background-image: linear-gradient(rgba(201, 214, 222, 0.47) 40%, rgba(126, 144, 158, 0.58)),
+    radial-gradient(at 50% 70%, rgb(245, 251, 255), transparent);
+}
+.cloud-2 {
+  background-image: radial-gradient(at 50% 10%, rgb(197, 208, 215) 40%, rgb(170, 178, 184) 70%);
+}
+.cloud-3 {
+  background-image: linear-gradient(rgba(201, 214, 222, 0.71) 40%, rgba(126, 144, 158, 0.7));
+}
+.cloud-4 {
+  background-image: linear-gradient(rgba(201, 214, 222, 0.56) 40%, rgba(126, 144, 158, 0.6)),
+    radial-gradient(at 50% 70%, rgb(252, 252, 252), rgb(163, 183, 196));
+}
+.cloud-1--low {
+  background: radial-gradient(circle at 20% 50%, #edf0e9 20%, #a3aeb7 80%);
+}
+.cloud-2--low {
+  background: radial-gradient(circle at 30% 50%, #f2f3ee 20%, #b5c3c8 80%);
+}
+.cloud-3--low {
+  background: radial-gradient(circle at 0% 50%, #cbd0d4 30%, #f2f3ee 60%);
+}
+.cloud-4--low {
+  background: radial-gradient(circle at 0% 50%, #a9afb3 10%, #e8e9e4 60%);
+}
 
 .top-clouds,
 .bottom-clouds {
@@ -716,24 +722,13 @@ $clouds--low: (
   z-index: 2;
 }
 .top-clouds    { z-index: 3; }
-.bottom-clouds { opacity: 0.7; }
 
 .cloud-1-wrap {
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
-  opacity: 0.85;
   width: 100%;
   height: calc(288px / 2);
   position: absolute;
   z-index: 4;
-}
-.cloud-1--low-wrap {
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
-  width: calc(521px / 2);
-  height: calc(332px / 2);
-  position: absolute;
-  right: -2%;
-  bottom: 6%;
-  z-index: 2;
 }
 
 // Cloud overlay containers — top + bottom each get four panes.

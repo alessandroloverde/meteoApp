@@ -317,5 +317,12 @@ $trunk-cool-b: #493f35;
 // Layer 1 backgrounds: paint library (data-paint-sky / data-paint-terrain).
 // Layer 2 block overlays + layer 3 global grade: add per scene when authoring.
 //
-// cloudy--autumn--morning--frosty: terrain layers via `autumn--cloudy--frosty`
-// paint bundle; sky / foliage / overlays / grades — add below when authored.
+// cloudy--autumn--morning--frosty: terrain / bushes / foliage via
+// `autumn--cloudy--frosty` paint bundle; sky + finishing below.
+
+[data-scene-id='cloudy--autumn--morning--frosty'] {
+  --sky-stop-0: #7f8c99;
+  --sky-stop-1: #a1abb4;
+  --sky-stop-2: #f8f9f4;
+  --sky-stop-3: #808080;
+}
