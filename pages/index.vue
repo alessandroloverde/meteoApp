@@ -694,10 +694,10 @@ $clouds--low: (
   background-image: radial-gradient(at 50% 10%, rgb(197, 208, 215) 40%, rgb(170, 178, 184) 70%);
 }
 .cloud-3 {
-  background-image: linear-gradient(rgba(201, 214, 222, 0.71) 40%, rgba(126, 144, 158, 0.7));
+  background-image: linear-gradient(rgb(201 214 222 / 50%) 40%, rgb(126 144 158 / 36%));
 }
 .cloud-4 {
-  background-image: linear-gradient(rgba(201, 214, 222, 0.56) 40%, rgba(126, 144, 158, 0.6)),
+  background-image: linear-gradient(rgba(201, 214, 222, 0.56) 40%, rgb(126 144 158 / 46%)),
     radial-gradient(at 50% 70%, rgb(252, 252, 252), rgb(163, 183, 196));
 }
 .cloud-1--low {

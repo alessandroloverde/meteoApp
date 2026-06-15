@@ -319,10 +319,31 @@ $trunk-cool-b: #493f35;
 //
 // cloudy--autumn--morning--frosty: terrain / bushes / foliage via
 // `autumn--cloudy--frosty` paint bundle; sky + finishing below.
+// cloudy--autumn--afternoon--frosty: same sky stops; terrain overlay below.
 
-[data-scene-id='cloudy--autumn--morning--frosty'] {
+[data-scene-id='cloudy--autumn--morning--frosty'],
+[data-scene-id='cloudy--autumn--afternoon--frosty'] {
   --sky-stop-0: #7f8c99;
   --sky-stop-1: #a1abb4;
   --sky-stop-2: #f8f9f4;
   --sky-stop-3: #808080;
+}
+
+[data-scene-id='cloudy--autumn--morning--frosty'] {
+  --scene-grade-soft-haze-bg:       radial-gradient(circle, #ffffff 0%, transparent 50%),
+    linear-gradient(23deg, #03d1d1, transparent 50%);
+  --scene-grade-soft-haze-opacity:  1;
+  --scene-grade-soft-haze-blend:    soft-light;
+  --scene-grade-soft-haze-filter:   none;
+}
+
+[data-scene-id='cloudy--autumn--afternoon--frosty'] {
+  --terrain-overlay-color:   #d76308;
+  --terrain-overlay-opacity: 0.75;
+  --terrain-overlay-blend:   hue;
+
+  --scene-grade-soft-haze-bg:       radial-gradient(farthest-side, #ffffff, transparent);
+  --scene-grade-soft-haze-opacity:  1;
+  --scene-grade-soft-haze-blend:    soft-light;
+  --scene-grade-soft-haze-filter:   contrast(0.5);
 }
