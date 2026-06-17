@@ -141,33 +141,33 @@ onBeforeUnmount(() => {
         <section class="top-clouds">
           <div class="cloud-1-wrap">
             <div class="scene-layer cloud-1">
-              <div class="cloud-overlay"></div>
+              <div class="cloud-top-overlay"></div>
             </div>
           </div>
           <div class="scene-layer cloud-2">
-            <div class="cloud-overlay"></div>
+            <div class="cloud-top-overlay"></div>
           </div>
           <div class="scene-layer cloud-3">
-            <div class="cloud-overlay"></div>
+            <div class="cloud-top-overlay"></div>
           </div>
           <div class="scene-layer cloud-4">
-            <div class="cloud-overlay"></div>
+            <div class="cloud-top-overlay"></div>
           </div>
         </section>
 
         <!-- Bottom clouds + their overlays -->
         <section class="bottom-clouds">
           <div class="scene-layer cloud-1--low">
-            <div class="cloud-overlay"></div>
+            <div class="cloud-bottom-overlay"></div>
           </div>
           <div class="scene-layer cloud-2--low">
-            <div class="cloud-overlay"></div>
+            <div class="cloud-bottom-overlay"></div>
           </div>
           <div class="scene-layer cloud-3--low">
-            <div class="cloud-overlay"></div>
+            <div class="cloud-bottom-overlay"></div>
           </div>
           <div class="scene-layer cloud-4--low">
-            <div class="cloud-overlay"></div>
+            <div class="cloud-bottom-overlay"></div>
           </div>
         </section>
 
@@ -266,9 +266,10 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!-- Full-scene ambient grade (multiply + soft-light + soft-haze) -->
+      <!-- Full-scene ambient grade (multiply + night + evening + soft-haze) -->
       <div class="scene-grade scene-grade--multiply" aria-hidden="true"></div>
-      <div class="scene-grade scene-grade--softlight" aria-hidden="true"></div>
+      <div class="scene-grade scene-grade--night" aria-hidden="true"></div>
+      <div class="scene-grade scene-grade--evening" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--soft-haze" aria-hidden="true"></div>
     </div>
 
@@ -524,14 +525,21 @@ $trees: (
   background: var(--scene-grade-multiply-bg, rgb(var(--scene-grade-rgb) / 1));
   opacity: var(--scene-grade-multiply-opacity);
 }
-.scene-grade--softlight {
+.scene-grade--night {
   z-index: 101;
+  mix-blend-mode: var(--scene-grade-night-blend);
+  background: var(--scene-grade-night-bg, rgb(var(--scene-grade-rgb) / 1));
+  opacity: calc(var(--scene-grade-night-opacity) * var(--scene-grade-night-enabled));
+  filter: var(--scene-grade-night-filter, none);
+}
+.scene-grade--evening {
+  z-index: 102;
   mix-blend-mode: soft-light;
-  background: var(--scene-grade-softlight-bg, rgb(var(--scene-grade-rgb) / 1));
-  opacity: var(--scene-grade-softlight-opacity);
+  background: var(--scene-grade-evening-bg, rgb(var(--scene-grade-rgb) / 1));
+  opacity: calc(var(--scene-grade-evening-opacity) * var(--scene-grade-evening-enabled));
 }
 .scene-grade--soft-haze {
-  z-index: 102;
+  z-index: 103;
   mix-blend-mode: var(--scene-grade-soft-haze-blend);
   background: var(--scene-grade-soft-haze-bg, transparent);
   opacity: var(--scene-grade-soft-haze-opacity);
@@ -652,6 +660,7 @@ $clouds--low: (
     position: (right: -10%, bottom: 10%),
     bkg: radial-gradient(circle at 20% 50%, #edf0e9 20%, #a3aeb7 80%),
     mask-type: png,
+    opacity: 0.5,
     z-index: 2,
     filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3)),
   ),
@@ -660,6 +669,7 @@ $clouds--low: (
     position: (right: -8%, bottom: -6%),
     bkg: radial-gradient(circle at 30% 50%, #f2f3ee 20%, #b5c3c8 80%),
     mask-type: svg,
+    opacity: 0.6,
     z-index: 3,
   ),
   3: (
@@ -667,6 +677,7 @@ $clouds--low: (
     position: (left: -5%, bottom: 0),
     bkg: radial-gradient(circle at 0% 50%, #cbd0d4 30%, #f2f3ee 60%),
     mask-type: svg,
+    opacity: 0.4,
     z-index: 3,
   ),
   4: (
@@ -674,6 +685,7 @@ $clouds--low: (
     position: (left: -15%, bottom: -5%),
     bkg: radial-gradient(circle at 0% 50%, #a9afb3 10%, #e8e9e4 60%),
     mask-type: svg,
+    opacity: 0.6,
     z-index: 1,
   ),
 );
@@ -702,15 +714,19 @@ $clouds--low: (
 }
 .cloud-1--low {
   background: radial-gradient(circle at 20% 50%, #edf0e9 20%, #a3aeb7 80%);
+  opacity: 0.5;
 }
 .cloud-2--low {
   background: radial-gradient(circle at 30% 50%, #f2f3ee 20%, #b5c3c8 80%);
+  opacity: 0.6;
 }
 .cloud-3--low {
   background: radial-gradient(circle at 0% 50%, #cbd0d4 30%, #f2f3ee 60%);
+  opacity: 0.4;
 }
 .cloud-4--low {
   background: radial-gradient(circle at 0% 50%, #a9afb3 10%, #e8e9e4 60%);
+  opacity: 0.6;
 }
 
 .top-clouds,
@@ -731,14 +747,9 @@ $clouds--low: (
   z-index: 4;
 }
 
-// Cloud overlay containers — top + bottom each get four panes.
-// Panes are masked to the cloud silhouettes by the parent `section`
-// when needed; otherwise they sit full-bleed over the cloud group.
-// Cloud overlay panes live inside each cloud element as children.
-// The cloud element's own mask clips them automatically.
-
-// Pane styles shared by all cloud elements.
-.cloud-overlay { @include overlay-pane('cloud'); }
+// Cloud overlay panes — top and bottom groups use separate token sets.
+.cloud-top-overlay    { @include overlay-pane('cloud-top'); }
+.cloud-bottom-overlay { @include overlay-pane('cloud-bottom'); }
 
 
 // =============================================================================

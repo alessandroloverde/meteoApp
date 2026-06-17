@@ -7,7 +7,7 @@
 //
 // Layer 1 — element backgrounds (required): paint library via data-paint-*.
 // Layer 2 — block overlays (optional): one corrective pane per group.
-// Layer 3 — global grade (optional): multiply, soft-light, soft-haze.
+// Layer 3 — global grade (optional): multiply, night (time-gated), evening (time-gated), soft-haze.
 //
 // Block overlay tokens (off by default — opacity 0):
 //   --<group>-overlay-color    solid fallback when --overlay-bg unset
@@ -20,7 +20,7 @@
 //   --sky-overlay-stop-0/1/2   3-stop top→bottom gradient fallback
 //   --sky-overlay-bg           overrides the 3-stop gradient when set
 //
-// Groups: sky | cloud | terrain | foliage | bush | building
+// Groups: sky | cloud-top | cloud-bottom | terrain | foliage | bush | building
 // Per-scene overrides: `data-scene-id` combo block at file end.
 // =============================================================================
 
@@ -33,6 +33,8 @@ $trunk-warm-a: #5f1307;
 $trunk-warm-b: #421513;
 $trunk-cool-a: #48464d;
 $trunk-cool-b: #493f35;
+$trunk-dusk-a: #271d16;
+$trunk-dusk-b: #412b15;
 
 // =============================================================================
 // @property — blend-mode custom properties
@@ -40,11 +42,13 @@ $trunk-cool-b: #493f35;
 // mix-blend-mode ignores var() unless the custom property is registered.
 // syntax:'*' + inherits:true lets the value cascade normally.
 @property --sky-overlay-blend      { syntax: '*'; inherits: true; initial-value: normal; }
-@property --cloud-overlay-blend    { syntax: '*'; inherits: true; initial-value: normal; }
+@property --cloud-top-overlay-blend     { syntax: '*'; inherits: true; initial-value: normal; }
+@property --cloud-bottom-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --terrain-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --foliage-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --bush-overlay-blend     { syntax: '*'; inherits: true; initial-value: normal; }
 @property --building-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+@property --scene-grade-night-blend      { syntax: '*'; inherits: true; initial-value: normal; }
 @property --scene-grade-soft-haze-blend { syntax: '*'; inherits: true; initial-value: normal; }
 
 
@@ -92,7 +96,7 @@ $trunk-cool-b: #493f35;
   --sun-glow-falloff: 60%;
 
   // --------------------------------------------------------------------------
-  // Clouds (top + bottom share the same overlay tokens)
+  // Cloud paint (backgrounds) + per-cloud low opacity
   // --------------------------------------------------------------------------
   --cloud-base-light:  #{$gray};
   --cloud-base-mid:    #{$gray};
@@ -108,17 +112,23 @@ $trunk-cool-b: #493f35;
   // Low (bottom) clouds — full background + opacity, painted per sky variant.
   // Defaults fall back to the shared base tone with the original per-cloud opacity.
   --cloud-1-low-bkg: var(--cloud-base-light);
-  --cloud-1-low-opacity: 1;
+  --cloud-1-low-opacity: 0.5;
   --cloud-2-low-bkg: var(--cloud-base-light);
-  --cloud-2-low-opacity: 1;
+  --cloud-2-low-opacity: 0.6;
   --cloud-3-low-bkg: var(--cloud-base-light);
-  --cloud-3-low-opacity: 0.25;
+  --cloud-3-low-opacity: 0.4;
   --cloud-4-low-bkg: var(--cloud-base-light);
-  --cloud-4-low-opacity: 1;
+  --cloud-4-low-opacity: 0.6;
 
-  --cloud-overlay-color:   #{$gray};
-  --cloud-overlay-opacity: 0;
-  --cloud-overlay-blend:   color;
+  // Cloud overlays — top and bottom groups use separate token sets.
+  // --------------------------------------------------------------------------
+  --cloud-top-overlay-color:    #{$gray};
+  --cloud-top-overlay-opacity:  0;
+  --cloud-top-overlay-blend:    color;
+
+  --cloud-bottom-overlay-color:    #{$gray};
+  --cloud-bottom-overlay-opacity:  0;
+  --cloud-bottom-overlay-blend:    color;
 
   // --------------------------------------------------------------------------
   // Terrain — per-layer gradient stops (a = highlight, b = mid, c = deep)
@@ -200,11 +210,16 @@ $trunk-cool-b: #493f35;
   --building-overlay-blend:   soft-light;
 
   // --------------------------------------------------------------------------
-  // Full-scene grade (multiply + soft-light + soft-haze — off by default)
+  // Full-scene grade (multiply + night + evening + soft-haze — off by default)
   // --------------------------------------------------------------------------
   --scene-grade-rgb:                 128 128 128;
   --scene-grade-multiply-opacity:    0;
-  --scene-grade-softlight-opacity:   0;
+  --scene-grade-night-opacity:       0;
+  --scene-grade-night-enabled:       0;
+  --scene-grade-night-blend:         normal;
+  --scene-grade-night-filter:        none;
+  --scene-grade-evening-opacity:     0;
+  --scene-grade-evening-enabled:     0;
   --scene-grade-soft-haze-opacity:   0;
   --scene-grade-soft-haze-filter:    none;
   --scene-grade-soft-haze-blend:     normal;
@@ -256,9 +271,14 @@ $trunk-cool-b: #493f35;
 }
 
 [data-time='evening'] {
+  --scene-grade-evening-enabled: 1;
   --moon-top:         50%;
   --moon-left:        50%;
   --moon-translate-x: -50%;
+}
+
+[data-time='night'] {
+  --scene-grade-night-enabled: 1;
 }
 
 
@@ -297,6 +317,28 @@ $trunk-cool-b: #493f35;
 
 
 // =============================================================================
+// Trunk palette — evening / night (all seasons & weather)
+// =============================================================================
+// linear-gradient(83deg, #271d16 40%, #412b15 70%) on tree 1; same stops on
+// other trees at their per-tree angles (index.vue). Wins over warm / cool above.
+
+[data-time='evening'],
+[data-time='night'] {
+  --trunk-base: #{$trunk-dusk-a};
+  --trunk-1-a: #{$trunk-dusk-a};
+  --trunk-1-b: #{$trunk-dusk-b};
+  --trunk-2-a: #{$trunk-dusk-a};
+  --trunk-2-b: #{$trunk-dusk-b};
+  --trunk-3-a: #{$trunk-dusk-a};
+  --trunk-3-b: #{$trunk-dusk-b};
+  --trunk-4-a: #{$trunk-dusk-a};
+  --trunk-4-b: #{$trunk-dusk-b};
+  --trunk-5-a: #{$trunk-dusk-a};
+  --trunk-5-b: #{$trunk-dusk-b};
+}
+
+
+// =============================================================================
 // WEATHER axis — saturation / haze / density
 // =============================================================================
 
@@ -320,6 +362,62 @@ $trunk-cool-b: #493f35;
 // cloudy--autumn--morning--frosty: terrain / bushes / foliage via
 // `autumn--cloudy--frosty` paint bundle; sky + finishing below.
 // cloudy--autumn--afternoon--frosty: same sky stops; terrain overlay below.
+// cloudy--autumn--evening--frosty: sky below; more finishing TBD.
+// cloudy--autumn--night--frosty: sky + terrain / bush overlay + night grade below.
+
+[data-scene-id='cloudy--autumn--night--frosty'] {
+  --sky-gradient: linear-gradient(to bottom, #151a20 0%, #1a1e21 40%, #65869b 70%, #badff2 100%);
+
+  --terrain-overlay-bg:       radial-gradient(circle at 50% 10%, rgb(184 117 29 / 0.65) 10%, rgb(41 22 21 / 0.65) 70%);
+  --terrain-overlay-opacity:  0.65;
+  --terrain-overlay-blend:    multiply;
+
+  --bush-overlay-bg:       linear-gradient(45deg, #834535, #413231);
+  --bush-overlay-blend:    normal;
+
+  --foliage-overlay-color:   #232b44;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   overlay;
+  --foliage-overlay-filter:  brightness(0.5);
+
+  --scene-grade-night-bg:       linear-gradient(to bottom, #171b21 30%, #a0bcd2);
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    multiply;
+}
+
+[data-scene-id='cloudy--autumn--evening--frosty'] {
+  --sky-gradient: linear-gradient(to bottom, #222a45 0%, #262c40 40%, #704f44 70%, #977569 100%);
+
+  --terrain-overlay-color:   #232b44;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   overlay;
+  --terrain-overlay-filter:  brightness(0.5);
+
+  --foliage-overlay-color:   #232b44;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   overlay;
+  --foliage-overlay-filter:  brightness(0.5);
+
+  --bush-overlay-color:   #232b44;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   overlay;
+  --bush-overlay-filter:  brightness(0.5);
+
+  --scene-grade-evening-bg:       rgb(63 78 136);
+  --scene-grade-evening-opacity:  0.5;
+
+  --moon-opacity:     0;
+  --sun-glow-opacity: 0;
+
+  .top-clouds {
+    opacity: 0.55;
+    filter: hue-rotate(178deg) saturate(2) contrast(1.5) opacity(0.75);
+  }
+
+  .bottom-clouds {
+    opacity: 0.6;
+  }
+}
 
 [data-scene-id='cloudy--autumn--morning--frosty'],
 [data-scene-id='cloudy--autumn--afternoon--frosty'] {
