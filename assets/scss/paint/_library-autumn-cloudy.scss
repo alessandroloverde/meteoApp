@@ -63,6 +63,29 @@ $autumn-cloudy-terrain-default: (
   ),
 );
 
+// Terrain temp patch — cold (copy of frosty; terrain-1 authored for cold set).
+$autumn-cloudy-terrain-cold: (
+  terrain: (
+    1: (a: #c97b39c4, c: #875d25, d: #947040, blend: overlay),
+    2: (layer-bkg: linear-gradient(-7deg, #5d5442 75%, #c49751 90%)),
+    3: (a: #c8a161, b: #686249),
+    4: (a: #9d8c63, b: #826e50),
+    5: (a: #96a2a8, b: #515f67),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #bb7f40 12%, #7e532a)),
+    2: (gradient: radial-gradient(at 30% 35%, #a56948, #7f4934)),
+    3: (gradient: radial-gradient(at 10% 30%, #a56948, #7f4934)),
+    4: (gradient: radial-gradient(at 0 30%, #a56948, #7f4934)),
+    5: (gradient: radial-gradient(at 80% 20%, #bb7f40 12%, #7e532a)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-22deg, #7c5b3f, #c0803d)),
+    2: (gradient: linear-gradient(25deg, #87612a, #c78c41 60%)),
+    3: (gradient: linear-gradient(45deg, #6d513a, #c1863f)),
+  ),
+);
+
 // Terrain temp patch — frosty (terrain layers, bushes, foliage).
 $autumn-cloudy-terrain-frosty: (
   terrain: (
@@ -97,6 +120,7 @@ $paint-library: (
       ),
       terrain: (
         default: $autumn-cloudy-terrain-default,
+        cold: $autumn-cloudy-terrain-cold,
         frosty: $autumn-cloudy-terrain-frosty,
       ),
     ),

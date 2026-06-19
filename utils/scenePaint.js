@@ -46,6 +46,7 @@ const TERRAIN_VARIANT_BY_TEMP = {
   autumn: {
     cloudy: {
       frosty: 'frosty',
+      cold: 'cold',
     },
   },
 }
