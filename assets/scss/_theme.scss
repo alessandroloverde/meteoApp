@@ -362,6 +362,7 @@ $trunk-dusk-b: #412b15;
 // cloudy--autumn--morning--frosty: terrain / bushes / foliage via
 // `autumn--cloudy--frosty` paint bundle; sky + finishing below.
 // cloudy--autumn--morning--cold: copy of morning--frosty (starting point).
+// cloudy--autumn--morning--mild: copy of morning--cold (starting point).
 // cloudy--autumn--afternoon--frosty: same sky stops; terrain overlay below.
 // cloudy--autumn--afternoon--cold: sky + foliage overlay below.
 // cloudy--autumn--evening--frosty: sky below; more finishing TBD.
@@ -487,10 +488,9 @@ $trunk-dusk-b: #412b15;
   --scene-grade-soft-haze-filter:   none;
 }
 
-[data-scene-id='cloudy--autumn--morning--cold'] {
+[data-scene-id='cloudy--autumn--morning--cold'],
+[data-scene-id='cloudy--autumn--morning--mild'] {
   --sky-stop-0: #7f8c99;
-  --sky-stop-1: #a1abb4;
-  --sky-gradient: linear-gradient(to bottom, var(--sky-stop-0) 0%, var(--sky-stop-1) 40%, #b3bdc6 70%, #b3b9c5 100%);
 
   --scene-grade-soft-haze-bg:       radial-gradient(circle, #ffffff 0%, transparent 50%),
     linear-gradient(23deg, #be7a3900, transparent 50%);
@@ -500,6 +500,15 @@ $trunk-dusk-b: #412b15;
 
   --foliage-overlay-bg:       linear-gradient(45deg, #d9a64c, #7e2624);
   --foliage-overlay-blend:    lighten;
+}
+
+[data-scene-id='cloudy--autumn--morning--cold'] {
+  --sky-stop-1: #a1abb4;
+  --sky-gradient: linear-gradient(to bottom, var(--sky-stop-0) 0%, var(--sky-stop-1) 40%, #b3bdc6 70%, #b3b9c5 100%);
+}
+
+[data-scene-id='cloudy--autumn--morning--mild'] {
+  --sky-gradient: linear-gradient(to bottom, var(--sky-stop-0) 10%, #c7cabc 50%, #f8f8dc 70%, #e6e0cf 100%);
 }
 
 [data-scene-id='cloudy--autumn--afternoon--frosty'] {

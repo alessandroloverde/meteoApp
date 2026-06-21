@@ -829,7 +829,10 @@ $clouds--low: (
 .terrain-1 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-1--gradient.png');
-  --layer-bkg: linear-gradient(to right, var(--terrain-1-c), var(--terrain-1-d) 90%);
+  --layer-bkg: var(
+    --terrain-1-layer-bkg,
+    linear-gradient(to right, var(--terrain-1-c), var(--terrain-1-d) 90%)
+  );
   --accent-color: var(--terrain-1-a);
   --blend-mode: var(--terrain-1-blend, overlay);
   --layer-opacity: 1;
