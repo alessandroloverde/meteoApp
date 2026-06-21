@@ -363,8 +363,18 @@ $trunk-dusk-b: #412b15;
 // `autumn--cloudy--frosty` paint bundle; sky + finishing below.
 // cloudy--autumn--morning--cold: copy of morning--frosty (starting point).
 // cloudy--autumn--afternoon--frosty: same sky stops; terrain overlay below.
+// cloudy--autumn--afternoon--cold: sky + foliage overlay below.
 // cloudy--autumn--evening--frosty: sky below; more finishing TBD.
+// cloudy--autumn--evening--cold: evening grade + terrain / foliage / bush overlays below.
 // cloudy--autumn--night--frosty: sky + terrain / bush overlay + night grade below.
+// cloudy--autumn--night--cold: night grade + sky + terrain / foliage / bush overlays below.
+
+[data-scene-id='cloudy--autumn--night--frosty'],
+[data-scene-id='cloudy--autumn--night--cold'] {
+  --scene-grade-night-bg:       linear-gradient(to bottom, #171b21 30%, #a0bcd2);
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    multiply;
+}
 
 [data-scene-id='cloudy--autumn--night--frosty'] {
   --sky-gradient: linear-gradient(to bottom, #151a20 0%, #1a1e21 40%, #65869b 70%, #badff2 100%);
@@ -380,13 +390,57 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-opacity: 0.5;
   --foliage-overlay-blend:   overlay;
   --foliage-overlay-filter:  brightness(0.5);
+}
 
-  --scene-grade-night-bg:       linear-gradient(to bottom, #171b21 30%, #a0bcd2);
-  --scene-grade-night-opacity:  0.5;
-  --scene-grade-night-blend:    multiply;
+[data-scene-id='cloudy--autumn--night--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #141b2e 0%, #131a2d 30%, #1f303f 50%, #5b8798 90%);
+
+  --terrain-overlay-bg:       radial-gradient(circle at 50% 20%, #b35809, #241821);
+  --terrain-overlay-blend:    overlay;
+  --terrain-overlay-filter:   saturate(30%) contrast(110%);
+
+  --foliage-overlay-bg:       radial-gradient(circle at 50% 20%, #b35809, #241821);
+  --foliage-overlay-blend:    overlay;
+  --foliage-overlay-filter:   saturate(30%) contrast(110%);
+
+  --bush-overlay-bg:       radial-gradient(circle at 50% 20%, #b35809, #241821);
+  --bush-overlay-blend:    overlay;
+  --bush-overlay-filter:   saturate(30%) contrast(110%);
+
+  --cloud-top-overlay-bg:       #182033;
+  --cloud-top-overlay-filter:   opacity(0.5);
+
+  --cloud-bottom-overlay-bg:       #182033;
+  --cloud-bottom-overlay-filter:   opacity(0.5);
+
+  .top-clouds {
+    opacity: 0.65;
+  }
+}
+
+[data-scene-id='cloudy--autumn--evening--frosty'],
+[data-scene-id='cloudy--autumn--evening--cold'] {
+  --scene-grade-evening-bg: rgb(63 78 136);
+}
+
+[data-scene-id='cloudy--autumn--evening--cold'] {
+  --scene-grade-evening-opacity: 1;
+
+  --terrain-overlay-bg:       linear-gradient(0deg, rgb(0 0 0 / 0.75), transparent);
+  --terrain-overlay-opacity:  0.75;
+  --terrain-overlay-blend:    overlay;
+
+  --foliage-overlay-bg:       linear-gradient(0deg, rgb(0 0 0 / 0.5), transparent);
+  --foliage-overlay-opacity:  0.5;
+  --foliage-overlay-blend:    overlay;
+
+  --bush-overlay-bg:       linear-gradient(0deg, rgb(0 0 0 / 0.5), transparent);
+  --bush-overlay-opacity:  0.5;
+  --bush-overlay-blend:    overlay;
 }
 
 [data-scene-id='cloudy--autumn--evening--frosty'] {
+  --scene-grade-evening-opacity: 0.5;
   --sky-gradient: linear-gradient(to bottom, #222a45 0%, #262c40 40%, #704f44 70%, #977569 100%);
 
   --terrain-overlay-color:   #232b44;
@@ -403,9 +457,6 @@ $trunk-dusk-b: #412b15;
   --bush-overlay-opacity: 0.5;
   --bush-overlay-blend:   overlay;
   --bush-overlay-filter:  brightness(0.5);
-
-  --scene-grade-evening-bg:       rgb(63 78 136);
-  --scene-grade-evening-opacity:  0.5;
 
   --moon-opacity:     0;
   --sun-glow-opacity: 0;
@@ -460,4 +511,15 @@ $trunk-dusk-b: #412b15;
   --scene-grade-soft-haze-opacity:  1;
   --scene-grade-soft-haze-blend:    soft-light;
   --scene-grade-soft-haze-filter:   contrast(0.5);
+}
+
+[data-scene-id='cloudy--autumn--afternoon--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #9ca6b2 0%, #9da7b1 40%, #8e9395 70%, #976433 100%);
+
+  --foliage-overlay-bg:       linear-gradient(45deg, #842f2f 10%, #769d7e);
+  --foliage-overlay-blend:    lighten;
+
+  .bottom-clouds {
+    opacity: 0.7;
+  }
 }
