@@ -266,8 +266,8 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!-- Full-scene ambient grade (multiply + night + evening + soft-haze) -->
-      <div class="scene-grade scene-grade--multiply" aria-hidden="true"></div>
+      <!-- Full-scene ambient grade (color + night + evening + soft-haze) -->
+      <div class="scene-grade scene-grade--color" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--night" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--evening" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--soft-haze" aria-hidden="true"></div>
@@ -519,11 +519,11 @@ $trees: (
   pointer-events: none;
   background-color: rgb(var(--scene-grade-rgb) / 1);
 }
-.scene-grade--multiply {
+.scene-grade--color {
   z-index: 100;
-  mix-blend-mode: multiply;
-  background: var(--scene-grade-multiply-bg, rgb(var(--scene-grade-rgb) / 1));
-  opacity: var(--scene-grade-multiply-opacity);
+  mix-blend-mode: var(--scene-grade-color-blend);
+  background: var(--scene-grade-color-bg, rgb(var(--scene-grade-rgb) / 1));
+  opacity: var(--scene-grade-color-opacity);
 }
 .scene-grade--night {
   z-index: 101;

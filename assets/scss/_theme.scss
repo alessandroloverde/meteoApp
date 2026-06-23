@@ -7,7 +7,7 @@
 //
 // Layer 1 — element backgrounds (required): paint library via data-paint-*.
 // Layer 2 — block overlays (optional): one corrective pane per group.
-// Layer 3 — global grade (optional): multiply, night (time-gated), evening (time-gated), soft-haze.
+// Layer 3 — global grade (optional): color, night (time-gated), evening (time-gated), soft-haze.
 //
 // Block overlay tokens (off by default — opacity 0):
 //   --<group>-overlay-color    solid fallback when --overlay-bg unset
@@ -48,6 +48,7 @@ $trunk-dusk-b: #412b15;
 @property --foliage-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --bush-overlay-blend     { syntax: '*'; inherits: true; initial-value: normal; }
 @property --building-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+@property --scene-grade-color-blend      { syntax: '*'; inherits: true; initial-value: normal; }
 @property --scene-grade-night-blend      { syntax: '*'; inherits: true; initial-value: normal; }
 @property --scene-grade-soft-haze-blend { syntax: '*'; inherits: true; initial-value: normal; }
 
@@ -210,10 +211,11 @@ $trunk-dusk-b: #412b15;
   --building-overlay-blend:   soft-light;
 
   // --------------------------------------------------------------------------
-  // Full-scene grade (multiply + night + evening + soft-haze — off by default)
+  // Full-scene grade (color + night + evening + soft-haze — off by default)
   // --------------------------------------------------------------------------
   --scene-grade-rgb:                 128 128 128;
-  --scene-grade-multiply-opacity:    0;
+  --scene-grade-color-opacity:       0;
+  --scene-grade-color-blend:         normal;
   --scene-grade-night-opacity:       0;
   --scene-grade-night-enabled:       0;
   --scene-grade-night-blend:         normal;
@@ -368,11 +370,14 @@ $trunk-dusk-b: #412b15;
 // cloudy--autumn--afternoon--cold: sky + foliage overlay below.
 // cloudy--autumn--evening--frosty: sky below; more finishing TBD.
 // cloudy--autumn--evening--cold: evening grade + terrain / foliage / bush overlays below.
+// cloudy--autumn--evening--mild: sky below; more finishing TBD.
 // cloudy--autumn--night--frosty: sky + terrain / bush overlay + night grade below.
 // cloudy--autumn--night--cold: night grade + sky + terrain / foliage / bush overlays below.
+// cloudy--autumn--night--mild: night grade + sky below; more finishing TBD.
 
 [data-scene-id='cloudy--autumn--night--frosty'],
-[data-scene-id='cloudy--autumn--night--cold'] {
+[data-scene-id='cloudy--autumn--night--cold'],
+[data-scene-id='cloudy--autumn--night--mild'] {
   --scene-grade-night-bg:       linear-gradient(to bottom, #171b21 30%, #a0bcd2);
   --scene-grade-night-opacity:  0.5;
   --scene-grade-night-blend:    multiply;
@@ -418,6 +423,19 @@ $trunk-dusk-b: #412b15;
   .top-clouds {
     opacity: 0.65;
   }
+}
+
+[data-scene-id='cloudy--autumn--night--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #011741 0%, #253756 30%, #957d71 80%, #b28d77 100%);
+
+  --terrain-overlay-bg:       radial-gradient(circle at 50% 10%, #ad7a30, #3c180e 50%);
+  --terrain-overlay-blend:    overlay;
+  --terrain-overlay-filter:   brightness(0.75) saturate(0.25);
+
+  --foliage-overlay-bg:       #a45b47;
+  --foliage-overlay-blend:    darken;
+
+  --bush-overlay-bg: linear-gradient(347deg in hsl shorter hue, #4a1809 20%, #ad7d34 80%);
 }
 
 [data-scene-id='cloudy--autumn--evening--frosty'],
@@ -470,6 +488,22 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.6;
+  }
+}
+
+[data-scene-id='cloudy--autumn--evening--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #2a2d4c 0%, #3c3d5a 40%, #5f5048 60%, #be9d68 100%);
+
+  --scene-grade-color-bg:       #dcad52;
+  --scene-grade-color-opacity:  0.4;
+  --scene-grade-color-blend:    color-burn;
+
+  .bottom-clouds {
+    opacity: 0.6;
+  }
+
+  .top-clouds {
+    opacity: 0.8;
   }
 }
 
