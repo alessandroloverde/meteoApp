@@ -48,6 +48,7 @@ $trunk-dusk-b: #412b15;
 @property --foliage-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --bush-overlay-blend     { syntax: '*'; inherits: true; initial-value: normal; }
 @property --building-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
+@property --sun-glow-blend            { syntax: '*'; inherits: true; initial-value: normal; }
 @property --scene-grade-color-blend      { syntax: '*'; inherits: true; initial-value: normal; }
 @property --scene-grade-night-blend      { syntax: '*'; inherits: true; initial-value: normal; }
 @property --scene-grade-soft-haze-blend { syntax: '*'; inherits: true; initial-value: normal; }
@@ -373,6 +374,7 @@ $trunk-dusk-b: #412b15;
 // cloudy--autumn--evening--frosty: sky below; more finishing TBD.
 // cloudy--autumn--evening--cold: evening grade + terrain / foliage / bush overlays below.
 // cloudy--autumn--evening--mild: sky below; more finishing TBD.
+// cloudy--autumn--evening--warm: sky below; more finishing TBD.
 // cloudy--autumn--night--frosty: sky + terrain / bush overlay + night grade below.
 // cloudy--autumn--night--cold: night grade + sky + terrain / foliage / bush overlays below.
 // cloudy--autumn--night--mild: night grade + sky below; more finishing TBD.
@@ -617,4 +619,20 @@ $trunk-dusk-b: #412b15;
 
   --cloud-top-overlay-bg:       #e6d4a8;
   --cloud-top-overlay-blend:    soft-light;
+}
+
+[data-scene-id='cloudy--autumn--evening--warm'] {
+  --sky-gradient: linear-gradient(to bottom, #32295a 0%, #594a77 40%, #c48c56 80%, #fcea82 100%);
+
+  --sun-glow-bg:       radial-gradient(#fce883, #ce8b3d, #312a5a);
+  --sun-glow-opacity:  0.5;
+  --sun-glow-blend:    overlay;
+
+  --cloud-top-overlay-bg:          #c68f41;
+  --cloud-bottom-overlay-bg:       #c68f41;
+
+  .bottom-clouds,
+  .top-clouds {
+    opacity: 0.5;
+  }
 }

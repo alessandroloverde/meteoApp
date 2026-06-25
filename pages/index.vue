@@ -563,10 +563,13 @@ $trees: (
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse var(--sun-glow-size-x) var(--sun-glow-size-y) at var(--moon-left) var(--moon-top),
-    rgb(var(--sun-glow-rgb) / 1)   0%,
-    rgb(var(--sun-glow-rgb) / 0)   var(--sun-glow-falloff)
+  background: var(
+    --sun-glow-bg,
+    radial-gradient(
+      ellipse var(--sun-glow-size-x) var(--sun-glow-size-y) at var(--moon-left) var(--moon-top),
+      rgb(var(--sun-glow-rgb) / 1)   0%,
+      rgb(var(--sun-glow-rgb) / 0)   var(--sun-glow-falloff)
+    )
   );
   mix-blend-mode: var(--sun-glow-blend);
   opacity: var(--sun-glow-opacity);
