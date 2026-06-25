@@ -367,7 +367,8 @@ $trunk-dusk-b: #412b15;
 // cloudy--autumn--morning--mild: copy of morning--cold (starting point).
 // cloudy--autumn--afternoon--mild: copy of morning--mild (starting point).
 // cloudy--autumn--afternoon--frosty: same sky stops; terrain overlay below.
-// cloudy--autumn--morning--warm: sky below; more finishing TBD.
+// cloudy--autumn--morning--warm: sky + soft-haze below.
+// cloudy--autumn--afternoon--warm: color grade below; more finishing TBD.
 // cloudy--autumn--afternoon--cold: sky + foliage overlay below.
 // cloudy--autumn--evening--frosty: sky below; more finishing TBD.
 // cloudy--autumn--evening--cold: evening grade + terrain / foliage / bush overlays below.
@@ -517,7 +518,8 @@ $trunk-dusk-b: #412b15;
 }
 
 [data-scene-id='cloudy--autumn--morning--frosty'] {
-  --scene-grade-soft-haze-bg:       radial-gradient(circle, #ffffff 0%, transparent 50%),
+  --scene-grade-soft-haze-bg: 
+    radial-gradient(circle, #ffffff 0%, transparent 50%),
     linear-gradient(23deg, #03d1d1, transparent 50%);
   --scene-grade-soft-haze-opacity:  1;
   --scene-grade-soft-haze-blend:    soft-light;
@@ -527,7 +529,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--autumn--morning--cold'] {
   --sky-stop-0: #7f8c99;
 
-  --scene-grade-soft-haze-bg:       radial-gradient(circle, #ffffff 0%, transparent 50%),
+  --scene-grade-soft-haze-bg:
+    radial-gradient(circle, #ffffff 0%, transparent 50%),
     linear-gradient(23deg, #be7a3900, transparent 50%);
   --scene-grade-soft-haze-opacity:  1;
   --scene-grade-soft-haze-blend:    soft-light;
@@ -603,4 +606,15 @@ $trunk-dusk-b: #412b15;
   .top-clouds {
     opacity: 0.75;
   }
+}
+
+[data-scene-id='cloudy--autumn--afternoon--warm'] {
+  --sky-gradient: linear-gradient(to bottom, #c4a56d 0%, #cab898 40%, #ded3b3 70%, #f4ecd0 100%);
+
+  --scene-grade-color-bg:       #c3a66a;
+  --scene-grade-color-opacity:  0.5;
+  --scene-grade-color-blend:    multiply;
+
+  --cloud-top-overlay-bg:       #e6d4a8;
+  --cloud-top-overlay-blend:    soft-light;
 }
