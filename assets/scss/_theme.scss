@@ -366,6 +366,7 @@ $trunk-dusk-b: #412b15;
 // `autumn--cloudy--frosty` paint bundle; sky + finishing below.
 // cloudy--autumn--morning--cold: copy of morning--frosty (starting point).
 // cloudy--autumn--morning--mild: copy of morning--cold (starting point).
+// cloudy--autumn--morning--hot: copy of morning--warm without overlays (starting point).
 // cloudy--autumn--afternoon--mild: copy of morning--mild (starting point).
 // cloudy--autumn--afternoon--frosty: same sky stops; terrain overlay below.
 // cloudy--autumn--morning--warm: sky + soft-haze below.
@@ -562,6 +563,24 @@ $trunk-dusk-b: #412b15;
 
 [data-scene-id='cloudy--autumn--morning--mild'] {
   --sky-gradient: linear-gradient(to bottom, var(--sky-stop-0) 10%, #c7cabc 50%, #f8f8dc 70%, #e6e0cf 100%);
+}
+
+[data-scene-id='cloudy--autumn--morning--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #abbbc8 0%, #b8c4cc 40%, #ffddbb 70%, #f2e3d9 90%);
+
+  --cloud-top-overlay-bg: linear-gradient(0deg, #ebd6bf, #f1f2f6 60%);
+
+  --sun-glow-bg:       radial-gradient(circle farthest-side at 50% 90%, #fdb76d, #acc0cb);
+  --sun-glow-opacity:  0.5;
+  --sun-glow-blend:    color;
+
+  .top-clouds {
+    opacity: 0.5;
+  }
+
+  .bottom-clouds {
+    opacity: 0.6;
+  }
 }
 
 [data-scene-id='cloudy--autumn--afternoon--mild'] {

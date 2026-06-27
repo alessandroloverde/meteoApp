@@ -49,6 +49,7 @@ const TERRAIN_VARIANT_BY_TEMP = {
       cold: 'cold',
       mild: 'mild',
       warm: 'warm',
+      hot: 'hot',
     },
   },
 }
