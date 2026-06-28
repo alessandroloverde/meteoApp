@@ -382,6 +382,7 @@ $trunk-dusk-b: #412b15;
 // cloudy--autumn--night--cold: night grade + sky + terrain / foliage / bush overlays below.
 // cloudy--autumn--night--mild: night grade + sky below; more finishing TBD.
 // cloudy--autumn--night--warm: night grade below; more finishing TBD.
+// cloudy--autumn--night--hot: copy of evening--hot without overlays (starting point).
 
 [data-scene-id='cloudy--autumn--night--frosty'],
 [data-scene-id='cloudy--autumn--night--cold'],
@@ -712,5 +713,31 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.5;
+  }
+}
+
+[data-scene-id='cloudy--autumn--night--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #0422a2 0%, #12215c 40%, #384c95 70%, #8d7a74 100%);
+
+  --scene-grade-night-bg:       #131e5f;
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    multiply;
+
+  --terrain-overlay-bg:       radial-gradient(#825a33, #32251b);
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   brightness(0.5);
+
+  --sun-glow-bg:       radial-gradient(circle closest-corner at 50% 90%, #d28413, #000000);
+  --sun-glow-opacity:  1;
+
+  --foliage-overlay-bg:       #a45b47;
+  --foliage-overlay-blend:    luminosity;
+
+  --bush-overlay-bg:       #a45b47;
+  --bush-overlay-blend:    soft-light;
+
+  .bottom-clouds,
+  .top-clouds {
+    opacity: 0.75;
   }
 }
