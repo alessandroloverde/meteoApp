@@ -1,0 +1,109 @@
+// Spring + cloudy — neutral-gray skeleton (re-author from here).
+//
+// Block 1 — branch defaults:
+//   • sky `default`     — sky gradient stops + clouds
+//   • terrain `default` — terrain, foliage, bushes, buildings
+//   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
+//
+// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
+//
+// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
+
+$neutral: #808080;
+
+// =============================================================================
+// SKY cluster
+// =============================================================================
+$spring-cloudy-sky-default: (
+  sky: (
+    stops: (
+      0: $neutral,
+      1: $neutral,
+      2: $neutral,
+      3: $neutral,
+    ),
+  ),
+  cloud: (
+    1: (a: $neutral, b: $neutral),
+    2: (solid: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (solid: $neutral),
+  ),
+);
+
+// =============================================================================
+// TERRAIN cluster
+// =============================================================================
+// Terrain-2 base — layer-bkg: linear-gradient(-7deg, <deep> 80%, <highlight> 90%).
+$spring-cloudy-terrain-default: (
+  terrain: (
+    1: (a: $neutral, b: $neutral, c: $neutral, d: $neutral, blend: normal),
+    2: (layer-bkg: linear-gradient(-7deg, #{$neutral} 80%, #{$neutral} 90%)),
+    3: (a: $neutral, b: $neutral),
+    4: (a: $neutral, b: $neutral),
+    5: (a: $neutral, b: $neutral),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #{$neutral} 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #{$neutral} 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #{$neutral} 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #{$neutral} 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #{$neutral} 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
+    2: (gradient: radial-gradient(ellipse at 20% 100%, #{$neutral} 100%)),
+    3: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
+  ),
+  building: (
+    wall: $neutral,
+    roof: $neutral,
+    window: $neutral,
+    church: $neutral,
+  ),
+);
+
+// Terrain temp patch — frosty (terrain-1 authored; shared across cloudy--spring--frosty).
+$spring-cloudy-terrain-frosty: (
+  terrain: (
+    1: (
+      a: #8bab78,
+      blend: overlay,
+      layer-bkg: linear-gradient(45deg, #4f7273, #4b706f),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #4b6b52 80%, #90b07d 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #7e8758 -5%, #6f6849 16%)),
+    4: (a: #87a779, b: #706849),
+    5: (a: #5f8169, b: #4e706b),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #87b18a 12%, #54592a)),
+    2: (gradient: radial-gradient(at 30% 35%, #a59148, #1c5210)),
+    3: (gradient: radial-gradient(at 10% 30%, #819d75 20%, #615831 60%)),
+    4: (gradient: radial-gradient(at 0 30%, #658167, #7f4934)),
+    5: (gradient: radial-gradient(at 80% 20%, #50714b 12%, #818440)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(351deg, #3b635c, #8fb275 70%)),
+    2: (gradient: linear-gradient(21deg, #3b635c, #8fb275 60%)),
+    3: (gradient: linear-gradient(351deg, #63583b, #98b275 70%)),
+  ),
+);
+
+// =============================================================================
+// Library map — season → weather → cluster → variant
+// =============================================================================
+$paint-library: (
+  spring: (
+    cloudy: (
+      sky: (
+        default: $spring-cloudy-sky-default,
+      ),
+      terrain: (
+        default: $spring-cloudy-terrain-default,
+        frosty: $spring-cloudy-terrain-frosty,
+      ),
+    ),
+  ),
+);

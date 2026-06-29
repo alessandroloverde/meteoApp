@@ -741,3 +741,29 @@ $trunk-dusk-b: #412b15;
     opacity: 0.75;
   }
 }
+
+// =============================================================================
+// cloudy--spring — scene recipes (spring--cloudy paint library enabled)
+// =============================================================================
+// cloudy--spring--morning--frosty: sky + soft-haze below; terrain via `spring--cloudy--frosty`.
+
+[data-scene-id='cloudy--spring--morning--frosty'] {
+  --sky-gradient: linear-gradient(to bottom, #5c7e90 0%, #5a7c8c 40%, #a7c7d8 70%, #e8f4fc 100%);
+
+  --moon-opacity:  0.75;
+  --moon-filter:   contrast(0.75);
+
+  --scene-grade-soft-haze-bg:       radial-gradient(circle, #ffffff 0%, transparent 50%),
+    linear-gradient(23deg, #03d1d1, transparent 50%);
+  --scene-grade-soft-haze-opacity:  0.5;
+  --scene-grade-soft-haze-blend:    soft-light;
+  --scene-grade-soft-haze-filter:   none;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}

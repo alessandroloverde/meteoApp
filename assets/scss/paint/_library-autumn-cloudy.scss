@@ -35,10 +35,11 @@ $autumn-cloudy-sky-default: (
 // =============================================================================
 // TERRAIN cluster
 // =============================================================================
+// Terrain-2 base — layer-bkg: linear-gradient(-7deg, <deep> 80%, <highlight> 90%).
 $autumn-cloudy-terrain-default: (
   terrain: (
     1: (a: $neutral, b: $neutral, c: $neutral, d: $neutral, blend: normal),
-    2: (a: $neutral, b: $neutral, b-stop: 50%),
+    2: (layer-bkg: linear-gradient(-7deg, #{$neutral} 80%, #{$neutral} 90%)),
     3: (a: $neutral, b: $neutral),
     4: (a: $neutral, b: $neutral),
     5: (a: $neutral, b: $neutral),

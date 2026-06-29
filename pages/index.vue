@@ -120,16 +120,13 @@ onBeforeUnmount(() => {
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
     >
-      <!--
-        SKY — gradient base + sun glow + moon/sun disc + clouds.
-        The overlay container sits above the gradient and below the clouds.
-      -->
+      <!-- SKY Group -->
       <div class="scene-layer sky-base">
 
-        <!-- Sun glow (radial halo behind disc, tracks --moon-* position) -->
+        <!-- Sun glow -->
         <div class="sky-sun-glow" aria-hidden="true"></div>
 
-        <!-- Sky block overlay (optional corrective) -->
+        <!-- Sky overlay -->
         <aside class="sky-overlays" aria-hidden="true">
           <div class="sky-overlay"></div>
         </aside>
@@ -137,7 +134,7 @@ onBeforeUnmount(() => {
         <!-- Moon / sun disc -->
         <div class="scene-layer moon"></div>
 
-        <!-- Top clouds + their overlays -->
+        <!-- Top clouds -->
         <section class="top-clouds">
           <div class="cloud-1-wrap">
             <div class="scene-layer cloud-1">
@@ -155,7 +152,7 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <!-- Bottom clouds + their overlays -->
+        <!-- Bottom clouds -->
         <section class="bottom-clouds">
           <div class="scene-layer cloud-1--low">
             <div class="cloud-bottom-overlay"></div>
@@ -173,10 +170,7 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!--
-        TERRAIN — trees, bushes, ridges, buildings.
-        Each group has its own overlay container above it.
-      -->
+      <!-- TERRAIN Group -->
       <div class="scene-layer terrain">
 
         <!-- Trees + overlays -->
@@ -256,7 +250,7 @@ onBeforeUnmount(() => {
           </aside>
         </section>
 
-        <!-- Terrain ridges (4–5, in front of buildings) + overlays -->
+        <!-- Terrain ridges (4–5, in front of buildings) -->
         <div class="scene-layer terrain-layer terrain-4">
           <div class="terrain-overlay"></div>
         </div>
@@ -266,7 +260,7 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!-- Full-scene ambient grade (color + night + evening + soft-haze) -->
+      <!-- AMBIENT GRADE Group -->
       <div class="scene-grade scene-grade--color" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--night" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--evening" aria-hidden="true"></div>
@@ -806,10 +800,13 @@ $clouds--low: (
 }
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
-  --layer-bkg: radial-gradient(
-    circle at 28% 0,
-    var(--terrain-3-a) -1%,
-    var(--terrain-3-b) 15%
+  --layer-bkg: var(
+    --terrain-3-layer-bkg,
+    radial-gradient(
+      circle at 28% 0,
+      var(--terrain-3-a) -1%,
+      var(--terrain-3-b) 15%
+    )
   );
   --layer-opacity: 1;
   top: 4%;
@@ -817,13 +814,10 @@ $clouds--low: (
 }
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg');
+  // Standard base: linear-gradient(-7deg, … 80%, … 90%) via --terrain-2-layer-bkg.
   --layer-bkg: var(
     --terrain-2-layer-bkg,
-    radial-gradient(
-      circle at 55% 0%,
-      var(--terrain-2-a)  5%,
-      var(--terrain-2-b) var(--terrain-2-b-stop, 11%)
-    )
+    linear-gradient(-7deg, var(--terrain-2-a) 80%, var(--terrain-2-b) 90%)
   );
   --layer-opacity: 1;
   top: 4%;

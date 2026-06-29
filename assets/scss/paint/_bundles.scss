@@ -4,20 +4,28 @@
 @use 'sass:map';
 @use 'helpers' as paint;
 @use 'emit';
-@use 'library-autumn-cloudy' as lib;
+@use 'library-autumn-cloudy' as autumn-lib;
+@use 'library-spring-cloudy' as spring-lib;
 
 $paint-clusters: (
   sky: 'data-paint-sky',
   terrain: 'data-paint-terrain',
 );
 
-@each $cluster, $attr in $paint-clusters {
-  @each $variant in paint.paint-variant-names(lib.$paint-library, autumn, cloudy, $cluster) {
-    $bundle-id: paint.paint-bundle-id(autumn, cloudy, $variant);
-    $merged: paint.paint-resolve(lib.$paint-library, autumn, cloudy, $cluster, $variant);
+$paint-branches: (
+  autumn: autumn-lib.$paint-library,
+  spring: spring-lib.$paint-library,
+);
 
-    [#{$attr}='#{$bundle-id}'] {
-      @include emit.paint-emit($merged);
+@each $season, $library in $paint-branches {
+  @each $cluster, $attr in $paint-clusters {
+    @each $variant in paint.paint-variant-names($library, $season, cloudy, $cluster) {
+      $bundle-id: paint.paint-bundle-id($season, cloudy, $variant);
+      $merged: paint.paint-resolve($library, $season, cloudy, $cluster, $variant);
+
+      [#{$attr}='#{$bundle-id}'] {
+        @include emit.paint-emit($merged);
+      }
     }
   }
 }
