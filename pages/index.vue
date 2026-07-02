@@ -269,7 +269,6 @@ onBeforeUnmount(() => {
 
     <div class="main-content">
       <div v-if="store.loading">Loading...</div>
-
       <div v-else-if="store.error">Error: {{ store.error }}</div>
 
       <div v-else-if="store.weather">
@@ -941,7 +940,7 @@ $clouds--low: (
     inset: 0;
     background: url('~/assets/images/masks/Buildings/HouseBlock--church.svg') center center / 100% auto no-repeat;
     mix-blend-mode: overlay;
-    opacity: 0.6;
+    opacity: 0.4;
   }
   &::after {
     content: '';
@@ -1007,6 +1006,15 @@ $clouds--low: (
       mask-position: center -2px,
     ));
   }
+}
+
+// Window lights — opacity + glow driven by --building-window-* tokens (_theme.scss).
+.houseBlock--main--windows,
+.houseBlock--left--windows,
+.houseBlock--small--windows,
+.houseBlock--church::after {
+  opacity: var(--building-window-opacity, 0.9);
+  filter: var(--building-window-glow-filter, none);
 }
 
 // Building overlay container.

@@ -1,1 +1,20 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 223 117.61"><defs><style>.cls-1{fill:#fff;}</style></defs><polygon class="cls-1" points="31.49 36.85 2.52 36.85 0 42.42 0 42.74 34 42.74 34 42.42 31.49 36.85"/><g id="Building_4" data-name="Building 4"><polygon class="cls-1" points="41.52 47.61 40.02 53.45 73.99 53.45 72.74 47.61 41.52 47.61"/></g><g id="Building_2" data-name="Building 2"><polygon class="cls-1" points="151.22 0 149.12 6.87 178.85 6.87 176.89 0 151.22 0"/></g><g id="Building_1" data-name="Building 1"><polygon class="cls-1" points="191.52 25.61 189.14 30.93 222.86 30.93 220.46 25.61 191.52 25.61"/></g></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 223 117.6" style="enable-background:new 0 0 223 117.6;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.4;fill:#C9C7C7;}
+	.st1{opacity:0.4;}
+	.st2{fill:#C9C7C7;}
+</style>
+<polygon class="st0" points="31.5,36.8 2.5,36.8 0,42.4 0,42.7 34,42.7 34,42.4 "/>
+<g id="Building_4" class="st1">
+	<polygon class="st2" points="41.5,47.6 40,53.5 74,53.5 72.7,47.6 	"/>
+</g>
+<g id="Building_2" class="st1">
+	<polygon class="st2" points="151.2,0 149.1,6.9 178.9,6.9 176.9,0 	"/>
+</g>
+<g id="Building_1" class="st1">
+	<polygon class="st2" points="191.5,25.6 189.1,30.9 222.9,30.9 220.5,25.6 	"/>
+</g>
+</svg>

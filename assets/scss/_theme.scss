@@ -205,6 +205,8 @@ $trunk-dusk-b: #412b15;
   --building-wall-base:   #{$gray};
   --building-roof-base:   #{$gray};
   --building-window-base: #{$gray};
+  --building-window-opacity:    0.9;
+  --building-window-glow-filter: none;
   --building-church:      #{$gray};
 
   --building-overlay-color:   #{$gray};
@@ -342,6 +344,20 @@ $trunk-dusk-b: #412b15;
 
 
 // =============================================================================
+// Building windows — evening / night (all seasons & weather)
+// =============================================================================
+
+[data-time='evening'],
+[data-time='night'] {
+  --building-window-base:        radial-gradient(circle at 50% 45%, #fff9c4 0%, #ffeb3b 55%, #f9a825 100%);
+  --building-window-opacity:     1;
+  --building-window-glow-filter: drop-shadow(0 0 1px #fffde7)
+    drop-shadow(0 0 3px #ffeb3b)
+    drop-shadow(0 0 7px rgb(255 193 7 / 0.75));
+}
+
+
+// =============================================================================
 // WEATHER axis — saturation / haze / density
 // =============================================================================
 
@@ -383,6 +399,26 @@ $trunk-dusk-b: #412b15;
 // cloudy--autumn--night--mild: night grade + sky below; more finishing TBD.
 // cloudy--autumn--night--warm: night grade below; more finishing TBD.
 // cloudy--autumn--night--hot: copy of evening--hot without overlays (starting point).
+
+// Day (morning & afternoon) — building roofs (all weather & temps).
+[data-season='autumn'][data-time='morning'],
+[data-season='autumn'][data-time='afternoon'] {
+  --building-roof-base: #594e4c;
+}
+
+// Morning & afternoon — building walls (all temps; wins over paint-bundle grays).
+[data-season='autumn'][data-weather='cloudy'][data-time='morning'],
+[data-season='autumn'][data-weather='cloudy'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(0deg, #5d5151, #928274);
+  --building-church:      linear-gradient(90deg, #8d8280, #8d827a);
+}
+
+// Evening & night — building walls (all temps; wins over paint-bundle grays).
+[data-season='autumn'][data-weather='cloudy'][data-time='evening'],
+[data-season='autumn'][data-weather='cloudy'][data-time='night'] {
+  --building-wall-base: linear-gradient(to bottom, #7d4c4c, #562e21);
+  --building-church:      linear-gradient(to bottom, #7d4c4c, #562e21);
+}
 
 [data-scene-id='cloudy--autumn--night--frosty'],
 [data-scene-id='cloudy--autumn--night--cold'],
@@ -745,10 +781,18 @@ $trunk-dusk-b: #412b15;
 // =============================================================================
 // cloudy--spring — scene recipes (spring--cloudy paint library enabled)
 // =============================================================================
+// Morning & afternoon — building walls (all temps; wins over paint-bundle grays).
+[data-season='spring'][data-weather='cloudy'][data-time='morning'],
+[data-season='spring'][data-weather='cloudy'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(to bottom, #7493a1, #586e79);
+  --building-church:      linear-gradient(90deg, #7493a1, #586e79);
+  --building-roof-base:   #47565c;
+}
+
 // cloudy--spring--morning--frosty: sky + soft-haze below; terrain via `spring--cloudy--frosty`.
 
 [data-scene-id='cloudy--spring--morning--frosty'] {
-  --sky-gradient: linear-gradient(to bottom, #5c7e90 0%, #5a7c8c 40%, #a7c7d8 70%, #e8f4fc 100%);
+  --sky-gradient: linear-gradient(to bottom, #678594 0%, #79919c 40%, #99a7b0 70%, #bbc7ce 100%);
 
   --moon-opacity:  0.75;
   --moon-filter:   contrast(0.75);
