@@ -56,6 +56,7 @@ const TERRAIN_VARIANT_BY_TEMP = {
   spring: {
     cloudy: {
       frosty: 'frosty',
+      cold: 'cold',
     },
   },
 }

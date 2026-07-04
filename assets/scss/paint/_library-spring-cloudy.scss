@@ -91,6 +91,33 @@ $spring-cloudy-terrain-frosty: (
   ),
 );
 
+// Terrain temp patch — cold (terrain-1 authored; terrain 2–5 + foliage/bushes from frosty).
+$spring-cloudy-terrain-cold: (
+  terrain: (
+    1: (
+      a: #8ba850,
+      blend: overlay,
+      layer-bkg: linear-gradient(86deg, #437f36, #487f36),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #4b6b52 80%, #90b07d 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #779c4f -5%, #668176 16%)),
+    4: (a: #87a779, b: #706849),
+    5: (a: #5f8169, b: #4e706b),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #87b18a 12%, #54592a)),
+    2: (gradient: radial-gradient(at 30% 35%, #a59148, #1c5210)),
+    3: (gradient: radial-gradient(at 10% 30%, #819d75 20%, #615831 60%)),
+    4: (gradient: radial-gradient(at 0 30%, #658167, #7f4934)),
+    5: (gradient: radial-gradient(at 80% 20%, #50714b 12%, #818440)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(351deg, #3b635c, #8fb275 70%)),
+    2: (gradient: linear-gradient(21deg, #3b635c, #8fb275 60%)),
+    3: (gradient: linear-gradient(351deg, #63583b, #98b275 70%)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -103,6 +130,7 @@ $paint-library: (
       terrain: (
         default: $spring-cloudy-terrain-default,
         frosty: $spring-cloudy-terrain-frosty,
+        cold: $spring-cloudy-terrain-cold,
       ),
     ),
   ),

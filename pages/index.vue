@@ -527,9 +527,10 @@ $trees: (
 }
 .scene-grade--evening {
   z-index: 102;
-  mix-blend-mode: soft-light;
+  mix-blend-mode: var(--scene-grade-evening-blend, soft-light);
   background: var(--scene-grade-evening-bg, rgb(var(--scene-grade-rgb) / 1));
   opacity: calc(var(--scene-grade-evening-opacity) * var(--scene-grade-evening-enabled));
+  filter: var(--scene-grade-evening-filter, none);
 }
 .scene-grade--soft-haze {
   z-index: 103;
