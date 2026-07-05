@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
         <div class="scene-layer terrain-layer terrain-2">
           <div class="terrain-overlay"></div>
         </div>
-        <div class="3scene-layer terrain-layer terrain-3">
+        <div class="scene-layer terrain-layer terrain-3">
           <div class="terrain-overlay"></div>
         </div>
 
