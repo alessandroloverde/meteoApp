@@ -173,33 +173,33 @@ onBeforeUnmount(() => {
       <!-- TERRAIN Group -->
       <div class="scene-layer terrain">
 
-        <!-- Trees + overlays -->
-        <section class="scene-layer mask-layer trees">
-          <div class="trees-1">
+        <!-- 🌲 Trees + overlays -->
+        <section class="🌲 scene-layer mask-layer trees">
+          <div class="1️⃣🌲 trees-1">
             <div class="trees-1--trunk"></div>
             <div class="trees-1--foliage">
               <div class="foliage-overlay"></div>
             </div>
           </div>
-          <div class="trees-2">
+          <div class="2️⃣🌲 trees-2">
             <div class="trees-2--trunk"></div>
             <div class="trees-2--foliage">
               <div class="foliage-overlay"></div>
             </div>
           </div>
-          <div class="trees-3">
+          <div class="3️⃣🌲 trees-3">
             <div class="trees-3--trunk"></div>
             <div class="trees-3--foliage">
               <div class="foliage-overlay"></div>
             </div>
           </div>
-          <div class="trees-4">
+          <div class="4️⃣🌲 trees-4">
             <div class="trees-4--trunk"></div>
             <div class="trees-4--foliage">
               <div class="foliage-overlay"></div>
             </div>
           </div>
-          <div class="trees-5">
+          <div class="5️⃣🌲 trees-5">
             <div class="trees-5--trunk"></div>
             <div class="trees-5--foliage">
               <div class="foliage-overlay"></div>
@@ -214,25 +214,25 @@ onBeforeUnmount(() => {
         <div class="scene-layer terrain-layer terrain-2">
           <div class="terrain-overlay"></div>
         </div>
-        <div class="scene-layer terrain-layer terrain-3">
+        <div class="3scene-layer terrain-layer terrain-3">
           <div class="terrain-overlay"></div>
         </div>
 
-        <!-- Bushes + overlays -->
-        <div class="scene-layer bushes">
-          <div class="bushes-1">
+        <!-- 🌳 Bushes + overlays -->
+        <div class="🌳 scene-layer bushes">
+          <div class="1️⃣🌳 bushes-1">
             <div class="bush-overlay"></div>
           </div>
-          <div class="bushes-2">
+          <div class="2️⃣🌳 bushes-2">
             <div class="bush-overlay"></div>
           </div>
-          <div class="bushes-3">
+          <div class="3️⃣🌳 bushes-3">
             <div class="bush-overlay"></div>
           </div>
         </div>
 
-        <!-- Buildings + overlays -->
-        <section class="scene-layer city">
+        <!-- 🏠 Buildings + overlays -->
+        <section class="🏠 scene-layer city">
           <div class="houseBlock--church"></div>
           <div class="houseBlock--main">
             <div class="houseBlock--main--windows"></div>
