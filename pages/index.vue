@@ -120,8 +120,8 @@ onBeforeUnmount(() => {
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
     >
-      <!-- SKY Group -->
-      <div class="scene-layer sky-base">
+      <!-- 🟦 SKY Group -->
+      <div class="🟦 scene-layer sky-base">
 
         <!-- Sun glow -->
         <div class="sky-sun-glow" aria-hidden="true"></div>
@@ -132,10 +132,10 @@ onBeforeUnmount(() => {
         </aside>
 
         <!-- Moon / sun disc -->
-        <div class="scene-layer moon"></div>
+        <div class="🌞 scene-layer moon"></div>
 
-        <!-- Top clouds -->
-        <section class="top-clouds">
+        <!-- 🌥️ Top clouds -->
+        <section class="🌥️ top-clouds">
           <div class="cloud-1-wrap">
             <div class="scene-layer cloud-1">
               <div class="cloud-top-overlay"></div>
@@ -152,8 +152,8 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <!-- Bottom clouds -->
-        <section class="bottom-clouds">
+        <!-- 🌥️ Bottom clouds -->
+        <section class="🌥️ bottom-clouds">
           <div class="scene-layer cloud-1--low">
             <div class="cloud-bottom-overlay"></div>
           </div>
