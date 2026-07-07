@@ -801,6 +801,15 @@ $trunk-dusk-b: #412b15;
   --building-window-opacity: 0.5;
 }
 
+// Morning & afternoon — warm building palette + transparent windows.
+[data-season='spring'][data-weather='cloudy'][data-temp='warm'][data-time='morning'],
+[data-season='spring'][data-weather='cloudy'][data-temp='warm'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(to bottom, #baad97, #a7987d);
+  --building-church:      linear-gradient(90deg, #b3ab9e, #c3b59e);
+  --building-roof-base:   #9a8767;
+  --building-window-opacity: 0;
+}
+
 // Evening & night — building walls (all temps; wins over paint-bundle grays).
 [data-season='spring'][data-weather='cloudy'][data-time='evening'],
 [data-season='spring'][data-weather='cloudy'][data-time='night'] {
@@ -992,6 +1001,39 @@ $trunk-dusk-b: #412b15;
   --sky-gradient: linear-gradient(to bottom, #d8d0ce 0%, #dbd4cd 40%, #dfd4b7 70%, #fdfef1 100%);
 
   --cloud-top-overlay-bg: linear-gradient(45deg, #fafdf4, #ece5d3);
+}
+
+// cloudy--spring--morning--warm: sky + soft-haze + block overlays below; terrain via `spring--cloudy--warm`.
+
+[data-scene-id='cloudy--spring--morning--warm'] {
+  --sky-gradient: radial-gradient(circle at 10% 100%, #fbfbf3, #a4b3ac, #6b95a4 90%);
+
+  --scene-grade-soft-haze-bg:       radial-gradient(#d2b55d, #7ca9b98f);
+  --scene-grade-soft-haze-opacity:  0.5;
+  --scene-grade-soft-haze-blend:    soft-light;
+
+  --terrain-overlay-bg:       #099455;
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   brightness(0.5) hue-rotate(53deg);
+
+  --bush-overlay-bg:       #22702a;
+  --bush-overlay-blend:    lighten;
+
+  --foliage-overlay-color:   #45a418;
+  --foliage-overlay-opacity: 0.25;
+}
+
+// cloudy--spring--afternoon--warm: sky + cloud groups below; terrain via `spring--cloudy--warm`.
+
+[data-scene-id='cloudy--spring--afternoon--warm'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #fcf4e1 10%, #e6d9c3, #b9a894 70%);
+
+  --cloud-top-overlay-bg: linear-gradient(282deg, #f5dcb9, #f8f1e5);
+
+  .bottom-clouds {
+    opacity: 0.5;
+    filter: contrast(1.5);
+  }
 }
 
 // cloudy--spring--evening--mild: sky + cloud groups below; terrain via `spring--cloudy--mild`.

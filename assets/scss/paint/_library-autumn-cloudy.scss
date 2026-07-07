@@ -53,8 +53,8 @@ $autumn-cloudy-terrain-default: (
   ),
   bush: (
     1: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
-    2: (gradient: radial-gradient(ellipse at 20% 100%, #{$neutral} 100%)),
-    3: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #{$neutral}, #{$neutral} 70%)),
+    3: (gradient: linear-gradient(356deg, #{$neutral}, #{$neutral} 75%)),
   ),
   building: (
     wall: $neutral,

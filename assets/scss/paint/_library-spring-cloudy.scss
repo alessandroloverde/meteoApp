@@ -53,8 +53,8 @@ $spring-cloudy-terrain-default: (
   ),
   bush: (
     1: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
-    2: (gradient: radial-gradient(ellipse at 20% 100%, #{$neutral} 100%)),
-    3: (gradient: linear-gradient(160deg, #{$neutral} 100%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #{$neutral}, #{$neutral} 70%)),
+    3: (gradient: linear-gradient(356deg, #{$neutral}, #{$neutral} 75%)),
   ),
   building: (
     wall: $neutral,
@@ -86,8 +86,8 @@ $spring-cloudy-terrain-frosty: (
   ),
   bush: (
     1: (gradient: linear-gradient(351deg, #3b635c, #8fb275 70%)),
-    2: (gradient: linear-gradient(21deg, #3b635c, #8fb275 60%)),
-    3: (gradient: linear-gradient(351deg, #63583b, #98b275 70%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #3b635c, #8fb275 60%)),
+    3: (gradient: linear-gradient(356deg, #63583b, #98b275 70%)),
   ),
 );
 
@@ -113,8 +113,8 @@ $spring-cloudy-terrain-cold: (
   ),
   bush: (
     1: (gradient: linear-gradient(351deg, #3b635c, #8fb275 70%)),
-    2: (gradient: linear-gradient(21deg, #3b635c, #8fb275 60%)),
-    3: (gradient: linear-gradient(351deg, #63583b, #98b275 70%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #3b635c, #8fb275 60%)),
+    3: (gradient: linear-gradient(356deg, #63583b, #98b275 70%)),
   ),
 );
 
@@ -141,7 +141,34 @@ $spring-cloudy-terrain-mild: (
   bush: (
     1: (gradient: linear-gradient(160deg, #87aa3a 10%, #346726 100%)),
     2: (gradient: radial-gradient(ellipse at -30% 100%, #306727, #8aa651 60%)),
-    3: (gradient: linear-gradient(160deg, #8ea562, #336322 100%)),
+    3: (gradient: linear-gradient(356deg, #8ea562, #336322 75%)),
+  ),
+);
+
+// Terrain temp patch — warm (terrain 1–5 authored).
+$spring-cloudy-terrain-warm: (
+  terrain: (
+    1: (
+      a: #dacc25,
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, #8a9435, #868e3c 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #918a2c 80%, #d6c73f 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #c4b849 -1%, #90993e 15%)),
+    4: (a: #e1d03c, b: #a39b37),
+    5: (a: #c5b6a2, b: #c3b8a3),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(circle at 60% 60%, #5f5e25, #9e933b, #bc7474 90%)),
+    2: (gradient: radial-gradient(circle at 60% 60%, #5f5e25, #7e938b, #91aaa8 90%)),
+    3: (gradient: radial-gradient(circle at 60% 60%, #92533d, #ae9a59, #dd9888 90%)),
+    4: (gradient: radial-gradient(at 0 30%, #b7cf32, #857d32 100%)),
+    5: (gradient: radial-gradient(at 0 30%, #a8ba44, #7a8c7d, #b47d64 70%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-8deg, #78852d, #bad330 60%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #71812a, #b3cb32 70%)),
+    3: (gradient: linear-gradient(356deg, #798726, #afc62f 75%)),
   ),
 );
 
@@ -159,6 +186,7 @@ $paint-library: (
         frosty: $spring-cloudy-terrain-frosty,
         cold: $spring-cloudy-terrain-cold,
         mild: $spring-cloudy-terrain-mild,
+        warm: $spring-cloudy-terrain-warm,
       ),
     ),
   ),
