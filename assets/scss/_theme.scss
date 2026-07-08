@@ -1036,6 +1036,40 @@ $trunk-dusk-b: #412b15;
   }
 }
 
+// cloudy--spring--evening--warm: sky + evening grade + cloud groups + terrain/foliage/bush overlays below; terrain via `spring--cloudy--warm`.
+
+[data-scene-id='cloudy--spring--evening--warm'] {
+  --sky-gradient: linear-gradient(to bottom, #986054 0%, #ab7962 40%, #cf9f73 70%, #e2b893 100%);
+
+  --scene-grade-evening-bg:       #3a5072;
+  --scene-grade-evening-opacity:  0.5;
+
+  --cloud-top-overlay-bg:    radial-gradient(#eb711c82, #603a2c8a);
+  --cloud-top-overlay-blend: hard-light;
+
+  --terrain-overlay-color:   #67612a;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-bg:      color-mix(in srgb, var(--terrain-overlay-color) calc(var(--terrain-overlay-opacity) * 100%), #64835b);
+  --terrain-overlay-blend:   multiply;
+  --terrain-overlay-filter:  brightness(1.6) saturate(0.5) hue-rotate(196deg);
+
+  --bush-overlay-color:   #614d19;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   multiply;
+
+  --foliage-overlay-color:   #9c8135;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   multiply;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
 // cloudy--spring--evening--mild: sky + cloud groups below; terrain via `spring--cloudy--mild`.
 
 [data-scene-id='cloudy--spring--evening--mild'] {
@@ -1081,6 +1115,41 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.25;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
+// cloudy--spring--night--warm: sky + night grade + terrain/bush overlays + cloud overlays below; terrain via `spring--cloudy--warm`.
+
+[data-scene-id='cloudy--spring--night--warm'] {
+  --sky-gradient: linear-gradient(to bottom, #0e1930 0%, #15253f 40%, #2e4168 70%, #64879d 100%);
+
+  --scene-grade-night-bg:       radial-gradient(circle at 50% 40%, #e0b67c 20%, #1c202c 60%);
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    multiply;
+
+  --terrain-overlay-color:   #67612a;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-bg:      color-mix(in srgb, var(--terrain-overlay-color) calc(var(--terrain-overlay-opacity) * 100%), #64835b);
+  --terrain-overlay-blend:   multiply;
+  --terrain-overlay-filter:  brightness(1.6) saturate(0.5) hue-rotate(196deg);
+
+  --bush-overlay-color:   #614d19;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   multiply;
+
+  --cloud-top-overlay-color:   #b79a72;
+  --cloud-top-overlay-opacity: 0.5;
+
+  --cloud-bottom-overlay-color:   #683a05;
+  --cloud-bottom-overlay-opacity: 0.5;
+  --cloud-bottom-overlay-blend:   multiply;
+
+  .bottom-clouds {
+    opacity: 0.75;
   }
 
   .top-clouds {
