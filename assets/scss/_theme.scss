@@ -810,6 +810,15 @@ $trunk-dusk-b: #412b15;
   --building-window-opacity: 0;
 }
 
+// Morning & afternoon — hot building palette + transparent windows.
+[data-season='spring'][data-weather='cloudy'][data-temp='hot'][data-time='morning'],
+[data-season='spring'][data-weather='cloudy'][data-temp='hot'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(to bottom, #c4b888, #9e9366);
+  --building-church:      linear-gradient(90deg, #a39a76, #dbcc97);
+  --building-roof-base:   #968542;
+  --building-window-opacity: 0;
+}
+
 // Evening & night — building walls (all temps; wins over paint-bundle grays).
 [data-season='spring'][data-weather='cloudy'][data-time='evening'],
 [data-season='spring'][data-weather='cloudy'][data-time='night'] {
@@ -1033,6 +1042,25 @@ $trunk-dusk-b: #412b15;
   .bottom-clouds {
     opacity: 0.5;
     filter: contrast(1.5);
+  }
+}
+
+// cloudy--spring--afternoon--hot: sky + cloud overlays below; terrain via `spring--cloudy--hot`.
+
+[data-scene-id='cloudy--spring--afternoon--hot'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #fffdf1 0%, #e7e1b9 40%, #b0a47b 70%, #ac8b54 100%);
+
+  --cloud-top-overlay-color:    #c3b478;
+  --cloud-top-overlay-opacity:  0.5;
+  --cloud-bottom-overlay-color:   #c3b478;
+  --cloud-bottom-overlay-opacity: 0.5;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
   }
 }
 
