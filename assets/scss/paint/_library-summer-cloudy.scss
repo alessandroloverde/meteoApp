@@ -1,0 +1,86 @@
+// Summer + cloudy — neutral-gray skeleton (re-author from here).
+//
+// Block 1 — branch defaults:
+//   • sky `default`     — sky gradient stops + clouds
+//   • terrain `default` — terrain, foliage, bushes, buildings
+//   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
+//
+// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
+//
+// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
+
+$neutral: #808080;
+
+// =============================================================================
+// SKY cluster
+// =============================================================================
+$summer-cloudy-sky-default: (
+  sky: (
+    stops: (
+      0: $neutral,
+      1: $neutral,
+      2: $neutral,
+      3: $neutral,
+    ),
+  ),
+  cloud: (
+    1: (a: $neutral, b: $neutral),
+    2: (solid: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (solid: $neutral),
+  ),
+);
+
+// =============================================================================
+// TERRAIN cluster
+// =============================================================================
+// Terrain-2 base — layer-bkg: linear-gradient(-7deg, <deep> 80%, <highlight> 90%).
+// Bush-1 base — linear-gradient(-7deg, <deep>, <highlight> 60%).
+$summer-cloudy-terrain-default: (
+  terrain: (
+    1: (
+      a: #abd727,
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, #4d8b28, #4e882e 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #6c8a22 80%, #b1d436 90%)),
+    3: (a: #90bb34, b: #639225),
+    4: (a: #c3dc3e, b: #89a231),
+    5: (a: #ded4cf, b: #7c7467),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #b6c531, #717821, #785e21 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #e3d10b, #a0a941, #545921 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #d4d6ad, #a9a522, #373e30 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #5d312b, #6e9c29 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #d8cb14, #65881e, #645c2b 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #65871f, #bddf2f 60%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #2a760e, #b2cf22 70%)),
+    3: (gradient: linear-gradient(356deg, #598a16, #b3de24 75%)),
+  ),
+  building: (
+    wall: $neutral,
+    roof: $neutral,
+    window: $neutral,
+    church: $neutral,
+  ),
+);
+
+// =============================================================================
+// Library map — season → weather → cluster → variant
+// =============================================================================
+$paint-library: (
+  summer: (
+    cloudy: (
+      sky: (
+        default: $summer-cloudy-sky-default,
+      ),
+      terrain: (
+        default: $summer-cloudy-terrain-default,
+      ),
+    ),
+  ),
+);

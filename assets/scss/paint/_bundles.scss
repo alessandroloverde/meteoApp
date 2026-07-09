@@ -6,6 +6,7 @@
 @use 'emit';
 @use 'library-autumn-cloudy' as autumn-lib;
 @use 'library-spring-cloudy' as spring-lib;
+@use 'library-summer-cloudy' as summer-lib;
 
 $paint-clusters: (
   sky: 'data-paint-sky',
@@ -15,6 +16,7 @@ $paint-clusters: (
 $paint-branches: (
   autumn: autumn-lib.$paint-library,
   spring: spring-lib.$paint-library,
+  summer: summer-lib.$paint-library,
 );
 
 @each $season, $library in $paint-branches {

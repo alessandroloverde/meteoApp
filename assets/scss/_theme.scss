@@ -1263,3 +1263,78 @@ $trunk-dusk-b: #412b15;
     opacity: 0.75;
   }
 }
+
+// =============================================================================
+// cloudy--summer — building palette (copy of cloudy--spring)
+// =============================================================================
+// Morning & afternoon — building walls (all temps; wins over paint-bundle grays).
+[data-season='summer'][data-weather='cloudy'][data-time='morning'],
+[data-season='summer'][data-weather='cloudy'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(to bottom, #7493a1, #586e79);
+  --building-church:      linear-gradient(90deg, #7493a1, #586e79);
+  --building-roof-base:   #47565c;
+}
+
+// Morning & afternoon — mild building palette + window opacity.
+[data-season='summer'][data-weather='cloudy'][data-temp='mild'][data-time='morning'],
+[data-season='summer'][data-weather='cloudy'][data-temp='mild'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(to bottom, #bb9566, #907656);
+  --building-church:      linear-gradient(90deg, #af9069, #dcbb90);
+  --building-roof-base:   #776750;
+  --building-window-opacity: 0.5;
+}
+
+// Morning & afternoon — warm building palette + transparent windows.
+[data-season='summer'][data-weather='cloudy'][data-temp='warm'][data-time='morning'],
+[data-season='summer'][data-weather='cloudy'][data-temp='warm'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(to bottom, #baad97, #a7987d);
+  --building-church:      linear-gradient(90deg, #b3ab9e, #c3b59e);
+  --building-roof-base:   #9a8767;
+  --building-window-opacity: 0;
+}
+
+// Morning & afternoon — hot building palette + transparent windows.
+[data-season='summer'][data-weather='cloudy'][data-temp='hot'][data-time='morning'],
+[data-season='summer'][data-weather='cloudy'][data-temp='hot'][data-time='afternoon'] {
+  --building-wall-base: linear-gradient(to bottom, #c4b888, #9e9366);
+  --building-church:      linear-gradient(90deg, #a39a76, #dbcc97);
+  --building-roof-base:   #968542;
+  --building-window-opacity: 0;
+}
+
+// Evening & night — building walls (all temps; wins over paint-bundle grays).
+[data-season='summer'][data-weather='cloudy'][data-time='evening'],
+[data-season='summer'][data-weather='cloudy'][data-time='night'] {
+  --building-wall-base: linear-gradient(to bottom, #4f5069, #303640);
+  --building-church:      linear-gradient(to bottom, #515379, #5f646d);
+}
+
+// =============================================================================
+// cloudy--summer — scene recipes (summer--cloudy paint library enabled)
+// =============================================================================
+
+// cloudy--summer--morning--mild: sky + terrain/foliage/bush overlays below; terrain via `summer--cloudy--default`.
+
+[data-scene-id='cloudy--summer--morning--mild'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #dcbc0a, #e4d8c3, #97a8a7, #6c7c7d);
+
+  --terrain-overlay-color:   #007255;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   overlay;
+  --terrain-overlay-filter:  brightness(0.5) saturate(0.5) hue-rotate(38deg);
+
+  --foliage-overlay-color:   #0c9951;
+  --foliage-overlay-opacity: 0.5;
+
+  --bush-overlay-color:   #0c9951;
+  --bush-overlay-opacity: 0.5;
+}
+
+// cloudy--summer--afternoon--mild: sky + top-cloud overlay below; terrain via `summer--cloudy--default`.
+
+[data-scene-id='cloudy--summer--afternoon--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #9b8b7b 0%, #cdc6bf 40%, #e4ddd3 70%, #fafbf8 100%);
+
+  --cloud-top-overlay-color:   #dfd3c1;
+  --cloud-top-overlay-opacity: 0.5;
+}
