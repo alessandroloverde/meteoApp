@@ -1032,6 +1032,16 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-opacity: 0.25;
 }
 
+// cloudy--spring--morning--hot: sky + color grade below; terrain via `spring--cloudy--hot`.
+
+[data-scene-id='cloudy--spring--morning--hot'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #fcf9e9, #f1ecd4, #b6aa92, #9c9583);
+
+  --scene-grade-color-bg:       radial-gradient(rgb(239 223 1), transparent);
+  --scene-grade-color-opacity:  0.5;
+  --scene-grade-color-blend:    color;
+}
+
 // cloudy--spring--afternoon--warm: sky + cloud groups below; terrain via `spring--cloudy--warm`.
 
 [data-scene-id='cloudy--spring--afternoon--warm'] {
@@ -1057,6 +1067,41 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.75;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
+// cloudy--spring--evening--hot: sky + evening grade + terrain/bush overlays + cloud overlays below; terrain via `spring--cloudy--hot`.
+
+[data-scene-id='cloudy--spring--evening--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #512f40 0%, #77483e 40%, #a66643 70%, #d48e5a 100%);
+
+  --scene-grade-evening-bg:       rgb(158 92 63);
+  --scene-grade-evening-opacity:  0.35;
+  --scene-grade-evening-blend:    multiply;
+
+  --terrain-overlay-color:   #a24207;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   multiply;
+  --terrain-overlay-filter:  hue-rotate(280deg) brightness(1.25) saturate(0.75);
+
+  --bush-overlay-color:   #a24207;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   multiply;
+  --bush-overlay-filter:  hue-rotate(280deg) brightness(1.25) saturate(0.75);
+
+  --cloud-bottom-overlay-color:   #955a41;
+  --cloud-bottom-overlay-opacity: 1;
+
+  --cloud-top-overlay-color:    #d97949;
+  --cloud-top-overlay-opacity:  0.5;
+  --cloud-top-overlay-blend:    multiply;
+
+  .bottom-clouds {
+    opacity: 0.65;
   }
 
   .top-clouds {
@@ -1178,6 +1223,40 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.75;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
+// cloudy--spring--night--hot: sky + night grade + terrain/bush overlays + cloud overlays below; terrain via `spring--cloudy--hot`.
+
+[data-scene-id='cloudy--spring--night--hot'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #e39857, #8a6985, #3e3670, #25275c);
+
+  --scene-grade-night-bg:       linear-gradient(to bottom, #a07967, #171832);
+  --scene-grade-night-opacity:  0.35;
+  --scene-grade-night-blend:    multiply;
+
+  --terrain-overlay-color:   #a24207;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   multiply;
+  --terrain-overlay-filter:  hue-rotate(280deg) brightness(1.25) saturate(0.75);
+
+  --bush-overlay-color:   #a24207;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   multiply;
+  --bush-overlay-filter:  hue-rotate(280deg) brightness(1.25) saturate(0.75);
+
+  --cloud-bottom-overlay-color:   #bb6228;
+  --cloud-bottom-overlay-opacity: 1;
+
+  --cloud-top-overlay-color:    #c98053;
+  --cloud-top-overlay-opacity:  1;
+
+  .bottom-clouds {
+    opacity: 0.5;
   }
 
   .top-clouds {
