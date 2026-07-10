@@ -1330,6 +1330,12 @@ $trunk-dusk-b: #412b15;
   --bush-overlay-opacity: 0.5;
 }
 
+// cloudy--summer--afternoon--cold: sky below; terrain via `summer--cloudy--cold`.
+
+[data-scene-id='cloudy--summer--afternoon--cold'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #f7f7f7, #cbd0d3, #7e7773);
+}
+
 // cloudy--summer--afternoon--mild: sky + top-cloud overlay below; terrain via `summer--cloudy--default`.
 
 [data-scene-id='cloudy--summer--afternoon--mild'] {
