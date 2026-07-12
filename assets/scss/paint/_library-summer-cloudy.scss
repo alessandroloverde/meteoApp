@@ -96,6 +96,33 @@ $summer-cloudy-terrain-cold: (
   ),
 );
 
+// Terrain temp patch — warm (terrain 1–5 + foliage + bushes authored).
+$summer-cloudy-terrain-warm: (
+  terrain: (
+    1: (
+      a: #21b834,
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, #007854, #027b4f 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #017043 80%, #8dc93a 90%)),
+    3: (a: #28a044, b: #037159),
+    4: (a: #8c7c02, b: #4e7713),
+    5: (a: #bdc4c7, b: #647568),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, color-mix(in srgb, color-mix(in srgb, #b6c531 50%, #039c54) 85%, #022818), color-mix(in srgb, color-mix(in srgb, #717821 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #785e21 50%, #039c54) 88%, #022818) 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, color-mix(in srgb, color-mix(in srgb, #e3d10b 50%, #039c54) 85%, #022818), color-mix(in srgb, color-mix(in srgb, #a0a941 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #545921 50%, #039c54) 88%, #022818) 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, color-mix(in srgb, color-mix(in srgb, #d4d6ad 50%, #039c54) 85%, #022818), color-mix(in srgb, color-mix(in srgb, #a9a522 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #373e30 50%, #039c54) 88%, #022818) 100%)),
+    4: (gradient: radial-gradient(at 0 30%, color-mix(in srgb, color-mix(in srgb, #5d312b 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #6e9c29 50%, #039c54) 85%, #022818) 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, color-mix(in srgb, color-mix(in srgb, #d8cb14 50%, #039c54) 85%, #022818), color-mix(in srgb, color-mix(in srgb, #65881e 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #645c2b 50%, #039c54) 88%, #022818) 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, color-mix(in srgb, color-mix(in srgb, #65871f 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #bddf2f 50%, #039c54) 85%, #022818) 60%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, color-mix(in srgb, color-mix(in srgb, #2a760e 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #b2cf22 50%, #039c54) 85%, #022818) 70%)),
+    3: (gradient: linear-gradient(356deg, color-mix(in srgb, color-mix(in srgb, #598a16 50%, #039c54) 88%, #022818), color-mix(in srgb, color-mix(in srgb, #b3de24 50%, #039c54) 85%, #022818) 75%)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -108,6 +135,7 @@ $paint-library: (
       terrain: (
         default: $summer-cloudy-terrain-default,
         cold: $summer-cloudy-terrain-cold,
+        warm: $summer-cloudy-terrain-warm,
       ),
     ),
   ),
