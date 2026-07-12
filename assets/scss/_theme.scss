@@ -1330,10 +1330,80 @@ $trunk-dusk-b: #412b15;
   --bush-overlay-opacity: 0.5;
 }
 
+// cloudy--summer--morning--cold: sky + terrain/foliage/bush overlays + cloud groups below; terrain via `summer--cloudy--cold`.
+
+[data-scene-id='cloudy--summer--morning--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #608291 0%, #67828e 40%, #8ea2ac 70%, #d3e7f2 100%);
+
+  --terrain-overlay-bg:       #095368;
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   brightness(0.9) hue-rotate(89deg) contrast(1.25) saturate(0.5);
+
+  --foliage-overlay-color:   #00dc86;
+  --foliage-overlay-opacity: 0.5;
+
+  --bush-overlay-bg:       #095368;
+  --bush-overlay-blend:    soft-light;
+  --bush-overlay-filter:   brightness(0.65) hue-rotate(89deg) contrast(1.5) saturate(0.5);
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
 // cloudy--summer--afternoon--cold: sky below; terrain via `summer--cloudy--cold`.
 
 [data-scene-id='cloudy--summer--afternoon--cold'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #f7f7f7, #cbd0d3, #7e7773);
+}
+
+// cloudy--summer--evening--cold: sky + evening grade + cloud groups below; terrain via `summer--cloudy--cold`.
+
+[data-scene-id='cloudy--summer--evening--cold'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #e8d4ae 10%, #178392 30%, #0d3f7d, #0d1d6c 90%);
+
+  --scene-grade-evening-bg:       radial-gradient(circle, #dea416, #012329 50%);
+  --scene-grade-evening-opacity:  0.5;
+  --scene-grade-evening-filter:   brightness(0.25);
+
+  --moon-opacity: 0.75;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+
+  .top-clouds {
+    opacity: 0.5;
+  }
+}
+
+// cloudy--summer--night--cold: copy of evening--cold + terrain/foliage/bush overlays; terrain via `summer--cloudy--cold`.
+
+[data-scene-id='cloudy--summer--night--cold'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #e8d4ae 10%, #178392 30%, #0d3f7d, #0d1d6c 90%);
+
+  --terrain-overlay-bg:    radial-gradient(circle at 50% 10%, #978d09, #084046);
+  --terrain-overlay-blend: multiply;
+
+  --foliage-overlay-bg:    radial-gradient(circle at 50% 10%, #978d09, #084046);
+  --foliage-overlay-blend: multiply;
+
+  --bush-overlay-bg:       radial-gradient(circle at 50% 10%, #978d09, #084046);
+  --bush-overlay-blend:    multiply;
+
+  --moon-opacity: 0.75;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+
+  .top-clouds {
+    opacity: 0.5;
+  }
 }
 
 // cloudy--summer--afternoon--mild: sky + top-cloud overlay below; terrain via `summer--cloudy--default`.
