@@ -220,6 +220,7 @@ $trunk-dusk-b: #412b15;
   --scene-grade-rgb:                 128 128 128;
   --scene-grade-color-opacity:       0;
   --scene-grade-color-blend:         normal;
+  --scene-grade-color-filter:        none;
   --scene-grade-night-opacity:       0;
   --scene-grade-night-enabled:       0;
   --scene-grade-night-blend:         normal;
@@ -1342,6 +1343,27 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-bg: radial-gradient(#386319 20%, #c2680f);
 }
 
+// cloudy--summer--morning--hot: sky + color grade + cloud groups below; terrain via `summer--cloudy--hot`.
+
+[data-scene-id='cloudy--summer--morning--hot'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #fdfdf1 15%, #f5f2c9 45%, #d1cba5 60%, #b4ad93 80%);
+
+  --scene-grade-color-bg:       linear-gradient(to bottom, #fdfadb, #0fb850);
+  --scene-grade-color-opacity:  0.5;
+  --scene-grade-color-blend:    soft-light;
+  --scene-grade-color-filter:   brightness(0.75);
+
+  --cloud-top-overlay-bg: beige;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
 // cloudy--summer--morning--cold: sky + terrain/foliage/bush overlays + cloud groups below; terrain via `summer--cloudy--cold`.
 
 [data-scene-id='cloudy--summer--morning--cold'] {
@@ -1461,6 +1483,36 @@ $trunk-dusk-b: #412b15;
   }
 }
 
+// cloudy--summer--evening--hot: sky + evening grade + foliage/bush overlays + cloud groups below; terrain via `summer--cloudy--hot`.
+
+[data-scene-id='cloudy--summer--evening--hot'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #fbe8ae 10%, #ce9f5c 35%, #825657 60%, #60405e 80%);
+
+  --scene-grade-evening-bg:       linear-gradient(to bottom, #5a3c5b, #c69d50, #412808);
+  --scene-grade-evening-opacity:  0.5;
+
+  --foliage-overlay-color:   #534a0f;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   darken;
+
+  --bush-overlay-color:   #534a0f;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   darken;
+
+  --cloud-top-overlay-bg:       radial-gradient(#d39a55, #865446);
+  --cloud-top-overlay-filter:   opacity(0.75);
+
+  --cloud-bottom-overlay-bg: #e0b763c4;
+
+  .bottom-clouds {
+    opacity: 0.6;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
 // cloudy--summer--evening--warm: sky + evening grade + terrain/foliage/bush overlays + cloud groups below; terrain via `summer--cloudy--warm`.
 
 [data-scene-id='cloudy--summer--evening--warm'] {
@@ -1564,5 +1616,34 @@ $trunk-dusk-b: #412b15;
 
   .top-clouds {
     opacity: 0.5;
+  }
+}
+
+// cloudy--summer--night--hot: copy of evening--hot + night grade; terrain via `summer--cloudy--hot`.
+
+[data-scene-id='cloudy--summer--night--hot'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #d1905e 10%, #5364ab 35%, #1e3581 60%, #12205e 80%);
+
+  --scene-grade-night-bg:       linear-gradient(to bottom, #5a3c5b, #c69d50, #412808);
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    multiply;
+  --scene-grade-night-filter:   brightness(1.35) contrast(1.25) saturate(0.5);
+
+  --foliage-overlay-color:   #534a0f;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   darken;
+
+  --bush-overlay-color:   #534a0f;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   darken;
+
+  --cloud-top-overlay-bg: radial-gradient(#c18a64, #050d2e);
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
   }
 }

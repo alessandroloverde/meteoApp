@@ -505,13 +505,13 @@ $trees: (
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-color: rgb(var(--scene-grade-rgb) / 1);
 }
 .scene-grade--color {
   z-index: 100;
   mix-blend-mode: var(--scene-grade-color-blend);
   background: var(--scene-grade-color-bg, rgb(var(--scene-grade-rgb) / 1));
   opacity: var(--scene-grade-color-opacity);
+  filter: var(--scene-grade-color-filter, none);
 }
 .scene-grade--night {
   z-index: 101;
