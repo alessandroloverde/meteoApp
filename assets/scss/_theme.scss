@@ -1296,9 +1296,9 @@ $trunk-dusk-b: #412b15;
 // Morning & afternoon — hot building palette + transparent windows.
 [data-season='summer'][data-weather='cloudy'][data-temp='hot'][data-time='morning'],
 [data-season='summer'][data-weather='cloudy'][data-temp='hot'][data-time='afternoon'] {
-  --building-wall-base: linear-gradient(to bottom, #c4b888, #9e9366);
-  --building-church:      linear-gradient(90deg, #a39a76, #dbcc97);
-  --building-roof-base:   #968542;
+  --building-wall-base: linear-gradient(to bottom, #a87248, #d3a16f);
+  --building-church:      linear-gradient(90deg, #bd895e, #d2a36b);
+  --building-roof-base:   #a55e24;
   --building-window-opacity: 0;
 }
 
@@ -1437,6 +1437,23 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.75;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
+// cloudy--summer--afternoon--hot: sky + cloud groups below; terrain via `summer--cloudy--hot`.
+
+[data-scene-id='cloudy--summer--afternoon--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #cf8c80 0%, #c1764e 40%, #f5ab55 70%, #fadf9d 100%);
+
+  --cloud-top-overlay-bg:       linear-gradient(45deg, #e8be82, #c49780);
+  --cloud-top-overlay-filter:   opacity(0.5);
+
+  .bottom-clouds {
+    opacity: 0.5;
   }
 
   .top-clouds {

@@ -123,18 +123,14 @@ onBeforeUnmount(() => {
       <!-- 🟦 SKY Group -->
       <div class="🟦 scene-layer sky-base">
 
-        <!-- Sun glow -->
         <div class="sky-sun-glow" aria-hidden="true"></div>
 
-        <!-- Sky overlay -->
         <aside class="sky-overlays" aria-hidden="true">
           <div class="sky-overlay"></div>
         </aside>
 
-        <!-- Moon / sun disc -->
         <div class="🌞 scene-layer moon"></div>
 
-        <!-- 🌥️ Top clouds -->
         <section class="🌥️ top-clouds">
           <div class="cloud-1-wrap">
             <div class="scene-layer cloud-1">
@@ -152,7 +148,6 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <!-- 🌥️ Bottom clouds -->
         <section class="🌥️ bottom-clouds">
           <div class="scene-layer cloud-1--low">
             <div class="cloud-bottom-overlay"></div>
@@ -170,8 +165,8 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!-- TERRAIN Group -->
-      <div class="scene-layer terrain">
+      <!-- 🖼️ TERRAIN Group -->
+      <div class="🖼️ scene-layer terrain">
 
         <!-- 🌲 Trees + overlays -->
         <section class="🌲 scene-layer mask-layer trees">

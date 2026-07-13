@@ -123,6 +123,30 @@ $summer-cloudy-terrain-warm: (
   ),
 );
 
+// Terrain temp patch — hot (terrain 1–4 + foliage 1–4 + bushes authored; terrain 5 + foliage 5 from default).
+$summer-cloudy-terrain-hot: (
+  terrain: (
+    1: (
+      a: #bd9b3e,
+      layer-bkg: linear-gradient(to right, #4d6127, #4e602c 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #845b3a 80%, #d7a468 90%)),
+    3: (a: #b18f53, b: #696a31),
+    4: (a: #c8ac4b, b: #576a28),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #f3ab56, #717821, #785e21 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #c0a1bf, #a98f41, #545921 80%)),
+    3: (gradient: radial-gradient(at 10% 30%, #a9c78c 10%, #a7a922, #7f0f71 90%)),
+    4: (gradient: radial-gradient(at 0 30%, #dda376, #597e22 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-15deg, #6e6f2c 20%, #a18b30 60%)),
+    2: (gradient: radial-gradient(ellipse at -40% 100%, #284518, #9a9446 60%)),
+    3: (gradient: linear-gradient(356deg, #656626, #a59848 75%)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -136,6 +160,7 @@ $paint-library: (
         default: $summer-cloudy-terrain-default,
         cold: $summer-cloudy-terrain-cold,
         warm: $summer-cloudy-terrain-warm,
+        hot: $summer-cloudy-terrain-hot,
       ),
     ),
   ),
