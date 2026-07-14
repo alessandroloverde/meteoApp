@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
     >
-      <!-- 🟦 SKY Group -->
+      <!-- SKY Group -->
       <div class="🟦 scene-layer sky-base">
 
         <div class="sky-sun-glow" aria-hidden="true"></div>
@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!-- 🖼️ TERRAIN Group -->
+      <!-- TERRAIN Group -->
       <div class="🖼️ scene-layer terrain">
 
         <!-- 🌲 Trees + overlays -->

@@ -1647,3 +1647,25 @@ $trunk-dusk-b: #412b15;
     opacity: 0.75;
   }
 }
+
+// =============================================================================
+// cloudy--winter — building palette
+// =============================================================================
+// Morning & afternoon — building walls (all temps; wins over paint-bundle grays).
+[data-season='winter'][data-weather='cloudy'][data-time='morning'],
+[data-season='winter'][data-weather='cloudy'][data-time='afternoon'] {
+  --building-wall-base:   #849098;
+  --building-roof-base:   #4b5d5f;
+  --building-window-base: #808080;
+  --building-church:      #919aa2;
+}
+
+// =============================================================================
+// cloudy--winter — scene recipes (winter--cloudy paint library enabled)
+// =============================================================================
+
+// cloudy--winter--morning--cold: sky below; terrain via `winter--cloudy--default`.
+
+[data-scene-id='cloudy--winter--morning--cold'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #e8e9e5 15%, #d0d6d6 45%, #9fa5a8 65%, #7e8891 85%);
+}

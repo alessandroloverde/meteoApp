@@ -1,0 +1,84 @@
+// Winter + cloudy — neutral-gray skeleton (re-author from here).
+//
+// Block 1 — branch defaults:
+//   • sky `default`     — sky gradient stops + clouds
+//   • terrain `default` — terrain, foliage, bushes, buildings
+//   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
+//
+// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
+//
+// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
+
+$neutral: #808080;
+
+// =============================================================================
+// SKY cluster
+// =============================================================================
+$winter-cloudy-sky-default: (
+  sky: (
+    stops: (
+      0: $neutral,
+      1: $neutral,
+      2: $neutral,
+      3: $neutral,
+    ),
+  ),
+  cloud: (
+    1: (a: $neutral, b: $neutral),
+    2: (solid: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (solid: $neutral),
+  ),
+);
+
+// =============================================================================
+// TERRAIN cluster
+// =============================================================================
+$winter-cloudy-terrain-default: (
+  terrain: (
+    1: (
+      a: #a29962,
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, #5f6049, #65634d 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #656447 80%, #8d8b65 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #7f7e61 -1%, #69684c 15%)),
+    4: (a: #ae9c71, b: #69684a),
+    5: (a: #b2bbbd, b: #3e4347),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #565c13, #67691b, #5d5a45 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #845b35, #5e5c40, #626031 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #6f8f70, #685749, #1a675f 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #454f44, #845f3b 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #65681b, #65744c, #765f4a 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #4a4b35, #8f896a 60%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #5f5c5c, #938e68 70%)),
+    3: (gradient: linear-gradient(356deg, #575435, #878164 75%)),
+  ),
+  building: (
+    wall: #849098,
+    roof: #4b5d5f,
+    window: #808080,
+    church: #919aa2,
+  ),
+);
+
+// =============================================================================
+// Library map — season → weather → cluster → variant
+// =============================================================================
+$paint-library: (
+  winter: (
+    cloudy: (
+      sky: (
+        default: $winter-cloudy-sky-default,
+      ),
+      terrain: (
+        default: $winter-cloudy-terrain-default,
+      ),
+    ),
+  ),
+);

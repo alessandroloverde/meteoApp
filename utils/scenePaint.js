@@ -27,6 +27,7 @@ export const PAINT_LIBRARY_BRANCHES = [
   { season: 'autumn', weather: 'cloudy' },
   { season: 'spring', weather: 'cloudy' },
   { season: 'summer', weather: 'cloudy' },
+  { season: 'winter', weather: 'cloudy' },
 ]
 
 export const PAINT_CLUSTERS = ['sky', 'terrain']
@@ -85,6 +86,9 @@ const SKY_VARIANT_BY_BRANCH = {
     cloudy: 'default',
   },
   summer: {
+    cloudy: 'default',
+  },
+  winter: {
     cloudy: 'default',
   },
 }
