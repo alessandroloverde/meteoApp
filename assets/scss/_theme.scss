@@ -1722,3 +1722,40 @@ $trunk-dusk-b: #412b15;
     opacity: 0.35;
   }
 }
+
+// cloudy--winter--night--cold: copy of evening--cold; terrain via `winter--cloudy--default`.
+
+[data-scene-id='cloudy--winter--night--cold'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #567a9a 10%, #3c5d7d 40%, #193146, #121d2f);
+
+  --scene-grade-night-bg:       radial-gradient(circle, transparent, #112b45 75%);
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    hard-light;
+
+  --terrain-overlay-bg:       linear-gradient(to bottom, #2174a3, #062846 65%);
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(3.5);
+
+  --foliage-overlay-color:   #1069aa;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   color;
+  --foliage-overlay-filter:  saturate(1.5) brightness(0.8);
+
+  --bush-overlay-color:   #1069aa;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   hard-light;
+  --bush-overlay-filter:  saturate(1.5) brightness(0.8);
+
+  --moon-opacity: 0;
+
+  --cloud-top-overlay-bg:       linear-gradient(to bottom, #7080a4, #2c3d59);
+  --cloud-top-overlay-blend:    soft-light;
+
+  .bottom-clouds {
+    opacity: 0.35;
+  }
+
+  .top-clouds {
+    opacity: 0.35;
+  }
+}
