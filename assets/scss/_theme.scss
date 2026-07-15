@@ -1660,6 +1660,13 @@ $trunk-dusk-b: #412b15;
   --building-church:      #919aa2;
 }
 
+// Evening & night — building walls (all temps; wins over paint-bundle grays).
+[data-season='winter'][data-weather='cloudy'][data-time='evening'],
+[data-season='winter'][data-weather='cloudy'][data-time='night'] {
+  --building-wall-base: #2e3955;
+  --building-church:    #495772;
+}
+
 // =============================================================================
 // cloudy--winter — scene recipes (winter--cloudy paint library enabled)
 // =============================================================================
@@ -1668,4 +1675,50 @@ $trunk-dusk-b: #412b15;
 
 [data-scene-id='cloudy--winter--morning--cold'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #e8e9e5 15%, #d0d6d6 45%, #9fa5a8 65%, #7e8891 85%);
+}
+
+// cloudy--winter--afternoon--cold: sky + color grade below; terrain via `winter--cloudy--default`.
+
+[data-scene-id='cloudy--winter--afternoon--cold'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #e8e9e5 15%, #d0d6d6 45%, #9fa5a8 65%, #7e8891 85%);
+
+  --scene-grade-color-bg:       radial-gradient(circle, #00000000, #6d81be82 30%, #000000);
+  --scene-grade-color-opacity:  0.5;
+  --scene-grade-color-blend:    multiply;
+}
+
+// cloudy--winter--evening--cold: sky + evening grade + terrain/foliage/bush overlays + moon + cloud groups below; terrain via `winter--cloudy--default`.
+
+[data-scene-id='cloudy--winter--evening--cold'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #9d90a1 10%, #736f8e 40%, #3e557a, #335177);
+
+  --scene-grade-evening-bg:       radial-gradient(circle, transparent, #112b45 75%);
+  --scene-grade-evening-opacity:  0.5;
+  --scene-grade-evening-blend:    hard-light;
+
+  --terrain-overlay-bg:       linear-gradient(to bottom, #678eb9, #062846 65%);
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(2.5);
+
+  --foliage-overlay-color:   #1069aa;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   color;
+  --foliage-overlay-filter:  brightness(0.5);
+
+  --bush-overlay-color:   #1069aa;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   hard-light;
+
+  --moon-opacity: 0;
+
+  --cloud-top-overlay-bg:       linear-gradient(to bottom, #7080a4, #2c3d59);
+  --cloud-top-overlay-blend:    soft-light;
+
+  .bottom-clouds {
+    opacity: 0.35;
+  }
+
+  .top-clouds {
+    opacity: 0.35;
+  }
 }
