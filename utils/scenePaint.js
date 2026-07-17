@@ -71,6 +71,11 @@ const TERRAIN_VARIANT_BY_TEMP = {
       hot: 'hot',
     },
   },
+  winter: {
+    cloudy: {
+      mild: 'mild',
+    },
+  },
 }
 
 /**

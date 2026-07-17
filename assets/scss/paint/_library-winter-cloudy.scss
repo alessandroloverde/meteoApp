@@ -67,6 +67,39 @@ $winter-cloudy-terrain-default: (
   ),
 );
 
+// Terrain temp patch — mild (copy of default / cold basics; diverge as authored).
+$winter-cloudy-terrain-mild: (
+  terrain: (
+    1: (
+      a: #9d8556,
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, #76633f, #65634d 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #5e4f30 80%, #7f8d65 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #836e46 -1%, #69654c 15%)),
+    4: (a: #ae9c71, b: #69684a),
+    5: (a: #b4bbbc, b: #3e4347),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #9fa45e, #75691f, #745831 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #c2844c, #717043, #023415 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #968b5e, #826750, #1a675f 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #5f6d5e, #824b16 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #65681b, #65744c, #765f4a 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #4a4b35, #998d57 60%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #5f5c5c, #939268 70%)),
+    3: (gradient: linear-gradient(356deg, #575435, #9b8760 75%)),
+  ),
+  building: (
+    wall: #849098,
+    roof: #4b5d5f,
+    window: #808080,
+    church: #919aa2,
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -78,6 +111,7 @@ $paint-library: (
       ),
       terrain: (
         default: $winter-cloudy-terrain-default,
+        mild: $winter-cloudy-terrain-mild,
       ),
     ),
   ),
