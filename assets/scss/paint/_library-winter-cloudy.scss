@@ -100,6 +100,29 @@ $winter-cloudy-terrain-mild: (
   ),
 );
 
+// Terrain temp patch — frosty (terrain 1–5 + foliage + bushes authored; buildings from default).
+$winter-cloudy-terrain-frosty: (
+  terrain: (
+    1: (a: #d1d4bea6),
+    2: (layer-bkg: linear-gradient(-7deg, #656447 80%, #9d9c86 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #a2a182 -1%, #76756a 15%)),
+    4: (a: #b0a58a),
+    5: (a: #b7bfc6, b: #768187),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #9b9c8a, #6b6b58, #5a6161 100%)),
+    2: (gradient: radial-gradient(at 40% 45%, #8c7158, #7f7f77, #5a5934 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #969d96, #6b5d52, #064e46 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #898e89, #6d6354 60%, #adcd95 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #d5d5c2, #707b5c, #989b88, #d3cac1 100%)),
+  ),
+  bush: (
+    1: (gradient: (linear-gradient(-7deg, #445459, #7a7a68d9 60%), #e1e0d2)),
+    2: (gradient: (radial-gradient(ellipse at -30% 100%, #3f4d50, #7a7a6999 70%), #e1e0d2)),
+    3: (gradient: linear-gradient(356deg, #46513d, #8c8c7b 75%)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -112,6 +135,7 @@ $paint-library: (
       terrain: (
         default: $winter-cloudy-terrain-default,
         mild: $winter-cloudy-terrain-mild,
+        frosty: $winter-cloudy-terrain-frosty,
       ),
     ),
   ),

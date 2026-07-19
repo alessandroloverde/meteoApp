@@ -1866,3 +1866,88 @@ $trunk-dusk-b: #412b15;
     opacity: 0.35;
   }
 }
+
+// cloudy--winter--afternoon--frosty: sky + cloud groups below; terrain via `winter--cloudy--frosty`.
+
+[data-scene-id='cloudy--winter--afternoon--frosty'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #ecefe8 10%, #acb5c3 40%, #8c929d 60%, #808a96 80%);
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// cloudy--winter--morning--frosty: sky + terrain/foliage/bush overlays below; terrain via `winter--cloudy--frosty`.
+
+[data-scene-id='cloudy--winter--morning--frosty'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #cbd4da 10%, #b4c9cb 40%, #92a4b0 60%, #7b8b95 80%);
+
+  --terrain-overlay-bg:       radial-gradient(#504911, #caebeb);
+  --terrain-overlay-filter:   opacity(0.5);
+
+  --foliage-overlay-bg:       radial-gradient(#504911, #caebeb);
+  --foliage-overlay-filter:   opacity(0.5);
+
+  --bush-overlay-bg:       radial-gradient(#504911, #caebeb);
+  --bush-overlay-filter:   opacity(0.5);
+}
+
+// cloudy--winter--evening--frosty: sky + evening grade + terrain/bush overlays + moon + cloud groups below; terrain via `winter--cloudy--frosty`.
+
+[data-scene-id='cloudy--winter--evening--frosty'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #ad8abb 0%, #726785 30%, #303f5c, #1a314f);
+
+  --scene-grade-evening-bg:       linear-gradient(to bottom, #2f455d, #342925);
+  --scene-grade-evening-opacity:  0.5;
+
+  --terrain-overlay-bg:       linear-gradient(to bottom, #6e8eb2, #401f19c4 65%);
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(2.5);
+
+  --bush-overlay-bg: linear-gradient(45deg, #2e3036, #274f6b);
+
+  --moon-opacity: 0.75;
+
+  --cloud-top-overlay-bg:       linear-gradient(to bottom, #556787, #35465c);
+  --cloud-top-overlay-blend:    overlay;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+
+  .top-clouds {
+    opacity: 0.5;
+  }
+}
+
+// cloudy--winter--night--frosty: sky + terrain/foliage/bush overlays + cloud groups below; terrain via `winter--cloudy--frosty`.
+
+[data-scene-id='cloudy--winter--night--frosty'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #7fbedd 10%, #516a89, #283d59, #071a3a);
+
+  --terrain-overlay-bg:       linear-gradient(to bottom, #6e8eb2, #401f19c4 65%);
+  --terrain-overlay-blend:    soft-light;
+  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(2.5);
+
+  --bush-overlay-bg:       linear-gradient(to bottom, #72a2ab, #2c414f 85%);
+  --bush-overlay-blend:    soft-light;
+
+  --foliage-overlay-bg:       linear-gradient(to bottom, #72a2ab, #2c414f 85%);
+  --foliage-overlay-blend:    soft-light;
+
+  --moon-filter: grayscale(0.5);
+
+  --cloud-top-overlay-bg: linear-gradient(0deg, #5a7f96, #26323f);
+
+  --cloud-bottom-overlay-bg:       linear-gradient(0deg, #a2e2ff, #12395e);
+  --cloud-bottom-overlay-blend:    multiply;
+
+  .bottom-clouds {
+    opacity: 1;
+  }
+
+  .top-clouds {
+    opacity: 0.75;
+    mix-blend-mode: soft-light;
+  }
+}
