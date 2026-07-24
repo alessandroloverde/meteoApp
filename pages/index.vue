@@ -132,19 +132,36 @@ onBeforeUnmount(() => {
         <div class="🌞 scene-layer moon"></div>
 
         <section class="🌥️ top-clouds">
-          <div class="cloud-1-wrap">
-            <div class="scene-layer cloud-1">
+          <div class="cloudy">
+            <div class="cloud-1-wrap">
+              <div class="scene-layer cloud-1">
+                <div class="cloud-top-overlay"></div>
+              </div>
+            </div>
+            <div class="scene-layer cloud-2">
+              <div class="cloud-top-overlay"></div>
+            </div>
+            <div class="scene-layer cloud-3">
+              <div class="cloud-top-overlay"></div>
+            </div>
+            <div class="scene-layer cloud-4">
               <div class="cloud-top-overlay"></div>
             </div>
           </div>
-          <div class="scene-layer cloud-2">
-            <div class="cloud-top-overlay"></div>
-          </div>
-          <div class="scene-layer cloud-3">
-            <div class="cloud-top-overlay"></div>
-          </div>
-          <div class="scene-layer cloud-4">
-            <div class="cloud-top-overlay"></div>
+
+          <div class="drizzle">
+            <div class="scene-layer small-cloud-1">
+              <div class="cloud-top-overlay"></div>
+            </div>
+            <div class="scene-layer small-cloud-2">
+              <div class="cloud-top-overlay"></div>
+            </div>
+            <div class="scene-layer small-cloud-3">
+              <div class="cloud-top-overlay"></div>
+            </div>
+            <div class="scene-layer small-cloud-4">
+              <div class="cloud-top-overlay"></div>
+            </div>
           </div>
         </section>
 
@@ -731,12 +748,89 @@ $clouds--low: (
 }
 .top-clouds    { z-index: 3; }
 
+// Weather folders inside top-clouds — cloudy is the default pack.
+.top-clouds .cloudy,
+.top-clouds .drizzle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.top-clouds .drizzle {
+  display: none;
+}
+
+[data-weather='drizzle'] {
+  .top-clouds .cloudy {
+    display: none;
+  }
+
+  .top-clouds .drizzle {
+    display: block;
+  }
+}
+
 .cloud-1-wrap {
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
   width: 100%;
   height: calc(288px / 2);
   position: absolute;
   z-index: 4;
+}
+
+// Partly-cloudy small-cloud layers (SmallCloud-1..4 masks).
+.small-cloud-1,
+.small-cloud-2,
+.small-cloud-3,
+.small-cloud-4 {
+  position: absolute;
+  opacity: 1;
+  mask-size: 100% auto;
+  mask-position: center center;
+  mask-repeat: no-repeat;
+}
+
+.small-cloud-1 {
+  width: 10vw;
+  height: 5vw;
+  top: 59%;
+  left: 6%;
+  z-index: 4;
+  background: linear-gradient(160deg, #f4f7fa 10%, #c5d0d8 70%, #9aadb8);
+  mask-image: url('~/assets/images/masks/Clouds/SmallCloud-1.svg');
+}
+
+.small-cloud-2 {
+  width: 15vw;
+  height: 7vw;
+  top: 66%;
+  left: 12%;
+  z-index: 4;
+  background: radial-gradient(circle at 40% 40%, #eef3f6, #a8b8c2 75%);
+  mask-image: url('~/assets/images/masks/Clouds/SmallCloud-2.svg');
+}
+
+.small-cloud-3 {
+  width: 10vw;
+  height: 5vw;
+  top: 108%;
+  right: 16%;
+  z-index: 5;
+  background: linear-gradient(200deg, #dde6ec, #8799a6 80%);
+  mask-image: url('~/assets/images/masks/Clouds/SmallCloud-3.svg');
+  filter: blur(1px);
+}
+
+.small-cloud-4 {
+  width: 11vw;
+  height: 5vw;
+  top: 50%;
+  right: 5%;
+  z-index: 2;
+  background: linear-gradient(15deg, #f8fafb 20%, #b7c5ce 65%, #7e929e);
+  mask-image: url('~/assets/images/masks/Clouds/SmallCloud-4.svg');
+  filter: blur(2px);
 }
 
 // Cloud overlay panes — top and bottom groups use separate token sets.
