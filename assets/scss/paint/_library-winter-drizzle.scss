@@ -1,0 +1,85 @@
+// Winter + drizzle — cold terrain basics authored first.
+//
+// Block 1 — branch defaults:
+//   • sky `default`     — sky gradient stops + clouds (neutral until authored)
+//   • terrain `default` — cold terrain basics (foliage/bushes/buildings TBD)
+//   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
+//
+// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
+//
+// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
+
+$neutral: #808080;
+
+// =============================================================================
+// SKY cluster
+// =============================================================================
+$winter-drizzle-sky-default: (
+  sky: (
+    stops: (
+      0: $neutral,
+      1: $neutral,
+      2: $neutral,
+      3: $neutral,
+    ),
+  ),
+  cloud: (
+    1: (a: $neutral, b: $neutral),
+    2: (solid: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (solid: $neutral),
+  ),
+);
+
+// =============================================================================
+// TERRAIN cluster
+// =============================================================================
+// Cold basics live in `default` until other temp bands are authored.
+$winter-drizzle-terrain-default: (
+  terrain: (
+    1: (
+      a: #afaf89,
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, #666450, #837b4d 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #988765 82%, #a3a799 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #aebbb9 -1%, #94926e 15%)),
+    4: (a: #a8aea2, b: #747b7e),
+    5: (a: #a9b9bf, b: #8faab9),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, $neutral, $neutral, $neutral 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, $neutral, $neutral, $neutral 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, $neutral, $neutral, $neutral 100%)),
+    4: (gradient: radial-gradient(at 0 30%, $neutral, $neutral 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, $neutral, $neutral, $neutral 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #6b6654, #93a296, #c2d4da)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #706a4d, #a89884 70%)),
+    3: (gradient: linear-gradient(356deg, #72683c, #b2a99b 75%)),
+  ),
+  building: (
+    wall: #5b7275,
+    roof: #4d5c5c,
+    window: #636f72,
+    church: #7f8d8d,
+  ),
+);
+
+// =============================================================================
+// Library map — season → weather → cluster → variant
+// =============================================================================
+$paint-library: (
+  winter: (
+    drizzle: (
+      sky: (
+        default: $winter-drizzle-sky-default,
+      ),
+      terrain: (
+        default: $winter-drizzle-terrain-default,
+      ),
+    ),
+  ),
+);

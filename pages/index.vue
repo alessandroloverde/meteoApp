@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
 
       </div>
 
-      <!-- TERRAIN Group -->
+      <!-- 🖼️ TERRAIN Group -->
       <div class="🖼️ scene-layer terrain">
 
         <!-- 🌲 Trees + overlays -->

@@ -324,6 +324,22 @@ $trunk-dusk-b: #412b15;
   --trunk-5-b: #{$trunk-cool-b};
 }
 
+// Trunk palette — frosty daylight (morning / afternoon).
+[data-temp='frosty'][data-time='morning'],
+[data-temp='frosty'][data-time='afternoon'] {
+  --trunk-base: #5a5956;
+  --trunk-1-a: #5a5956;
+  --trunk-1-b: #859199;
+  --trunk-2-a: #5a5956;
+  --trunk-2-b: #859199;
+  --trunk-3-a: #5a5956;
+  --trunk-3-b: #859199;
+  --trunk-4-a: #5a5956;
+  --trunk-4-b: #859199;
+  --trunk-5-a: #5a5956;
+  --trunk-5-b: #859199;
+}
+
 
 // =============================================================================
 // Trunk palette — evening / night (all seasons & weather)
@@ -344,6 +360,54 @@ $trunk-dusk-b: #412b15;
   --trunk-4-b: #{$trunk-dusk-b};
   --trunk-5-a: #{$trunk-dusk-a};
   --trunk-5-b: #{$trunk-dusk-b};
+}
+
+// Trunk palette + Winter tree package — drizzle--winter--cold (all times).
+// Winter trunk masks / sizes are applied case-by-case with terrain basics, not globally.
+[data-season='winter'][data-weather='drizzle'][data-temp='cold'] {
+  --trunk-base: #5a5956;
+  --trunk-1-a: #5a5956;
+  --trunk-1-b: #5a5956;
+  --trunk-2-a: #5a5956;
+  --trunk-2-b: #5a5956;
+  --trunk-3-a: #5a5956;
+  --trunk-3-b: #5a5956;
+  --trunk-4-a: #5a5956;
+  --trunk-4-b: #5a5956;
+  --trunk-5-a: #5a5956;
+  --trunk-5-b: #5a5956;
+
+  .trees-1--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-1--Winter--trunk.svg');
+  }
+
+  .trees-2--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-2--Winter--trunk.svg');
+    mask-size: 80% auto;
+  }
+
+  .trees-3--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-3--Winter--trunk.svg');
+    mask-size: 80% auto;
+  }
+
+  .trees-4--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-4--Winter--trunk.svg');
+    mask-size: 130% auto;
+  }
+
+  .trees-5--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-5--Winter--trunk.svg');
+    mask-size: 130% auto;
+  }
+
+  .trees-1--foliage,
+  .trees-2--foliage,
+  .trees-3--foliage,
+  .trees-4--foliage,
+  .trees-5--foliage {
+    display: none;
+  }
 }
 
 
@@ -1665,6 +1729,18 @@ $trunk-dusk-b: #412b15;
 [data-season='winter'][data-weather='cloudy'][data-time='night'] {
   --building-wall-base: #2e3955;
   --building-church:    #495772;
+}
+
+// =============================================================================
+// drizzle--winter — building palette
+// =============================================================================
+// Morning & afternoon — building walls (all temps; wins over paint-bundle grays).
+[data-season='winter'][data-weather='drizzle'][data-time='morning'],
+[data-season='winter'][data-weather='drizzle'][data-time='afternoon'] {
+  --building-wall-base:   #5b7275;
+  --building-roof-base:   #4d5c5c;
+  --building-window-base: #636f72;
+  --building-church:      #7f8d8d;
 }
 
 // =============================================================================
