@@ -150,17 +150,37 @@ onBeforeUnmount(() => {
           </div>
 
           <div class="drizzle">
-            <div class="scene-layer small-cloud-1">
-              <div class="cloud-top-overlay"></div>
+            <div class="small-cloud-1-wrap">
+              <div class="drizzle-rain drizzle-rain--cloud"></div>
+              <div class="small-cloud-shadow">
+                <div class="scene-layer small-cloud-1">
+                  <div class="cloud-top-overlay"></div>
+                </div>
+              </div>
             </div>
-            <div class="scene-layer small-cloud-2">
-              <div class="cloud-top-overlay"></div>
+            <div class="small-cloud-2-wrap">
+              <div class="drizzle-rain drizzle-rain--cloud"></div>
+              <div class="small-cloud-shadow">
+                <div class="scene-layer small-cloud-2">
+                  <div class="cloud-top-overlay"></div>
+                </div>
+              </div>
             </div>
-            <div class="scene-layer small-cloud-3">
-              <div class="cloud-top-overlay"></div>
+            <div class="small-cloud-3-wrap">
+              <div class="drizzle-rain drizzle-rain--cloud"></div>
+              <div class="small-cloud-shadow">
+                <div class="scene-layer small-cloud-3">
+                  <div class="cloud-top-overlay"></div>
+                </div>
+              </div>
             </div>
-            <div class="scene-layer small-cloud-4">
-              <div class="cloud-top-overlay"></div>
+            <div class="small-cloud-4-wrap">
+              <div class="drizzle-rain drizzle-rain--cloud"></div>
+              <div class="small-cloud-shadow">
+                <div class="scene-layer small-cloud-4">
+                  <div class="cloud-top-overlay"></div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -184,6 +204,7 @@ onBeforeUnmount(() => {
 
       <!-- 🖼️ TERRAIN Group -->
       <div class="🖼️ scene-layer terrain">
+        <div class="scene-layer drizzle-rain drizzle-rain--terrain"></div>
 
         <!-- 🌲 Trees + overlays -->
         <section class="🌲 scene-layer mask-layer trees">
@@ -667,7 +688,7 @@ $clouds--low: (
   1: (
     dimensions: (width: calc(521px / 2), height: calc(332px / 2)),
     position: (right: -10%, bottom: 10%),
-    bkg: radial-gradient(circle at 20% 50%, #edf0e9 20%, #a3aeb7 80%),
+    bkg: radial-gradient(circle at 20% 50%, #edf0e9 20%, #cad0d5 80%),
     mask-type: png,
     opacity: 0.5,
     z-index: 2,
@@ -722,7 +743,7 @@ $clouds--low: (
     radial-gradient(at 50% 70%, rgb(252, 252, 252), rgb(163, 183, 196));
 }
 .cloud-1--low {
-  background: radial-gradient(circle at 20% 50%, #edf0e9 20%, #a3aeb7 80%);
+  background: radial-gradient(circle at 20% 50%, #edf0e9 20%, #cad0d5 80%);
   opacity: 0.5;
 }
 .cloud-2--low {
@@ -779,56 +800,140 @@ $clouds--low: (
   z-index: 4;
 }
 
-// Partly-cloudy small-cloud layers (SmallCloud-1..4 masks).
+// Drizzle rain — shared SVG fill; terrain pack + under each small cloud.
+.drizzle-rain {
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background-image: url('~/assets/images/Drizzle-2.svg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+.drizzle-rain--terrain {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  opacity: 0.25;
+  background-image: url('~/assets/images/Drizzle-2.svg');
+  background-size: 75%;
+  background-repeat: repeat;
+}
+
+[data-weather='drizzle'] .drizzle-rain--terrain {
+  display: block;
+}
+
+.drizzle-rain--cloud {
+  position: absolute;
+  top: 80%;
+  left: 0;
+  width: 100%;
+  height: 300%;
+  z-index: 0;
+  opacity: 0.5;
+  background-size: 120%;
+}
+
+// Drizzle small-cloud layers — wrap positions; shadow wrap holds drop-shadow only on cloud.
+.small-cloud-1-wrap,
+.small-cloud-2-wrap,
+.small-cloud-3-wrap,
+.small-cloud-4-wrap {
+  position: absolute;
+}
+
+.small-cloud-shadow {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+}
+
 .small-cloud-1,
 .small-cloud-2,
 .small-cloud-3,
 .small-cloud-4 {
-  position: absolute;
+  width: 100%;
+  height: 100%;
   opacity: 1;
   mask-size: 100% auto;
   mask-position: center center;
   mask-repeat: no-repeat;
 }
 
-.small-cloud-1 {
-  width: 10vw;
-  height: 5vw;
-  top: 59%;
+.small-cloud-1-wrap {
+  width: 107px;
+  height: 54px;
+  top: 40%;
   left: 6%;
   z-index: 4;
-  background: linear-gradient(160deg, #f4f7fa 10%, #c5d0d8 70%, #9aadb8);
+}
+
+.small-cloud-1 {
+  background: radial-gradient(
+    ellipse at 150% 20%,
+    var(--small-cloud-1-a) 10%,
+    var(--small-cloud-1-b) 50%,
+    var(--small-cloud-1-c) 100%
+  );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-1.svg');
 }
 
-.small-cloud-2 {
-  width: 15vw;
-  height: 7vw;
-  top: 66%;
+.small-cloud-2-wrap {
+  width: 160px;
+  height: 75px;
+  top: 52%;
   left: 12%;
   z-index: 4;
-  background: radial-gradient(circle at 40% 40%, #eef3f6, #a8b8c2 75%);
+}
+
+.small-cloud-2 {
+  background: radial-gradient(
+    ellipse at 60% 20%,
+    var(--small-cloud-2-a) 30%,
+    var(--small-cloud-2-b) 70%,
+    var(--small-cloud-2-c) 100%
+  );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-2.svg');
 }
 
-.small-cloud-3 {
-  width: 10vw;
-  height: 5vw;
-  top: 108%;
+.small-cloud-3-wrap {
+  width: 107px;
+  height: 54px;
+  top: 92%;
   right: 16%;
   z-index: 5;
-  background: linear-gradient(200deg, #dde6ec, #8799a6 80%);
+}
+
+.small-cloud-3 {
+  background: radial-gradient(
+    ellipse at 30% 20%,
+    var(--small-cloud-3-a) 30%,
+    var(--small-cloud-3-b) 70%,
+    var(--small-cloud-3-c) 100%
+  );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-3.svg');
   filter: blur(1px);
 }
 
-.small-cloud-4 {
-  width: 11vw;
-  height: 5vw;
-  top: 50%;
+.small-cloud-4-wrap {
+  width: 117px;
+  height: 54px;
+  top: 39%;
   right: 5%;
   z-index: 2;
-  background: linear-gradient(15deg, #f8fafb 20%, #b7c5ce 65%, #7e929e);
+}
+
+.small-cloud-4 {
+  background: radial-gradient(
+    ellipse at 30% -10%,
+    var(--small-cloud-4-a) 30%,
+    var(--small-cloud-4-b) 80%,
+    var(--small-cloud-4-c) 100%
+  );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-4.svg');
   filter: blur(2px);
 }

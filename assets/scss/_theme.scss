@@ -112,6 +112,21 @@ $trunk-dusk-b: #412b15;
   --cloud-3-b: #{$gray};
   --cloud-4: #{$gray};
 
+  // Drizzle top-cloud (small-cloud) stop tokens — structure is fixed in index.vue;
+  // stops are painted per scene / temp set.
+  --small-cloud-1-a: #{$gray};
+  --small-cloud-1-b: #{$gray};
+  --small-cloud-1-c: #{$gray};
+  --small-cloud-2-a: #{$gray};
+  --small-cloud-2-b: #{$gray};
+  --small-cloud-2-c: #{$gray};
+  --small-cloud-3-a: #{$gray};
+  --small-cloud-3-b: #{$gray};
+  --small-cloud-3-c: #{$gray};
+  --small-cloud-4-a: #{$gray};
+  --small-cloud-4-b: #{$gray};
+  --small-cloud-4-c: #{$gray};
+
   // Low (bottom) clouds — full background + opacity, painted per sky variant.
   // Defaults fall back to the shared base tone with the original per-cloud opacity.
   --cloud-1-low-bkg: var(--cloud-base-light);
@@ -376,6 +391,20 @@ $trunk-dusk-b: #412b15;
   --trunk-4-b: #5a5956;
   --trunk-5-a: #5a5956;
   --trunk-5-b: #5a5956;
+
+  // Top clouds (drizzle small-cloud stops) — cold set.
+  --small-cloud-1-a: #b3bfc7;
+  --small-cloud-1-b: #abbcc5;
+  --small-cloud-1-c: #8b9ca4;
+  --small-cloud-2-a: #bac5cc;
+  --small-cloud-2-b: #9cadb6;
+  --small-cloud-2-c: #a0aeb5;
+  --small-cloud-3-a: #c1cdd4;
+  --small-cloud-3-b: #9cadb6;
+  --small-cloud-3-c: #798388;
+  --small-cloud-4-a: #b9c6ce;
+  --small-cloud-4-b: #91a3ad;
+  --small-cloud-4-c: #87979f;
 
   .trees-1--trunk {
     mask-image: url('~/assets/images/masks/Trees&bushes/Tree-1--Winter--trunk.svg');
@@ -1741,6 +1770,29 @@ $trunk-dusk-b: #412b15;
   --building-roof-base:   #4d5c5c;
   --building-window-base: #636f72;
   --building-church:      #7f8d8d;
+}
+
+// =============================================================================
+// drizzle--winter — scene recipes
+// =============================================================================
+
+// drizzle--winter--afternoon--cold: sky below; terrain via `winter--drizzle--default`.
+
+[data-scene-id='drizzle--winter--afternoon--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #8597a2 0%, #93a5af 40%, #aab1b6 70%, #c2d0de 100%);
+
+  --moon-opacity: 0;
+
+  --cloud-bottom-overlay-bg:     #335368;
+  --cloud-bottom-overlay-filter: contrast(1.5) brightness(0.5);
+  --cloud-bottom-overlay-blend:  soft-light;
+
+  --scene-grade-soft-haze-bg:      radial-gradient(circle at 50% 50%, #96a8b2, transparent 50%);
+  --scene-grade-soft-haze-opacity: 0.5;
+
+  .top-clouds {
+    opacity: 0.75;
+  }
 }
 
 // =============================================================================
