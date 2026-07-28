@@ -849,7 +849,7 @@ $clouds--low: (
   z-index: 1;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
 }
 
 .small-cloud-1,

@@ -1776,6 +1776,31 @@ $trunk-dusk-b: #412b15;
 // drizzle--winter — scene recipes
 // =============================================================================
 
+// drizzle--winter--morning--cold: sky below; terrain via `winter--drizzle--default`.
+
+[data-scene-id='drizzle--winter--morning--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #8ea0aa 0%, #a5bcca 40%, #bbcddb 70%, #e8ecea 100%);
+
+  // Match evening sun height/placement for this overcast morning (low disc).
+  --moon-top:         50%;
+  --moon-left:        50%;
+  --moon-translate-x: -50%;
+  --moon-filter:      saturate(0.75) opacity(0.75) blur(3px);
+
+  --cloud-top-overlay-bg:    #c4d5dd;
+  --cloud-top-overlay-blend: soft-light;
+
+  --scene-grade-soft-haze-bg:      radial-gradient(circle at 50% 50%, #b3c3ce, transparent 50%);
+  --scene-grade-soft-haze-opacity: 0.5;
+  --scene-grade-soft-haze-blend:   lighten;
+
+  --terrain-overlay-bg: #8f8152;
+
+  .top-clouds {
+    opacity: 0.75;
+  }
+}
+
 // drizzle--winter--afternoon--cold: sky below; terrain via `winter--drizzle--default`.
 
 [data-scene-id='drizzle--winter--afternoon--cold'] {
