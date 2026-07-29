@@ -1772,6 +1772,15 @@ $trunk-dusk-b: #412b15;
   --building-church:      #7f8d8d;
 }
 
+// Evening & night — building walls (all temps; wins over paint-bundle grays).
+[data-season='winter'][data-weather='drizzle'][data-time='evening'],
+[data-season='winter'][data-weather='drizzle'][data-time='night'] {
+  --building-wall-base:   #545b68;
+  --building-roof-base:   #53525a;
+  --building-window-base: #636f72;
+  --building-church:      #71717d;
+}
+
 // =============================================================================
 // drizzle--winter — scene recipes
 // =============================================================================
@@ -1817,6 +1826,36 @@ $trunk-dusk-b: #412b15;
 
   .top-clouds {
     opacity: 0.75;
+  }
+}
+
+// drizzle--winter--evening--cold: sky + sun hidden + bottom cloud opacity.
+
+[data-scene-id='drizzle--winter--evening--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #4c5ba3 0%, #939abd 40%, #bba1a4 70%, #dbbeb8 100%);
+
+  --moon-opacity: 0;
+  --sun-glow-opacity: 0;
+
+  --cloud-top-overlay-bg:       #848c9e;
+  --cloud-top-overlay-blend:    soft-light;
+
+  --terrain-overlay-bg:     radial-gradient(circle at 50% 10%, rgb(100 87 80 / 0.75), rgb(84 72 62 / 0.75), rgb(10 34 56 / 0.75) 90%);
+  --terrain-overlay-blend:    overlay;
+
+  --bush-overlay-bg:     linear-gradient(45deg, rgb(50 56 64 / 0.85), rgb(94 124 150 / 0.85));
+  --bush-overlay-blend:    hard-light;
+
+  --scene-grade-evening-bg:       radial-gradient(circle at 50% 60%, #5aa6de, #69493b 35%, transparent);
+  --scene-grade-evening-opacity:  0.75;
+  --scene-grade-evening-blend:    soft-light;
+
+  --scene-grade-color-bg:       linear-gradient(to bottom, #14232d, transparent 40%);
+  --scene-grade-color-opacity:  0.5;
+  --scene-grade-color-blend:    multiply;
+
+  .bottom-clouds {
+    opacity: 0.5;
   }
 }
 
@@ -1868,7 +1907,7 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-blend:    soft-light;
 
   .bottom-clouds {
-    opacity: 0.35;
+   opacity: 0.35;
   }
 
   .top-clouds {
