@@ -584,7 +584,7 @@ $trees: (
   position: relative;
 }
 
-// Sun glow — radial halo anchored to moon/sun disc position.
+// Sun glow — radial halo centered on the same point as the sun/moon disc.
 .sky-sun-glow {
   position: absolute;
   inset: 0;
@@ -599,6 +599,7 @@ $trees: (
     )
   );
   mix-blend-mode: var(--sun-glow-blend);
+  filter: blur(20px);
   opacity: var(--sun-glow-opacity);
 }
 
@@ -617,6 +618,8 @@ $trees: (
 // =============================================================================
 // Moon / sun disc
 // =============================================================================
+// `--moon-top` / `--moon-left` are the geometric center of the disc so the
+// sky sun-glow radial (same tokens) stays locked to the disc, not its corner.
 .moon {
   background-image: url('~/assets/images//Moon--full.png');
   background-size: 100% auto;
@@ -629,7 +632,7 @@ $trees: (
 
   top:       var(--moon-top);
   left:      var(--moon-left);
-  transform: translateX(var(--moon-translate-x));
+  transform: translate(-50%, -50%);
   filter:    var(--moon-filter);
   opacity:   var(--moon-opacity);
 
@@ -877,7 +880,7 @@ $clouds--low: (
     ellipse at 150% 20%,
     var(--small-cloud-1-a) 10%,
     var(--small-cloud-1-b) 50%,
-    var(--small-cloud-1-c) 100%
+    #657177 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-1.svg');
 }
@@ -892,10 +895,10 @@ $clouds--low: (
 
 .small-cloud-2 {
   background: radial-gradient(
-    ellipse at 60% 20%,
+    ellipse at 60% 10%,
     var(--small-cloud-2-a) 30%,
-    var(--small-cloud-2-b) 70%,
-    var(--small-cloud-2-c) 100%
+    #97a3aa 70%,
+    #6b7f89 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-2.svg');
 }
@@ -911,9 +914,9 @@ $clouds--low: (
 .small-cloud-3 {
   background: radial-gradient(
     ellipse at 30% 20%,
-    var(--small-cloud-3-a) 30%,
-    var(--small-cloud-3-b) 70%,
-    var(--small-cloud-3-c) 100%
+    #b9c5cc 30%,
+    #97a2a9 70%,
+    #9ca8ae 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-3.svg');
   filter: blur(1px);
@@ -929,10 +932,10 @@ $clouds--low: (
 
 .small-cloud-4 {
   background: radial-gradient(
-    ellipse at 30% -10%,
+    ellipse at 50% -20%,
     var(--small-cloud-4-a) 30%,
     var(--small-cloud-4-b) 80%,
-    var(--small-cloud-4-c) 100%
+    #63757d 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-4.svg');
   filter: blur(2px);

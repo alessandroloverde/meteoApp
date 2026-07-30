@@ -79,24 +79,24 @@ $trunk-dusk-b: #412b15;
   --sky-overlay-z-index:  auto;
 
   // --------------------------------------------------------------------------
-  // Sun / moon disc
+  // Sun / moon disc — top/left are the geometric center (see .moon transform).
   // --------------------------------------------------------------------------
-  --moon-top:         18%;
-  --moon-left:        4%;
-  --moon-translate-x: 0;
+  --moon-top:         calc(18% + 65px);
+  --moon-left:        calc(4% + 65px);
+  --moon-translate-x: -50%;
   --moon-filter:      none;
   --moon-opacity:     1;
   --moon-glow-rgb:    128 128 128;
 
   // --------------------------------------------------------------------------
-  // Sun glow (radial halo behind disc)
+  // Sun glow (radial halo behind disc) — centered on the same top/left tokens.
   // --------------------------------------------------------------------------
   --sun-glow-rgb:     128 128 128;
   --sun-glow-opacity: 0;
   --sun-glow-blend:   screen;
-  --sun-glow-size-x:  50%;
-  --sun-glow-size-y:  130%;
-  --sun-glow-falloff: 60%;
+  --sun-glow-size-x:  40%;
+  --sun-glow-size-y:  40%;
+  --sun-glow-falloff: 55%;
 
   // --------------------------------------------------------------------------
   // Cloud paint (backgrounds) + per-cloud low opacity
@@ -283,20 +283,21 @@ $trunk-dusk-b: #412b15;
 // =============================================================================
 
 [data-time='morning'] {
-  --moon-top:         40%;
+  // +65px keeps the old visual center after switching top/left to disc-center.
+  --moon-top:         calc(40% + 65px);
   --moon-left:        14%;
   --moon-translate-x: -50%;
 }
 
 [data-time='afternoon'] {
-  --moon-top:         16%;
+  --moon-top:         calc(16% + 65px);
   --moon-left:        82%;
   --moon-translate-x: -50%;
 }
 
 [data-time='evening'] {
   --scene-grade-evening-enabled: 1;
-  --moon-top:         50%;
+  --moon-top:         calc(50% + 65px);
   --moon-left:        50%;
   --moon-translate-x: -50%;
 }
@@ -707,7 +708,7 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-bg: linear-gradient(0deg, #ebd6bf, #f1f2f6 60%);
 
   --sun-glow-bg:       radial-gradient(circle farthest-side at 50% 90%, #fdb76d, #acc0cb);
-  --sun-glow-opacity:  0.5;
+  --sun-glow-opacity:  0.75;
   --sun-glow-blend:    color;
 
   .top-clouds {
@@ -744,7 +745,7 @@ $trunk-dusk-b: #412b15;
   --sky-gradient: linear-gradient(to bottom, #7ba5b5 10%, #7ca9b8 40%, #bcc9bf 70%, #f2e6d1 100%);
 
   --sun-glow-rgb:     240 172 82;
-  --sun-glow-opacity: 1;
+  --sun-glow-opacity: 0.75;
 
   --foliage-overlay-bg:    linear-gradient(45deg, #d9a64c, #a35210);
   --foliage-overlay-blend: lighten;
@@ -802,7 +803,7 @@ $trunk-dusk-b: #412b15;
   --sky-gradient: linear-gradient(to bottom, #32295a 0%, #594a77 40%, #c48c56 80%, #fcea82 100%);
 
   --sun-glow-bg:       radial-gradient(#fce883, #ce8b3d, #312a5a);
-  --sun-glow-opacity:  0.5;
+  --sun-glow-opacity:  0.75;
   --sun-glow-blend:    overlay;
 
   --cloud-top-overlay-bg:          #c68f41;
@@ -861,7 +862,7 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-filter:   brightness(0.5);
 
   --sun-glow-bg:       radial-gradient(circle closest-corner at 50% 90%, #d28413, #000000);
-  --sun-glow-opacity:  1;
+  --sun-glow-opacity:  0.75;
 
   --foliage-overlay-bg:       #a45b47;
   --foliage-overlay-blend:    luminosity;
@@ -975,7 +976,7 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-filter:   saturate(0.5);
 
   --sun-glow-bg:       radial-gradient(#be9fac, #31345a);
-  --sun-glow-opacity:  1;
+  --sun-glow-opacity:  0.75;
   --sun-glow-blend:    overlay;
 
   .bottom-clouds {
@@ -1791,7 +1792,8 @@ $trunk-dusk-b: #412b15;
   --sky-gradient: linear-gradient(to bottom, #8ea0aa 0%, #a5bcca 40%, #bbcddb 70%, #e8ecea 100%);
 
   // Match evening sun height/placement for this overcast morning (low disc).
-  --moon-top:         50%;
+  // top/left are disc center (see .moon transform).
+  --moon-top:         calc(50% + 65px);
   --moon-left:        50%;
   --moon-translate-x: -50%;
   --moon-filter:      saturate(0.75) opacity(0.75) blur(3px);
@@ -1837,7 +1839,7 @@ $trunk-dusk-b: #412b15;
   --moon-opacity: 0;
   --sun-glow-opacity: 0;
 
-  --cloud-top-overlay-bg:       #848c9e;
+  --cloud-top-overlay-bg:       #5b5b7e;
   --cloud-top-overlay-blend:    soft-light;
 
   --terrain-overlay-bg:     radial-gradient(circle at 50% 10%, rgb(100 87 80 / 0.75), rgb(84 72 62 / 0.75), rgb(10 34 56 / 0.75) 90%);
@@ -1856,6 +1858,35 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.5;
+  }
+}
+
+// drizzle--winter--night--cold: sky below; terrain via `winter--drizzle--default`.
+
+[data-scene-id='drizzle--winter--night--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #313453 0%, #3a4162 20%, #535271 60%, #8488ad 100%);
+
+  --cloud-top-overlay-color:   #6c6c90;
+  --cloud-top-overlay-opacity: 0.75;
+  --cloud-top-overlay-blend:   multiply;
+
+  --terrain-overlay-bg:    #646d89;
+  --terrain-overlay-blend: hard-light;
+
+  --bush-overlay-bg:    #646d89;
+  --bush-overlay-blend: hard-light;
+
+  --scene-grade-night-bg:       radial-gradient(circle at 50% 50%, white, #4d5068);
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    multiply;
+
+  --moon-filter: grayscale(0.75) brightness(1.5) opacity(0.75);
+
+  --sun-glow-rgb:     255 255 255;
+  --sun-glow-opacity: 0.75;
+
+  .bottom-clouds {
+    opacity: 0.25;
   }
 }
 
