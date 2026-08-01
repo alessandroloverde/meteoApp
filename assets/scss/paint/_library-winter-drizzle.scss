@@ -68,6 +68,25 @@ $winter-drizzle-terrain-default: (
   ),
 );
 
+// Terrain temp patch — mild (terrain 1–5 + bushes; foliage/building inherit default).
+$winter-drizzle-terrain-mild: (
+  terrain: (
+    1: (
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, #647167, #837b4d 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #62645a 82%, #c6bf91 90%)),
+    3: (layer-bkg: radial-gradient(circle at 38% 0, #aeab82 -1%, #757957 31%)),
+    4: (a: #9ca890, b: #937b65),
+    5: (a: #959d8e, b: #7f8a86),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #77785d, #9c997a, #b8b18b)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #61705f, #a89884 80%)),
+    3: (gradient: linear-gradient(356deg, #72683c, #b2a99b 75%)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -79,6 +98,7 @@ $paint-library: (
       ),
       terrain: (
         default: $winter-drizzle-terrain-default,
+        mild: $winter-drizzle-terrain-mild,
       ),
     ),
   ),

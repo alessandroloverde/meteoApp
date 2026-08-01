@@ -594,8 +594,8 @@ $trees: (
     --sun-glow-bg,
     radial-gradient(
       ellipse var(--sun-glow-size-x) var(--sun-glow-size-y) at var(--moon-left) var(--moon-top),
-      rgb(var(--sun-glow-rgb) / 1)   0%,
-      rgb(var(--sun-glow-rgb) / 0)   var(--sun-glow-falloff)
+      var(--sun-glow-color-0) 0%,
+      var(--sun-glow-color-1) 100%
     )
   );
   mix-blend-mode: var(--sun-glow-blend);
@@ -880,7 +880,7 @@ $clouds--low: (
     ellipse at 150% 20%,
     var(--small-cloud-1-a) 10%,
     var(--small-cloud-1-b) 50%,
-    #657177 100%
+    var(--small-cloud-1-c) 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-1.svg');
 }
@@ -897,8 +897,8 @@ $clouds--low: (
   background: radial-gradient(
     ellipse at 60% 10%,
     var(--small-cloud-2-a) 30%,
-    #97a3aa 70%,
-    #6b7f89 100%
+    var(--small-cloud-2-b) 70%,
+    var(--small-cloud-2-c) 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-2.svg');
 }
@@ -914,9 +914,9 @@ $clouds--low: (
 .small-cloud-3 {
   background: radial-gradient(
     ellipse at 30% 20%,
-    #b9c5cc 30%,
-    #97a2a9 70%,
-    #9ca8ae 100%
+    var(--small-cloud-3-a) 30%,
+    var(--small-cloud-3-b) 70%,
+    var(--small-cloud-3-c) 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-3.svg');
   filter: blur(1px);
@@ -935,7 +935,7 @@ $clouds--low: (
     ellipse at 50% -20%,
     var(--small-cloud-4-a) 30%,
     var(--small-cloud-4-b) 80%,
-    #63757d 100%
+    var(--small-cloud-4-c) 100%
   );
   mask-image: url('~/assets/images/masks/Clouds/SmallCloud-4.svg');
   filter: blur(2px);

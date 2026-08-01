@@ -91,12 +91,12 @@ $trunk-dusk-b: #412b15;
   // --------------------------------------------------------------------------
   // Sun glow (radial halo behind disc) — centered on the same top/left tokens.
   // --------------------------------------------------------------------------
-  --sun-glow-rgb:     128 128 128;
+  --sun-glow-color-0: rgb(243 218 165);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
   --sun-glow-opacity: 0;
-  --sun-glow-blend:   screen;
+  --sun-glow-blend:   normal;
   --sun-glow-size-x:  40%;
   --sun-glow-size-y:  40%;
-  --sun-glow-falloff: 55%;
 
   // --------------------------------------------------------------------------
   // Cloud paint (backgrounds) + per-cloud low opacity
@@ -113,19 +113,19 @@ $trunk-dusk-b: #412b15;
   --cloud-4: #{$gray};
 
   // Drizzle top-cloud (small-cloud) stop tokens — structure is fixed in index.vue;
-  // stops are painted per scene / temp set.
-  --small-cloud-1-a: #{$gray};
-  --small-cloud-1-b: #{$gray};
-  --small-cloud-1-c: #{$gray};
-  --small-cloud-2-a: #{$gray};
-  --small-cloud-2-b: #{$gray};
-  --small-cloud-2-c: #{$gray};
-  --small-cloud-3-a: #{$gray};
-  --small-cloud-3-b: #{$gray};
-  --small-cloud-3-c: #{$gray};
-  --small-cloud-4-a: #{$gray};
-  --small-cloud-4-b: #{$gray};
-  --small-cloud-4-c: #{$gray};
+  // stops are painted per scene / temp set. Defaults match the last authored fill.
+  --small-cloud-1-a: #b3bfc7;
+  --small-cloud-1-b: #abbcc5;
+  --small-cloud-1-c: #657177;
+  --small-cloud-2-a: #bac5cc;
+  --small-cloud-2-b: #97a3aa;
+  --small-cloud-2-c: #6b7f89;
+  --small-cloud-3-a: #b9c5cc;
+  --small-cloud-3-b: #97a2a9;
+  --small-cloud-3-c: #9ca8ae;
+  --small-cloud-4-a: #b9c6ce;
+  --small-cloud-4-b: #91a3ad;
+  --small-cloud-4-c: #63757d;
 
   // Low (bottom) clouds — full background + opacity, painted per sky variant.
   // Defaults fall back to the shared base tone with the original per-cloud opacity.
@@ -396,16 +396,63 @@ $trunk-dusk-b: #412b15;
   // Top clouds (drizzle small-cloud stops) — cold set.
   --small-cloud-1-a: #b3bfc7;
   --small-cloud-1-b: #abbcc5;
-  --small-cloud-1-c: #8b9ca4;
+  --small-cloud-1-c: #657177;
   --small-cloud-2-a: #bac5cc;
-  --small-cloud-2-b: #9cadb6;
-  --small-cloud-2-c: #a0aeb5;
-  --small-cloud-3-a: #c1cdd4;
-  --small-cloud-3-b: #9cadb6;
-  --small-cloud-3-c: #798388;
+  --small-cloud-2-b: #97a3aa;
+  --small-cloud-2-c: #6b7f89;
+  --small-cloud-3-a: #b9c5cc;
+  --small-cloud-3-b: #97a2a9;
+  --small-cloud-3-c: #9ca8ae;
   --small-cloud-4-a: #b9c6ce;
   --small-cloud-4-b: #91a3ad;
-  --small-cloud-4-c: #87979f;
+  --small-cloud-4-c: #63757d;
+
+  .trees-1--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-1--Winter--trunk.svg');
+  }
+
+  .trees-2--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-2--Winter--trunk.svg');
+    mask-size: 80% auto;
+  }
+
+  .trees-3--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-3--Winter--trunk.svg');
+    mask-size: 80% auto;
+  }
+
+  .trees-4--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-4--Winter--trunk.svg');
+    mask-size: 130% auto;
+  }
+
+  .trees-5--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-5--Winter--trunk.svg');
+    mask-size: 130% auto;
+  }
+
+  .trees-1--foliage,
+  .trees-2--foliage,
+  .trees-3--foliage,
+  .trees-4--foliage,
+  .trees-5--foliage {
+    display: none;
+  }
+}
+
+// Trunk palette + Winter tree package — drizzle--winter--mild (all times).
+[data-season='winter'][data-weather='drizzle'][data-temp='mild'] {
+  --trunk-base: #665e54;
+  --trunk-1-a: #665e54;
+  --trunk-1-b: #493f35;
+  --trunk-2-a: #665e54;
+  --trunk-2-b: #493f35;
+  --trunk-3-a: #665e54;
+  --trunk-3-b: #493f35;
+  --trunk-4-a: #665e54;
+  --trunk-4-b: #493f35;
+  --trunk-5-a: #665e54;
+  --trunk-5-b: #493f35;
 
   .trees-1--trunk {
     mask-image: url('~/assets/images/masks/Trees&bushes/Tree-1--Winter--trunk.svg');
@@ -707,9 +754,8 @@ $trunk-dusk-b: #412b15;
 
   --cloud-top-overlay-bg: linear-gradient(0deg, #ebd6bf, #f1f2f6 60%);
 
-  --sun-glow-bg:       radial-gradient(circle farthest-side at 50% 90%, #fdb76d, #acc0cb);
-  --sun-glow-opacity:  0.75;
-  --sun-glow-blend:    color;
+  --sun-glow-opacity:  1;
+  --sun-glow-blend:    normal;
 
   .top-clouds {
     opacity: 0.5;
@@ -744,8 +790,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--autumn--afternoon--mild'] {
   --sky-gradient: linear-gradient(to bottom, #7ba5b5 10%, #7ca9b8 40%, #bcc9bf 70%, #f2e6d1 100%);
 
-  --sun-glow-rgb:     240 172 82;
-  --sun-glow-opacity: 0.75;
+  --sun-glow-opacity: 1;
+  --sun-glow-blend:   normal;
 
   --foliage-overlay-bg:    linear-gradient(45deg, #d9a64c, #a35210);
   --foliage-overlay-blend: lighten;
@@ -802,9 +848,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--autumn--evening--warm'] {
   --sky-gradient: linear-gradient(to bottom, #32295a 0%, #594a77 40%, #c48c56 80%, #fcea82 100%);
 
-  --sun-glow-bg:       radial-gradient(#fce883, #ce8b3d, #312a5a);
-  --sun-glow-opacity:  0.75;
-  --sun-glow-blend:    overlay;
+  --sun-glow-opacity:  1;
+  --sun-glow-blend:    normal;
 
   --cloud-top-overlay-bg:          #c68f41;
   --cloud-bottom-overlay-bg:       #c68f41;
@@ -861,8 +906,8 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-blend:    soft-light;
   --terrain-overlay-filter:   brightness(0.5);
 
-  --sun-glow-bg:       radial-gradient(circle closest-corner at 50% 90%, #d28413, #000000);
-  --sun-glow-opacity:  0.75;
+  --sun-glow-opacity:  1;
+  --sun-glow-blend:    normal;
 
   --foliage-overlay-bg:       #a45b47;
   --foliage-overlay-blend:    luminosity;
@@ -975,9 +1020,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-blend:    multiply;
   --scene-grade-evening-filter:   saturate(0.5);
 
-  --sun-glow-bg:       radial-gradient(#be9fac, #31345a);
-  --sun-glow-opacity:  0.75;
-  --sun-glow-blend:    overlay;
+  --sun-glow-opacity:  1;
+  --sun-glow-blend:    normal;
 
   .bottom-clouds {
     opacity: 0.65;
@@ -1812,6 +1856,35 @@ $trunk-dusk-b: #412b15;
   }
 }
 
+// drizzle--winter--morning--mild: sky below; terrain via `winter--drizzle--mild`.
+
+[data-scene-id='drizzle--winter--morning--mild'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #ece1c2 20%, #c8d0cf, #b8c9d2 60%, #90a9b6);
+
+  --small-cloud-1-a: #c1ced6;
+  --small-cloud-1-b: #a4b8c6;
+  --small-cloud-1-c: #94a9ad;
+  --small-cloud-2-a: #c1ced6;
+  --small-cloud-2-b: #a4b8c6;
+  --small-cloud-2-c: #94a9ad;
+  --small-cloud-3-a: #c1ced6;
+  --small-cloud-3-b: #a4b8c6;
+  --small-cloud-3-c: #94a9ad;
+  --small-cloud-4-a: #c1ced6;
+  --small-cloud-4-b: #a4b8c6;
+  --small-cloud-4-c: #94a9ad;
+
+  --moon-top:  calc(62% + 65px);
+  --moon-left: 50%;
+
+  --sun-glow-opacity: 1;
+  --sun-glow-blend:   normal;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
+}
+
 // drizzle--winter--afternoon--cold: sky below; terrain via `winter--drizzle--default`.
 
 [data-scene-id='drizzle--winter--afternoon--cold'] {
@@ -1882,8 +1955,8 @@ $trunk-dusk-b: #412b15;
 
   --moon-filter: grayscale(0.75) brightness(1.5) opacity(0.75);
 
-  --sun-glow-rgb:     255 255 255;
-  --sun-glow-opacity: 0.75;
+  --sun-glow-opacity: 1;
+  --sun-glow-blend:   normal;
 
   .bottom-clouds {
     opacity: 0.25;
