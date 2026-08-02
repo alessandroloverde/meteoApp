@@ -489,20 +489,6 @@ $trunk-dusk-b: #412b15;
 
 
 // =============================================================================
-// Building windows — evening / night (all seasons & weather)
-// =============================================================================
-
-[data-time='evening'],
-[data-time='night'] {
-  --building-window-base:        radial-gradient(circle at 50% 45%, #fff9c4 0%, #ffeb3b 55%, #f9a825 100%);
-  --building-window-opacity:     1;
-  --building-window-glow-filter: drop-shadow(0 0 1px #fffde7)
-    drop-shadow(0 0 3px #ffeb3b)
-    drop-shadow(0 0 7px rgb(255 193 7 / 0.75));
-}
-
-
-// =============================================================================
 // WEATHER axis — saturation / haze / density
 // =============================================================================
 
@@ -1818,12 +1804,27 @@ $trunk-dusk-b: #412b15;
 }
 
 // Evening & night — building walls (all temps; wins over paint-bundle grays).
+// Window lights stay on the global evening/night rule below — do not set --building-window-base here.
 [data-season='winter'][data-weather='drizzle'][data-time='evening'],
 [data-season='winter'][data-weather='drizzle'][data-time='night'] {
   --building-wall-base:   #545b68;
   --building-roof-base:   #53525a;
-  --building-window-base: #636f72;
   --building-church:      #71717d;
+}
+
+// =============================================================================
+// Building windows — evening / night (all seasons & weather)
+// =============================================================================
+// Declared after season building palettes so lit windows always win over daytime
+// paint / palette `--building-window-base` grays.
+
+[data-time='evening'],
+[data-time='night'] {
+  --building-window-base:        radial-gradient(circle at 50% 45%, #fff9c4 0%, #ffeb3b 55%, #f9a825 100%);
+  --building-window-opacity:     1;
+  --building-window-glow-filter: drop-shadow(0 0 1px #fffde7)
+    drop-shadow(0 0 3px #ffeb3b)
+    drop-shadow(0 0 7px rgb(255 193 7 / 0.75));
 }
 
 // =============================================================================
@@ -2005,6 +2006,39 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.25;
+  }
+}
+
+// drizzle--winter--night--mild: terrain overlay below; terrain via `winter--drizzle--mild`.
+
+[data-scene-id='drizzle--winter--night--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #393f60 0%, #3f4467 40%, #575976 70%, #81829b 100%);
+
+  --terrain-overlay-color:   #7f9cca;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   multiply;
+  --terrain-overlay-filter:  hue-rotate(17deg);
+
+  --bush-overlay-bg:    #364663;
+  --bush-overlay-blend: overlay;
+
+  --scene-grade-night-bg:       #313453;
+  --scene-grade-night-opacity:  0.5;
+  --scene-grade-night-blend:    hard-light;
+  --scene-grade-night-filter:   brightness(1.5) contrast(1.5);
+
+  --scene-grade-soft-haze-bg:       radial-gradient(circle at 50% 65%, #9ddad7, #1300008c 60%);
+  --scene-grade-soft-haze-opacity:  0.5;
+  --scene-grade-soft-haze-blend:    overlay;
+
+  --moon-filter: brightness(1.5) blur(10px);
+
+  --sun-glow-color-0: rgb(227 222 209);
+  --sun-glow-color-1: rgb(227 222 209 / 5%);
+  --sun-glow-opacity: 1;
+
+  .bottom-clouds {
+    opacity: 0.5;
   }
 }
 
