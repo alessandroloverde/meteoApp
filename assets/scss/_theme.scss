@@ -95,6 +95,7 @@ $trunk-dusk-b: #412b15;
   --sun-glow-color-1: rgb(243 212 154 / 5%);
   --sun-glow-opacity: 0;
   --sun-glow-blend:   normal;
+  --sun-glow-filter:  blur(20px);
   --sun-glow-size-x:  40%;
   --sun-glow-size-y:  40%;
 
@@ -483,6 +484,42 @@ $trunk-dusk-b: #412b15;
   .trees-3--foliage,
   .trees-4--foliage,
   .trees-5--foliage {
+    display: none;
+  }
+}
+
+// Winter tree package (trees 2, 3, 4) — drizzle--spring--cold (all times).
+[data-season='spring'][data-weather='drizzle'][data-temp='cold'] {
+  --trunk-base: #636950;
+  --trunk-1-a: #636950;
+  --trunk-1-b: #322b21;
+  --trunk-2-a: #636950;
+  --trunk-2-b: #322b21;
+  --trunk-3-a: #636950;
+  --trunk-3-b: #322b21;
+  --trunk-4-a: #636950;
+  --trunk-4-b: #322b21;
+  --trunk-5-a: #636950;
+  --trunk-5-b: #322b21;
+
+  .trees-2--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-2--Winter--trunk.svg');
+    mask-size: 80% auto;
+  }
+
+  .trees-3--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-3--Winter--trunk.svg');
+    mask-size: 80% auto;
+  }
+
+  .trees-4--trunk {
+    mask-image: url('~/assets/images/masks/Trees&bushes/Tree-4--Winter--trunk.svg');
+    mask-size: 130% auto;
+  }
+
+  .trees-2--foliage,
+  .trees-3--foliage,
+  .trees-4--foliage {
     display: none;
   }
 }
@@ -1813,6 +1850,18 @@ $trunk-dusk-b: #412b15;
 }
 
 // =============================================================================
+// drizzle--spring — building palette
+// =============================================================================
+// Morning & afternoon — cold (wins over paint-bundle grays).
+[data-season='spring'][data-weather='drizzle'][data-temp='cold'][data-time='morning'],
+[data-season='spring'][data-weather='drizzle'][data-temp='cold'][data-time='afternoon'] {
+  --building-wall-base:   #859598;
+  --building-roof-base:   #63777b;
+  --building-window-base: #88a1a5;
+  --building-church:      #8d9da0;
+}
+
+// =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
 // Declared after season building palettes so lit windows always win over daytime
@@ -2325,4 +2374,60 @@ $trunk-dusk-b: #412b15;
     opacity: 0.75;
     mix-blend-mode: soft-light;
   }
+}
+
+// =============================================================================
+// drizzle--spring — scene recipes (spring--drizzle paint library enabled)
+// =============================================================================
+
+// drizzle--spring--morning--cold: sky below; terrain via `spring--drizzle--default`.
+
+[data-scene-id='drizzle--spring--morning--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #677e85 0%, #a2b7bd 40%, #aac6cf 70%, #cfdede 100%);
+
+  --moon-filter:      brightness(1.25) blur(10px) grayscale(0.5);
+  --sun-glow-filter:  brightness(1.25) blur(10px) grayscale(0.5);
+  --sun-glow-opacity: 1;
+
+  --cloud-top-overlay-bg:     #50a5b4;
+  --cloud-top-overlay-blend:  screen;
+  --cloud-top-overlay-filter: opacity(0.4);
+
+  --cloud-bottom-overlay-bg: #ccdbe2;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
+}
+
+// drizzle--spring--afternoon--cold: sky below; terrain via `spring--drizzle--default`.
+
+[data-scene-id='drizzle--spring--afternoon--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #7695a6 0%, #a8c5d3 40%, #e7e6cc 70%, #f3ede0 100%);
+
+  --moon-opacity:     0.5;
+  --moon-filter:      brightness(1.25);
+  --sun-glow-opacity: 1;
+
+  --cloud-top-overlay-bg:    #c2d7e2;
+  --cloud-top-overlay-blend: soft-light;
+
+  --scene-grade-soft-haze-bg:      radial-gradient(circle at 50% 60%, #c9cdb8, transparent 60%);
+  --scene-grade-soft-haze-opacity: 0.5;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
+}
+
+// drizzle--spring--evening--cold: sky below; terrain via `spring--drizzle--default`.
+
+[data-scene-id='drizzle--spring--evening--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #6773a6 0%, #b4b6d3 40%, #cbbac6 70%, #f0ddd6 100%);
+}
+
+// drizzle--spring--night--cold: sky below; terrain via `spring--drizzle--default`.
+
+[data-scene-id='drizzle--spring--night--cold'] {
+  --sky-gradient: linear-gradient(to bottom, #1d1d38 0%, #30325c 40%, #45476e 70%, #4d4a69 100%);
 }

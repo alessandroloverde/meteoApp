@@ -6,6 +6,7 @@
 @use 'emit';
 @use 'library-autumn-cloudy' as autumn-cloudy-lib;
 @use 'library-spring-cloudy' as spring-cloudy-lib;
+@use 'library-spring-drizzle' as spring-drizzle-lib;
 @use 'library-summer-cloudy' as summer-cloudy-lib;
 @use 'library-winter-cloudy' as winter-cloudy-lib;
 @use 'library-winter-drizzle' as winter-drizzle-lib;
@@ -19,7 +20,10 @@ $paint-clusters: (
 // a season has more than one weather file.
 $paint-branches: (
   autumn: autumn-cloudy-lib.$paint-library,
-  spring: spring-cloudy-lib.$paint-library,
+  spring: paint.paint-deep-merge(
+    spring-cloudy-lib.$paint-library,
+    spring-drizzle-lib.$paint-library
+  ),
   summer: summer-cloudy-lib.$paint-library,
   winter: paint.paint-deep-merge(
     winter-cloudy-lib.$paint-library,

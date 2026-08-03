@@ -599,7 +599,7 @@ $trees: (
     )
   );
   mix-blend-mode: var(--sun-glow-blend);
-  filter: blur(20px);
+  filter: var(--sun-glow-filter, blur(20px));
   opacity: var(--sun-glow-opacity);
 }
 
@@ -977,10 +977,13 @@ $clouds--low: (
 
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
-  --layer-bkg: linear-gradient(
-    to right,
-    var(--terrain-5-a)   0%,
-    var(--terrain-5-b) 100%
+  --layer-bkg: var(
+    --terrain-5-layer-bkg,
+    linear-gradient(
+      to right,
+      var(--terrain-5-a)   0%,
+      var(--terrain-5-b) 100%
+    )
   );
   --layer-opacity: 1;
   z-index: 5;
