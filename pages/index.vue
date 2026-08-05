@@ -300,6 +300,11 @@ onBeforeUnmount(() => {
       <div class="scene-grade scene-grade--soft-haze" aria-hidden="true"></div>
     </div>
 
+    <header v-if="store.city" class="city-name">
+      <p class="city-name--city">{{ store.city }}</p>
+      <!-- <p class="city-name--country">{{ store.country }}</p> -->
+    </header>
+
     <div class="main-content">
       <div v-if="store.loading">Loading...</div>
       <div v-else-if="store.error">Error: {{ store.error }}</div>
@@ -311,10 +316,6 @@ onBeforeUnmount(() => {
 
       <div v-if="ui">
         <p class="mt-4 text-sm">{{ ui.key }}</p>
-      </div>
-
-      <div v-if="store.city">
-        <p class="mt-4 text-sm">{{ store.city }} - {{ store.country }}</p>
       </div>
     </div>
 
@@ -1229,8 +1230,21 @@ $clouds--low: (
 
 
 // =============================================================================
-// UI card
+// UI — location + card
 // =============================================================================
+.city-name {
+  position: absolute;
+  top: 3vh;
+  z-index: 20;
+  line-height: 1;
+
+  &--city {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+}
+
 .main-content {
   position: absolute;
   bottom: 3vh;
