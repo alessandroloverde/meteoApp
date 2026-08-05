@@ -524,6 +524,17 @@ $trunk-dusk-b: #412b15;
   }
 }
 
+// Trunk first stop — drizzle--spring--cold evening & night.
+[data-season='spring'][data-weather='drizzle'][data-temp='cold'][data-time='evening'],
+[data-season='spring'][data-weather='drizzle'][data-temp='cold'][data-time='night'] {
+  --trunk-base: #3f3e4f;
+  --trunk-1-a: #3f3e4f;
+  --trunk-2-a: #3f3e4f;
+  --trunk-3-a: #3f3e4f;
+  --trunk-4-a: #3f3e4f;
+  --trunk-5-a: #3f3e4f;
+}
+
 
 // =============================================================================
 // WEATHER axis — saturation / haze / density
@@ -1861,6 +1872,24 @@ $trunk-dusk-b: #412b15;
   --building-church:      #8d9da0;
 }
 
+// Evening & night — cold (wins over paint-bundle grays).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='spring'][data-weather='drizzle'][data-temp='cold'][data-time='evening'],
+[data-season='spring'][data-weather='drizzle'][data-temp='cold'][data-time='night'] {
+  --building-wall-base: #4f505f;
+  --building-roof-base: #2f3045;
+  --building-church:    #51516c;
+}
+
+// Morning & afternoon — mild (daylight; wins over paint-bundle grays).
+[data-season='spring'][data-weather='drizzle'][data-temp='mild'][data-time='morning'],
+[data-season='spring'][data-weather='drizzle'][data-temp='mild'][data-time='afternoon'] {
+  --building-wall-base:   #798480;
+  --building-roof-base:   #696f67;
+  --building-window-base: #808080;
+  --building-church:      #899695;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -2424,10 +2453,93 @@ $trunk-dusk-b: #412b15;
 
 [data-scene-id='drizzle--spring--evening--cold'] {
   --sky-gradient: linear-gradient(to bottom, #6773a6 0%, #b4b6d3 40%, #cbbac6 70%, #f0ddd6 100%);
+
+  --cloud-top-overlay-bg:     #b390df;
+  --cloud-top-overlay-blend:  hard-light;
+  --cloud-top-overlay-filter: opacity(0.3);
+
+  --moon-filter:  brightness(1.25) blur(6px);
+  --moon-opacity: 0.5;
+
+  --sun-glow-color-0: rgb(212 190 199);
+  --sun-glow-color-1: rgb(212 190 199 / 5%);
+  --sun-glow-opacity: 1;
+
+  --terrain-overlay-color:   #2d514c;
+  --terrain-overlay-opacity: 0.5;
+
+  --bush-overlay-color:   #2d514c;
+  --bush-overlay-opacity: 0.5;
+
+  --scene-grade-evening-bg:       radial-gradient(circle at 50% 40%, #e4141400 20%, #7068d459 70%);
+  --scene-grade-evening-opacity:  0.75;
+  --scene-grade-evening-blend:    color-burn;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
 }
 
 // drizzle--spring--night--cold: sky below; terrain via `spring--drizzle--default`.
 
 [data-scene-id='drizzle--spring--night--cold'] {
-  --sky-gradient: linear-gradient(to bottom, #1d1d38 0%, #30325c 40%, #45476e 70%, #4d4a69 100%);
+  --sky-gradient: linear-gradient(to bottom, #2c324c 0%, #414669 40%, #525573 70%, #8282a5 100%);
+
+  --cloud-top-overlay-bg:     #846b91;
+  --cloud-top-overlay-blend:  color-burn;
+  --cloud-top-overlay-filter: opacity(0.55) contrast(1.5) saturate(0.5);
+
+  --cloud-bottom-overlay-bg: #7e80a2;
+
+  --moon-filter: brightness(1.5) blur(10px) grayscale(0.75);
+
+  --sun-glow-color-0: rgb(85 89 111);
+  --sun-glow-color-1: rgb(85 89 111 / 5%);
+  --sun-glow-opacity: 1;
+
+  --terrain-overlay-bg:    #403778d6;
+  --terrain-overlay-blend: hard-light;
+
+  --bush-overlay-bg:    #403778d6;
+  --bush-overlay-blend: hard-light;
+
+  --foliage-overlay-bg:    #403778d6;
+  --foliage-overlay-blend: hard-light;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// =============================================================================
+// drizzle--spring--mild — scene recipes (terrain via `spring--drizzle--mild`)
+// =============================================================================
+
+// drizzle--spring--afternoon--mild: sky below.
+
+[data-scene-id='drizzle--spring--afternoon--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #7391ae 0%, #95afcb 40%, #b0c3d7 70%, #bfcbd6 100%);
+
+  --small-cloud-1-a: #bcc3d1;
+  --small-cloud-1-b: #94a5ba;
+  --small-cloud-1-c: #7c8d9a;
+  --small-cloud-2-a: #bcc3d1;
+  --small-cloud-2-b: #94a5ba;
+  --small-cloud-2-c: #7c8d9a;
+  --small-cloud-3-a: #bcc3d1;
+  --small-cloud-3-b: #94a5ba;
+  --small-cloud-3-c: #7c8d9a;
+  --small-cloud-4-a: #bcc3d1;
+  --small-cloud-4-b: #94a5ba;
+  --small-cloud-4-c: #7c8d9a;
+
+  --moon-filter:      brightness(1.25) grayscale(0.5) contrast(0.75) blur(2px);
+  --sun-glow-filter:  brightness(1.25) grayscale(0.5) contrast(0.75) blur(2px);
+  --sun-glow-color-0: rgb(229 159 218);
+  --sun-glow-color-1: rgb(229 159 218 / 5%);
+  --sun-glow-opacity: 1;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
 }

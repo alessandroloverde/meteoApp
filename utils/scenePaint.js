@@ -65,6 +65,9 @@ const TERRAIN_VARIANT_BY_TEMP = {
       warm: 'warm',
       hot: 'hot',
     },
+    drizzle: {
+      mild: 'mild',
+    },
   },
   summer: {
     cloudy: {
