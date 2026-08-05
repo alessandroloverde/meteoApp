@@ -2515,6 +2515,26 @@ $trunk-dusk-b: #412b15;
 // drizzle--spring--mild — scene recipes (terrain via `spring--drizzle--mild`)
 // =============================================================================
 
+// drizzle--spring--morning--mild: sky below.
+
+[data-scene-id='drizzle--spring--morning--mild'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #f4e1bf 10%, #a8b9b3 40%, #8da4ab, #687b82 90%);
+
+  --moon-top:    calc(50% + 65px);
+  --moon-left:   50%;
+  --moon-filter: brightness(1.25) blur(20px) hue-rotate(320deg) saturate(1.5);
+
+  --sun-glow-opacity: 0.5;
+
+  --scene-grade-color-bg:       radial-gradient(circle at 50% 50%, #e5ad42b2, #526973);
+  --scene-grade-color-opacity:  0.25;
+  --scene-grade-color-blend:    multiply;
+
+  .bottom-clouds {
+    opacity: 0.75;
+  }
+}
+
 // drizzle--spring--afternoon--mild: sky below.
 
 [data-scene-id='drizzle--spring--afternoon--mild'] {
