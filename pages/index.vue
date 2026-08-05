@@ -489,7 +489,7 @@ $trees: (
 // Page shell
 // =============================================================================
 
-.main-content { display: none; }
+//.main-content { display: none; }
 
 .page-bg {
   position: relative;
@@ -1232,7 +1232,8 @@ $clouds--low: (
 // UI card
 // =============================================================================
 .main-content {
-  position: relative;
+  position: absolute;
+  bottom: 3vh;
   z-index: 20;
   border-radius: 1rem;
   padding: 0.9rem 1.2rem;
