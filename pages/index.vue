@@ -8,7 +8,7 @@ import { buildSceneIdentifier } from '@/utils/sceneIdentifier'
 import { reverseGeocode } from '@/composables/useReverseGeocoding'
 
 const store = useWeatherStore()
-const { getLocation } = useLocation()
+const { getBestLocation, getGpsLocation } = useLocation()
 
 async function loadWeather(lat, lon) {
   const weather = await fetchWeather(lat, lon)
@@ -16,37 +16,102 @@ async function loadWeather(lat, lon) {
   store.setWeather(weather)
 }
 
-onMounted(async () => {
+async function applyLocationResult(result) {
+  const { latitude, longitude } = result.coords
+
+  if (result.source === 'gps') {
+    store.setGPS(result.coords)
+    await loadWeather(latitude, longitude)
+
+    const location = await reverseGeocode(latitude, longitude)
+    store.city = location.city
+    store.country = location.country
+    return
+  }
+
+  store.setIpLocation(
+    { latitude, longitude },
+    result.city,
+    result.country ?? null,
+    result.gpsError
+      ? `Approximate network location (GPS: ${result.gpsError})`
+      : undefined,
+  )
+
+  await loadWeather(latitude, longitude)
+}
+
+/** GPS first, then IP fallback — Chrome/Brave often deny GPS even when settings look fine. */
+async function loadFromLocation() {
+  store.setError(null)
+  store.setLoading(true)
+
   try {
-    store.setLoading(true)
-
-    const hasSaved = store.loadSavedLocation()
-
-    if (hasSaved && store.coords) {
-      await loadWeather(store.coords.latitude, store.coords.longitude)
-    } else {
-      const coords = await getLocation()
-
-      store.setGPS(coords)
-
-      await loadWeather(coords.latitude, coords.longitude)
-
-      const location = await reverseGeocode(coords.latitude, coords.longitude)
-
-      store.city = location.city
-      store.country = location.country
-    }
+    const result = await getBestLocation()
+    await applyLocationResult(result)
   } catch (err) {
-    store.setError(err.message)
+    store.setError(err.message || 'Unable to get location.')
   } finally {
     store.setLoading(false)
   }
+}
+
+/** User-gesture GPS retry (more reliable in Chromium than auto-request on load). */
+async function retryPreciseLocation() {
+  const hadWeather = Boolean(store.weather)
+  store.setError(null)
+  store.setLoading(true)
+
+  try {
+    const coords = await getGpsLocation()
+    await applyLocationResult({ coords, source: 'gps' })
+  } catch (err) {
+    // Keep approximate weather if we already have it; Chrome often denies GPS only.
+    if (hadWeather) {
+      store.locationNotice = err.message || 'Precise location unavailable in this browser.'
+    } else {
+      store.setError(err.message || 'Unable to get precise location.')
+    }
+  } finally {
+    store.setLoading(false)
+  }
+}
+
+onMounted(async () => {
+  const hasSaved = store.loadSavedLocation()
+
+  if (hasSaved && store.coords) {
+    try {
+      store.setLoading(true)
+      await loadWeather(store.coords.latitude, store.coords.longitude)
+    } catch (err) {
+      store.setError(err.message || 'Unable to load weather.')
+    } finally {
+      store.setLoading(false)
+    }
+    return
+  }
+
+  await loadFromLocation()
 })
 
 const ui = computed(() => {
   if (!store.weather) return null
 
   return mapWeatherToUI(store.weather)
+})
+
+const locationSourceMeta = computed(() => {
+  switch (store.source) {
+    case 'gps':
+      return { icon: '📍', label: 'GPS' }
+    case 'ip':
+      return { icon: '🌐', label: 'Network' }
+    case 'search':
+      return { icon: '🔎', label: 'City search' }
+    default:
+      return { icon: '', label: '' }
+  }
 })
 
 // Dev/test theming knobs — driven by <SceneControls> in the layout.
@@ -302,20 +367,34 @@ onBeforeUnmount(() => {
 
     <header v-if="store.city" class="city-name">
       <p class="city-name--city">{{ store.city }}</p>
-      <!-- <p class="city-name--country">{{ store.country }}</p> -->
     </header>
 
     <div class="main-content">
       <div v-if="store.loading">Loading...</div>
-      <div v-else-if="store.error">Error: {{ store.error }}</div>
-
-      <div v-else-if="store.weather">
-        <h1 class="text-6xl font-bold">{{ store.weather.temperature }}°</h1>
-        <p class="mt-2 text-lg">Weather code: {{ store.weather.weathercode }}</p>
+      <div v-else-if="store.error" class="location-error">
+        <p>{{ store.error }}</p>
+        <div class="location-error__actions">
+          <button type="button" class="location-error__btn" @click="retryPreciseLocation">
+            Try GPS
+          </button>
+          <button type="button" class="location-error__btn" @click="loadFromLocation">
+            Use network
+          </button>
+          <NuxtLink to="/search" class="location-error__link">Search city</NuxtLink>
+        </div>
       </div>
 
-      <div v-if="ui">
-        <p class="mt-4 text-sm">{{ ui.key }}</p>
+      <div v-else-if="store.weather" class="weather-panel">
+        <h1 class="weather-panel__temp">{{ store.weather.temperature }}°</h1>
+        <p class="weather-panel__meta">
+          <span>code: {{ store.weather.weathercode }}</span>
+          <span class="weather-panel__sep" aria-hidden="true">|</span>
+          <span
+            :title="locationSourceMeta.label"
+            :aria-label="`Location source: ${locationSourceMeta.label}`"
+          >source: {{ locationSourceMeta.icon }}</span>
+        </p>
+        <p v-if="ui" class="weather-panel__key">{{ ui.key }}</p>
       </div>
     </div>
 
@@ -1248,9 +1327,68 @@ $clouds--low: (
 .main-content {
   position: absolute;
   bottom: 3vh;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 20;
   border-radius: 1rem;
   padding: 0.9rem 1.2rem;
   background: rgba(128, 128, 128, 0.22);
+}
+
+.weather-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.35rem;
+
+  &__temp {
+    font-size: 3.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__meta,
+  &__key {
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  &__sep {
+    opacity: 0.55;
+  }
+}
+
+.location-error {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 22rem;
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  &__btn {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid currentColor;
+    border-radius: 0.35rem;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  &__link {
+    text-decoration: underline;
+  }
 }
 </style>

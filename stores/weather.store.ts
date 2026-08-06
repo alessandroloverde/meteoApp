@@ -17,19 +17,30 @@ export const useWeatherStore = defineStore('weather', {
     coords: null as Coordinates | null,
     city: null as string | null,
     country: null as string | null,
-    source: 'gps',
+    source: 'gps' as 'gps' | 'ip' | 'search',
     weather: null as CurrentWeather | null,
     loading: false,
     error: null as string | null,
+    locationNotice: null as string | null,
     favoriteCities: [] as string[]
   }),
 
   actions: {
     setGPS(coords: Coordinates) {
-      if (this.source === 'gps') {
-        this.coords = coords
-        this.city = "Current location"
-      }
+      this.source = 'gps'
+      this.coords = coords
+      this.city = 'Current location'
+      this.locationNotice = null
+      this.error = null
+    },
+
+    setIpLocation(coords: Coordinates, city: string, country: string | null, notice?: string) {
+      this.source = 'ip'
+      this.coords = coords
+      this.city = city
+      this.country = country
+      this.locationNotice = notice ?? 'Approximate location from your network (GPS unavailable in this browser).'
+      this.error = null
     },
 
     setCity(city: string, country: string, coords: Coordinates) {
@@ -37,6 +48,7 @@ export const useWeatherStore = defineStore('weather', {
       this.country = country
       this.coords = coords
       this.source = 'search'
+      this.locationNotice = null
 
       saveLocation({ city, country, latitude: coords.latitude, longitude: coords.longitude })
     },
@@ -50,6 +62,7 @@ export const useWeatherStore = defineStore('weather', {
       this.country = saved.country ?? null
       this.coords = { latitude: saved.latitude, longitude: saved.longitude }
       this.source = 'search'
+      this.locationNotice = null
       
       return true
     },
@@ -62,6 +75,8 @@ export const useWeatherStore = defineStore('weather', {
       this.country = null
       this.coords = null
       this.weather = null
+      this.locationNotice = null
+      this.error = null
     },
 
     setCountry(country: string) {
@@ -76,7 +91,7 @@ export const useWeatherStore = defineStore('weather', {
       this.loading = val
     },
 
-    setError(err: string) {
+    setError(err: string | null) {
       this.error = err
     }
   }
