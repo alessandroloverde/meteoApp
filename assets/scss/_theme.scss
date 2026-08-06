@@ -1890,6 +1890,15 @@ $trunk-dusk-b: #412b15;
   --building-church:      #899695;
 }
 
+// Evening & night — mild (wins over paint-bundle grays).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='spring'][data-weather='drizzle'][data-temp='mild'][data-time='evening'],
+[data-season='spring'][data-weather='drizzle'][data-temp='mild'][data-time='night'] {
+  --building-wall-base: #5d4f4f;
+  --building-roof-base: #594643;
+  --building-church:    #80676b;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -2558,6 +2567,40 @@ $trunk-dusk-b: #412b15;
   --sun-glow-color-0: rgb(229 159 218);
   --sun-glow-color-1: rgb(229 159 218 / 5%);
   --sun-glow-opacity: 1;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// drizzle--spring--evening--mild: terrain overlay below; terrain via `spring--drizzle--mild`.
+
+[data-scene-id='drizzle--spring--evening--mild'] {
+  --sky-gradient: radial-gradient(circle at 50% 90%, #e5b494, #caada1, #9fa9b8, #768395 80%);
+
+  --moon-opacity:     0;
+  --sun-glow-opacity: 0;
+
+  --cloud-top-overlay-bg:     #97a4ad;
+  --cloud-top-overlay-blend:  color-burn;
+  --cloud-top-overlay-filter: opacity(0.4);
+
+  --terrain-overlay-color:   #4c462c;
+  --terrain-overlay-opacity: 0.4;
+  --terrain-overlay-blend:   hard-light;
+  --terrain-overlay-filter:  saturate(0.5) brightness(0.75) contrast(1.25);
+
+  --bush-overlay-color:   #4c462c;
+  --bush-overlay-opacity: 0.4;
+  --bush-overlay-blend:   hard-light;
+  --bush-overlay-filter:  saturate(0.5) brightness(0.75) contrast(1.25);
+
+  --foliage-overlay-color:   #4c462c;
+  --foliage-overlay-opacity: 0.4;
+  --foliage-overlay-blend:   hard-light;
+
+  --scene-grade-evening-bg:       radial-gradient(circle at 50% 50%, transparent, #3d4452);
+  --scene-grade-evening-opacity:  0.5;
 
   .bottom-clouds {
     opacity: 0.5;
