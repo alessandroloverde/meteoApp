@@ -2606,3 +2606,36 @@ $trunk-dusk-b: #412b15;
     opacity: 0.5;
   }
 }
+
+// drizzle--spring--night--mild: sky below; terrain via `spring--drizzle--mild`.
+
+[data-scene-id='drizzle--spring--night--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #282b43 0%, #3e3f60 40%, #5c4d5b 70%, #89746b 100%);
+
+  --cloud-top-overlay-color:   #7a6888;
+  --cloud-top-overlay-opacity: 0.75;
+  --cloud-top-overlay-blend:   multiply;
+
+  --cloud-bottom-overlay-bg: #7f6e7a;
+
+  --terrain-overlay-bg:     #7f572ed6;
+  --terrain-overlay-blend:  color-burn;
+  --terrain-overlay-filter: opacity(0.5);
+
+  --bush-overlay-bg:     #7f572ed6;
+  --bush-overlay-blend:  color-burn;
+  --bush-overlay-filter: opacity(0.5);
+
+  --foliage-overlay-bg:     #7f572ed6;
+  --foliage-overlay-blend:  color-burn;
+  --foliage-overlay-filter: opacity(0.5);
+
+  --scene-grade-night-bg:      linear-gradient(to bottom, transparent 40%, #3b3129);
+  --scene-grade-night-opacity: 1;
+
+  --sun-glow-opacity: 0.25;
+
+  .bottom-clouds {
+    opacity: 0.35;
+  }
+}
