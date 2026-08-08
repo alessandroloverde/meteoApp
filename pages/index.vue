@@ -1195,10 +1195,19 @@ $clouds--low: (
 // The bush element's own mask clips them automatically.
 .bush-overlay { @include overlay-pane('bush'); }
 
-// Per-bush background — full gradient from terrain paint cluster (--bush-N-bg).
-.bushes-1 { background: var(--bush-1-bg); }
-.bushes-2 { background: var(--bush-2-bg); }
-.bushes-3 { background: var(--bush-3-bg); }
+// Per-bush background — --bush-N-bg from terrain paint; secondary layer from scene.
+.bushes-1 {
+  background: var(--bush-1-bg), var(--bush-bg-secondary);
+  background-blend-mode: var(--bush-bg-blend);
+}
+.bushes-2 {
+  background: var(--bush-2-bg), var(--bush-bg-secondary);
+  background-blend-mode: var(--bush-bg-blend);
+}
+.bushes-3 {
+  background: var(--bush-3-bg), var(--bush-bg-secondary);
+  background-blend-mode: var(--bush-bg-blend);
+}
 
 
 // =============================================================================

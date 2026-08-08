@@ -83,6 +83,28 @@ $spring-drizzle-terrain-mild: (
   ),
 );
 
+// Terrain temp patch — warm (terrain 1–5 + foliage; bushes/building inherit default until authored).
+$spring-drizzle-terrain-warm: (
+  terrain: (
+    1: (
+      a: #a09b59,
+      blend: overlay,
+      layer-bkg: linear-gradient(86deg, #74795c, #4e574b),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, #6a684f 80%, #b3b081 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, #bec583 -6%, #6e704e 16%)),
+    4: (a: #cdc580, b: #596750),
+    5: (layer-bkg: linear-gradient(to right, #6b8266 0%, #a0a4a9 60%)),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #d69383 0%, #54592a)),
+    2: (gradient: radial-gradient(at 30% 35%, #a59148, #414c28)),
+    3: (gradient: radial-gradient(at 10% 30%, #a3943c 20%, #524a26 60%)),
+    4: (gradient: radial-gradient(at 0 30%, #658167, #2c4e16)),
+    5: (gradient: radial-gradient(at 80% 20%, #a07c5f, #39513b 60%)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -95,6 +117,7 @@ $paint-library: (
       terrain: (
         default: $spring-drizzle-terrain-default,
         mild: $spring-drizzle-terrain-mild,
+        warm: $spring-drizzle-terrain-warm,
       ),
     ),
   ),

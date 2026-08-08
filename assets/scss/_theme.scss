@@ -212,6 +212,10 @@ $trunk-dusk-b: #412b15;
   --bush-2-bg: #{$gray};
   --bush-3-bg: #{$gray};
 
+  // Second background layer — scene recipes only (paint sets --bush-N-bg).
+  --bush-bg-secondary: transparent;
+  --bush-bg-blend:     normal;
+
   --bush-overlay-color:   #{$gray};
   --bush-overlay-opacity: 0;
   --bush-overlay-blend:   color;
@@ -2637,5 +2641,32 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.35;
+  }
+}
+
+// =============================================================================
+// drizzle--spring--warm — scene recipes (terrain via `spring--drizzle--warm`)
+// =============================================================================
+
+// drizzle--spring--afternoon--warm: sky below.
+
+[data-scene-id='drizzle--spring--afternoon--warm'] {
+  --sky-gradient: linear-gradient(to bottom, #73878e 0%, #879ea2 40%, #bdc6c8 70%, #c0cacb 90%);
+
+  --moon-opacity:     0;
+  --sun-glow-opacity: 0;
+
+  --cloud-top-overlay-color:   #7e939d;
+  --cloud-top-overlay-opacity: 0.3;
+  --cloud-top-overlay-blend:   multiply;
+
+  --cloud-bottom-overlay-bg:    #788691;
+  --cloud-bottom-overlay-blend: color-burn;
+
+  --bush-bg-secondary: #a3a996ba;
+  --bush-bg-blend:     multiply;
+
+  .bottom-clouds {
+    opacity: 0.5;
   }
 }
