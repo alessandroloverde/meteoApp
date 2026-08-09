@@ -16,6 +16,13 @@
 //   --<group>-overlay-blend    mix-blend-mode
 //   --<group>-overlay-filter   CSS filter (optional)
 //
+// Foliage is migrated: no pane element, no filter. The same -bg / -color /
+// -opacity / -blend tokens feed a second background layer on .trees-N--foliage
+// via background-blend-mode. Bake any correction into the authored color.
+// --foliage-overlay-bg must be an image; a flat tint goes through
+// --foliage-overlay-color + --foliage-overlay-opacity, which is wrapped in a
+// gradient for you. A color in --foliage-overlay-bg drops the declaration.
+//
 // Sky overlay (inside .sky-overlays; container owns --sky-overlay-blend):
 //   --sky-overlay-stop-0/1/2   3-stop top→bottom gradient fallback
 //   --sky-overlay-bg           overrides the 3-stop gradient when set
@@ -624,7 +631,6 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-color:   #232b44;
   --foliage-overlay-opacity: 0.5;
   --foliage-overlay-blend:   overlay;
-  --foliage-overlay-filter:  brightness(0.5);
 }
 
 [data-scene-id='cloudy--autumn--night--cold'] {
@@ -636,7 +642,6 @@ $trunk-dusk-b: #412b15;
 
   --foliage-overlay-bg:       radial-gradient(circle at 50% 20%, #b35809, #241821);
   --foliage-overlay-blend:    overlay;
-  --foliage-overlay-filter:   saturate(30%) contrast(110%);
 
   --bush-overlay-bg:       radial-gradient(circle at 50% 20%, #b35809, #241821);
   --bush-overlay-blend:    overlay;
@@ -660,7 +665,8 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-blend:    overlay;
   --terrain-overlay-filter:   brightness(0.75) saturate(0.25);
 
-  --foliage-overlay-bg:       #a45b47;
+  --foliage-overlay-color:    #a45b47;
+  --foliage-overlay-opacity:  1;
   --foliage-overlay-blend:    darken;
 
   --bush-overlay-bg: linear-gradient(347deg in hsl shorter hue, #4a1809 20%, #ad7d34 80%);
@@ -699,7 +705,6 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-color:   #232b44;
   --foliage-overlay-opacity: 0.5;
   --foliage-overlay-blend:   overlay;
-  --foliage-overlay-filter:  brightness(0.5);
 
   --bush-overlay-color:   #232b44;
   --bush-overlay-opacity: 0.5;
@@ -947,7 +952,8 @@ $trunk-dusk-b: #412b15;
   --sun-glow-opacity:  1;
   --sun-glow-blend:    normal;
 
-  --foliage-overlay-bg:       #a45b47;
+  --foliage-overlay-color:    #a45b47;
+  --foliage-overlay-opacity:  1;
   --foliage-overlay-blend:    luminosity;
 
   --bush-overlay-bg:       #a45b47;
@@ -1126,7 +1132,6 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-filter:   contrast(1.25);
 
   --foliage-overlay-bg:       linear-gradient(339deg, #4e5c42 60%, #a8875c);
-  --foliage-overlay-filter:   contrast(1.25);
 
   --bush-overlay-bg:       linear-gradient(359deg, #4e5c42 80%, #a8875c);
   --bush-overlay-filter:   contrast(1.25);
@@ -1151,7 +1156,8 @@ $trunk-dusk-b: #412b15;
 
   --terrain-overlay-bg: radial-gradient(circle at 50% 0%, #73644c 30%, #10192d 70%);
 
-  --foliage-overlay-bg:       #8a7555;
+  --foliage-overlay-color:    #8a7555;
+  --foliage-overlay-opacity:  1;
   --foliage-overlay-blend:    overlay;
 
   --bush-overlay-bg:       #8a7555;
@@ -1175,7 +1181,6 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-filter:   saturate(0.75);
 
   --foliage-overlay-bg:       radial-gradient(#c29c31, #018c43);
-  --foliage-overlay-filter:   saturate(0.5);
 
   --bush-overlay-bg:       radial-gradient(#59c231, #018c43);
   --bush-overlay-filter:   saturate(0.5);
@@ -1351,9 +1356,9 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-blend:    soft-light;
   --terrain-overlay-filter:   brightness(0.5) saturate(0.5);
 
-  --foliage-overlay-bg:       #5d5f4f;
+  --foliage-overlay-color:    #5d5f4f;
+  --foliage-overlay-opacity:  1;
   --foliage-overlay-blend:    hard-light;
-  --foliage-overlay-filter:   saturate(0.5);
 
   --bush-overlay-bg:       #5d5f4f;
   --bush-overlay-blend:    hard-light;
@@ -1702,7 +1707,8 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-bg:       color-mix(in srgb, #974c17e6, #1000000f);
   --terrain-overlay-filter:   brightness(1.5) hue-rotate(3deg);
 
-  --foliage-overlay-bg: color-mix(in srgb, #d07b3f, #10000026);
+  --foliage-overlay-color:   color-mix(in srgb, #d07b3f, #10000026);
+  --foliage-overlay-opacity: 1;
 
   --bush-overlay-bg: color-mix(in srgb, #703105, #10000026);
 
@@ -1758,7 +1764,6 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-color:   #f36e02;
   --foliage-overlay-opacity: 0.5;
   --foliage-overlay-blend:   multiply;
-  --foliage-overlay-filter:  brightness(1.25) saturate(0.5) hue-rotate(310deg);
 
   --bush-overlay-color:   #f36e02;
   --bush-overlay-opacity: 0.5;
@@ -2169,7 +2174,6 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-color:   #1069aa;
   --foliage-overlay-opacity: 0.5;
   --foliage-overlay-blend:   color;
-  --foliage-overlay-filter:  brightness(0.5);
 
   --bush-overlay-color:   #1069aa;
   --bush-overlay-opacity: 0.5;
@@ -2205,7 +2209,6 @@ $trunk-dusk-b: #412b15;
   --foliage-overlay-color:   #1069aa;
   --foliage-overlay-opacity: 0.5;
   --foliage-overlay-blend:   color;
-  --foliage-overlay-filter:  saturate(1.5) brightness(0.8);
 
   --bush-overlay-color:   #1069aa;
   --bush-overlay-opacity: 0.5;
@@ -2235,9 +2238,9 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-blend:    soft-light;
   --terrain-overlay-filter:   brightness(1.5) saturate(0.5) contrast(0.5) hue-rotate(59deg);
 
-  --foliage-overlay-bg:       #a5995c;
+  --foliage-overlay-color:    #a5995c;
+  --foliage-overlay-opacity:  1;
   --foliage-overlay-blend:    soft-light;
-  --foliage-overlay-filter:   brightness(1.5) saturate(0.5) contrast(0.5) hue-rotate(59deg);
 
   --bush-overlay-bg:       #a5995c;
   --bush-overlay-blend:    soft-light;
@@ -2313,7 +2316,6 @@ $trunk-dusk-b: #412b15;
 
   --foliage-overlay-bg:       linear-gradient(to bottom, #473c34, #011830 65%);
   --foliage-overlay-blend:    overlay;
-  --foliage-overlay-filter:   brightness(1.5) saturate(0.5) contrast(0.75);
 
   --bush-overlay-bg:       linear-gradient(to bottom, #473c34, #011830 65%);
   --bush-overlay-blend:    overlay;
@@ -2351,8 +2353,7 @@ $trunk-dusk-b: #412b15;
   --terrain-overlay-bg:       radial-gradient(#504911, #caebeb);
   --terrain-overlay-filter:   opacity(0.5);
 
-  --foliage-overlay-bg:       radial-gradient(#504911, #caebeb);
-  --foliage-overlay-filter:   opacity(0.5);
+  --foliage-overlay-bg:       radial-gradient(#50491180, #caebeb80);
 
   --bush-overlay-bg:       radial-gradient(#504911, #caebeb);
   --bush-overlay-filter:   opacity(0.5);
@@ -2516,8 +2517,9 @@ $trunk-dusk-b: #412b15;
   --bush-overlay-bg:    #403778d6;
   --bush-overlay-blend: hard-light;
 
-  --foliage-overlay-bg:    #403778d6;
-  --foliage-overlay-blend: hard-light;
+  --foliage-overlay-color:   #403778d6;
+  --foliage-overlay-opacity: 1;
+  --foliage-overlay-blend:   hard-light;
 
   .bottom-clouds {
     opacity: 0.5;
@@ -2630,9 +2632,9 @@ $trunk-dusk-b: #412b15;
   --bush-overlay-blend:  color-burn;
   --bush-overlay-filter: opacity(0.5);
 
-  --foliage-overlay-bg:     #7f572ed6;
-  --foliage-overlay-blend:  color-burn;
-  --foliage-overlay-filter: opacity(0.5);
+  --foliage-overlay-color:   #7f572ed6;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   color-burn;
 
   --scene-grade-night-bg:      linear-gradient(to bottom, transparent 40%, #3b3129);
   --scene-grade-night-opacity: 1;

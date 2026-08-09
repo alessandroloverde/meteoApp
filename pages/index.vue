@@ -271,37 +271,27 @@ onBeforeUnmount(() => {
       <div class="🖼️ scene-layer terrain">
         <div class="scene-layer drizzle-rain drizzle-rain--terrain"></div>
 
-        <!-- 🌲 Trees + overlays -->
+        <!-- 🌲 Trees — scene mix is a second background layer on each foliage element -->
         <section class="🌲 scene-layer mask-layer trees">
           <div class="1️⃣🌲 trees-1">
             <div class="trees-1--trunk"></div>
-            <div class="trees-1--foliage">
-              <div class="foliage-overlay"></div>
-            </div>
+            <div class="trees-1--foliage"></div>
           </div>
           <div class="2️⃣🌲 trees-2">
             <div class="trees-2--trunk"></div>
-            <div class="trees-2--foliage">
-              <div class="foliage-overlay"></div>
-            </div>
+            <div class="trees-2--foliage"></div>
           </div>
           <div class="3️⃣🌲 trees-3">
             <div class="trees-3--trunk"></div>
-            <div class="trees-3--foliage">
-              <div class="foliage-overlay"></div>
-            </div>
+            <div class="trees-3--foliage"></div>
           </div>
           <div class="4️⃣🌲 trees-4">
             <div class="trees-4--trunk"></div>
-            <div class="trees-4--foliage">
-              <div class="foliage-overlay"></div>
-            </div>
+            <div class="trees-4--foliage"></div>
           </div>
           <div class="5️⃣🌲 trees-5">
             <div class="trees-5--trunk"></div>
-            <div class="trees-5--foliage">
-              <div class="foliage-overlay"></div>
-            </div>
+            <div class="trees-5--foliage"></div>
           </div>
         </section>
 
@@ -558,12 +548,32 @@ $trees: (
 .trees-4--trunk { background: linear-gradient(0deg,  var(--trunk-4-a)  0%, var(--trunk-4-b) 100%); }
 .trees-5--trunk { background: linear-gradient(90deg, var(--trunk-5-a) 44%, var(--trunk-5-b)  57%); }
 
-// Per-tree foliage — full gradient from terrain paint cluster (--foliage-N-bg).
-.trees-1--foliage { background: var(--foliage-1-bg); }
-.trees-2--foliage { background: var(--foliage-2-bg); }
-.trees-3--foliage { background: var(--foliage-3-bg); }
-.trees-4--foliage { background: var(--foliage-4-bg); }
-.trees-5--foliage { background: var(--foliage-5-bg); }
+// Per-tree foliage — paint from the terrain cluster (--foliage-N-bg) with the
+// scene mix blended on top as a second background layer.
+//
+// --foliage-overlay-bg is already an image and is used as-is. The
+// color + opacity fallback is a color, so it is wrapped in a gradient to be
+// usable as a layer. --foliage-N-bg may be either an image (paint library) or a
+// color (:root stubs); as the last layer of the shorthand both are accepted —
+// a color lands in background-color, which is the backdrop of the layer above.
+@mixin foliage-paint($n) {
+  background:
+    var(
+      --foliage-overlay-bg,
+      linear-gradient(
+        #{color-mix(in srgb, var(--foliage-overlay-color) calc(var(--foliage-overlay-opacity) * 100%), transparent)},
+        #{color-mix(in srgb, var(--foliage-overlay-color) calc(var(--foliage-overlay-opacity) * 100%), transparent)}
+      )
+    ),
+    var(--foliage-#{$n}-bg);
+  background-blend-mode: var(--foliage-overlay-blend), normal;
+}
+
+.trees-1--foliage { @include foliage-paint(1); }
+.trees-2--foliage { @include foliage-paint(2); }
+.trees-3--foliage { @include foliage-paint(3); }
+.trees-4--foliage { @include foliage-paint(4); }
+.trees-5--foliage { @include foliage-paint(5); }
 
 // =============================================================================
 // Page shell
@@ -1133,10 +1143,6 @@ $clouds--low: (
   width: 100%;
   height: 100%;
 }
-
-// Foliage overlay panes live inside each .trees-N--foliage element as children.
-// The foliage element's own mask clips them automatically.
-.foliage-overlay { @include overlay-pane('foliage'); }
 
 
 // =============================================================================
