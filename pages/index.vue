@@ -250,19 +250,12 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
+        <!-- 🌥️ Bottom clouds — scene mix is a second background layer on each cloud -->
         <section class="🌥️ bottom-clouds">
-          <div class="scene-layer cloud-1--low">
-            <div class="cloud-bottom-overlay"></div>
-          </div>
-          <div class="scene-layer cloud-2--low">
-            <div class="cloud-bottom-overlay"></div>
-          </div>
-          <div class="scene-layer cloud-3--low">
-            <div class="cloud-bottom-overlay"></div>
-          </div>
-          <div class="scene-layer cloud-4--low">
-            <div class="cloud-bottom-overlay"></div>
-          </div>
+          <div class="scene-layer cloud-1--low"></div>
+          <div class="scene-layer cloud-2--low"></div>
+          <div class="scene-layer cloud-3--low"></div>
+          <div class="scene-layer cloud-4--low"></div>
         </section>
 
       </div>
@@ -295,16 +288,14 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <!-- Terrain ridges (1–3, behind buildings) + overlays -->
+        <!-- Terrain ridges (1–3, behind buildings). Terrain-1 keeps a pane so the
+             scene mix stays above its ::before/::after accent stack; 2–5 blend it
+             in as a second background layer. -->
         <div class="scene-layer terrain-layer--accent terrain-1">
           <div class="terrain-overlay"></div>
         </div>
-        <div class="scene-layer terrain-layer terrain-2">
-          <div class="terrain-overlay"></div>
-        </div>
-        <div class="scene-layer terrain-layer terrain-3">
-          <div class="terrain-overlay"></div>
-        </div>
+        <div class="scene-layer terrain-layer terrain-2"></div>
+        <div class="scene-layer terrain-layer terrain-3"></div>
 
         <!-- 🌳 Bushes + overlays -->
         <div class="🌳 scene-layer bushes">
@@ -339,12 +330,8 @@ onBeforeUnmount(() => {
         </section>
 
         <!-- Terrain ridges (4–5, in front of buildings) -->
-        <div class="scene-layer terrain-layer terrain-4">
-          <div class="terrain-overlay"></div>
-        </div>
-        <div class="scene-layer terrain-layer terrain-5">
-          <div class="terrain-overlay"></div>
-        </div>
+        <div class="scene-layer terrain-layer terrain-4"></div>
+        <div class="scene-layer terrain-layer terrain-5"></div>
 
       </div>
 
@@ -549,31 +536,13 @@ $trees: (
 .trees-5--trunk { background: linear-gradient(90deg, var(--trunk-5-a) 44%, var(--trunk-5-b)  57%); }
 
 // Per-tree foliage — paint from the terrain cluster (--foliage-N-bg) with the
-// scene mix blended on top as a second background layer.
-//
-// --foliage-overlay-bg is already an image and is used as-is. The
-// color + opacity fallback is a color, so it is wrapped in a gradient to be
-// usable as a layer. --foliage-N-bg may be either an image (paint library) or a
-// color (:root stubs); as the last layer of the shorthand both are accepted —
-// a color lands in background-color, which is the backdrop of the layer above.
-@mixin foliage-paint($n) {
-  background:
-    var(
-      --foliage-overlay-bg,
-      linear-gradient(
-        #{color-mix(in srgb, var(--foliage-overlay-color) calc(var(--foliage-overlay-opacity) * 100%), transparent)},
-        #{color-mix(in srgb, var(--foliage-overlay-color) calc(var(--foliage-overlay-opacity) * 100%), transparent)}
-      )
-    ),
-    var(--foliage-#{$n}-bg);
-  background-blend-mode: var(--foliage-overlay-blend), normal;
-}
-
-.trees-1--foliage { @include foliage-paint(1); }
-.trees-2--foliage { @include foliage-paint(2); }
-.trees-3--foliage { @include foliage-paint(3); }
-.trees-4--foliage { @include foliage-paint(4); }
-.trees-5--foliage { @include foliage-paint(5); }
+// scene mix blended on top as a second background layer. --foliage-N-bg may be
+// an image (paint library) or a color (:root stubs); both work as the last layer.
+.trees-1--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-1-bg)); }
+.trees-2--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-2-bg)); }
+.trees-3--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-3-bg)); }
+.trees-4--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-4-bg)); }
+.trees-5--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-5-bg)); }
 
 // =============================================================================
 // Page shell
@@ -615,8 +584,10 @@ $trees: (
 }
 
 // Terrain ridges: mask + gradient. Terrain-1 adds accent stack via --accent modifier.
+// Terrain 2–5 have no pseudo-elements, so the scene mix rides along as a second
+// background layer; terrain-1 keeps a pane (see .terrain-overlay).
 .terrain-layer {
-  @include mx.masked-gradient-layer;
+  @include mx.masked-gradient-layer($overlay: 'terrain');
   opacity: var(--layer-opacity, 1);
 }
 
@@ -816,8 +787,12 @@ $clouds--low: (
 @each $key, $config in $clouds {
   .cloud-#{$key} { @include mx.cloud($key, $config); }
 }
+// Bottom clouds — the scene mix rides along as a second background layer rather
+// than a child pane. Their own opacity already gives each cloud a stacking
+// context, so the blend stays scoped to the cloud exactly as the pane's
+// mix-blend-mode did.
 @each $key, $config in $clouds--low {
-  .cloud-#{$key}--low { @include mx.cloud($key, $config, '--low'); }
+  .cloud-#{$key}--low { @include mx.cloud($key, $config, '--low', $overlay: 'cloud-bottom'); }
 }
 
 // Top + bottom cloud backgrounds.
@@ -835,23 +810,6 @@ $clouds--low: (
   background-image: linear-gradient(rgba(201, 214, 222, 0.56) 40%, rgb(126 144 158 / 46%)),
     radial-gradient(at 50% 70%, rgb(252, 252, 252), rgb(163, 183, 196));
 }
-.cloud-1--low {
-  background: radial-gradient(circle at 20% 50%, #edf0e9 20%, #cad0d5 80%);
-  opacity: 0.5;
-}
-.cloud-2--low {
-  background: radial-gradient(circle at 30% 50%, #f2f3ee 20%, #b5c3c8 80%);
-  opacity: 0.6;
-}
-.cloud-3--low {
-  background: radial-gradient(circle at 0% 50%, #cbd0d4 30%, #f2f3ee 60%);
-  opacity: 0.4;
-}
-.cloud-4--low {
-  background: radial-gradient(circle at 0% 50%, #a9afb3 10%, #e8e9e4 60%);
-  opacity: 0.6;
-}
-
 .top-clouds,
 .bottom-clouds {
   position: relative;
@@ -1031,9 +989,9 @@ $clouds--low: (
   filter: blur(2px);
 }
 
-// Cloud overlay panes — top and bottom groups use separate token sets.
-.cloud-top-overlay    { @include overlay-pane('cloud-top'); }
-.cloud-bottom-overlay { @include overlay-pane('cloud-bottom'); }
+// Top clouds keep a pane; the bottom group blends its mix in as a background
+// layer instead (see .cloud-N--low).
+.cloud-top-overlay { @include overlay-pane('cloud-top'); }
 
 
 // =============================================================================
@@ -1127,8 +1085,10 @@ $clouds--low: (
   z-index: 10;
 }
 
-// Terrain overlay panes live inside each .terrain-N element as children.
-// The parent's mask-image automatically clips descendants — no position math needed.
+// Terrain-1 only. Its ::before texture and ::after accent paint above the
+// element background, so the scene mix cannot ride along as a background layer
+// the way it does on terrain 2–5 — it needs a pane at z-index 1 to stay on top.
+// The parent's mask-image automatically clips it — no position math needed.
 .terrain-overlay { @include overlay-pane('terrain'); }
 
 // =============================================================================

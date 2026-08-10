@@ -2,13 +2,49 @@
 @use 'sass:list';
 @use 'variables' as v;
 
+// Paints $base with a group's overlay blended on top as a second background
+// layer, replacing the child pane a group would otherwise need.
+//   --<group>-overlay-bg       full background (image only — a color here would
+//                              be invalid in a non-final layer and drop the
+//                              whole shorthand)
+//   --<group>-overlay-color    flat tint, wrapped in a gradient to make it usable
+//   --<group>-overlay-opacity  0–1, applied to the tint
+//   --<group>-overlay-blend    blend against $base
+//
+// $base is the last layer, so it may be an image or a color; a color simply
+// lands in background-color and still acts as the backdrop for the layer above.
+//
+// Only valid on elements with no pseudo-elements of their own — those paint
+// above the background, and a background layer cannot rise above them. The
+// element must also isolate blending (its own stacking context via opacity,
+// z-index, isolation, …) for this to be equivalent to a pane.
+@mixin overlay-blend-paint($prefix, $base) {
+  background:
+    var(
+      --#{$prefix}-overlay-bg,
+      linear-gradient(
+        #{color-mix(in srgb, var(--#{$prefix}-overlay-color) calc(var(--#{$prefix}-overlay-opacity) * 100%), transparent)},
+        #{color-mix(in srgb, var(--#{$prefix}-overlay-color) calc(var(--#{$prefix}-overlay-opacity) * 100%), transparent)}
+      )
+    ),
+    #{$base};
+  background-blend-mode: var(--#{$prefix}-overlay-blend), normal;
+}
+
 // Silhouette mask + background gradient only (terrain 2–5).
 //   --layer-bkg       background gradient
 //   --mask-image      silhouette mask
 //   --mask-size       (default: 100% auto)
 //   --mask-position   (default: bottom center)
-@mixin masked-gradient-layer {
-  background: var(--layer-bkg);
+//
+// Pass $overlay a group prefix to blend that group's overlay in — see
+// overlay-blend-paint for the constraints that come with it.
+@mixin masked-gradient-layer($overlay: null) {
+  @if $overlay {
+    @include overlay-blend-paint($overlay, var(--layer-bkg));
+  } @else {
+    background: var(--layer-bkg);
+  }
   // Longhand — mask shorthand + var() is unreliable in WebKit for multi-token positions.
   -webkit-mask-image: var(--mask-image);
   -webkit-mask-position: var(--mask-position, bottom center);
@@ -185,13 +221,25 @@
 //   mix-blend-mode      optional
 //   has-gradient-mask   if true, paints the ::after gradient overlay (PNG)
 // $variant  asset-slug suffix ('' for top clouds, '--low' for bottom clouds).
-@mixin cloud($key, $config, $variant: '') {
+// $overlay  group prefix to blend in as a second background layer instead of a
+//           child pane — see overlay-blend-paint. Requires has-gradient-mask to
+//           be unset, since that ::after would paint above the background.
+@mixin cloud($key, $config, $variant: '', $overlay: null) {
   $mask-ext: map.get($config, mask-type) or svg;
+
+  @if $overlay and map.get($config, has-gradient-mask) {
+    @error 'cloud #{$key}#{$variant}: $overlay cannot be combined with has-gradient-mask.';
+  }
 
   width:  map.get($config, dimensions, width);
   height: map.get($config, dimensions, height);
-  background: map.get($config, bkg);
   z-index: map.get($config, z-index);
+
+  @if $overlay {
+    @include overlay-blend-paint($overlay, map.get($config, bkg));
+  } @else {
+    background: map.get($config, bkg);
+  }
 
   mask-image: url('~/assets/images/masks/Clouds/Cloud-#{$key}#{$variant}--mask.#{$mask-ext}');
   mask-position: top center;

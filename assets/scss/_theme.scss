@@ -16,12 +16,17 @@
 //   --<group>-overlay-blend    mix-blend-mode
 //   --<group>-overlay-filter   CSS filter (optional)
 //
-// Foliage is migrated: no pane element, no filter. The same -bg / -color /
-// -opacity / -blend tokens feed a second background layer on .trees-N--foliage
-// via background-blend-mode. Bake any correction into the authored color.
-// --foliage-overlay-bg must be an image; a flat tint goes through
-// --foliage-overlay-color + --foliage-overlay-opacity, which is wrapped in a
-// gradient for you. A color in --foliage-overlay-bg drops the declaration.
+// Migrated groups — foliage, cloud-bottom, and terrain 2–5: no pane element, no
+// filter. The same -bg / -color / -opacity / -blend tokens feed a second
+// background layer on the element itself via background-blend-mode. Bake any
+// correction into the authored color; --<group>-overlay-bg must be an image,
+// and a flat tint goes through --<group>-overlay-color + --<group>-overlay-opacity,
+// which is wrapped in a gradient for you. A color in -bg drops the declaration.
+//
+// Terrain-1 is the exception and still uses a pane: its ::before texture and
+// ::after accent paint above the element background, and a background layer
+// cannot sit on top of those. --terrain-overlay-* therefore has to stay valid
+// for both paths, which the rules above already guarantee.
 //
 // Sky overlay (inside .sky-overlays; container owns --sky-overlay-blend):
 //   --sky-overlay-stop-0/1/2   3-stop top→bottom gradient fallback
@@ -640,9 +645,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--autumn--night--cold'] {
   --sky-gradient: linear-gradient(to bottom, #141b2e 0%, #131a2d 30%, #1f303f 50%, #5b8798 90%);
 
-  --terrain-overlay-bg:       radial-gradient(circle at 50% 20%, #b35809, #241821);
+  --terrain-overlay-bg:       radial-gradient(circle at 50% 20%, #7d5f45, #141013);
   --terrain-overlay-blend:    overlay;
-  --terrain-overlay-filter:   saturate(30%) contrast(110%);
 
   --foliage-overlay-bg:       radial-gradient(circle at 50% 20%, #b35809, #241821);
   --foliage-overlay-blend:    overlay;
@@ -654,8 +658,8 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-bg:       #182033;
   --cloud-top-overlay-filter:   opacity(0.5);
 
-  --cloud-bottom-overlay-bg:       #182033;
-  --cloud-bottom-overlay-filter:   opacity(0.5);
+  --cloud-bottom-overlay-color:   #18203380;
+  --cloud-bottom-overlay-opacity: 1;
 
   .top-clouds {
     opacity: 0.65;
@@ -665,9 +669,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--autumn--night--mild'] {
   --sky-gradient: linear-gradient(to bottom, #011741 0%, #253756 30%, #957d71 80%, #b28d77 100%);
 
-  --terrain-overlay-bg:       radial-gradient(circle at 50% 10%, #ad7a30, #3c180e 50%);
+  --terrain-overlay-bg:       radial-gradient(circle at 50% 10%, #685f51, #1d1614 50%);
   --terrain-overlay-blend:    overlay;
-  --terrain-overlay-filter:   brightness(0.75) saturate(0.25);
 
   --foliage-overlay-color:    #a45b47;
   --foliage-overlay-opacity:  1;
@@ -701,10 +704,9 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-opacity: 0.5;
   --sky-gradient: linear-gradient(to bottom, #222a45 0%, #262c40 40%, #704f44 70%, #977569 100%);
 
-  --terrain-overlay-color:   #232b44;
+  --terrain-overlay-color:   #121622;
   --terrain-overlay-opacity: 0.5;
   --terrain-overlay-blend:   overlay;
-  --terrain-overlay-filter:  brightness(0.5);
 
   --foliage-overlay-color:   #232b44;
   --foliage-overlay-opacity: 0.5;
@@ -898,8 +900,9 @@ $trunk-dusk-b: #412b15;
   --sun-glow-opacity:  1;
   --sun-glow-blend:    normal;
 
-  --cloud-top-overlay-bg:          #c68f41;
-  --cloud-bottom-overlay-bg:       #c68f41;
+  --cloud-top-overlay-bg:         #c68f41;
+  --cloud-bottom-overlay-color:   #c68f41;
+  --cloud-bottom-overlay-opacity: 1;
 
   .bottom-clouds,
   .top-clouds {
@@ -949,9 +952,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-night-opacity:  0.5;
   --scene-grade-night-blend:    multiply;
 
-  --terrain-overlay-bg:       radial-gradient(#825a33, #32251b);
+  --terrain-overlay-bg:       radial-gradient(#412d1a, #19120e);
   --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   brightness(0.5);
 
   --sun-glow-opacity:  1;
   --sun-glow-blend:    normal;
@@ -1044,8 +1046,7 @@ $trunk-dusk-b: #412b15;
 
   --sky-overlay-bg: linear-gradient(125deg, #577441, transparent);
 
-  --terrain-overlay-bg:     linear-gradient(45deg, #4c693f, #eaedba);
-  --terrain-overlay-filter: sepia(0.2);
+  --terrain-overlay-bg:     linear-gradient(45deg, #556a43, #f9f5c0);
 
   --foliage-overlay-color:   blanchedalmond;
   --foliage-overlay-opacity: 0.5;
@@ -1115,8 +1116,8 @@ $trunk-dusk-b: #412b15;
 
   --cloud-top-overlay-bg: linear-gradient(45deg, #ddd9d2, transparent);
 
-  --terrain-overlay-bg:     #9cc061;
-  --terrain-overlay-filter: brightness(0.75);
+  --terrain-overlay-color:   #759049;
+  --terrain-overlay-opacity: 1;
 
   --bush-overlay-color:   #b5ca69;
   --bush-overlay-opacity: 0.5;
@@ -1132,8 +1133,7 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-bg:       #1e3860;
   --scene-grade-evening-opacity:  0.5;
 
-  --terrain-overlay-bg:       linear-gradient(359deg, #4e5c42 80%, #a8875c);
-  --terrain-overlay-filter:   contrast(1.25);
+  --terrain-overlay-bg:       linear-gradient(359deg, #425333 80%, #b28953);
 
   --foliage-overlay-bg:       linear-gradient(339deg, #4e5c42 60%, #a8875c);
 
@@ -1181,8 +1181,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--spring--morning--mild'] {
   --sky-gradient: linear-gradient(to bottom, #b5bcc6 0%, #b5bfc7 40%, #f8f0cc 70%, #f7f1e1 100%);
 
-  --terrain-overlay-bg:       #018c43;
-  --terrain-overlay-filter:   saturate(0.75);
+  --terrain-overlay-color:   #1b834d;
+  --terrain-overlay-opacity: 1;
 
   --foliage-overlay-bg:       radial-gradient(#c29c31, #018c43);
 
@@ -1207,9 +1207,9 @@ $trunk-dusk-b: #412b15;
   --scene-grade-soft-haze-opacity:  0.5;
   --scene-grade-soft-haze-blend:    soft-light;
 
-  --terrain-overlay-bg:       #099455;
-  --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   brightness(0.5) hue-rotate(53deg);
+  --terrain-overlay-color:   #0e425a;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   soft-light;
 
   --bush-overlay-bg:       #22702a;
   --bush-overlay-blend:    lighten;
@@ -1246,8 +1246,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--spring--afternoon--hot'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #fffdf1 0%, #e7e1b9 40%, #b0a47b 70%, #ac8b54 100%);
 
-  --cloud-top-overlay-color:    #c3b478;
-  --cloud-top-overlay-opacity:  0.5;
+  --cloud-top-overlay-color:      #c3b478;
+  --cloud-top-overlay-opacity:    0.5;
   --cloud-bottom-overlay-color:   #c3b478;
   --cloud-bottom-overlay-opacity: 0.5;
 
@@ -1269,10 +1269,9 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-opacity:  0.35;
   --scene-grade-evening-blend:    multiply;
 
-  --terrain-overlay-color:   #a24207;
+  --terrain-overlay-color:   #b948a4;
   --terrain-overlay-opacity: 0.5;
   --terrain-overlay-blend:   multiply;
-  --terrain-overlay-filter:  hue-rotate(280deg) brightness(1.25) saturate(0.75);
 
   --bush-overlay-color:   #a24207;
   --bush-overlay-opacity: 0.5;
@@ -1306,11 +1305,9 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-bg:    radial-gradient(#eb711c82, #603a2c8a);
   --cloud-top-overlay-blend: hard-light;
 
-  --terrain-overlay-color:   #67612a;
-  --terrain-overlay-opacity: 0.5;
-  --terrain-overlay-bg:      color-mix(in srgb, var(--terrain-overlay-color) calc(var(--terrain-overlay-opacity) * 100%), #64835b);
+  --terrain-overlay-color:   #c5accebf;
+  --terrain-overlay-opacity: 1;
   --terrain-overlay-blend:   multiply;
-  --terrain-overlay-filter:  brightness(1.6) saturate(0.5) hue-rotate(196deg);
 
   --bush-overlay-color:   #614d19;
   --bush-overlay-opacity: 0.5;
@@ -1338,9 +1335,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-opacity:  0.5;
   --scene-grade-evening-blend:    multiply;
 
-  --terrain-overlay-bg:       radial-gradient(circle at 50% 0%, #9e6b29 10%, #0d180a 52%);
+  --terrain-overlay-bg:       radial-gradient(circle at 50% 0%, #c05d5159 10%, #15160859 52%);
   --terrain-overlay-blend:    normal;
-  --terrain-overlay-filter:   opacity(0.35) hue-rotate(324deg);
 
   .bottom-clouds {
     opacity: 0.5;
@@ -1356,9 +1352,9 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--spring--night--mild'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #e2d4a2b3 0%, #4e4f69 30%, #333f66 50%, #0d0f3a 90%);
 
-  --terrain-overlay-bg:       #1c323a;
-  --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   brightness(0.5) saturate(0.5);
+  --terrain-overlay-color:   #12181a;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   soft-light;
 
   --foliage-overlay-color:    #5d5f4f;
   --foliage-overlay-opacity:  1;
@@ -1390,11 +1386,9 @@ $trunk-dusk-b: #412b15;
   --scene-grade-night-opacity:  0.5;
   --scene-grade-night-blend:    multiply;
 
-  --terrain-overlay-color:   #67612a;
-  --terrain-overlay-opacity: 0.5;
-  --terrain-overlay-bg:      color-mix(in srgb, var(--terrain-overlay-color) calc(var(--terrain-overlay-opacity) * 100%), #64835b);
+  --terrain-overlay-color:   #c5accebf;
+  --terrain-overlay-opacity: 1;
   --terrain-overlay-blend:   multiply;
-  --terrain-overlay-filter:  brightness(1.6) saturate(0.5) hue-rotate(196deg);
 
   --bush-overlay-color:   #614d19;
   --bush-overlay-opacity: 0.5;
@@ -1425,10 +1419,9 @@ $trunk-dusk-b: #412b15;
   --scene-grade-night-opacity:  0.35;
   --scene-grade-night-blend:    multiply;
 
-  --terrain-overlay-color:   #a24207;
+  --terrain-overlay-color:   #b948a4;
   --terrain-overlay-opacity: 0.5;
   --terrain-overlay-blend:   multiply;
-  --terrain-overlay-filter:  hue-rotate(280deg) brightness(1.25) saturate(0.75);
 
   --bush-overlay-color:   #a24207;
   --bush-overlay-opacity: 0.5;
@@ -1504,10 +1497,9 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--summer--morning--mild'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #dcbc0a, #e4d8c3, #97a8a7, #6c7c7d);
 
-  --terrain-overlay-color:   #007255;
+  --terrain-overlay-color:   #1a3039;
   --terrain-overlay-opacity: 0.5;
   --terrain-overlay-blend:   overlay;
-  --terrain-overlay-filter:  brightness(0.5) saturate(0.5) hue-rotate(38deg);
 
   --foliage-overlay-color:   #0c9951;
   --foliage-overlay-opacity: 0.5;
@@ -1554,9 +1546,9 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--summer--morning--cold'] {
   --sky-gradient: linear-gradient(to bottom, #608291 0%, #67828e 40%, #8ea2ac 70%, #d3e7f2 100%);
 
-  --terrain-overlay-bg:       #095368;
-  --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   brightness(0.9) hue-rotate(89deg) contrast(1.25) saturate(0.5);
+  --terrain-overlay-color:   #41244f;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   soft-light;
 
   --foliage-overlay-color:   #00dc86;
   --foliage-overlay-opacity: 0.5;
@@ -1687,7 +1679,8 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-bg:       radial-gradient(#d39a55, #865446);
   --cloud-top-overlay-filter:   opacity(0.75);
 
-  --cloud-bottom-overlay-bg: #e0b763c4;
+  --cloud-bottom-overlay-color:   #e0b763c4;
+  --cloud-bottom-overlay-opacity: 1;
 
   .bottom-clouds {
     opacity: 0.6;
@@ -1708,8 +1701,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-blend:    color-burn;
   --scene-grade-evening-filter:   brightness(1.5) hue-rotate(42deg) contrast(0.25) saturate(0.5) sepia(0.5);
 
-  --terrain-overlay-bg:       color-mix(in srgb, #974c17e6, #1000000f);
-  --terrain-overlay-filter:   brightness(1.5) hue-rotate(3deg);
+  --terrain-overlay-color:   #d16d1c7a;
+  --terrain-overlay-opacity: 1;
 
   --foliage-overlay-color:   color-mix(in srgb, #d07b3f, #10000026);
   --foliage-overlay-opacity: 1;
@@ -1760,10 +1753,9 @@ $trunk-dusk-b: #412b15;
   --scene-grade-night-blend:    overlay;
   --scene-grade-night-filter:   saturate(0.5) brightness(0.5);
 
-  --terrain-overlay-color:   #f36e02;
+  --terrain-overlay-color:   #ff83a5;
   --terrain-overlay-opacity: 0.5;
   --terrain-overlay-blend:   multiply;
-  --terrain-overlay-filter:  brightness(1.25) saturate(0.5) hue-rotate(310deg);
 
   --foliage-overlay-color:   #f36e02;
   --foliage-overlay-opacity: 0.5;
@@ -1912,6 +1904,15 @@ $trunk-dusk-b: #412b15;
   --building-church:    #80676b;
 }
 
+// Morning & afternoon — warm (daylight; wins over paint-bundle grays).
+[data-season='spring'][data-weather='drizzle'][data-temp='warm'][data-time='morning'],
+[data-season='spring'][data-weather='drizzle'][data-temp='warm'][data-time='afternoon'] {
+  --building-wall-base:   #647981;
+  --building-roof-base:   #4a5353;
+  --building-window-base: #808080;
+  --building-church:      #74868c;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -1945,7 +1946,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-soft-haze-opacity: 0.5;
   --scene-grade-soft-haze-blend:   lighten;
 
-  --terrain-overlay-bg: #8f8152;
+  --terrain-overlay-color:   #8f8152;
+  --terrain-overlay-opacity: 1;
 
   .top-clouds {
     opacity: 0.75;
@@ -1985,9 +1987,9 @@ $trunk-dusk-b: #412b15;
 
   --moon-opacity: 0;
 
-  --cloud-bottom-overlay-bg:     #335368;
-  --cloud-bottom-overlay-filter: contrast(1.5) brightness(0.5);
-  --cloud-bottom-overlay-blend:  soft-light;
+  --cloud-bottom-overlay-color:   #061e2e;
+  --cloud-bottom-overlay-opacity: 1;
+  --cloud-bottom-overlay-blend:   soft-light;
 
   --scene-grade-soft-haze-bg:      radial-gradient(circle at 50% 50%, #96a8b2, transparent 50%);
   --scene-grade-soft-haze-opacity: 0.5;
@@ -2028,8 +2030,8 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-bg:       #5b5b7e;
   --cloud-top-overlay-blend:    soft-light;
 
-  --terrain-overlay-bg:     radial-gradient(circle at 50% 10%, rgb(100 87 80 / 0.75), rgb(84 72 62 / 0.75), rgb(10 34 56 / 0.75) 90%);
-  --terrain-overlay-blend:    overlay;
+  --terrain-overlay-bg:    radial-gradient(circle at 50% 10%, rgb(100 87 80 / 0.75), rgb(84 72 62 / 0.75), rgb(10 34 56 / 0.75) 90%);
+  --terrain-overlay-blend: overlay;
 
   --bush-overlay-bg:     linear-gradient(45deg, rgb(50 56 64 / 0.85), rgb(94 124 150 / 0.85));
   --bush-overlay-blend:    hard-light;
@@ -2059,9 +2061,9 @@ $trunk-dusk-b: #412b15;
   --cloud-bottom-overlay-color:   #d59e7f;
   --cloud-bottom-overlay-opacity: 0.75;
 
-  --terrain-overlay-bg:     #693f2f;
-  --terrain-overlay-filter: brightness(0.75) saturate(1.5) contrast(1.5) hue-rotate(12deg);
-  --terrain-overlay-blend:  hue;
+  --terrain-overlay-color:   #400700;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   hue;
 
   --bush-overlay-bg:     #693f2f;
   --bush-overlay-filter: brightness(0.75) saturate(1.5) contrast(1.5) hue-rotate(12deg);
@@ -2081,8 +2083,9 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-opacity: 0.75;
   --cloud-top-overlay-blend:   multiply;
 
-  --terrain-overlay-bg:    #646d89;
-  --terrain-overlay-blend: hard-light;
+  --terrain-overlay-color:   #646d89;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   hard-light;
 
   --bush-overlay-bg:    #646d89;
   --bush-overlay-blend: hard-light;
@@ -2106,10 +2109,9 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='drizzle--winter--night--mild'] {
   --sky-gradient: linear-gradient(to bottom, #393f60 0%, #3f4467 40%, #575976 70%, #81829b 100%);
 
-  --terrain-overlay-color:   #7f9cca;
+  --terrain-overlay-color:   #8e97d0;
   --terrain-overlay-opacity: 1;
   --terrain-overlay-blend:   multiply;
-  --terrain-overlay-filter:  hue-rotate(17deg);
 
   --bush-overlay-bg:    #364663;
   --bush-overlay-blend: overlay;
@@ -2163,9 +2165,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-opacity:  0.5;
   --scene-grade-evening-blend:    hard-light;
 
-  --terrain-overlay-bg:       linear-gradient(to bottom, #678eb9, #062846 65%);
+  --terrain-overlay-bg:       linear-gradient(to bottom, #005fd5cc, #000041cc 65%);
   --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(2.5);
 
   --foliage-overlay-color:   #1069aa;
   --foliage-overlay-opacity: 0.5;
@@ -2198,9 +2199,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-night-opacity:  0.5;
   --scene-grade-night-blend:    hard-light;
 
-  --terrain-overlay-bg:       linear-gradient(to bottom, #2174a3, #062846 65%);
+  --terrain-overlay-bg:       linear-gradient(to bottom, #0061ffcc, #000067cc 65%);
   --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(3.5);
 
   --foliage-overlay-color:   #1069aa;
   --foliage-overlay-opacity: 0.5;
@@ -2230,9 +2230,9 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--winter--morning--mild'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #d9c9b3 15%, #d4cab9 45%, #bab6ac 65%, #968e84 85%);
 
-  --terrain-overlay-bg:       #a5995c;
-  --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   brightness(1.5) saturate(0.5) contrast(0.5) hue-rotate(59deg);
+  --terrain-overlay-color:   #a1b8a1;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   soft-light;
 
   --foliage-overlay-color:    #a5995c;
   --foliage-overlay-opacity:  1;
@@ -2272,9 +2272,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-opacity:  0.5;
   --scene-grade-evening-blend:    hard-light;
 
-  --terrain-overlay-bg:       linear-gradient(to bottom, #6e8eb2, #401f19c4 65%);
+  --terrain-overlay-bg:       linear-gradient(to bottom, #055dc0cc, #2c00009d 65%);
   --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(2.5);
 
   --foliage-overlay-color:   #502b12;
   --foliage-overlay-opacity: 0.5;
@@ -2306,9 +2305,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-night-opacity:  0.5;
   --scene-grade-night-blend:    hard-light;
 
-  --terrain-overlay-bg:       linear-gradient(to bottom, #473c34, #011830 65%);
+  --terrain-overlay-bg:       linear-gradient(to bottom, #6b6460, #2c3947 65%);
   --terrain-overlay-blend:    overlay;
-  --terrain-overlay-filter:   brightness(1.5) saturate(0.5) contrast(0.75);
 
   --foliage-overlay-bg:       linear-gradient(to bottom, #473c34, #011830 65%);
   --foliage-overlay-blend:    overlay;
@@ -2346,8 +2344,7 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--winter--morning--frosty'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #cbd4da 10%, #b4c9cb 40%, #92a4b0 60%, #7b8b95 80%);
 
-  --terrain-overlay-bg:       radial-gradient(#504911, #caebeb);
-  --terrain-overlay-filter:   opacity(0.5);
+  --terrain-overlay-bg:       radial-gradient(#50491180, #caebeb80);
 
   --foliage-overlay-bg:       radial-gradient(#50491180, #caebeb80);
 
@@ -2363,9 +2360,8 @@ $trunk-dusk-b: #412b15;
   --scene-grade-evening-bg:       linear-gradient(to bottom, #2f455d, #342925);
   --scene-grade-evening-opacity:  0.5;
 
-  --terrain-overlay-bg:       linear-gradient(to bottom, #6e8eb2, #401f19c4 65%);
+  --terrain-overlay-bg:       linear-gradient(to bottom, #055dc0cc, #2c00009d 65%);
   --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(2.5);
 
   --bush-overlay-bg: linear-gradient(45deg, #2e3036, #274f6b);
 
@@ -2388,9 +2384,8 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='cloudy--winter--night--frosty'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #7fbedd 10%, #516a89, #283d59, #071a3a);
 
-  --terrain-overlay-bg:       linear-gradient(to bottom, #6e8eb2, #401f19c4 65%);
+  --terrain-overlay-bg:       linear-gradient(to bottom, #055dc0cc, #2c00009d 65%);
   --terrain-overlay-blend:    soft-light;
-  --terrain-overlay-filter:   opacity(0.8) contrast(2) brightness(0.55) saturate(2.5);
 
   --bush-overlay-bg:       linear-gradient(to bottom, #72a2ab, #2c414f 85%);
   --bush-overlay-blend:    soft-light;
@@ -2432,7 +2427,8 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-blend:  screen;
   --cloud-top-overlay-filter: opacity(0.4);
 
-  --cloud-bottom-overlay-bg: #ccdbe2;
+  --cloud-bottom-overlay-color:   #ccdbe2;
+  --cloud-bottom-overlay-opacity: 1;
 
   .bottom-clouds {
     opacity: 0.75;
@@ -2499,7 +2495,8 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-blend:  color-burn;
   --cloud-top-overlay-filter: opacity(0.55) contrast(1.5) saturate(0.5);
 
-  --cloud-bottom-overlay-bg: #7e80a2;
+  --cloud-bottom-overlay-color:   #7e80a2;
+  --cloud-bottom-overlay-opacity: 1;
 
   --moon-filter: brightness(1.5) blur(10px) grayscale(0.75);
 
@@ -2507,8 +2504,9 @@ $trunk-dusk-b: #412b15;
   --sun-glow-color-1: rgb(85 89 111 / 5%);
   --sun-glow-opacity: 1;
 
-  --terrain-overlay-bg:    #403778d6;
-  --terrain-overlay-blend: hard-light;
+  --terrain-overlay-color:   #403778d6;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   hard-light;
 
   --bush-overlay-bg:    #403778d6;
   --bush-overlay-blend: hard-light;
@@ -2585,10 +2583,9 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-blend:  color-burn;
   --cloud-top-overlay-filter: opacity(0.4);
 
-  --terrain-overlay-color:   #4c462c;
+  --terrain-overlay-color:   #242115;
   --terrain-overlay-opacity: 0.4;
   --terrain-overlay-blend:   hard-light;
-  --terrain-overlay-filter:  saturate(0.5) brightness(0.75) contrast(1.25);
 
   --bush-overlay-color:   #4c462c;
   --bush-overlay-opacity: 0.4;
@@ -2616,11 +2613,12 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-opacity: 0.75;
   --cloud-top-overlay-blend:   multiply;
 
-  --cloud-bottom-overlay-bg: #7f6e7a;
+  --cloud-bottom-overlay-color:   #7f6e7a;
+  --cloud-bottom-overlay-opacity: 1;
 
-  --terrain-overlay-bg:     #7f572ed6;
-  --terrain-overlay-blend:  color-burn;
-  --terrain-overlay-filter: opacity(0.5);
+  --terrain-overlay-color:   #7f572e6b;
+  --terrain-overlay-opacity: 1;
+  --terrain-overlay-blend:   color-burn;
 
   --bush-overlay-bg:     #7f572ed6;
   --bush-overlay-blend:  color-burn;
@@ -2644,7 +2642,7 @@ $trunk-dusk-b: #412b15;
 // drizzle--spring--warm — scene recipes (terrain via `spring--drizzle--warm`)
 // =============================================================================
 
-// drizzle--spring--morning--warm: sky + foliage overlay below.
+// drizzle--spring--morning--warm: sky + terrain/foliage overlays below.
 
 [data-scene-id='drizzle--spring--morning--warm'] {
   --sky-gradient: radial-gradient(circle at 50% 90%, #f8e0ad, #d7d6b7, #9fc2de, #6d8ea8 90%);
@@ -2654,6 +2652,12 @@ $trunk-dusk-b: #412b15;
   --sun-glow-opacity: 1;
 
   --moon-filter: grayscale(0.5) blur(10px);
+
+  --cloud-top-overlay-bg: #aac2ced4;
+
+  --terrain-overlay-color:   #387f3aa6;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   color;
 
   --foliage-overlay-color:   #8fac78;
   --foliage-overlay-opacity: 0.5;
@@ -2675,11 +2679,44 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-opacity: 0.3;
   --cloud-top-overlay-blend:   multiply;
 
-  --cloud-bottom-overlay-bg:    #788691;
-  --cloud-bottom-overlay-blend: color-burn;
+  --cloud-bottom-overlay-color:   #788691;
+  --cloud-bottom-overlay-opacity: 1;
+  --cloud-bottom-overlay-blend:   color-burn;
 
   --bush-bg-secondary: #a3a996ba;
   --bush-bg-blend:     multiply;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// drizzle--spring--evening--warm: sky + bottom cloud overlay below.
+
+[data-scene-id='drizzle--spring--evening--warm'] {
+  --sky-gradient: linear-gradient(to bottom, #757185 0%, #928f99 40%, #aa9690 60%, #deae8c 100%);
+
+  --moon-filter: grayscale(0.5);
+
+  --cloud-top-overlay-color:   #ad8b79;
+  --cloud-top-overlay-opacity: 0.5;
+
+  --cloud-bottom-overlay-color:   #f0c8af;
+  --cloud-bottom-overlay-opacity: 0.5;
+
+  --terrain-overlay-color:   #618e80;
+  --terrain-overlay-opacity: 0.25;
+  --terrain-overlay-blend:   color-burn;
+
+  --bush-overlay-color:   #212b2d;
+  --bush-overlay-opacity: 0.35;
+  --bush-overlay-blend:   darken;
+
+  --foliage-overlay-color:   #6b7945;
+  --foliage-overlay-opacity: 0.5;
+
+  --scene-grade-evening-bg:      radial-gradient(transparent, #310546);
+  --scene-grade-evening-opacity: 0.5;
 
   .bottom-clouds {
     opacity: 0.5;
