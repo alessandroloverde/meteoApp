@@ -1913,6 +1913,33 @@ $trunk-dusk-b: #412b15;
   --building-church:      #74868c;
 }
 
+// Evening & night — warm (wins over paint-bundle grays).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='spring'][data-weather='drizzle'][data-temp='warm'][data-time='evening'],
+[data-season='spring'][data-weather='drizzle'][data-temp='warm'][data-time='night'] {
+  --building-wall-base: #3b323d;
+  --building-roof-base: #383549;
+  --building-church:    #403a4a;
+}
+
+// Morning & afternoon — hot (daylight; wins over paint-bundle grays).
+[data-season='spring'][data-weather='drizzle'][data-temp='hot'][data-time='morning'],
+[data-season='spring'][data-weather='drizzle'][data-temp='hot'][data-time='afternoon'] {
+  --building-wall-base:   #99794f;
+  --building-roof-base:   #503e2b;
+  --building-window-base: #99774c;
+  --building-church:      #af8a56;
+}
+
+// Evening & night — hot (wins over paint-bundle grays).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='spring'][data-weather='drizzle'][data-temp='hot'][data-time='evening'],
+[data-season='spring'][data-weather='drizzle'][data-temp='hot'][data-time='night'] {
+  --building-wall-base: #392f4a;
+  --building-roof-base: #2a2446;
+  --building-church:    #483a54;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -2720,5 +2747,178 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.5;
+  }
+}
+
+// drizzle--spring--night--warm: sky + cloud/terrain overlays below.
+
+[data-scene-id='drizzle--spring--night--warm'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #e79b54, #736062, #504b67, #262743);
+
+  --moon-filter: grayscale(0.5);
+
+  --cloud-bottom-overlay-color:   #dc926b;
+  --cloud-bottom-overlay-opacity: 0.5;
+
+  --cloud-top-overlay-color:   #250c3ea3;
+  --cloud-top-overlay-opacity: 0.5;
+  --cloud-top-overlay-blend:   multiply;
+
+  --terrain-overlay-bg: radial-gradient(
+    circle at 50% 20%,
+    color-mix(in srgb, #361f0f calc(var(--terrain-overlay-opacity) * 100%), transparent),
+    color-mix(in srgb, #1e2134 calc(var(--terrain-overlay-opacity) * 100%), transparent) 90%
+  );
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   darken;
+
+  --bush-overlay-bg: radial-gradient(
+    circle at 50% 20%,
+    color-mix(in srgb, #361f0f calc(var(--bush-overlay-opacity) * 100%), transparent),
+    color-mix(in srgb, #1e2134 calc(var(--bush-overlay-opacity) * 100%), transparent) 90%
+  );
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   darken;
+
+  --foliage-overlay-bg: radial-gradient(
+    circle at 50% 20%,
+    color-mix(in srgb, #361f0f calc(var(--foliage-overlay-opacity) * 100%), transparent),
+    color-mix(in srgb, #1e2134 calc(var(--foliage-overlay-opacity) * 100%), transparent) 90%
+  );
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   darken;
+
+  --scene-grade-night-bg:      radial-gradient(#997a788f, #272844 80%);
+  --scene-grade-night-opacity: 1;
+  --scene-grade-night-blend:   overlay;
+
+  .bottom-clouds {
+    opacity: 0.25;
+  }
+}
+
+// =============================================================================
+// drizzle--spring--hot — scene recipes (terrain via `spring--drizzle--hot`)
+// =============================================================================
+
+// drizzle--spring--morning--hot: sky + terrain overlay + terrain-1 accent below.
+
+[data-scene-id='drizzle--spring--morning--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #71868e 0%, #9bb8c1 35%, #fce49d 70%, #fcedbe 100%);
+
+  --moon-top:    calc(70% + 65px);
+  --moon-left:   50%;
+  --moon-filter: blur(10px) brightness(1.25);
+
+  --sun-glow-color-0: rgb(234 186 84);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
+  --sun-glow-opacity: 1;
+
+  --terrain-1-a: #ced150;
+
+  --terrain-overlay-color:   #72922e;
+  --terrain-overlay-opacity: 1;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// drizzle--spring--afternoon--hot: sky below.
+
+[data-scene-id='drizzle--spring--afternoon--hot'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #edd39a, #b7d2bb, #69babc, #579ea0);
+
+  --sun-glow-opacity: 1;
+  --moon-filter:      grayscale(0.5) brightness(1.25) blur(10px);
+
+  --cloud-top-overlay-color:   #64abaa;
+  --cloud-top-overlay-opacity: 0.5;
+
+  --terrain-overlay-bg: linear-gradient(
+    to right,
+    color-mix(in srgb, #29613a calc(var(--terrain-overlay-opacity) * 100%), transparent),
+    color-mix(in srgb, #7fa64c calc(var(--terrain-overlay-opacity) * 100%), transparent),
+    color-mix(in srgb, #326c3c calc(var(--terrain-overlay-opacity) * 100%), transparent)
+  );
+  --terrain-overlay-opacity: 0.5;
+
+  --bush-bg-secondary: #49744380;
+  --bush-bg-blend:     overlay;
+
+  --foliage-overlay-color:   #e6e750;
+  --foliage-overlay-opacity: 0.5;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// drizzle--spring--evening--hot: sky + sun placement below.
+
+[data-scene-id='drizzle--spring--evening--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #6b395a 0%, #a1485a 40%, #ed664e 70%, #fbdb8c 100%);
+
+  --moon-top:    calc(70% + 65px);
+  --moon-left:   42%;
+  --moon-filter: blur(6px) saturate(1.25);
+
+  --sun-glow-color-0: rgb(244 153 37);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
+  --sun-glow-opacity: 1;
+
+  --cloud-top-overlay-color:   #6a190a;
+  --cloud-top-overlay-opacity: 1;
+
+  --terrain-overlay-color:   #274425d9;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   multiply;
+
+  --bush-overlay-color:   #2e7324;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   multiply;
+
+  --foliage-overlay-color:   #274225c7;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   normal;
+
+  --scene-grade-evening-bg:      radial-gradient(circle at 50% 50%, #df633fed, #021c02ab 50%);
+  --scene-grade-evening-opacity: 0.5;
+  --scene-grade-evening-blend:   hard-light;
+
+  .bottom-clouds {
+    opacity: 0.35;
+  }
+}
+
+// drizzle--spring--night--hot: sky below.
+
+[data-scene-id='drizzle--spring--night--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #1d1d4f 0%, #1e1f4f 20%, #4b3c95 70%, #695680 100%);
+
+  --moon-filter: blur(2px) brightness(1.25) hue-rotate(-9deg);
+
+  --sun-glow-color-0: rgb(236 141 103);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
+  --sun-glow-opacity: 0.5;
+
+  --cloud-top-overlay-color:   #3c206ea3;
+  --cloud-top-overlay-opacity: 1;
+  --cloud-top-overlay-blend:   darken;
+
+  --foliage-overlay-color:   #131836;
+  --foliage-overlay-opacity: 0.6;
+  --foliage-overlay-blend:   color-burn;
+
+  --terrain-overlay-color:   #993bda;
+  --terrain-overlay-opacity: 0.6;
+  --terrain-overlay-blend:   color-burn;
+
+  --bush-overlay-color:   #993bda;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   color-burn;
+
+  .bottom-clouds {
+    opacity: 0.35;
   }
 }

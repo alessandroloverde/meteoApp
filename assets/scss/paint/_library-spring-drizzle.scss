@@ -105,6 +105,17 @@ $spring-drizzle-terrain-warm: (
   ),
 );
 
+// Terrain temp patch — hot (foliage 1–5; terrain/bushes/building inherit default until authored).
+$spring-drizzle-terrain-hot: (
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #b5b869 12%, #556f40)),
+    2: (gradient: radial-gradient(at 30% 35%, #e1a695, #61363e)),
+    3: (gradient: radial-gradient(at 10% 30%, #fde8a5 0%, #7a3d33 60%)),
+    4: (gradient: radial-gradient(at 0 30%, #8a5856 20%, #d89d8e 80%)),
+    5: (gradient: radial-gradient(at 70% 50%, #d7b684, #7a3d33)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -118,6 +129,7 @@ $paint-library: (
         default: $spring-drizzle-terrain-default,
         mild: $spring-drizzle-terrain-mild,
         warm: $spring-drizzle-terrain-warm,
+        hot: $spring-drizzle-terrain-hot,
       ),
     ),
   ),
