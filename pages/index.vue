@@ -1023,39 +1023,57 @@ $clouds--low: (
   --mask-position: top center;
 }
 
+// Each ridge paints two background layers: a token-built color ramp at the
+// bottom, and an optional grayscale shading ramp blended over it. Authoring a
+// temp variant only needs colors — geometry stays here. --terrain-N-layer-bkg
+// remains the escape hatch for a non-standard gradient shape, but a paint
+// bundle's `default` must never set it, or the token fallback is dead for every
+// variant merged on top of that default.
 .terrain-5 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-5--bkg.svg');
-  --layer-bkg: var(
-    --terrain-5-layer-bkg,
-    linear-gradient(
-      to right,
-      var(--terrain-5-a)   0%,
-      var(--terrain-5-b) 100%
-    )
-  );
+  --layer-bkg:
+    var(--terrain-5-shade, var(--terrain-shade-none)),
+    var(
+      --terrain-5-layer-bkg,
+      linear-gradient(
+        to right,
+        var(--terrain-5-a)   0%,
+        var(--terrain-5-b) 100%
+      )
+    );
+  --layer-blend: var(--terrain-5-shade-blend, overlay), normal;
   --layer-opacity: 1;
   z-index: 5;
 }
 .terrain-4 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-4--bkg.svg');
-  --layer-bkg: radial-gradient(
-    circle at 72% 0%,
-    var(--terrain-4-a)  0%,
-    var(--terrain-4-b) 25%
-  );
+  --layer-bkg:
+    var(--terrain-4-shade, var(--terrain-shade-none)),
+    var(
+      --terrain-4-layer-bkg,
+      radial-gradient(
+        circle at 72% 0%,
+        var(--terrain-4-a)  0%,
+        var(--terrain-4-b) 25%
+      )
+    );
+  --layer-blend: var(--terrain-4-shade-blend, overlay), normal;
   --layer-opacity: 1;
   z-index: 6;
 }
 .terrain-3 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-3--bkg.svg');
-  --layer-bkg: var(
-    --terrain-3-layer-bkg,
-    radial-gradient(
-      circle at 28% 0,
-      var(--terrain-3-a) -1%,
-      var(--terrain-3-b) 15%
-    )
-  );
+  --layer-bkg:
+    var(--terrain-3-shade, var(--terrain-shade-none)),
+    var(
+      --terrain-3-layer-bkg,
+      radial-gradient(
+        circle at 28% 0,
+        var(--terrain-3-a) -1%,
+        var(--terrain-3-b) 15%
+      )
+    );
+  --layer-blend: var(--terrain-3-shade-blend, overlay), normal;
   --layer-opacity: 1;
   top: 4%;
   z-index: 8;
@@ -1063,10 +1081,13 @@ $clouds--low: (
 .terrain-2 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-2--bkg.svg');
   // Standard base: linear-gradient(-7deg, … 80%, … 90%) via --terrain-2-layer-bkg.
-  --layer-bkg: var(
-    --terrain-2-layer-bkg,
-    linear-gradient(-7deg, var(--terrain-2-a) 80%, var(--terrain-2-b) 90%)
-  );
+  --layer-bkg:
+    var(--terrain-2-shade, var(--terrain-shade-none)),
+    var(
+      --terrain-2-layer-bkg,
+      linear-gradient(-7deg, var(--terrain-2-a) 80%, var(--terrain-2-b) 90%)
+    );
+  --layer-blend: var(--terrain-2-shade-blend, overlay), normal;
   --layer-opacity: 1;
   top: 4%;
   z-index: 9;
@@ -1074,10 +1095,13 @@ $clouds--low: (
 .terrain-1 {
   --mask-image: url('~/assets/images/masks/Terrains/Terrain-1--bkg.svg');
   --mask-gradient: url('~/assets/images/masks/Terrains/Terrain-1--gradient.png');
-  --layer-bkg: var(
-    --terrain-1-layer-bkg,
-    linear-gradient(to right, var(--terrain-1-c), var(--terrain-1-d) 90%)
-  );
+  --layer-bkg:
+    var(--terrain-1-shade, var(--terrain-shade-none)),
+    var(
+      --terrain-1-layer-bkg,
+      linear-gradient(to right, var(--terrain-1-c), var(--terrain-1-d) 90%)
+    );
+  --layer-blend: var(--terrain-1-shade-blend, overlay), normal;
   --accent-color: var(--terrain-1-a);
   --blend-mode: var(--terrain-1-blend, overlay);
   --layer-opacity: 1;

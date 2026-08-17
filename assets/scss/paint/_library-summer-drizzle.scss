@@ -35,15 +35,14 @@ $summer-drizzle-sky-default: (
 // =============================================================================
 // TERRAIN cluster
 // =============================================================================
+// Terrain slots stay tokens here on purpose: `layer-bkg` in a default would be
+// inherited by every temp variant merged on top and would suppress the token
+// gradients index.vue builds, leaving unauthored layers gray.
 $summer-drizzle-terrain-default: (
   terrain: (
-    1: (
-      a: $neutral,
-      blend: overlay,
-      layer-bkg: linear-gradient(to right, $neutral, $neutral 90%),
-    ),
-    2: (layer-bkg: linear-gradient(-7deg, $neutral 80%, $neutral 90%)),
-    3: (layer-bkg: radial-gradient(circle at 28% 0, $neutral -6%, $neutral 16%)),
+    1: (a: $neutral, c: $neutral, d: $neutral, blend: overlay),
+    2: (a: $neutral, b: $neutral),
+    3: (a: $neutral, b: $neutral),
     4: (a: $neutral, b: $neutral),
     5: (a: $neutral, b: $neutral),
   ),
@@ -67,7 +66,9 @@ $summer-drizzle-terrain-default: (
   ),
 );
 
-// Terrain temp patch — mild (terrain 1–5; foliage/bushes/building inherit default until authored).
+// Terrain temp patch — mild (terrain 1–5 + bushes + foliage; building inherit default until authored).
+// Colors only — gradient geometry comes from index.vue. Add a `shade` grayscale
+// ramp (+ optional `shade-blend`) here when a layer needs extra depth.
 $summer-drizzle-terrain-mild: (
   terrain: (
     1: (
@@ -79,6 +80,18 @@ $summer-drizzle-terrain-mild: (
     3: (a: #99925a, b: #6e6d4a),
     4: (a: #95a15d, b: #8a8346),
     5: (a: #a5beb8, b: #becdc1),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #5b553b, #948958 70%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #585539, #afa170 60%)),
+    3: (gradient: linear-gradient(356deg, #59563d, #bfb46e 70%)),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #c3b370, #65754b 60%, #615652 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #c0bf80, #232912 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #d4dc6c, #683909 100%)),
+    4: (gradient: radial-gradient(at 80% 50%, #b3b025, #474e2b 100%)),
+    5: (gradient: radial-gradient(at 70% 40%, #c3b35b, #38241a 100%)),
   ),
 );
 

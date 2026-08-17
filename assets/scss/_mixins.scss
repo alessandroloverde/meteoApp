@@ -14,11 +14,15 @@
 // $base is the last layer, so it may be an image or a color; a color simply
 // lands in background-color and still acts as the backdrop for the layer above.
 //
+// $base-blend is the blend list belonging to $base — pass one entry per layer
+// $base expands to, so the two lists stay aligned. Defaults to a single
+// `normal` for single-layer bases.
+//
 // Only valid on elements with no pseudo-elements of their own — those paint
 // above the background, and a background layer cannot rise above them. The
 // element must also isolate blending (its own stacking context via opacity,
 // z-index, isolation, …) for this to be equivalent to a pane.
-@mixin overlay-blend-paint($prefix, $base) {
+@mixin overlay-blend-paint($prefix, $base, $base-blend: normal) {
   background:
     var(
       --#{$prefix}-overlay-bg,
@@ -28,11 +32,12 @@
       )
     ),
     #{$base};
-  background-blend-mode: var(--#{$prefix}-overlay-blend), normal;
+  background-blend-mode: var(--#{$prefix}-overlay-blend), #{$base-blend};
 }
 
 // Silhouette mask + background gradient only (terrain 2–5).
-//   --layer-bkg       background gradient
+//   --layer-bkg       background gradient (may be a multi-layer list)
+//   --layer-blend     blend list matching --layer-bkg (default: normal)
 //   --mask-image      silhouette mask
 //   --mask-size       (default: 100% auto)
 //   --mask-position   (default: bottom center)
@@ -41,9 +46,10 @@
 // overlay-blend-paint for the constraints that come with it.
 @mixin masked-gradient-layer($overlay: null) {
   @if $overlay {
-    @include overlay-blend-paint($overlay, var(--layer-bkg));
+    @include overlay-blend-paint($overlay, var(--layer-bkg), var(--layer-blend, normal));
   } @else {
     background: var(--layer-bkg);
+    background-blend-mode: var(--layer-blend, normal);
   }
   // Longhand — mask shorthand + var() is unreliable in WebKit for multi-token positions.
   -webkit-mask-image: var(--mask-image);
@@ -59,7 +65,8 @@
 // Full terrain accent stack (terrain 1 only): base mask + ::before gradient
 // texture + ::after accent through gradient mask.
 // Configure via CSS custom properties on the element:
-//   --layer-bkg         background of the base layer
+//   --layer-bkg         background of the base layer (may be a multi-layer list)
+//   --layer-blend       blend list matching --layer-bkg (default: normal)
 //   --mask-image        mask applied to the base layer
 //   --mask-size         (default: 100% auto)
 //   --mask-position     (default: bottom center)
@@ -69,6 +76,7 @@
 //   --blend-mode        mix-blend-mode of ::after
 @mixin gradient-mask-layer {
   background: var(--layer-bkg);
+  background-blend-mode: var(--layer-blend, normal);
   -webkit-mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
           mask: var(--mask-image) var(--mask-position, bottom center) / var(--mask-size, 100% auto) no-repeat;
 

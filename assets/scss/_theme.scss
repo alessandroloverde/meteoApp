@@ -28,6 +28,12 @@
 // cannot sit on top of those. --terrain-overlay-* therefore has to stay valid
 // for both paths, which the rules above already guarantee.
 //
+// Terrain ridges split shape from color: index.vue owns the gradient geometry and
+// builds it from --terrain-N-a/b/c/d, so a paint variant supplies colors only.
+// --terrain-N-shade adds an optional grayscale ramp blended over that base via
+// --terrain-N-shade-blend. A `layer-bkg` slot overrides the geometry outright and
+// must never appear in a bundle's `default`, since every variant merges onto it.
+//
 // Sky overlay (inside .sky-overlays; container owns --sky-overlay-blend):
 //   --sky-overlay-stop-0/1/2   3-stop top→bottom gradient fallback
 //   --sky-overlay-bg           overrides the 3-stop gradient when set
@@ -57,6 +63,13 @@ $trunk-dusk-b: #412b15;
 @property --cloud-top-overlay-blend     { syntax: '*'; inherits: true; initial-value: normal; }
 @property --cloud-bottom-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --terrain-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
+// Terrain shading layer — mid-gray under `overlay` is an identity blend, so the
+// initial value keeps an unset --terrain-N-shade a no-op.
+@property --terrain-1-shade-blend  { syntax: '*'; inherits: true; initial-value: overlay; }
+@property --terrain-2-shade-blend  { syntax: '*'; inherits: true; initial-value: overlay; }
+@property --terrain-3-shade-blend  { syntax: '*'; inherits: true; initial-value: overlay; }
+@property --terrain-4-shade-blend  { syntax: '*'; inherits: true; initial-value: overlay; }
+@property --terrain-5-shade-blend  { syntax: '*'; inherits: true; initial-value: overlay; }
 @property --foliage-overlay-blend  { syntax: '*'; inherits: true; initial-value: normal; }
 @property --bush-overlay-blend     { syntax: '*'; inherits: true; initial-value: normal; }
 @property --building-overlay-blend { syntax: '*'; inherits: true; initial-value: normal; }
@@ -184,6 +197,11 @@ $trunk-dusk-b: #412b15;
   // Shared fallback — used by overlay containers and anything that needs a
   // single terrain color without layer specificity.
   --terrain-base: #{$gray};
+
+  // Terrain shading — optional grayscale ramp blended over the token-built color
+  // base, so a temp variant can add depth without restating gradient geometry.
+  // A flat mid-gray is an identity blend under `overlay`, hence the no-op default.
+  --terrain-shade-none: linear-gradient(#{$gray}, #{$gray});
 
   --terrain-overlay-color:   #{$gray};
   --terrain-overlay-opacity: 0;
@@ -1941,6 +1959,18 @@ $trunk-dusk-b: #412b15;
 }
 
 // =============================================================================
+// drizzle--summer — building palette
+// =============================================================================
+// Morning & afternoon — mild (daylight; wins over paint-bundle grays).
+[data-season='summer'][data-weather='drizzle'][data-temp='mild'][data-time='morning'],
+[data-season='summer'][data-weather='drizzle'][data-temp='mild'][data-time='afternoon'] {
+  --building-wall-base:   #717b84;
+  --building-roof-base:   #60686a;
+  --building-window-base: #717b84;
+  --building-church:      #828c95;
+}
+
+// =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
 // Declared after season building palettes so lit windows always win over daytime
@@ -2937,6 +2967,23 @@ $trunk-dusk-b: #412b15;
 
 [data-scene-id='drizzle--summer--afternoon--mild'] {
   --sky-gradient: linear-gradient(to bottom, #637fa0 0%, #7794b6 40%, #bab8b9 70%, #e0d4c8 100%);
+
+  --cloud-top-overlay-color:   #91c2da;
+  --cloud-top-overlay-opacity: 0.5;
+  --cloud-top-overlay-blend:   multiply;
+
+  --cloud-bottom-overlay-color:   #e1d4ca;
+  --cloud-bottom-overlay-opacity: 0.75;
+  --cloud-bottom-overlay-blend:   color;
+
+  --sun-glow-color-0: rgb(136, 225, 253);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
+  --sun-glow-opacity: 0.5;
+  --moon-filter:      blur(10px) grayscale(0.5) brightness(1.25);
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
 }
 
 // drizzle--summer--evening--mild: sky below.
