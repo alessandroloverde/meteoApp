@@ -2922,3 +2922,31 @@ $trunk-dusk-b: #412b15;
     opacity: 0.35;
   }
 }
+
+// =============================================================================
+// drizzle--summer--mild — scene recipes
+// =============================================================================
+
+// drizzle--summer--morning--mild: sky below.
+
+[data-scene-id='drizzle--summer--morning--mild'] {
+  --sky-gradient: radial-gradient(circle at 0% 100%, #e9e0d7 10%, #eac9a5 20%, #e6ba97 40%, #8399b1 75%);
+}
+
+// drizzle--summer--afternoon--mild: sky below.
+
+[data-scene-id='drizzle--summer--afternoon--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #637fa0 0%, #7794b6 40%, #bab8b9 70%, #e0d4c8 100%);
+}
+
+// drizzle--summer--evening--mild: sky below.
+
+[data-scene-id='drizzle--summer--evening--mild'] {
+  --sky-gradient: radial-gradient(circle at 50% 100%, #e9c4ad 10%, #ebbfa6 20%, #e79597 40%, #67608a 70%);
+}
+
+// drizzle--summer--night--mild: sky below.
+
+[data-scene-id='drizzle--summer--night--mild'] {
+  --sky-gradient: linear-gradient(45deg, #655869, #2d2f48, #322f45);
+}

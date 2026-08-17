@@ -8,6 +8,7 @@
 @use 'library-spring-cloudy' as spring-cloudy-lib;
 @use 'library-spring-drizzle' as spring-drizzle-lib;
 @use 'library-summer-cloudy' as summer-cloudy-lib;
+@use 'library-summer-drizzle' as summer-drizzle-lib;
 @use 'library-winter-cloudy' as winter-cloudy-lib;
 @use 'library-winter-drizzle' as winter-drizzle-lib;
 
@@ -24,7 +25,10 @@ $paint-branches: (
     spring-cloudy-lib.$paint-library,
     spring-drizzle-lib.$paint-library
   ),
-  summer: summer-cloudy-lib.$paint-library,
+  summer: paint.paint-deep-merge(
+    summer-cloudy-lib.$paint-library,
+    summer-drizzle-lib.$paint-library
+  ),
   winter: paint.paint-deep-merge(
     winter-cloudy-lib.$paint-library,
     winter-drizzle-lib.$paint-library

@@ -28,6 +28,7 @@ export const PAINT_LIBRARY_BRANCHES = [
   { season: 'spring', weather: 'cloudy' },
   { season: 'spring', weather: 'drizzle' },
   { season: 'summer', weather: 'cloudy' },
+  { season: 'summer', weather: 'drizzle' },
   { season: 'winter', weather: 'cloudy' },
   { season: 'winter', weather: 'drizzle' },
 ]
@@ -77,6 +78,9 @@ const TERRAIN_VARIANT_BY_TEMP = {
       warm: 'warm',
       hot: 'hot',
     },
+    drizzle: {
+      mild: 'mild',
+    },
   },
   winter: {
     cloudy: {
@@ -104,6 +108,7 @@ const SKY_VARIANT_BY_BRANCH = {
   },
   summer: {
     cloudy: 'default',
+    drizzle: 'default',
   },
   winter: {
     cloudy: 'default',

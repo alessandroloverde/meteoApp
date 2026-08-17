@@ -1,0 +1,100 @@
+// Summer + drizzle — mild terrain basics authored first.
+//
+// Block 1 — branch defaults:
+//   • sky `default`     — sky gradient stops + clouds (neutral until authored)
+//   • terrain `default` — neutral terrain basics (foliage/bushes/buildings TBD)
+//   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
+//
+// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
+//
+// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
+
+$neutral: #808080;
+
+// =============================================================================
+// SKY cluster
+// =============================================================================
+$summer-drizzle-sky-default: (
+  sky: (
+    stops: (
+      0: $neutral,
+      1: $neutral,
+      2: $neutral,
+      3: $neutral,
+    ),
+  ),
+  cloud: (
+    1: (a: $neutral, b: $neutral),
+    2: (solid: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (solid: $neutral),
+  ),
+);
+
+// =============================================================================
+// TERRAIN cluster
+// =============================================================================
+$summer-drizzle-terrain-default: (
+  terrain: (
+    1: (
+      a: $neutral,
+      blend: overlay,
+      layer-bkg: linear-gradient(to right, $neutral, $neutral 90%),
+    ),
+    2: (layer-bkg: linear-gradient(-7deg, $neutral 80%, $neutral 90%)),
+    3: (layer-bkg: radial-gradient(circle at 28% 0, $neutral -6%, $neutral 16%)),
+    4: (a: $neutral, b: $neutral),
+    5: (a: $neutral, b: $neutral),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, $neutral, $neutral 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, $neutral, $neutral 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, $neutral, $neutral 100%)),
+    4: (gradient: radial-gradient(at 0 30%, $neutral, $neutral 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, $neutral, $neutral 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, $neutral, $neutral 70%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, $neutral, $neutral 60%)),
+    3: (gradient: linear-gradient(356deg, $neutral, $neutral 70%)),
+  ),
+  building: (
+    wall: $neutral,
+    roof: $neutral,
+    window: $neutral,
+    church: $neutral,
+  ),
+);
+
+// Terrain temp patch — mild (terrain 1–5; foliage/bushes/building inherit default until authored).
+$summer-drizzle-terrain-mild: (
+  terrain: (
+    1: (
+      a: #d4c276,
+      c: #61763c,
+      d: #5d5931,
+    ),
+    2: (a: #618c4c, b: #a8b56e),
+    3: (a: #99925a, b: #6e6d4a),
+    4: (a: #95a15d, b: #8a8346),
+    5: (a: #a5beb8, b: #becdc1),
+  ),
+);
+
+// =============================================================================
+// Library map — season → weather → cluster → variant
+// =============================================================================
+$paint-library: (
+  summer: (
+    drizzle: (
+      sky: (
+        default: $summer-drizzle-sky-default,
+      ),
+      terrain: (
+        default: $summer-drizzle-terrain-default,
+        mild: $summer-drizzle-terrain-mild,
+      ),
+    ),
+  ),
+);
