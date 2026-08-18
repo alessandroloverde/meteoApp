@@ -1970,6 +1970,15 @@ $trunk-dusk-b: #412b15;
   --building-church:      #828c95;
 }
 
+// Evening & night — mild (wins over paint-bundle grays).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='summer'][data-weather='drizzle'][data-temp='mild'][data-time='evening'],
+[data-season='summer'][data-weather='drizzle'][data-temp='mild'][data-time='night'] {
+  --building-wall-base: #684f54;
+  --building-roof-base: #9d7775;
+  --building-church:    #937576;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -2961,6 +2970,19 @@ $trunk-dusk-b: #412b15;
 
 [data-scene-id='drizzle--summer--morning--mild'] {
   --sky-gradient: radial-gradient(circle at 0% 100%, #e9e0d7 10%, #eac9a5 20%, #e6ba97 40%, #8399b1 75%);
+
+  --terrain-overlay-color:   #758f50;
+  --terrain-overlay-opacity: 0.5;
+
+  --bush-overlay-color:   #6ba912;
+  --bush-overlay-opacity: 0.5;
+
+  --foliage-overlay-color:   #77912e;
+  --foliage-overlay-opacity: 1;
+
+  --scene-grade-color-bg:      linear-gradient(to bottom, transparent, #da923d);
+  --scene-grade-color-opacity: 1;
+  --scene-grade-color-blend:   color;
 }
 
 // drizzle--summer--afternoon--mild: sky below.
@@ -2990,6 +3012,13 @@ $trunk-dusk-b: #412b15;
 
 [data-scene-id='drizzle--summer--evening--mild'] {
   --sky-gradient: radial-gradient(circle at 50% 100%, #e9c4ad 10%, #ebbfa6 20%, #e79597 40%, #67608a 70%);
+
+  --scene-grade-evening-bg:      radial-gradient(circle at 50% 50%, #393252, #2f2138);
+  --scene-grade-evening-opacity: 0.75;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
 }
 
 // drizzle--summer--night--mild: sky below.
