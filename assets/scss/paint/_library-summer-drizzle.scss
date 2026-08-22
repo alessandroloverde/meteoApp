@@ -95,6 +95,33 @@ $summer-drizzle-terrain-mild: (
   ),
 );
 
+// Terrain temp patch — warm (terrain 1–5 + bushes + foliage; building inherit until authored).
+$summer-drizzle-terrain-warm: (
+  terrain: (
+    1: (
+      a: #deb04b,
+      c: #b06624,
+      d: #b55628,
+    ),
+    2: (a: #a6651a, b: #a9a562),
+    3: (a: #d09843, b: #9c583d),
+    4: (a: #b89d4d, b: #98563e),
+    5: (a: #daa67f, b: #9a4228),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #766846, #c4ac86 70%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #7b6b49, #d2b47b 60%)),
+    3: (gradient: linear-gradient(356deg, #555d51, #95ad73 70%)),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #daa054, #944721 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #c3ab86, #384e1c 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #c58545, #610505 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #a24920, #ce8c31 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #a09075, #4d6354 100%)),
+  ),
+);
+
 // =============================================================================
 // Library map — season → weather → cluster → variant
 // =============================================================================
@@ -107,6 +134,7 @@ $paint-library: (
       terrain: (
         default: $summer-drizzle-terrain-default,
         mild: $summer-drizzle-terrain-mild,
+        warm: $summer-drizzle-terrain-warm,
       ),
     ),
   ),
