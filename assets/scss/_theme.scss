@@ -2009,6 +2009,15 @@ $trunk-dusk-b: #412b15;
   --building-church:    #4e4d5b;
 }
 
+// Morning & afternoon — hot (daylight; wins over paint-bundle grays).
+[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='morning'],
+[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='afternoon'] {
+  --building-wall-base:   #9e8b70;
+  --building-roof-base:   #86745c;
+  --building-window-base: #9e8b70;
+  --building-church:      #b3a186;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -3192,4 +3201,18 @@ $trunk-dusk-b: #412b15;
   .bottom-clouds {
     opacity: 0.35;
   }
+}
+
+// =============================================================================
+// drizzle--summer--hot — scene recipes
+// =============================================================================
+
+// drizzle--summer--morning--hot: sky + top clouds below.
+
+[data-scene-id='drizzle--summer--morning--hot'] {
+  --sky-gradient: linear-gradient(to bottom, #b4ccce 0%, #c8cabf 40%, #f0d4a0 70%, #f2ddab 100%);
+
+  --cloud-top-overlay-color:   #dfa83999;
+  --cloud-top-overlay-opacity: 1;
+  --cloud-top-overlay-blend:   soft-light;
 }
