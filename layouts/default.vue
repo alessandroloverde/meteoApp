@@ -124,13 +124,18 @@ const referencePhoneStyle = computed(() => {
 }
 
 .bottom-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-around;
   gap: v.$space-sm;
   padding: v.$space-sm v.$space-md calc(v.$space-sm + env(safe-area-inset-bottom, 0px));
-  background-color: rgba(v.$color-surface, 0.96);
+  background-color: rgba(v.$color-surface, 0.5);
   backdrop-filter: blur(12px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

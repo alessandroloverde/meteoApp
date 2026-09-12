@@ -557,7 +557,10 @@ $trees: (
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 1rem;
+  // Bottom clearance for the floating bottom-nav. The absolutely-positioned
+  // scene ignores padding (inset: 0 covers the padding box), so it still
+  // extends edge-to-edge behind the nav; only the centered content is pushed up.
+  padding: 1rem 1rem calc(4rem + env(safe-area-inset-bottom, 0px));
   color: #fff;
   text-align: center;
   isolation: isolate;
@@ -1325,7 +1328,7 @@ $clouds--low: (
 
 .main-content {
   position: absolute;
-  bottom: 3vh;
+  bottom: calc(1rem + 4rem + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;

@@ -50,9 +50,11 @@
 }
 
 // Mobile UI frame: all app chrome (scroll + bottom nav) lives inside this box.
+// `position: relative` anchors the floating bottom-nav (absolute, bottom: 0).
 .phoneContainer {
   @apply w-[375px] h-[667px] max-h-[90dvh] bg-black rounded-[40px] shadow-2xl;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
