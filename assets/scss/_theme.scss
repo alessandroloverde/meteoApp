@@ -2009,13 +2009,28 @@ $trunk-dusk-b: #412b15;
   --building-church:    #4e4d5b;
 }
 
-// Morning & afternoon — hot (daylight; wins over paint-bundle grays).
-[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='morning'],
-[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='afternoon'] {
+// Morning — hot (daylight; wins over paint-bundle grays).
+[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='morning'] {
   --building-wall-base:   #9e8b70;
   --building-roof-base:   #86745c;
   --building-window-base: #9e8b70;
   --building-church:      #b3a186;
+}
+
+// Afternoon — hot (daylight; wins over paint-bundle grays).
+[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='afternoon'] {
+  --building-wall-base:   #8f745d;
+  --building-roof-base:   #6e5f4a;
+  --building-window-base: #887457;
+  --building-church:      #a99274;
+}
+
+// Evening — hot (wins over paint-bundle grays).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='evening'] {
+  --building-wall-base:   #75534a;
+  --building-roof-base:   #47332d;
+  --building-church:      #866258;
 }
 
 // =============================================================================
@@ -3215,4 +3230,73 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-color:   #dfa83999;
   --cloud-top-overlay-opacity: 1;
   --cloud-top-overlay-blend:   soft-light;
+}
+
+// drizzle--summer--afternoon--hot: sky + bottom clouds below.
+
+[data-scene-id='drizzle--summer--afternoon--hot'] {
+  --sky-stop-0: #7db9b9;
+  --sky-stop-1: #7fbab3;
+  --sky-stop-2: #bad2c2;
+  --sky-stop-3: #ede5d0;
+
+  --cloud-bottom-overlay-color:   #f7e5c2;
+  --cloud-bottom-overlay-opacity: 1;
+
+  --cloud-top-overlay-color:   #eedcbf;
+  --cloud-top-overlay-opacity: 0.75;
+
+  --sun-glow-color-0: rgb(238, 212, 157);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
+  --sun-glow-opacity: 0.5;
+  --moon-filter:    brightness(1.25) hue-rotate(-20deg);
+
+  --terrain-overlay-color:   #e38805;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   multiply;
+
+  --bush-overlay-color:   #e9b968;
+  --bush-overlay-opacity: 0.5;
+
+  --foliage-overlay-color:   #f0be6c;
+  --foliage-overlay-opacity: 0.4;
+
+  .bottom-clouds {
+    opacity: 0.35;
+  }
+}
+
+// drizzle--summer--evening--hot: terrain overlay below.
+
+[data-scene-id='drizzle--summer--evening--hot'] {
+  --sky-stop-0: #6a445e;
+  --sky-stop-1: #a3566c;
+  --sky-stop-2: #c4645f;
+  --sky-stop-3: #f69b64;
+
+  --terrain-overlay-color:   #664d02a1;
+  --terrain-overlay-opacity: 0.75;
+  --terrain-overlay-blend:   color-burn;
+
+  --bush-overlay-color:   #785d40;
+  --bush-overlay-opacity: 0.4;
+  --bush-overlay-blend:   color-burn;
+
+  --foliage-overlay-color:   #b57a46;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   multiply;
+
+  --cloud-bottom-overlay-color:   #b06a75;
+  --cloud-bottom-overlay-opacity: 1;
+
+  --moon-opacity: 1;
+  --moon-filter:  hue-rotate(-20deg) brightness(0.95) saturate(2);
+
+  --cloud-top-overlay-color:   #951d3f61;
+  --cloud-top-overlay-opacity: 1;
+  --cloud-top-overlay-blend:   color-burn;
+
+  .bottom-clouds {
+    opacity: 0.25;
+  }
 }
