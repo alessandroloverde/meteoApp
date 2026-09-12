@@ -2033,6 +2033,13 @@ $trunk-dusk-b: #412b15;
   --building-church:      #866258;
 }
 
+// Night — hot (wins over paint-bundle grays).
+[data-season='summer'][data-weather='drizzle'][data-temp='hot'][data-time='night'] {
+  --building-wall-base:   #2c1e31;
+  --building-roof-base:   #272839;
+  --building-church:      #43303d;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -3295,6 +3302,44 @@ $trunk-dusk-b: #412b15;
   --cloud-top-overlay-color:   #951d3f61;
   --cloud-top-overlay-opacity: 1;
   --cloud-top-overlay-blend:   color-burn;
+
+  .bottom-clouds {
+    opacity: 0.25;
+  }
+}
+
+// drizzle--summer--night--hot: sky + bottom clouds below.
+
+[data-scene-id='drizzle--summer--night--hot'] {
+  --sky-stop-0: #1b1d34;
+  --sky-stop-1: #36334e;
+  --sky-stop-2: #53444b;
+  --sky-stop-3: #624b4f;
+
+  --cloud-bottom-overlay-color:   #c6a699;
+  --cloud-bottom-overlay-opacity: 1;
+  --cloud-bottom-overlay-blend:   color;
+
+  --cloud-top-overlay-color:   #48374fcf;
+  --cloud-top-overlay-opacity: 1;
+  --cloud-top-overlay-blend:   multiply;
+
+  --sun-glow-color-0: rgb(243, 165, 172);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
+  --sun-glow-opacity: 0.25;
+  --moon-filter:    blur(10px) contrast(0.75);
+
+  --terrain-overlay-color:   #0003a6f0;
+  --terrain-overlay-opacity: 0.75;
+  --terrain-overlay-blend:   multiply;
+
+  --bush-overlay-color:   #2f2175;
+  --bush-overlay-opacity: 0.75;
+  --bush-overlay-blend:   multiply;
+
+  --foliage-overlay-color:   #524849;
+  --foliage-overlay-opacity: 0.75;
+  --foliage-overlay-blend:   multiply;
 
   .bottom-clouds {
     opacity: 0.25;
