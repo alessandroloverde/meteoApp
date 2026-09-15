@@ -7,9 +7,13 @@ export interface Coordinates {
 }
 
 export interface CurrentWeather {
-  temperature: number
+  temperature: number            // raw air temperature (°C) — drives the scene temp band
+  apparentTemperature: number   // perceived / "feels-like" temperature (°C)
   weathercode: number
   time: string
+  isDay: number                  // 1 = day, 0 = night (server-side; unused by scene builder)
+  windSpeed: number             // km/h
+  windDirection: number          // degrees
 }
 
 export const useWeatherStore = defineStore('weather', {

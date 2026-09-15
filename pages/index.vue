@@ -363,6 +363,9 @@ onBeforeUnmount(() => {
 
       <div v-else-if="store.weather" class="weather-panel">
         <h1 class="weather-panel__temp">{{ store.weather.temperature }}°</h1>
+        <p v-if="store.weather.apparentTemperature != null" class="weather-panel__feels">
+          Feels like {{ Math.round(store.weather.apparentTemperature) }}°
+        </p>
         <p class="weather-panel__meta">
           <span>code: {{ store.weather.weathercode }}</span>
           <span class="weather-panel__sep" aria-hidden="true">|</span>
@@ -1347,6 +1350,12 @@ $clouds--low: (
   &__temp {
     font-size: 3.75rem;
     font-weight: 700;
+    line-height: 1;
+  }
+
+  &__feels {
+    font-size: 0.9rem;
+    opacity: 0.8;
     line-height: 1;
   }
 
