@@ -83,7 +83,7 @@
 const route = useRoute()
 
 const { options: referenceOptions, selectedFilename, selectedUrl } = useReferenceBackgrounds()
-const { current: phoneViewport } = usePhoneViewport()
+const { current: phoneViewport, SCENE_BASE_HEIGHT } = usePhoneViewport()
 
 const referencePhoneStyle = computed(() => {
   const u = selectedUrl.value
@@ -137,6 +137,9 @@ const appPhoneStyle = computed(() => {
     transform: `scale(${s})`,
     transformOrigin: 'top left',
     '--status-bar-h': v.notch ? '44px' : '20px',
+    // Scene adapt: authored artboard + phone height → extenders in index.vue
+    '--phone-h': `${v.height}px`,
+    '--scene-base-h': `${SCENE_BASE_HEIGHT}px`,
   }
 })
 </script>

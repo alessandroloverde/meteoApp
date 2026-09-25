@@ -10,6 +10,12 @@
 // Dimensions are CSS px (iPhone "points"). Notch flag drives the status bar
 // style: true  → 44px bar with iPhone X-style notch
 //              false → 20px thin bar (iPhone 8 / SE)
+//
+// SCENE_BASE_HEIGHT is the authored artboard (iPhone 8). Taller phones absorb
+// the leftover height via a sky extender (1/3) and a taller .terrain group
+// with --terrain-1-c fill (2/3) — see pages/index.vue.
+
+export const SCENE_BASE_HEIGHT = 667
 
 export const PHONE_VIEWPORTS = [
   { id: 'iphone-8',           label: 'iPhone 8',           width: 375, height: 667,  notch: false },
@@ -37,5 +43,6 @@ export function usePhoneViewport() {
     current,
     options: PHONE_VIEWPORTS,
     setViewport,
+    SCENE_BASE_HEIGHT,
   }
 }

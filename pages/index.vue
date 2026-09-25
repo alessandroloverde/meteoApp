@@ -185,8 +185,10 @@ onBeforeUnmount(() => {
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
     >
-      <!-- SKY Group -->
+      <!-- SKY Group — extender absorbs 1/3 of (phone − iPhone-8) height above the frozen core -->
       <div class="🟦 scene-layer sky-base">
+        <div class="scene-extend scene-extend--sky" aria-hidden="true"></div>
+        <div class="sky-body">
 
         <div class="sky-sun-glow" aria-hidden="true"></div>
 
@@ -258,10 +260,13 @@ onBeforeUnmount(() => {
           <div class="scene-layer cloud-4--low"></div>
         </section>
 
+        </div>
       </div>
 
-      <!-- 🖼️ TERRAIN Group -->
+      <!-- 🖼️ TERRAIN Group — taller by --scene-extend-bottom; ground fill is
+           .terrain's own background. Authored art stays frozen in .terrain-body. -->
       <div class="🖼️ scene-layer terrain">
+        <div class="terrain-body">
         <div class="scene-layer drizzle-rain drizzle-rain--terrain"></div>
 
         <!-- 🌲 Trees — scene mix is a second background layer on each foliage element -->
@@ -333,6 +338,7 @@ onBeforeUnmount(() => {
         <div class="scene-layer terrain-layer terrain-4"></div>
         <div class="scene-layer terrain-layer terrain-5"></div>
 
+        </div>
       </div>
 
       <!-- AMBIENT GRADE Group -->
@@ -576,6 +582,15 @@ $trees: (
   pointer-events: none;
   contain: layout style;
   isolation: isolate;
+
+  // Leftover height vs the iPhone-8 artboard. Extenders absorb it 1/3 top / 2/3 bottom.
+  // --phone-h / --scene-base-h are set on .phoneContainer by the layout.
+  --scene-extra: max(0px, calc(var(--phone-h, 667px) - var(--scene-base-h, 667px)));
+  --scene-extend-top: calc(var(--scene-extra) / 3);
+  --scene-extend-bottom: calc(var(--scene-extra) * 2 / 3);
+  // Frozen sky/terrain band heights (were 55% / 55% of the phone).
+  --scene-core-band: calc(var(--scene-base-h, 667px) * 0.55);
+  --scene-core-overlap: calc(var(--scene-base-h, 667px) * 0.08);
 }
 
 .scene-layer {
@@ -644,11 +659,42 @@ $trees: (
 // =============================================================================
 // SKY
 // =============================================================================
+// sky-base grows by --scene-extend-top; authored content lives in .sky-body at
+// the frozen iPhone-8 band height so clouds/moon/% offsets don't stretch.
+// z-index stays below .terrain so the overlap still reveals city/trees.
 .sky-base {
-  height: 55%;
-  background: var(--sky-gradient);
+  height: calc(var(--scene-core-band) + var(--scene-extend-top));
   z-index: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+.scene-extend {
+  flex-shrink: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+// Sample the top stop of --sky-gradient (works even when the gradient is a
+// hardcoded override that doesn't touch --sky-stop-0).
+.scene-extend--sky {
+  height: var(--scene-extend-top);
+  background-image: var(--sky-gradient);
+  background-size: 100% 5000%;
+  background-position: top center;
+  background-repeat: no-repeat;
+}
+
+.sky-body {
+  position: relative;
+  flex: 0 0 var(--scene-core-band);
+  height: var(--scene-core-band);
+  width: 100%;
+  background: var(--sky-gradient);
+  // Do NOT set overflow:hidden — it would create a stacking context and is
+  // unnecessary (the phone frame already clips).
 }
 
 // Sun glow — radial halo centered on the same point as the sun/moon disc.
@@ -1003,12 +1049,28 @@ $clouds--low: (
 // =============================================================================
 // Terrain
 // =============================================================================
+// .terrain grows by --scene-extend-bottom; the extra height is filled by its
+// own --terrain-1-c background (no separate extender stripe). Authored content
+// stays in .terrain-body at the frozen band height. Overlap is the old -8%.
+// z-index: auto so ridge/tree z-indexes compete with sky (not trapped under a
+// terrain stacking context).
 .terrain {
-  height: 55%;
+  height: calc(var(--scene-core-band) + var(--scene-extend-bottom));
   z-index: auto;
   position: relative;
-  top: -8%;
-  background-color: transparent;
+  top: calc(var(--scene-core-overlap) * -1);
+  background-color: var(--terrain-1-c);
+  display: flex;
+  flex-direction: column;
+}
+
+.terrain-body {
+  position: relative;
+  flex: 0 0 var(--scene-core-band);
+  height: var(--scene-core-band);
+  width: 100%;
+  // No overflow:hidden — it creates a stacking context that traps child
+  // z-indexes under .sky-base, covering the city.
 }
 
 .terrain-1,
@@ -1318,7 +1380,7 @@ $clouds--low: (
 // =============================================================================
 .city-name {
   position: absolute;
-  top: calc(var(--status-bar-h, 44px) + 1.5vh);
+  top: calc(44px + 1.5vh);
   z-index: 20;
   line-height: 1;
 
