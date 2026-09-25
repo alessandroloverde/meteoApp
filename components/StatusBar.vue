@@ -1,6 +1,11 @@
 <template>
-  <div class="ios-status-bar" aria-hidden="true">
-    <div class="ios-status-bar__notch" />
+  <div
+    class="ios-status-bar"
+    :class="{ 'ios-status-bar--notch': current.notch, 'ios-status-bar--thin': !current.notch }"
+    :style="{ '--status-bar-h': current.notch ? '44px' : '20px' }"
+    aria-hidden="true"
+  >
+    <div v-if="current.notch" class="ios-status-bar__notch" />
     <span class="ios-status-bar__time">{{ time }}</span>
     <div class="ios-status-bar__icons">
       <svg class="ios-status-bar__signal" viewBox="0 0 18 12" aria-hidden="true">
@@ -26,6 +31,8 @@
 </template>
 
 <script setup>
+const { current } = usePhoneViewport()
+
 const time = ref(formatTime())
 
 function formatTime() {
@@ -50,12 +57,24 @@ onBeforeUnmount(() => {
   top: 0;
   left: 0;
   right: 0;
-  height: 44px;
+  height: var(--status-bar-h, 44px);
   z-index: 1000;
   pointer-events: none;
   color: #fff;
   font: 600 15px/1 system-ui, -apple-system, 'SF Pro Text', sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+// Thin bar (iPhone 8 / SE) — tighter padding, smaller icons.
+.ios-status-bar--thin {
+  font-size: 13px;
+
+  .ios-status-bar__time { left: 16px; }
+  .ios-status-bar__icons { right: 14px; gap: 5px; }
+  .ios-status-bar__signal,
+  .ios-status-bar__wifi { width: 16px; height: 10px; }
+  .ios-status-bar__battery-body { width: 22px; height: 10px; border-width: 1px; padding: 1px; }
+  .ios-status-bar__battery-cap { width: 1.5px; height: 4px; }
 }
 
 // iPhone X-style notch — wider/taller than the Dynamic Island, as requested.

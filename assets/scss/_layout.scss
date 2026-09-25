@@ -51,8 +51,10 @@
 
 // Mobile UI frame: all app chrome (scroll + bottom nav) lives inside this box.
 // `position: relative` anchors the floating bottom-nav (absolute, bottom: 0).
+// Fixed dimensions live on the modifiers — the app phone is sized inline via
+// `appPhoneStyle` (viewport-driven), the reference phone stays 375×667.
 .phoneContainer {
-  @apply w-[375px] h-[667px] max-h-[90dvh] bg-black rounded-[40px] shadow-2xl;
+  @apply bg-black rounded-[40px] shadow-2xl;
 
   position: relative;
   display: flex;
@@ -61,6 +63,7 @@
 }
 
 .phoneContainer--reference {
+  @apply w-[375px] h-[667px] max-h-[90dvh];
   background-color: #000;
   background-position: center;
   background-size: cover;

@@ -1,5 +1,6 @@
 <template>
   <div class="pageContainer">
+    <div class="phoneStage">
     <div class="phoneRow">
       <div class="phoneColumn">
         <label class="reference-bg-label" for="reference-bg-select">Reference background</label>
@@ -24,9 +25,10 @@
       </div>
 
       <div class="phoneColumn">
-        <SceneControls class="scene-controls--above-phone" />
-        <div class="phoneContainer">
-          <StatusBar />
+        <PhoneViewportSelect class="scene-controls--above-phone" />
+        <div class="phoneScaler" :style="phoneScalerStyle">
+          <div class="phoneContainer phoneContainer--app" :style="appPhoneStyle">
+            <StatusBar />
           <main class="phoneContainer__main">
             <slot />
           </main>
@@ -68,8 +70,11 @@
               </svg>
             </NuxtLink>
           </nav>
+          </div>
         </div>
       </div>
+    </div>
+    <SceneControls class="scene-controls--below-row" />
     </div>
   </div>
 </template>
@@ -78,11 +83,61 @@
 const route = useRoute()
 
 const { options: referenceOptions, selectedFilename, selectedUrl } = useReferenceBackgrounds()
+const { current: phoneViewport } = usePhoneViewport()
 
 const referencePhoneStyle = computed(() => {
   const u = selectedUrl.value
   if (!u) return {}
   return { backgroundImage: `url(${u})` }
+})
+
+// Uniform scale so the tallest model (iPhone 17 Pro Max, 956px) fits in the
+// viewport. Applied via `transform: scale()` on the phone, while a wrapper
+// reserves the scaled box so layout reflects the true on-screen size. This
+// preserves relative size differences between models — e.g. 14 Pro Max and
+// 17 Pro Max share an aspect ratio but differ in absolute size, which an
+// `aspect-ratio` + `max-height` cap would collapse to the same rendered box.
+const TALLEST_MODEL_HEIGHT = 956
+const availableHeight = ref<number | null>(null)
+
+function updateAvailableHeight() {
+  if (import.meta.client) {
+    availableHeight.value = window.innerHeight * 0.88
+  }
+}
+
+onMounted(() => {
+  updateAvailableHeight()
+  window.addEventListener('resize', updateAvailableHeight)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateAvailableHeight)
+})
+
+const phoneScale = computed(() => {
+  if (availableHeight.value == null) return 1
+  return Math.min(1, availableHeight.value / TALLEST_MODEL_HEIGHT)
+})
+
+const phoneScalerStyle = computed(() => {
+  const v = phoneViewport.value
+  const s = phoneScale.value
+  return {
+    width: `${Math.round(v.width * s)}px`,
+    height: `${Math.round(v.height * s)}px`,
+  }
+})
+
+const appPhoneStyle = computed(() => {
+  const v = phoneViewport.value
+  const s = phoneScale.value
+  return {
+    width: `${v.width}px`,
+    height: `${v.height}px`,
+    transform: `scale(${s})`,
+    transformOrigin: 'top left',
+    '--status-bar-h': v.notch ? '44px' : '20px',
+  }
 })
 </script>
 
@@ -122,6 +177,27 @@ const referencePhoneStyle = computed(() => {
 .scene-controls--above-phone {
   width: 100%;
   max-width: 375px;
+}
+
+// SceneControls below the row — spans both phone columns (full phoneStage
+// width) and collapses its four selects into a single 4-column row.
+.scene-controls--below-row {
+  width: 100%;
+}
+
+.phoneStage {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: v.$space-md;
+}
+
+// Wrapper that reserves the scaled box for the app phone. The phone inside
+// renders at its true model dimensions and is shrunk via `transform: scale()`,
+// so the status bar, notch, and scene all scale together while the layout
+// around it sees the correct on-screen footprint.
+.phoneScaler {
+  position: relative;
 }
 
 .bottom-nav {

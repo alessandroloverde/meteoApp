@@ -1318,7 +1318,7 @@ $clouds--low: (
 // =============================================================================
 .city-name {
   position: absolute;
-  top: calc(44px + 1.5vh);
+  top: calc(var(--status-bar-h, 44px) + 1.5vh);
   z-index: 20;
   line-height: 1;
 

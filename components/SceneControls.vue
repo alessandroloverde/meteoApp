@@ -30,18 +30,20 @@ const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
       {{ sceneId }}
     </p>
     <template v-if="paintBundles">
-      <p
-        class="scene-controls__paint-bundle"
-        title="sky cluster — season--weather--variant"
-      >
-        sky: {{ paintBundles.sky }}
-      </p>
-      <p
-        class="scene-controls__paint-bundle"
-        title="terrain cluster — season--weather--variant"
-      >
-        terrain: {{ paintBundles.terrain }}
-      </p>
+      <div class="scene-controls__paint-bundles">
+        <p
+          class="scene-controls__paint-bundle"
+          title="sky cluster — season--weather--variant"
+        >
+          sky: {{ paintBundles.sky }}
+        </p>
+        <p
+          class="scene-controls__paint-bundle"
+          title="terrain cluster — season--weather--variant"
+        >
+          terrain: {{ paintBundles.terrain }}
+        </p>
+      </div>
     </template>
     <p v-else class="scene-controls__paint-bundle scene-controls__paint-bundle--missing">
       paint: (no library branch)
@@ -94,6 +96,12 @@ const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
   backdrop-filter: blur(4px);
 }
 
+.scene-controls__paint-bundles {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .scene-controls__paint-bundle {
   margin: 0;
   padding: 0 2px;
@@ -121,6 +129,27 @@ const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
   grid-template-columns: 1fr 1fr;
   gap: 10px 12px;
   width: 100%;
+}
+
+// Below-row variant: span two phone columns and collapse the two 2-field rows
+// into a single 4-column row (less height). The modifier is applied by the
+// layout on the root element, so it can be targeted here.
+.scene-controls--below-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 12px;
+
+  .scene-controls__scene-id,
+  .scene-controls__paint-bundles,
+  .scene-controls__paint-bundle--missing {
+    grid-column: 1 / -1;
+  }
+
+  // Flatten the two .scene-controls__row wrappers so their fields participate
+  // directly in the parent 4-column grid.
+  .scene-controls__row {
+    display: contents;
+  }
 }
 
 .scene-controls__field {
