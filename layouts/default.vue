@@ -26,6 +26,7 @@
       <div class="phoneColumn">
         <SceneControls class="scene-controls--above-phone" />
         <div class="phoneContainer">
+          <StatusBar />
           <main class="phoneContainer__main">
             <slot />
           </main>
