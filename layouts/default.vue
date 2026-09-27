@@ -26,9 +26,8 @@
 
       <div class="phoneColumn">
         <PhoneViewportSelect class="scene-controls--above-phone" />
-        <div class="phoneScaler" :style="phoneScalerStyle">
-          <div class="phoneContainer phoneContainer--app" :style="appPhoneStyle">
-            <StatusBar />
+        <div class="phoneContainer phoneContainer--app" :style="appPhoneStyle">
+          <StatusBar />
           <main class="phoneContainer__main">
             <slot />
           </main>
@@ -70,7 +69,6 @@
               </svg>
             </NuxtLink>
           </nav>
-          </div>
         </div>
       </div>
     </div>
@@ -91,53 +89,14 @@ const referencePhoneStyle = computed(() => {
   return { backgroundImage: `url(${u})` }
 })
 
-// Uniform scale so the tallest model (iPhone 17 Pro Max, 956px) fits in the
-// viewport. Applied via `transform: scale()` on the phone, while a wrapper
-// reserves the scaled box so layout reflects the true on-screen size. This
-// preserves relative size differences between models — e.g. 14 Pro Max and
-// 17 Pro Max share an aspect ratio but differ in absolute size, which an
-// `aspect-ratio` + `max-height` cap would collapse to the same rendered box.
-const TALLEST_MODEL_HEIGHT = 956
-const availableHeight = ref<number | null>(null)
-
-function updateAvailableHeight() {
-  if (import.meta.client) {
-    availableHeight.value = window.innerHeight * 0.88
-  }
-}
-
-onMounted(() => {
-  updateAvailableHeight()
-  window.addEventListener('resize', updateAvailableHeight)
-})
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateAvailableHeight)
-})
-
-const phoneScale = computed(() => {
-  if (availableHeight.value == null) return 1
-  return Math.min(1, availableHeight.value / TALLEST_MODEL_HEIGHT)
-})
-
-const phoneScalerStyle = computed(() => {
-  const v = phoneViewport.value
-  const s = phoneScale.value
-  return {
-    width: `${Math.round(v.width * s)}px`,
-    height: `${Math.round(v.height * s)}px`,
-  }
-})
-
+// App phone at true model points (no scale). Page scrolls when a tall model
+// exceeds the browser window — preferred for accurate scene / inspector checks.
 const appPhoneStyle = computed(() => {
   const v = phoneViewport.value
-  const s = phoneScale.value
   return {
     width: `${v.width}px`,
     height: `${v.height}px`,
-    transform: `scale(${s})`,
-    transformOrigin: 'top left',
     '--status-bar-h': v.notch ? '44px' : '20px',
-    // Scene adapt: authored artboard + phone height → extenders in index.vue
     '--phone-h': `${v.height}px`,
     '--scene-base-h': `${SCENE_BASE_HEIGHT}px`,
   }
@@ -193,14 +152,6 @@ const appPhoneStyle = computed(() => {
   flex-direction: column;
   align-items: stretch;
   gap: v.$space-md;
-}
-
-// Wrapper that reserves the scaled box for the app phone. The phone inside
-// renders at its true model dimensions and is shrunk via `transform: scale()`,
-// so the status bar, notch, and scene all scale together while the layout
-// around it sees the correct on-screen footprint.
-.phoneScaler {
-  position: relative;
 }
 
 .bottom-nav {

@@ -263,8 +263,8 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <!-- 🖼️ TERRAIN Group — taller by --scene-extend-bottom; ground fill is
-           .terrain's own background. Authored art stays frozen in .terrain-body. -->
+      <!-- 🖼️ TERRAIN Group — .terrain-body grows by --scene-extend-bottom so
+           ridges fill taller phones; ground fill is --terrain-1-c on .terrain. -->
       <div class="🖼️ scene-layer terrain">
         <div class="terrain-body">
         <div class="scene-layer drizzle-rain drizzle-rain--terrain"></div>
@@ -1049,26 +1049,21 @@ $clouds--low: (
 // =============================================================================
 // Terrain
 // =============================================================================
-// .terrain grows by --scene-extend-bottom; the extra height is filled by its
-// own --terrain-1-c background (no separate extender stripe). Authored content
-// stays in .terrain-body at the frozen band height. Overlap is the old -8%.
-// z-index: auto so ridge/tree z-indexes compete with sky (not trapped under a
-// terrain stacking context).
+// .terrain / .terrain-body grow by --scene-extend-bottom so absolute ridges
+// (height: 100%) cover taller phones. Ground fill: --terrain-1-c on .terrain.
+// Overlap is the old -8%. z-index: auto so child z-indexes compete with sky.
 .terrain {
   height: calc(var(--scene-core-band) + var(--scene-extend-bottom));
   z-index: auto;
   position: relative;
   top: calc(var(--scene-core-overlap) * -1);
   background-color: var(--terrain-1-c);
-  display: flex;
-  flex-direction: column;
 }
 
 .terrain-body {
   position: relative;
-  flex: 0 0 var(--scene-core-band);
-  height: var(--scene-core-band);
   width: 100%;
+  height: 100%;
   // No overflow:hidden — it creates a stacking context that traps child
   // z-indexes under .sky-base, covering the city.
 }

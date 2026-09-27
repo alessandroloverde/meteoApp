@@ -30,7 +30,10 @@
 }
 
 .pageContainer {
-  @apply flex min-h-dvh flex-col items-center justify-center bg-neutral-700;
+  @apply flex min-h-dvh flex-col items-center bg-neutral-700;
+  // safe center: when phones are taller than the window, align to start so
+  // content isn't clipped (app phone uses true model px, no scale).
+  justify-content: safe center;
   gap: v.$space-md;
   padding: v.$space-md;
 }
