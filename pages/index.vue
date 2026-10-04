@@ -185,9 +185,9 @@ onBeforeUnmount(() => {
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
     >
-      <!-- SKY Group — extender absorbs 1/3 of (phone − iPhone-8) height above the frozen core -->
+      <!-- SKY Group — .sky-body grows by --scene-extend-top (no separate extender)
+           so clouds can sit at the real top of taller phones. -->
       <div class="🟦 scene-layer sky-base">
-        <div class="scene-extend scene-extend--sky" aria-hidden="true"></div>
         <div class="sky-body">
 
         <div class="sky-sun-glow" aria-hidden="true"></div>
@@ -478,11 +478,13 @@ onBeforeUnmount(() => {
 
 
 // Per-tree config — neutral-gray base until foliage overlays color them.
+// Vertical offsets are px from top of .terrain-body (band H = 366.85px).
+// Horizontal stays % of width (width adapt deferred).
 $trees: (
   1: (
     width: calc(112px / 2),
     height: calc(194px / 2),
-    offset: (right: 0%, top: -19%),
+    offset: (right: 0%, top: -69.7px),
     z-index: 13,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -492,7 +494,7 @@ $trees: (
   2: (
     width: calc(52px / 2),
     height: calc(102px / 2),
-    offset: (right: 13%, top: -6%),
+    offset: (right: 13%, top: -22.01px),
     z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -502,7 +504,7 @@ $trees: (
   3: (
     width: calc(79px / 2),
     height: calc(100px / 2),
-    offset: (right: 21%, top: -6%),
+    offset: (right: 21%, top: -22.01px),
     z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -512,7 +514,7 @@ $trees: (
   4: (
     width: calc(51px / 2),
     height: calc(99px / 2),
-    offset: (left: 8%, top: -4%),
+    offset: (left: 8%, top: -14.67px),
     z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -522,7 +524,7 @@ $trees: (
   5: (
     width: calc(64px / 2),
     height: calc(122px / 2),
-    offset: (left: 1.5%, top: -11%),
+    offset: (left: 1.5%, top: -40.35px),
     z-index: 8,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -659,9 +661,8 @@ $trees: (
 // =============================================================================
 // SKY
 // =============================================================================
-// sky-base grows by --scene-extend-top; authored content lives in .sky-body at
-// the frozen iPhone-8 band height so clouds/moon/% offsets don't stretch.
-// z-index stays below .terrain so the overlap still reveals city/trees.
+// .sky-base / .sky-body grow by --scene-extend-top so clouds can occupy the
+// real top of taller phones (no separate sky extender stripe).
 .sky-base {
   height: calc(var(--scene-core-band) + var(--scene-extend-top));
   z-index: 1;
@@ -671,26 +672,10 @@ $trees: (
   background: transparent;
 }
 
-.scene-extend {
-  flex-shrink: 0;
-  width: 100%;
-  pointer-events: none;
-}
-
-// Sample the top stop of --sky-gradient (works even when the gradient is a
-// hardcoded override that doesn't touch --sky-stop-0).
-.scene-extend--sky {
-  height: var(--scene-extend-top);
-  background-image: var(--sky-gradient);
-  background-size: 100% 5000%;
-  background-position: top center;
-  background-repeat: no-repeat;
-}
-
 .sky-body {
   position: relative;
-  flex: 0 0 var(--scene-core-band);
-  height: var(--scene-core-band);
+  flex: 0 0 calc(var(--scene-core-band) + var(--scene-extend-top));
+  height: calc(var(--scene-core-band) + var(--scene-extend-top));
   width: 100%;
   background: var(--sky-gradient);
   // Do NOT set overflow:hidden — it would create a stacking context and is
@@ -777,23 +762,29 @@ $clouds: (
     z-index: 4,
   ),
   2: (
-    dimensions: (width: calc(260px / 2), height: calc(108px / 2)),
-    position: (left: 0, top: 40%),
+    //dimensions: (width: calc(260px / 2), height: calc(108px / 2)),
+    dimensions: (width: 34.5%, height: 30%),
+    //position: (left: 0, top: 57px),
+    position: (left: 0, top: 33%),
     bkg: transparent,
     mask-type: svg,
     z-index: 3,
     filter: blur(8px),
   ),
   3: (
-    dimensions: (width: calc(317px / 2), height: calc(148px / 2)),
-    position: (right: -7%, top: 41%),
+    dimensions: (width: 42%, height: 40%),
+    position: (right: -7%, top: 38%),
+    //dimensions: (width: calc(317px / 2), height: calc(148px / 2)),
+    //position: (right: -7%, top: 80px),
     bkg: transparent,
     mask-type: svg,
     z-index: 3,
   ),
   4: (
-    dimensions: (width: calc(673px / 2), height: calc(208px / 2)),
-    position: (right: -15%, top: 46%),
+/*     dimensions: (width: calc(673px / 2), height: calc(208px / 2)),
+    position: (right: -15%, top: 79px), */
+    dimensions: (width: 90%, height: 57%),
+    position: (right: -15%, top: 41%),
     bkg: transparent,
     mask-type: svg,
     z-index: 1,
@@ -803,7 +794,7 @@ $clouds: (
 $clouds--low: (
   1: (
     dimensions: (width: calc(521px / 2), height: calc(332px / 2)),
-    position: (right: -10%, bottom: 10%),
+    position: (right: -10%, bottom: 18.34px),
     bkg: radial-gradient(circle at 20% 50%, #edf0e9 20%, #cad0d5 80%),
     mask-type: png,
     opacity: 0.5,
@@ -812,7 +803,7 @@ $clouds--low: (
   ),
   2: (
     dimensions: (width: calc(694px / 2), height: calc(265px / 2)),
-    position: (right: -8%, bottom: -6%),
+    position: (right: -8%, bottom: -11.01px),
     bkg: radial-gradient(circle at 30% 50%, #f2f3ee 20%, #b5c3c8 80%),
     mask-type: svg,
     opacity: 0.6,
@@ -828,7 +819,7 @@ $clouds--low: (
   ),
   4: (
     dimensions: (width: calc(608px / 2), height: calc(334px / 2)),
-    position: (left: -15%, bottom: -5%),
+    position: (left: -15%, bottom: -9.17px),
     bkg: radial-gradient(circle at 0% 50%, #a9afb3 10%, #e8e9e4 60%),
     mask-type: svg,
     opacity: 0.6,
@@ -898,7 +889,8 @@ $clouds--low: (
 .cloud-1-wrap {
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
   width: 100%;
-  height: calc(288px / 2);
+  //height: calc(288px / 2);
+  height: 93%;
   position: absolute;
   z-index: 4;
 }
@@ -970,7 +962,7 @@ $clouds--low: (
 .small-cloud-1-wrap {
   width: 107px;
   height: 54px;
-  top: 40%;
+  bottom: 56.06px;
   left: 6%;
   z-index: 4;
 }
@@ -988,7 +980,7 @@ $clouds--low: (
 .small-cloud-2-wrap {
   width: 160px;
   height: 75px;
-  top: 52%;
+  bottom: 13.05px;
   left: 12%;
   z-index: 4;
 }
@@ -1006,7 +998,7 @@ $clouds--low: (
 .small-cloud-3-wrap {
   width: 107px;
   height: 54px;
-  top: 92%;
+  bottom: -39.32px;
   right: 16%;
   z-index: 5;
 }
@@ -1025,7 +1017,7 @@ $clouds--low: (
 .small-cloud-4-wrap {
   width: 117px;
   height: 54px;
-  top: 39%;
+  bottom: 57.89px;
   right: 5%;
   z-index: 2;
 }
@@ -1138,7 +1130,7 @@ $clouds--low: (
     );
   --layer-blend: var(--terrain-3-shade-blend, overlay), normal;
   --layer-opacity: 1;
-  top: 4%;
+  top: 14.67px;
   z-index: 8;
 }
 .terrain-2 {
@@ -1152,7 +1144,7 @@ $clouds--low: (
     );
   --layer-blend: var(--terrain-2-shade-blend, overlay), normal;
   --layer-opacity: 1;
-  top: 4%;
+  top: 14.67px;
   z-index: 9;
 }
 .terrain-1 {
@@ -1168,7 +1160,7 @@ $clouds--low: (
   --accent-color: var(--terrain-1-a);
   --blend-mode: var(--terrain-1-blend, overlay);
   --layer-opacity: 1;
-  top: 8%;
+  top: 29.35px;
   z-index: 10;
 }
 
@@ -1202,7 +1194,7 @@ $clouds--low: (
   background: var(--bush-base);
   position: absolute;
   right: 0%;
-  top: 6%;
+  top: 22.01px;
   mask-image: url('~/assets/images/masks/Trees&bushes/Bush-1--bkg.svg');
 
   &::after {
@@ -1221,7 +1213,7 @@ $clouds--low: (
   position: absolute;
   background: var(--bush-base);
   left: 0%;
-  top: 10%;
+  top: 36.69px;
   mask-image: url('~/assets/images/masks/Trees&bushes/Bush-2--bkg.svg');
 
   &::after {
@@ -1240,7 +1232,7 @@ $clouds--low: (
   background: var(--bush-base);
   position: absolute;
   left: 60%;
-  top: 10%;
+  top: 36.69px;
   mask-image: url('~/assets/images/masks/Trees&bushes/Bush-3--bkg.svg');
 }
 
@@ -1272,7 +1264,7 @@ $clouds--low: (
   @include mx.house-block(church, (
     width: calc(68px / 2),
     height: calc(44px / 2),
-    offset: (top: -2%, left: 17%),
+    offset: (top: -7.34px, left: 17%),
     background: var(--building-church),
     z-index: 2,
   ));
@@ -1297,7 +1289,7 @@ $clouds--low: (
   @include mx.house-block(left, (
     width: calc(223px / 2),
     height: calc(117px / 2),
-    offset: (left: -1%, top: -9%),
+    offset: (left: -1%, top: -33.02px),
     background: var(--building-wall-base),
   ));
 
@@ -1318,7 +1310,7 @@ $clouds--low: (
   @include mx.house-block(small, (
     width: calc(72px / 2),
     height: calc(67px / 2),
-    offset: (right: 29%, top: -6%),
+    offset: (right: 29%, top: -22.01px),
     background: var(--building-wall-base),
   ));
 
@@ -1333,7 +1325,7 @@ $clouds--low: (
   @include mx.house-block(main, (
     width: calc(129px / 2),
     height: calc(83px / 2),
-    offset: (left: 30%, top: -6%),
+    offset: (left: 30%, top: -22.01px),
     background: var(--building-wall-base),
   ));
 

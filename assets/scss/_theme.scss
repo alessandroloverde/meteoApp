@@ -106,8 +106,8 @@ $trunk-dusk-b: #412b15;
   // --------------------------------------------------------------------------
   // Sun / moon disc — top/left are the geometric center (see .moon transform).
   // --------------------------------------------------------------------------
-  --moon-top:         calc(18% + 65px);
-  --moon-left:        calc(4% + 65px);
+  --moon-top:         131.03px;
+  --moon-left:        80px;
   --moon-translate-x: -50%;
   --moon-filter:      none;
   --moon-opacity:     1;
@@ -318,21 +318,21 @@ $trunk-dusk-b: #412b15;
 // =============================================================================
 
 [data-time='morning'] {
-  // +65px keeps the old visual center after switching top/left to disc-center.
-  --moon-top:         calc(40% + 65px);
+  // Disc-center in px (was calc(40% + 65px) of sky-body band 366.85px).
+  --moon-top:         211.74px;
   --moon-left:        14%;
   --moon-translate-x: -50%;
 }
 
 [data-time='afternoon'] {
-  --moon-top:         calc(16% + 65px);
+  --moon-top:         123.7px;
   --moon-left:        82%;
   --moon-translate-x: -50%;
 }
 
 [data-time='evening'] {
   --scene-grade-evening-enabled: 1;
-  --moon-top:         calc(50% + 65px);
+  --moon-top:         248.43px;
   --moon-left:        50%;
   --moon-translate-x: -50%;
 }
@@ -580,7 +580,7 @@ $trunk-dusk-b: #412b15;
 [data-weather='fog']          { --_weather: fog;          }
 [data-weather='drizzle'] {
   --_weather: drizzle;
-  --moon-top:  calc(21% + 65px);
+  --moon-top:  142.04px;
   --moon-left: 20.8%;
 }
 [data-weather='rain']         { --_weather: rain;         }
@@ -2906,7 +2906,7 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='drizzle--spring--morning--hot'] {
   --sky-gradient: linear-gradient(to bottom, #71868e 0%, #9bb8c1 35%, #fce49d 70%, #fcedbe 100%);
 
-  --moon-top:    calc(70% + 65px);
+  --moon-top:    321.8px;
   --moon-left:   50%;
   --moon-filter: blur(10px) brightness(1.25);
 
@@ -2959,7 +2959,7 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='drizzle--spring--evening--hot'] {
   --sky-gradient: linear-gradient(to bottom, #6b395a 0%, #a1485a 40%, #ed664e 70%, #fbdb8c 100%);
 
-  --moon-top:    calc(70% + 65px);
+  --moon-top:    321.8px;
   --moon-left:   42%;
   --moon-filter: blur(6px) saturate(1.25);
 
@@ -3166,7 +3166,7 @@ $trunk-dusk-b: #412b15;
   --sky-stop-2: #d7795f;
   --sky-stop-3: #eebd80;
 
-  --moon-top:     calc(60% + 65px);
+  --moon-top:     285.11px;
   --moon-left:    50%;
   --moon-opacity: 1;
   --moon-filter:  hue-rotate(340deg) brightness(0.75) saturate(2);

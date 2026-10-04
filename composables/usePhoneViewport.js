@@ -12,8 +12,8 @@
 //              false → 20px thin bar (iPhone 8 / SE)
 //
 // SCENE_BASE_HEIGHT is the authored artboard (iPhone 8). Taller phones absorb
-// the leftover height via a sky extender (1/3) and a taller .terrain group
-// with --terrain-1-c fill (2/3) — see pages/index.vue.
+// the leftover height via a taller .sky-body (1/3) and a taller .terrain
+// (2/3, fill --terrain-1-c) — see pages/index.vue.
 
 export const SCENE_BASE_HEIGHT = 667
 
