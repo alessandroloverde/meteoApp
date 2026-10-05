@@ -580,7 +580,7 @@ $trunk-dusk-b: #412b15;
 [data-weather='fog']          { --_weather: fog;          }
 [data-weather='drizzle'] {
   --_weather: drizzle;
-  --moon-top:  142.04px;
+  --moon-top:  39%;
   --moon-left: 20.8%;
 }
 [data-weather='rain']         { --_weather: rain;         }
@@ -2906,7 +2906,7 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='drizzle--spring--morning--hot'] {
   --sky-gradient: linear-gradient(to bottom, #71868e 0%, #9bb8c1 35%, #fce49d 70%, #fcedbe 100%);
 
-  --moon-top:    321.8px;
+  --moon-top:    87.7%;
   --moon-left:   50%;
   --moon-filter: blur(10px) brightness(1.25);
 
@@ -2959,7 +2959,7 @@ $trunk-dusk-b: #412b15;
 [data-scene-id='drizzle--spring--evening--hot'] {
   --sky-gradient: linear-gradient(to bottom, #6b395a 0%, #a1485a 40%, #ed664e 70%, #fbdb8c 100%);
 
-  --moon-top:    321.8px;
+  --moon-top:    87.7%;
   --moon-left:   42%;
   --moon-filter: blur(6px) saturate(1.25);
 
@@ -3166,7 +3166,7 @@ $trunk-dusk-b: #412b15;
   --sky-stop-2: #d7795f;
   --sky-stop-3: #eebd80;
 
-  --moon-top:     285.11px;
+  --moon-top:     77.7%;
   --moon-left:    50%;
   --moon-opacity: 1;
   --moon-filter:  hue-rotate(340deg) brightness(0.75) saturate(2);

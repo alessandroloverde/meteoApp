@@ -723,8 +723,9 @@ $trees: (
   background-size: 100% auto;
   background-position: center center;
   background-repeat: no-repeat;
-  width:  calc(260px / 2);
-  height: calc(260px / 2);
+  width:  37%;
+  height: auto;
+  aspect-ratio: 1;
   position: absolute;
   z-index: 2;
 
@@ -960,9 +961,9 @@ $clouds--low: (
 }
 
 .small-cloud-1-wrap {
-  width: 107px;
-  height: 54px;
-  bottom: 56.06px;
+  width: 29%;
+  height: 29%;
+  top: 40%;
   left: 6%;
   z-index: 4;
 }
@@ -978,9 +979,9 @@ $clouds--low: (
 }
 
 .small-cloud-2-wrap {
-  width: 160px;
-  height: 75px;
-  bottom: 13.05px;
+  width: 43%;
+  height: 41%;
+  top: 52%;
   left: 12%;
   z-index: 4;
 }
@@ -996,9 +997,9 @@ $clouds--low: (
 }
 
 .small-cloud-3-wrap {
-  width: 107px;
-  height: 54px;
-  bottom: -39.32px;
+  width: 29%;
+  height: 29%;
+  top: 92%;
   right: 16%;
   z-index: 5;
 }
@@ -1015,9 +1016,9 @@ $clouds--low: (
 }
 
 .small-cloud-4-wrap {
-  width: 117px;
-  height: 54px;
-  bottom: 57.89px;
+  width: 31%;
+  height: 30%;
+  top: 39%;
   right: 5%;
   z-index: 2;
 }
