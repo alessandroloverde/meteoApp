@@ -108,6 +108,7 @@
   width: map.get($config, width);
   height: map.get($config, height);
   z-index: map.get($config, z-index);
+  padding: map.get($config, padding);
 
   @each $prop, $value in map.get($config, offset) {
     #{$prop}: $value;

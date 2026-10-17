@@ -482,9 +482,10 @@ onBeforeUnmount(() => {
 // Horizontal stays % of width (width adapt deferred).
 $trees: (
   1: (
-    width: calc(112px / 2),
-    height: calc(194px / 2),
-    offset: (right: 0%, top: -69.7px),
+    width: auto,
+    height: 0,
+    offset: (right: 0%, top: calc(-51px - 6%)),
+    padding: 13.25% 7.5%,
     z-index: 13,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -492,9 +493,10 @@ $trees: (
     trunk-mask-position: 40% bottom,
   ),
   2: (
-    width: calc(52px / 2),
-    height: calc(102px / 2),
-    offset: (right: 13%, top: -22.01px),
+    width: auto,
+    height: 0,
+    offset: (right: 13%, top: calc(-17px - 2.5%)),
+    padding: 7% 3.5%,
     z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -502,9 +504,10 @@ $trees: (
     trunk-mask-position: 40% bottom,
   ),
   3: (
-    width: calc(79px / 2),
-    height: calc(100px / 2),
-    offset: (right: 21%, top: -22.01px),
+    width: auto,
+    height: 0,
+    offset: (right: 21%, top: calc(-16px - 2.5%)),
+    padding: 7% 5.25%,
     z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -512,9 +515,10 @@ $trees: (
     trunk-mask-position: 40% bottom,
   ),
   4: (
-    width: calc(51px / 2),
-    height: calc(99px / 2),
-    offset: (left: 8%, top: -14.67px),
+    width: auto,
+    height: 0,
+    offset: (left: 8%, top: calc(-5px - 1%)),
+    padding: 5.75% 3%,
     z-index: 16,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -522,9 +526,10 @@ $trees: (
     trunk-mask-position: 55% 150%,
   ),
   5: (
-    width: calc(64px / 2),
-    height: calc(122px / 2),
-    offset: (left: 1.5%, top: -40.35px),
+    width: auto,
+    height: 0,
+    offset: (left: 1.5%, top: calc(-30px - 2.5%)),
+    padding: 8.5% 4.5%,
     z-index: 8,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
@@ -1228,12 +1233,14 @@ $clouds--low: (
 }
 .bushes-3 {
   z-index: 9;
-  width: calc(119px / 2);
-  height: calc(49px / 2);
+  //width: calc(119px / 2);
+  width: 75px;
+  //height: calc(49px / 2);
+  height: 30px;
   background: var(--bush-base);
   position: absolute;
   left: 60%;
-  top: 36.69px;
+  top: calc(30px + 1%);
   mask-image: url('~/assets/images/masks/Trees&bushes/Bush-3--bkg.svg');
 }
 
