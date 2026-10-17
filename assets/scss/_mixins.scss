@@ -149,10 +149,16 @@
 //   offset          map of position properties (e.g. (left: 30%, top: -6%))
 //   background      paint shown through the silhouette mask (default: `var(--house-shell)`)
 //   z-index         stacking order (default: 1)
+//   padding         optional; with width:auto/height:0 sizes the box via
+//                   %-padding (relative to containing-block width)
 @mixin house-block($name, $config) {
   position: absolute;
   width: map.get($config, width);
   height: map.get($config, height);
+
+  @if map.has-key($config, padding) {
+    padding: map.get($config, padding);
+  }
 
   @if map.has-key($config, background) {
     background: map.get($config, background);

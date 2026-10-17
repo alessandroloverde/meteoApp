@@ -497,7 +497,7 @@ $trees: (
     height: 0,
     offset: (right: 13%, top: calc(-17px - 2.5%)),
     padding: 7% 3.5%,
-    z-index: 16,
+    z-index: 9,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
     trunk-mask-size: 50% auto,
@@ -506,9 +506,9 @@ $trees: (
   3: (
     width: auto,
     height: 0,
-    offset: (right: 21%, top: calc(-16px - 2.5%)),
+    offset: (right: 21%, top: calc(-14px - 2.5%)),
     padding: 7% 5.25%,
-    z-index: 16,
+    z-index: 9,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
     trunk-mask-size: 50% auto,
@@ -517,9 +517,9 @@ $trees: (
   4: (
     width: auto,
     height: 0,
-    offset: (left: 8%, top: calc(-5px - 1%)),
+    offset: (left: 8%, top: calc(-1px - 1.5%)),
     padding: 5.75% 3%,
-    z-index: 16,
+    z-index: 10,
     trunk-colors: (var(--trunk-base), var(--trunk-base)),
     foliage-colors: var(--foliage-base),
     trunk-mask-size: 50% auto,
@@ -1201,10 +1201,14 @@ $clouds--low: (
 // =============================================================================
 // Bushes
 // =============================================================================
+// Sized like trees: height:0 + %-padding (of terrain width). Tops stay px from
+// the terrain top so they track the ridge on taller phones.
 .bushes-1 {
   z-index: 14;
-  width: calc(141px / 2);
-  height: calc(62px / 2);
+  width: auto;
+  height: 0;
+  // iPhone-8: 70.5×31 → pad = h|w / (2×375)
+  padding: 4.13% 9.4%;
   background: var(--bush-base);
   position: absolute;
   right: 0%;
@@ -1222,8 +1226,10 @@ $clouds--low: (
 }
 .bushes-2 {
   z-index: 13;
-  width: calc(160px / 2);
-  height: calc(58px / 2);
+  width: auto;
+  height: 0;
+  // iPhone-8: 80×29
+  padding: 3.87% 10.67%;
   position: absolute;
   background: var(--bush-base);
   left: 0%;
@@ -1241,14 +1247,14 @@ $clouds--low: (
 }
 .bushes-3 {
   z-index: 9;
-  //width: calc(119px / 2);
-  width: 75px;
-  //height: calc(49px / 2);
-  height: 30px;
+  width: auto;
+  height: 0;
+  // iPhone-8: 59.5×24.5 (restored from hand-tuned 75×30)
+  padding: 3.27% 7.93%;
   background: var(--bush-base);
   position: absolute;
   left: 60%;
-  top: calc(30px + 1%);
+  top: 36.69px;
   mask-image: url('~/assets/images/masks/Trees&bushes/Bush-3--bkg.svg');
 }
 
@@ -1274,12 +1280,16 @@ $clouds--low: (
 // =============================================================================
 // Buildings
 // =============================================================================
+// Sized like trees/bushes: height:0 + %-padding (of terrain width). Tops stay
+// artboard px so the skyline stays locked on taller phones.
 .city { z-index: 6; }
 
 .houseBlock--church {
   @include mx.house-block(church, (
-    width: calc(68px / 2),
-    height: calc(44px / 2),
+    width: auto,
+    height: 0,
+    // iPhone-8: 34×22 → pad = h|w / (2×375)
+    padding: 2.93% 4.53%,
     offset: (top: -7.34px, left: 17%),
     background: var(--building-church),
     z-index: 2,
@@ -1303,8 +1313,10 @@ $clouds--low: (
 }
 .houseBlock--left {
   @include mx.house-block(left, (
-    width: calc(223px / 2),
-    height: calc(117px / 2),
+    width: auto,
+    height: 0,
+    // iPhone-8: 111.5×58.5
+    padding: 7.8% 14.87%,
     offset: (left: -1%, top: -33.02px),
     background: var(--building-wall-base),
   ));
@@ -1324,8 +1336,10 @@ $clouds--low: (
 }
 .houseBlock--small {
   @include mx.house-block(small, (
-    width: calc(72px / 2),
-    height: calc(67px / 2),
+    width: auto,
+    height: 0,
+    // iPhone-8: 36×33.5
+    padding: 4.47% 4.8%,
     offset: (right: 29%, top: -22.01px),
     background: var(--building-wall-base),
   ));
@@ -1339,8 +1353,10 @@ $clouds--low: (
 }
 .houseBlock--main {
   @include mx.house-block(main, (
-    width: calc(129px / 2),
-    height: calc(83px / 2),
+    width: auto,
+    height: 0,
+    // iPhone-8: 64.5×41.5
+    padding: 5.53% 8.6%,
     offset: (left: 30%, top: -22.01px),
     background: var(--building-wall-base),
   ));
