@@ -799,8 +799,10 @@ $clouds: (
 );
 $clouds--low: (
   1: (
-    dimensions: (width: calc(521px / 2), height: calc(332px / 2)),
-    position: (right: -10%, bottom: 18.34px),
+    // Sized via %-padding (of parent width); matches iPhone-8 260.5×166.
+    dimensions: (width: 0, height: auto),
+    padding: 22% 34.75%,
+    position: (right: -10%, bottom: 10%),
     bkg: radial-gradient(circle at 20% 50%, #edf0e9 20%, #cad0d5 80%),
     mask-type: png,
     opacity: 0.5,
@@ -808,15 +810,19 @@ $clouds--low: (
     filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3)),
   ),
   2: (
-    dimensions: (width: calc(694px / 2), height: calc(265px / 2)),
-    position: (right: -8%, bottom: -11.01px),
+    // iPhone-8: 347×132.5 → pad-y/x = h|w / (2×375)
+    dimensions: (width: 0, height: auto),
+    padding: 17.67% 46.27%,
+    position: (right: -8%, bottom: -6%),
     bkg: radial-gradient(circle at 30% 50%, #f2f3ee 20%, #b5c3c8 80%),
     mask-type: svg,
     opacity: 0.6,
     z-index: 3,
   ),
   3: (
-    dimensions: (width: calc(546px / 2), height: calc(229px / 2)),
+    // iPhone-8: 273×114.5
+    dimensions: (width: 0, height: auto),
+    padding: 15.27% 36.4%,
     position: (left: -5%, bottom: 0),
     bkg: radial-gradient(circle at 0% 50%, #cbd0d4 30%, #f2f3ee 60%),
     mask-type: svg,
@@ -824,8 +830,10 @@ $clouds--low: (
     z-index: 3,
   ),
   4: (
-    dimensions: (width: calc(608px / 2), height: calc(334px / 2)),
-    position: (left: -15%, bottom: -9.17px),
+    // iPhone-8: 304×167
+    dimensions: (width: 0, height: auto),
+    padding: 22.27% 40.53%,
+    position: (left: -15%, bottom: -5%),
     bkg: radial-gradient(circle at 0% 50%, #a9afb3 10%, #e8e9e4 60%),
     mask-type: svg,
     opacity: 0.6,

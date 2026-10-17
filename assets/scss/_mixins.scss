@@ -229,6 +229,8 @@
 //   filter              optional (e.g. blur(8px))
 //   mix-blend-mode      optional
 //   has-gradient-mask   if true, paints the ::after gradient overlay (PNG)
+//   padding             optional; with width:0/height:auto sizes the box via
+//                       %-padding (relative to containing-block width)
 // $variant  asset-slug suffix ('' for top clouds, '--low' for bottom clouds).
 // $overlay  group prefix to blend in as a second background layer instead of a
 //           child pane — see overlay-blend-paint. Requires has-gradient-mask to
@@ -243,6 +245,10 @@
   width:  map.get($config, dimensions, width);
   height: map.get($config, dimensions, height);
   z-index: map.get($config, z-index);
+
+  @if map.has-key($config, padding) {
+    padding: map.get($config, padding);
+  }
 
   @if $overlay {
     @include overlay-blend-paint($overlay, map.get($config, bkg));
