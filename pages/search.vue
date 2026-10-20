@@ -131,7 +131,7 @@ async function selectCity(result) {
   }
 
   &:focus {
-    border-color: v.$color-primary;
+    border-color: v.$accent-color;
   }
 }
 
@@ -203,13 +203,13 @@ async function selectCity(result) {
   border-radius: v.$radius-full;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: transparent;
-  color: v.$color-primary-light;
+  color: v.$accent-color;
   font-size: 0.8rem;
   cursor: pointer;
   transition: background-color v.$transition-fast;
 
   &:hover {
-    background: rgba(v.$color-primary, 0.1);
+    background: rgba(v.$accent-color, 0.1);
   }
 }
 </style>

@@ -38,35 +38,27 @@
               class="bottom-nav__link"
               :class="{ 'bottom-nav__link--active': route.path === '/' }"
               :aria-current="route.path === '/' ? 'page' : undefined"
-              aria-label="Home"
             >
-              <svg class="bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z" />
-              </svg>
+              <AppIcon name="weather" :size="26" class="bottom-nav__icon" />
+              <span class="bottom-nav__label">weather</span>
             </NuxtLink>
 
             <NuxtLink
               to="/search"
               class="bottom-nav__link"
               :class="{ 'bottom-nav__link--active': route.path.startsWith('/search') }"
-              aria-label="Search city"
             >
-              <svg class="bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="7" />
-                <path d="m20 20-3.2-3.2" />
-              </svg>
+              <AppIcon name="cities" :size="26" class="bottom-nav__icon" />
+              <span class="bottom-nav__label">cities</span>
             </NuxtLink>
 
             <NuxtLink
               to="/settings"
               class="bottom-nav__link"
               :class="{ 'bottom-nav__link--active': route.path.startsWith('/settings') }"
-              aria-label="Settings"
             >
-              <svg class="bottom-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-              </svg>
+              <AppIcon name="settings" :size="26" class="bottom-nav__icon" />
+              <span class="bottom-nav__label">settings</span>
             </NuxtLink>
           </nav>
         </div>
@@ -94,10 +86,10 @@ const referencePhoneStyle = computed(() => {
 const appPhoneStyle = computed(() => {
   const v = phoneViewport.value
   return {
-    width: `${v.width}px`,
-    height: `${v.height}px`,
-    '--status-bar-h': v.notch ? '44px' : '20px',
-    '--phone-h': `${v.height}px`,
+    width: `${v?.width}px`,
+    height: `${v?.height}px`,
+    '--status-bar-h': v?.notch ? '44px' : '20px',
+    '--phone-h': `${v?.height}px`,
     '--scene-base-h': `${SCENE_BASE_HEIGHT}px`,
   }
 })
@@ -173,33 +165,45 @@ const appPhoneStyle = computed(() => {
 
 .bottom-nav__link {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
+  gap: 2px;
+  min-width: 64px;
   min-height: 44px;
+  padding: 4px 8px;
   border-radius: v.$radius-md;
-  color: v.$color-text-muted;
+  color: var(--icon-muted);
   transition: color v.$transition-fast, background-color v.$transition-fast;
 
   &:focus-visible {
-    outline: 2px solid v.$color-primary;
+    outline: 2px solid var(--icon-accent);
     outline-offset: 2px;
   }
 
   &:hover {
-    color: v.$color-text;
+    color: var(--icon-accent);
     background-color: rgba(255, 255, 255, 0.04);
   }
 
   &--active {
-    color: v.$color-primary-light;
-    background-color: rgba(v.$color-primary, 0.12);
+    color: var(--icon-accent);
+    background-color: rgba(v.$accent-color, 0.12);
   }
 }
 
 .bottom-nav__icon {
-  width: 26px;
-  height: 26px;
   flex-shrink: 0;
+  color: inherit;
+}
+
+.bottom-nav__label {
+  font-family: 'Nunito Sans', system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  color: inherit;
 }
 </style>

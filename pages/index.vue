@@ -349,7 +349,10 @@ onBeforeUnmount(() => {
     </div>
 
     <header v-if="store.city" class="city-name">
-      <p class="city-name--city">{{ store.city }}</p>
+      <p class="city-name__label">
+        <AppIcon name="location" size="0.55em" class="city-name__icon" />
+        <span>{{ store.city }}</span>
+      </p>
     </header>
 
     <div class="main-content">
@@ -1392,95 +1395,4 @@ $clouds--low: (
 }
 
 .building-overlay { @include overlay-pane('building'); }
-
-
-// =============================================================================
-// UI — location + card
-// =============================================================================
-.city-name {
-  position: absolute;
-  top: calc(44px + 1.5vh);
-  z-index: 20;
-  line-height: 1;
-
-  &--city {
-    font-size: 2.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-}
-
-.main-content {
-  position: absolute;
-  bottom: calc(1rem + 4rem + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  border-radius: 1rem;
-  padding: 0.9rem 1.2rem;
-  background: rgba(128, 128, 128, 0.22);
-}
-
-.weather-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.35rem;
-
-  &__temp {
-    font-size: 3.75rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  &__feels {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    line-height: 1;
-  }
-
-  &__meta,
-  &__key {
-    font-size: 0.95rem;
-    opacity: 0.85;
-  }
-
-  &__meta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-  }
-
-  &__sep {
-    opacity: 0.55;
-  }
-}
-
-.location-error {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 22rem;
-
-  &__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    align-items: center;
-  }
-
-  &__btn {
-    padding: 0.4rem 0.75rem;
-    border: 1px solid currentColor;
-    border-radius: 0.35rem;
-    background: transparent;
-    cursor: pointer;
-  }
-
-  &__link {
-    text-decoration: underline;
-  }
-}
 </style>

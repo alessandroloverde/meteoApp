@@ -1,19 +1,36 @@
-// ---- Colors ----
-$color-primary: #3b82f6;
-$color-primary-light: #60a5fa;
-$color-primary-dark: #2563eb;
+// ------------------- Base Colors -------------------
+$pure-white: #FFFFFF;
+$pure-black: #000000;
+$turquoise: #38BDF8;
+$beige: #D9BDBD;
+$anthracite: #2D2E34;
+$cream: #FFFAFA;
+$light-red: #ef4444;
+$light-green: #22c55e;
 
-$color-bg: #000000;
+
+// ------------------- Color Tokens -------------------
+$color-text: $pure-white;
+$accent-color: $turquoise;
+$color-error: $light-red;
+$color-success: $light-green;
+$color-bg: $pure-black;
+
+
+
+
 $color-surface: #1a1a1a;
 $color-surface-elevated: #262626;
 
-$color-text: $color-primary-light;
 $color-text-muted: #a3a3a3;
 
-$color-error: #ef4444;
-$color-success: #22c55e;
+// UI icons — default beige, active accent
+$color-icon-muted: $beige;
+$color-icon-accent: $accent-color;
 
-// ---- Spacing ----
+
+
+// ------------------- Spacing Tokens -------------------
 $space-xs: 4px;
 $space-sm: 8px;
 $space-md: 16px;
@@ -21,17 +38,20 @@ $space-lg: 24px;
 $space-xl: 32px;
 $space-2xl: 48px;
 
-// ---- Radii ----
+
+// ------------------- Radii Tokens -------------------
 $radius-sm: 8px;
 $radius-md: 16px;
 $radius-lg: 24px;
 $radius-full: 9999px;
 
-// ---- Breakpoints ----
+
+// ------------------- Breakpoints Tokens -------------------
 $bp-sm: 640px;
 $bp-md: 768px;
 $bp-lg: 1024px;
 
-// ---- Transitions ----
+
+// ------------------- Transitions Tokens -------------------
 $transition-fast: 150ms ease;
 $transition-base: 250ms ease;

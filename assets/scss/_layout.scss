@@ -63,6 +63,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
+  // App chrome icon colors (inherited via currentColor)
+  --icon-muted: #{v.$color-icon-muted};
+  --icon-accent: #{v.$color-icon-accent};
 }
 
 .phoneContainer--reference {
