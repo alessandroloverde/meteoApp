@@ -198,7 +198,7 @@ const appPhoneStyle = computed(() => {
 }
 
 .bottom-nav__label {
-  font-family: 'Nunito Sans', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   font-size: 10px;
   font-weight: 600;
   line-height: 1.2;

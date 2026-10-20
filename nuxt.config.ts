@@ -6,11 +6,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   css: [
-    // Self-hosted Nunito Sans (Capacitor-friendly). Figma: medium→800.
-    '@fontsource/nunito-sans/500.css',
-    '@fontsource/nunito-sans/600.css',
-    '@fontsource/nunito-sans/700.css',
-    '@fontsource/nunito-sans/800.css',
+    // Self-hosted Nunito (Capacitor-friendly). Figma: medium→800.
+    '@fontsource/nunito/500.css',
+    '@fontsource/nunito/600.css',
+    '@fontsource/nunito/700.css',
+    '@fontsource/nunito/800.css',
     '~/assets/scss/base.scss',
   ],
   modules: [

@@ -32,9 +32,8 @@ const sizeStyle = computed(() => {
 .app-icon {
   display: block;
   flex-shrink: 0;
-  color: inherit;
   // Fallback when neither `size` nor a parent rule sets dimensions
-  width: 1em;
-  height: 1em;
+  width: var(--icon-size, 1em);
+  height: var(--icon-size, 1em);
 }
 </style>

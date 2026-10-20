@@ -1,5 +1,7 @@
 import Cities from '~/assets/icons/cities.svg?component'
 import Location from '~/assets/icons/location.svg?component'
+import LocationStatusIp from '~/assets/icons/locationStatus-ip.svg?component'
+import LocationStatusMap from '~/assets/icons/locationStatus-map.svg?component'
 import Weather from '~/assets/icons/weather.svg?component'
 import Settings from '~/assets/icons/settings.svg?component'
 import ConditionLightRain from '~/assets/icons/condition-light-rain.svg?component'
@@ -12,6 +14,8 @@ import TimeTomorrow from '~/assets/icons/time-tomorrow.svg?component'
 export const icons = {
   cities: Cities,
   location: Location,
+  'locationStatus-ip': LocationStatusIp,
+  'locationStatus-map': LocationStatusMap,
   weather: Weather,
   settings: Settings,
   'condition-light-rain': ConditionLightRain,

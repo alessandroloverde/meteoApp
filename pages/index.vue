@@ -104,13 +104,13 @@ const ui = computed(() => {
 const locationSourceMeta = computed(() => {
   switch (store.source) {
     case 'gps':
-      return { icon: '📍', label: 'GPS' }
+      return { iconName: 'location', emoji: '📍', label: 'GPS' }
     case 'ip':
-      return { icon: '🌐', label: 'Network' }
+      return { iconName: 'locationStatus-ip', emoji: '🌐', label: 'Network' }
     case 'search':
-      return { icon: '🔎', label: 'City search' }
+      return { iconName: 'locationStatus-map', emoji: '🔎', label: 'City search' }
     default:
-      return { icon: '', label: '' }
+      return { iconName: 'location', emoji: '', label: '' }
   }
 })
 
@@ -350,7 +350,11 @@ onBeforeUnmount(() => {
 
     <header v-if="store.city" class="city-name">
       <p class="city-name__label">
-        <AppIcon name="location" size="0.55em" class="city-name__icon" />
+        <AppIcon
+          :name="locationSourceMeta.iconName"
+          class="city-name__icon"
+          :label="`Location source: ${locationSourceMeta.label}`"
+        />
         <span>{{ store.city }}</span>
       </p>
     </header>
@@ -381,7 +385,7 @@ onBeforeUnmount(() => {
           <span
             :title="locationSourceMeta.label"
             :aria-label="`Location source: ${locationSourceMeta.label}`"
-          >source: {{ locationSourceMeta.icon }}</span>
+          >source: {{ locationSourceMeta.emoji }}</span>
         </p>
         <p v-if="ui" class="weather-panel__key">{{ ui.key }}</p>
       </div>
