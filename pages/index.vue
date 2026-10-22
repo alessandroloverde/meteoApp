@@ -114,6 +114,49 @@ const locationSourceMeta = computed(() => {
   }
 })
 
+/** Display label for the condition chip (Figma: “light rain”, etc.). */
+const conditionLabel = computed(() => {
+  const c = ui.value?.condition
+  if (!c) return ''
+  if (c === 'drizzle') return 'light rain'
+  return c.replaceAll('_', ' ')
+})
+
+/** Map Open-Meteo condition → AppIcon name. */
+const conditionIconName = computed(() => {
+  const c = ui.value?.condition
+  switch (c) {
+    case 'clear':
+      return 'condition-clear'
+    case 'partly_cloudy':
+      return 'condition-partlyCloudy'
+    case 'cloudy':
+      return 'condition-cloudy'
+    case 'fog':
+      return 'condition-fog'
+    case 'drizzle':
+      return 'condition-drizzle'
+    case 'rain':
+      return 'condition-rain'
+    case 'heavy_rain':
+      return 'condition-heavyRain'
+    case 'storm':
+      return 'condition-storm'
+    case 'snow':
+      return 'condition-snow'
+    default:
+      return 'condition-cloudy'
+  }
+})
+
+const timelineSlots = [
+  { id: 'morning', label: 'morning', icon: 'time-morning' },
+  { id: 'afternoon', label: 'afternoon', icon: 'time-afternoon' },
+  { id: 'evening', label: 'evening', icon: 'time-evening' },
+  { id: 'night', label: 'night', icon: 'time-night' },
+  { id: 'tomorrow', label: 'tomorrow', icon: 'time-tomorrow' },
+]
+
 // Dev/test theming knobs — driven by <SceneControls> in the layout.
 // Replace these bindings with the live `ui.*` values when wiring real data.
 const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: sceneTemp } = useSceneControls()
@@ -316,7 +359,7 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- 🏠 Buildings + overlays -->
-        <section class="🏠 scene-layer city">
+        <section class="🏠 scene-layer buildings">
           <div class="houseBlock--church"></div>
           <div class="houseBlock--main">
             <div class="houseBlock--main--windows"></div>
@@ -348,18 +391,19 @@ onBeforeUnmount(() => {
       <div class="scene-grade scene-grade--soft-haze" aria-hidden="true"></div>
     </div>
 
-    <header v-if="store.city" class="city-name">
-      <p class="city-name__label">
+    <header v-if="store.city" class="city">
+      <p class="city--label">
         <AppIcon
           :name="locationSourceMeta.iconName"
-          class="city-name__icon"
+          class="city--icon"
           :label="`Location source: ${locationSourceMeta.label}`"
         />
-        <span>{{ store.city }}</span>
+        <span class="city--name">{{ store.city }}</span>
       </p>
     </header>
 
-    <div class="main-content">
+    <!-- Legacy overlay — kept for loading/error; hidden while the Figma dock is in use -->
+    <div class="main-content" hidden>
       <div v-if="store.loading">Loading...</div>
       <div v-else-if="store.error" class="location-error">
         <p>{{ store.error }}</p>
@@ -373,24 +417,47 @@ onBeforeUnmount(() => {
           <NuxtLink to="/search" class="location-error__link">Search city</NuxtLink>
         </div>
       </div>
-
-      <div v-else-if="store.weather" class="weather-panel">
-        <h1 class="weather-panel__temp">{{ store.weather.temperature }}°</h1>
-        <p v-if="store.weather.apparentTemperature != null" class="weather-panel__feels">
-          Feels like {{ Math.round(store.weather.apparentTemperature) }}°
-        </p>
-        <p class="weather-panel__meta">
-          <span>code: {{ store.weather.weathercode }}</span>
-          <span class="weather-panel__sep" aria-hidden="true">|</span>
-          <span
-            :title="locationSourceMeta.label"
-            :aria-label="`Location source: ${locationSourceMeta.label}`"
-          >source: {{ locationSourceMeta.emoji }}</span>
-        </p>
-        <p v-if="ui" class="weather-panel__key">{{ ui.key }}</p>
-      </div>
     </div>
 
+    <aside v-if="store.weather" class="dock" aria-label="Weather summary">
+      <section class="dock--now">
+        <div class="temperature">
+          <p class="temperature--value">
+            {{ Math.round(store.weather.temperature) }}<span class="temperature--unit">°</span>
+          </p>
+          <p
+            v-if="store.weather.apparentTemperature != null"
+            class="temperature--feels"
+          >
+            feels like
+            <span class="temperature--feels-value">{{ Math.round(store.weather.apparentTemperature) }}°</span>
+          </p>
+        </div>
+
+        <div class="condition">
+          <div class="condition--badge">
+            <AppIcon :name="conditionIconName" class="condition--icon" />
+          </div>
+          <p class="condition--label">{{ conditionLabel }}</p>
+        </div>
+      </section>
+
+      <section class="dock--timeline" aria-label="Time of day">
+        <div class="timeline">
+          <div
+            v-for="slot in timelineSlots"
+            :key="slot.id"
+            class="timeline--item"
+            :class="{ 'timeline--item-active': sceneDisplayTime === slot.id }"
+          >
+            <span class="timeline--badge">
+              <AppIcon :name="slot.icon" class="timeline--icon" />
+            </span>
+            <span class="timeline--label">{{ slot.label }}</span>
+          </div>
+        </div>
+      </section>
+    </aside>
 
   </div>
 </template>
@@ -1289,7 +1356,7 @@ $clouds--low: (
 // =============================================================================
 // Sized like trees/bushes: height:0 + %-padding (of terrain width). Tops stay
 // artboard px so the skyline stays locked on taller phones.
-.city { z-index: 6; }
+.buildings { z-index: 6; }
 
 .houseBlock--church {
   @include mx.house-block(church, (

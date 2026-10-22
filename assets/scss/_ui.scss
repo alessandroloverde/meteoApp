@@ -8,7 +8,7 @@
 .icon-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.2em;
+  gap: 0;
   line-height: 1;
 
   &__icon {
@@ -17,76 +17,43 @@
   }
 }
 
-// ------------------- City name -------------------
-.city-name {
+// ------------------- City header -------------------
+.city {
   position: absolute;
   top: calc(44px + 1vh);
   z-index: 20;
+  max-width: calc(100% - (v.$appMargin * 2));
   line-height: 1;
 
-  &__label {
+  &--label {
     @extend .icon-label;
 
+    max-width: 100%;
+    min-width: 0;
     font-size: 2rem;
     font-weight: 700;
     color: v.$color-text;
   }
 
-  &__icon {
-    @extend .icon-label__icon;
+  &--icon {
     --icon-size: 0.75em;
+    @extend .icon-label__icon;
 
+    flex-shrink: 0;
     color: v.$accent-color;
   }
+
+  &--name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
-// ------------------- Main overlay card -------------------
+// ------------------- Legacy overlay (hidden) -------------------
 .main-content {
-  position: absolute;
-  bottom: calc(1rem + 4rem + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  border-radius: 1rem;
-  padding: 0.9rem 1.2rem;
-  background: rgba(128, 128, 128, 0.22);
-}
-
-.weather-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.35rem;
-
-  &__temp {
-    font-size: 3.75rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  &__feels {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    line-height: 1;
-  }
-
-  &__meta,
-  &__key {
-    font-size: 0.95rem;
-    opacity: 0.85;
-  }
-
-  &__meta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-  }
-
-  &__sep {
-    opacity: 0.55;
-  }
+  display: none;
 }
 
 .location-error {
@@ -112,5 +79,152 @@
 
   &__link {
     text-decoration: underline;
+  }
+}
+
+// ------------------- Dock (above bottom nav) -------------------
+.dock {
+  position: absolute;
+  left: v.$appMargin;
+  right: v.$appMargin;
+  bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-lg;
+  height: auto; // flexible — grows with content
+  color: v.$color-text;
+  pointer-events: none;
+  container-type: inline-size;
+  container-name: dock;
+
+  &--now {
+    // Temp uses the em box (96); badge matches Inter Extra Bold glyph/cap height (~0.67×)
+    --temp-font-size: 96px;
+    --badge-size: 76px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: v.$space-md;
+  }
+
+  &--timeline {
+    width: 100%;
+  }
+}
+
+// Temperature (left) — Figma: Inter Extra Bold 96 / ° Regular 64 / Nunito Medium 18
+.temperature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+
+  &--value {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: var(--temp-font-size, 96px);
+    font-weight: 800;
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: rgba(v.$pure-white, 0.4);
+  }
+
+  &--unit {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1;
+    color: v.$accent-color;
+    vertical-align: top;
+  }
+
+  &--feels {
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 500;
+    //color: rgba(v.$pure-white, 0.4);
+    color: v.$beige;
+
+  }
+
+  &--feels-value {
+    font-weight: 700;
+  }
+}
+
+// Condition badge (right) — same height as temp number, 4px stroke
+.condition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+
+  &--badge {
+    width: var(--badge-size, 64px);
+    height: var(--badge-size, 64px);
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    border-radius: v.$radius-full;
+    border: 4px solid rgba(v.$pure-white, 0.45);
+    background: rgba(v.$pure-black, 0.35);
+    color: v.$accent-color;
+  }
+
+  &--icon {
+    --icon-size: 56%;
+  }
+
+  &--label {
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 500;
+    color: v.$beige;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+
+// Timeline
+.timeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: v.$space-xs;
+  width: 100%;
+
+  &--item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  &--badge {
+    width: clamp(36px, 12cqi, 44px);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: v.$radius-full;
+    color: v.$beige;
+  }
+
+  &--item-active &--badge {
+    background: rgba(v.$pure-black, 0.45);
+    color: v.$accent-color;
+  }
+
+  &--icon {
+    --icon-size: 62%;
+  }
+
+  &--label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: v.$beige;
+    text-align: center;
+    line-height: 1.15;
   }
 }

@@ -6,11 +6,14 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
   css: [
-    // Self-hosted Nunito (Capacitor-friendly). Figma: medium→800.
+    // Self-hosted fonts (Capacitor-friendly).
     '@fontsource/nunito/500.css',
     '@fontsource/nunito/600.css',
     '@fontsource/nunito/700.css',
     '@fontsource/nunito/800.css',
+    // Temperature display — Inter Extra Bold (800) + Regular for °
+    '@fontsource/inter/400.css',
+    '@fontsource/inter/800.css',
     '~/assets/scss/base.scss',
   ],
   modules: [
