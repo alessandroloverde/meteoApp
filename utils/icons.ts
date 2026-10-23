@@ -17,6 +17,7 @@ import TimeMorning from '~/assets/icons/time-morning.svg?component'
 import TimeAfternoon from '~/assets/icons/time-afternoon.svg?component'
 import TimeEvening from '~/assets/icons/time-evening.svg?component'
 import TimeNight from '~/assets/icons/time-night.svg?component'
+import TimeToday from '~/assets/icons/time-today.svg?component'
 import TimeTomorrow from '~/assets/icons/time-tomorrow.svg?component'
 
 export const icons = {
@@ -39,6 +40,7 @@ export const icons = {
   'time-afternoon': TimeAfternoon,
   'time-evening': TimeEvening,
   'time-night': TimeNight,
+  'time-today': TimeToday,
   'time-tomorrow': TimeTomorrow,
 } as const
 

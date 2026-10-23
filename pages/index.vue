@@ -149,13 +149,61 @@ const conditionIconName = computed(() => {
   }
 })
 
-const timelineSlots = [
+/** Day-part strip (default). Forecast strip opens from “tomorrow”. */
+const daypartSlots = [
   { id: 'morning', label: 'morning', icon: 'time-morning' },
   { id: 'afternoon', label: 'afternoon', icon: 'time-afternoon' },
   { id: 'evening', label: 'evening', icon: 'time-evening' },
   { id: 'night', label: 'night', icon: 'time-night' },
   { id: 'tomorrow', label: 'tomorrow', icon: 'time-tomorrow' },
 ]
+
+const timelineMode = ref('dayparts') // 'dayparts' | 'forecast'
+const forecastActiveId = ref('tomorrow')
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+const forecastSlots = computed(() => {
+  const slots = []
+  for (let i = 0; i < 5; i++) {
+    const d = new Date()
+    d.setHours(12, 0, 0, 0)
+    d.setDate(d.getDate() + i)
+    const id = i === 0 ? 'today' : i === 1 ? 'tomorrow' : `day-${i}`
+    let label
+    if (i === 0) label = 'today'
+    else if (i === 1) label = 'tomorrow'
+    else label = `${d.getDate()} ${WEEKDAYS[d.getDay()]}`
+    slots.push({
+      id,
+      label,
+      icon: i === 0 ? 'time-today' : 'time-tomorrow',
+    })
+  }
+  return slots
+})
+
+function isTimelineSlotActive(slot, mode) {
+  if (mode === 'dayparts') return sceneDisplayTime.value === slot.id
+  return forecastActiveId.value === slot.id
+}
+
+function onTimelineSlotClick(slot, mode) {
+  if (isTimelineSlotActive(slot, mode)) return
+
+  if (mode === 'dayparts' && slot.id === 'tomorrow') {
+    forecastActiveId.value = 'tomorrow'
+    timelineMode.value = 'forecast'
+    return
+  }
+
+  if (mode === 'forecast' && slot.id === 'today') {
+    timelineMode.value = 'dayparts'
+    return
+  }
+
+  // Other slots clickable later — only today / tomorrow navigation for now
+}
 
 // Dev/test theming knobs — driven by <SceneControls> in the layout.
 // Replace these bindings with the live `ui.*` values when wiring real data.
@@ -443,17 +491,48 @@ onBeforeUnmount(() => {
       </section>
 
       <section class="dock--timeline" aria-label="Time of day">
-        <div class="timeline">
-          <div
-            v-for="slot in timelineSlots"
-            :key="slot.id"
-            class="timeline--item"
-            :class="{ 'timeline--item-active': sceneDisplayTime === slot.id }"
-          >
-            <span class="timeline--badge">
-              <AppIcon :name="slot.icon" class="timeline--icon" />
-            </span>
-            <span class="timeline--label">{{ slot.label }}</span>
+        <div
+          class="timeline"
+          :class="{ 'timeline--forecast': timelineMode === 'forecast' }"
+        >
+          <div class="timeline--track">
+            <div class="timeline--pane" role="list">
+              <button
+                v-for="slot in daypartSlots"
+                :key="`daypart-${slot.id}`"
+                type="button"
+                class="timeline--item"
+                role="listitem"
+                :class="{ 'timeline--item-active': isTimelineSlotActive(slot, 'dayparts') }"
+                :disabled="isTimelineSlotActive(slot, 'dayparts')"
+                :aria-current="isTimelineSlotActive(slot, 'dayparts') ? 'true' : undefined"
+                @click="onTimelineSlotClick(slot, 'dayparts')"
+              >
+                <span class="timeline--badge">
+                  <AppIcon :name="slot.icon" class="timeline--icon" />
+                </span>
+                <span class="timeline--label">{{ slot.label }}</span>
+              </button>
+            </div>
+
+            <div class="timeline--pane" role="list">
+              <button
+                v-for="slot in forecastSlots"
+                :key="`forecast-${slot.id}`"
+                type="button"
+                class="timeline--item"
+                role="listitem"
+                :class="{ 'timeline--item-active': isTimelineSlotActive(slot, 'forecast') }"
+                :disabled="isTimelineSlotActive(slot, 'forecast')"
+                :aria-current="isTimelineSlotActive(slot, 'forecast') ? 'true' : undefined"
+                @click="onTimelineSlotClick(slot, 'forecast')"
+              >
+                <span class="timeline--badge">
+                  <AppIcon :name="slot.icon" class="timeline--icon" />
+                </span>
+                <span class="timeline--label">{{ slot.label }}</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
