@@ -569,6 +569,21 @@ $trunk-dusk-b: #412b15;
   --trunk-5-a: #3f3e4f;
 }
 
+// Trunk palette — drizzle--autumn (all temps / times).
+[data-season='autumn'][data-weather='drizzle'] {
+  --trunk-base: #5a554f;
+  --trunk-1-a: #48464d;
+  --trunk-1-b: #493f35;
+  --trunk-2-a: #48464d;
+  --trunk-2-b: #493f35;
+  --trunk-3-a: #48464d;
+  --trunk-3-b: #493f35;
+  --trunk-4-a: #48464d;
+  --trunk-4-b: #493f35;
+  --trunk-5-a: #48464d;
+  --trunk-5-b: #493f35;
+}
+
 
 // =============================================================================
 // WEATHER axis — saturation / haze / density
@@ -2041,6 +2056,18 @@ $trunk-dusk-b: #412b15;
 }
 
 // =============================================================================
+// drizzle--autumn — building palette
+// =============================================================================
+// Morning & afternoon — daylight (all temps; wins over paint-bundle).
+[data-season='autumn'][data-weather='drizzle'][data-time='morning'],
+[data-season='autumn'][data-weather='drizzle'][data-time='afternoon'] {
+  --building-wall-base:   #6f7f82;
+  --building-roof-base:   #808080;
+  --building-window-base: #808080;
+  --building-church:      #7d8a90;
+}
+
+// =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
 // Declared after season building palettes so lit windows always win over daytime
@@ -3343,5 +3370,28 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.25;
+  }
+}
+
+// =============================================================================
+// drizzle--autumn — scene recipes (autumn--drizzle paint library enabled)
+// =============================================================================
+
+// drizzle--autumn--afternoon--cold: sky below.
+
+[data-scene-id='drizzle--autumn--afternoon--cold'] {
+  --sky-stop-0: #7b929f;
+  --sky-stop-1: #7b92a1;
+  --sky-stop-2: #b3c4cd;
+  --sky-stop-3: #c8d5dd;
+
+  --cloud-top-overlay-color:   #2e5870;
+  --cloud-top-overlay-opacity: 0.5;
+
+  --moon-filter:  grayscale(0.75);
+  --moon-opacity: 0.75;
+
+  .bottom-clouds {
+    opacity: 0.4;
   }
 }

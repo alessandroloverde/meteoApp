@@ -25,6 +25,7 @@ import { parseSceneIdentifier } from './sceneIdentifier'
  */
 export const PAINT_LIBRARY_BRANCHES = [
   { season: 'autumn', weather: 'cloudy' },
+  { season: 'autumn', weather: 'drizzle' },
   { season: 'spring', weather: 'cloudy' },
   { season: 'spring', weather: 'drizzle' },
   { season: 'summer', weather: 'cloudy' },
@@ -57,6 +58,7 @@ const TERRAIN_VARIANT_BY_TEMP = {
       warm: 'warm',
       hot: 'hot',
     },
+    // drizzle: temp variants (mild / warm / hot / …) added as authored
   },
   spring: {
     cloudy: {
@@ -103,6 +105,7 @@ const TERRAIN_VARIANT_BY_TEMP = {
 const SKY_VARIANT_BY_BRANCH = {
   autumn: {
     cloudy: 'default',
+    drizzle: 'default',
   },
   spring: {
     cloudy: 'default',

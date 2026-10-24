@@ -5,6 +5,7 @@
 @use 'helpers' as paint;
 @use 'emit';
 @use 'library-autumn-cloudy' as autumn-cloudy-lib;
+@use 'library-autumn-drizzle' as autumn-drizzle-lib;
 @use 'library-spring-cloudy' as spring-cloudy-lib;
 @use 'library-spring-drizzle' as spring-drizzle-lib;
 @use 'library-summer-cloudy' as summer-cloudy-lib;
@@ -20,7 +21,10 @@ $paint-clusters: (
 // Per-season libraries (may include multiple weather branches). Deep-merge when
 // a season has more than one weather file.
 $paint-branches: (
-  autumn: autumn-cloudy-lib.$paint-library,
+  autumn: paint.paint-deep-merge(
+    autumn-cloudy-lib.$paint-library,
+    autumn-drizzle-lib.$paint-library
+  ),
   spring: paint.paint-deep-merge(
     spring-cloudy-lib.$paint-library,
     spring-drizzle-lib.$paint-library

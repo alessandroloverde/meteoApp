@@ -1,0 +1,87 @@
+// Autumn + drizzle — neutral defaults until per-temp terrain is authored.
+//
+// Block 1 — branch defaults:
+//   • sky `default`     — sky gradient stops + clouds (neutral until authored)
+//   • terrain `default` — neutral terrain basics (foliage/bushes/buildings TBD)
+//   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
+//
+// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
+//
+// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
+
+$neutral: #808080;
+
+// =============================================================================
+// SKY cluster
+// =============================================================================
+$autumn-drizzle-sky-default: (
+  sky: (
+    stops: (
+      0: $neutral,
+      1: $neutral,
+      2: $neutral,
+      3: $neutral,
+    ),
+  ),
+  cloud: (
+    1: (a: $neutral, b: $neutral),
+    2: (solid: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (solid: $neutral),
+  ),
+);
+
+// =============================================================================
+// TERRAIN cluster
+// =============================================================================
+// Terrain slots stay tokens here on purpose: `layer-bkg` in a default would be
+// inherited by every temp variant merged on top and would suppress the token
+// gradients index.vue builds, leaving unauthored layers gray.
+$autumn-drizzle-terrain-default: (
+  terrain: (
+    1: (a: #bc9742, c: #5f2b27, d: #6b3c28, blend: overlay),
+    2: (a: #8d7337, b: #c6ae6e),
+    3: (a: #9e5039, b: #693b23),
+    4: (a: #baa589, b: #76634e),
+    5: (a: #5f2d28, b: #9fb4b9),
+  ),
+
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #a18953, #806b41 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #cfb055, #7d5916 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #af6441, #6b3418 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #c07935, #7e4006 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #b4863d, #64441f 100%)),
+  ),
+
+  bush: (
+    1: (gradient: linear-gradient(7deg, #7b5020 10%, #bf8f32 70%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #592a1c, #9d5d3d 50%)),
+    3: (gradient: linear-gradient(356deg, #724d20 30%, #a47028 70%)),
+  ),
+
+  building: (
+    wall: #6f7f82,
+    roof: #808080,
+    window: #808080,
+    church: #7d8a90,
+  ),
+);
+
+
+// =============================================================================
+// Library map — season → weather → cluster → variant
+// =============================================================================
+$paint-library: (
+  autumn: (
+    drizzle: (
+      sky: (
+        default: $autumn-drizzle-sky-default,
+      ),
+      terrain: (
+        default: $autumn-drizzle-terrain-default,
+      ),
+    ),
+  ),
+);
