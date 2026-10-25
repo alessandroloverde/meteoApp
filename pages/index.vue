@@ -104,15 +104,106 @@ const ui = computed(() => {
 const locationSourceMeta = computed(() => {
   switch (store.source) {
     case 'gps':
-      return { icon: '📍', label: 'GPS' }
+      return { iconName: 'location', emoji: '📍', label: 'GPS' }
     case 'ip':
-      return { icon: '🌐', label: 'Network' }
+      return { iconName: 'locationStatus-ip', emoji: '🌐', label: 'Network' }
     case 'search':
-      return { icon: '🔎', label: 'City search' }
+      return { iconName: 'locationStatus-map', emoji: '🔎', label: 'City search' }
     default:
-      return { icon: '', label: '' }
+      return { iconName: 'location', emoji: '', label: '' }
   }
 })
+
+/** Display label for the condition chip (Figma: “light rain”, etc.). */
+const conditionLabel = computed(() => {
+  const c = ui.value?.condition
+  if (!c) return ''
+  if (c === 'drizzle') return 'light rain'
+  return c.replaceAll('_', ' ')
+})
+
+/** Map Open-Meteo condition → AppIcon name. */
+const conditionIconName = computed(() => {
+  const c = ui.value?.condition
+  switch (c) {
+    case 'clear':
+      return 'condition-clear'
+    case 'partly_cloudy':
+      return 'condition-partlyCloudy'
+    case 'cloudy':
+      return 'condition-cloudy'
+    case 'fog':
+      return 'condition-fog'
+    case 'drizzle':
+      return 'condition-drizzle'
+    case 'rain':
+      return 'condition-rain'
+    case 'heavy_rain':
+      return 'condition-heavyRain'
+    case 'storm':
+      return 'condition-storm'
+    case 'snow':
+      return 'condition-snow'
+    default:
+      return 'condition-cloudy'
+  }
+})
+
+/** Day-part strip (default). Forecast strip opens from “tomorrow”. */
+const daypartSlots = [
+  { id: 'morning', label: 'morning', icon: 'time-morning' },
+  { id: 'afternoon', label: 'afternoon', icon: 'time-afternoon' },
+  { id: 'evening', label: 'evening', icon: 'time-evening' },
+  { id: 'night', label: 'night', icon: 'time-night' },
+  { id: 'tomorrow', label: 'tomorrow', icon: 'time-tomorrow' },
+]
+
+const timelineMode = ref('dayparts') // 'dayparts' | 'forecast'
+const forecastActiveId = ref('tomorrow')
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+const forecastSlots = computed(() => {
+  const slots = []
+  for (let i = 0; i < 5; i++) {
+    const d = new Date()
+    d.setHours(12, 0, 0, 0)
+    d.setDate(d.getDate() + i)
+    const id = i === 0 ? 'today' : i === 1 ? 'tomorrow' : `day-${i}`
+    let label
+    if (i === 0) label = 'today'
+    else if (i === 1) label = 'tomorrow'
+    else label = `${d.getDate()} ${WEEKDAYS[d.getDay()]}`
+    slots.push({
+      id,
+      label,
+      icon: i === 0 ? 'time-today' : 'time-tomorrow',
+    })
+  }
+  return slots
+})
+
+function isTimelineSlotActive(slot, mode) {
+  if (mode === 'dayparts') return sceneDisplayTime.value === slot.id
+  return forecastActiveId.value === slot.id
+}
+
+function onTimelineSlotClick(slot, mode) {
+  if (isTimelineSlotActive(slot, mode)) return
+
+  if (mode === 'dayparts' && slot.id === 'tomorrow') {
+    forecastActiveId.value = 'tomorrow'
+    timelineMode.value = 'forecast'
+    return
+  }
+
+  if (mode === 'forecast' && slot.id === 'today') {
+    timelineMode.value = 'dayparts'
+    return
+  }
+
+  // Other slots clickable later — only today / tomorrow navigation for now
+}
 
 // Dev/test theming knobs — driven by <SceneControls> in the layout.
 // Replace these bindings with the live `ui.*` values when wiring real data.
@@ -316,7 +407,7 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- 🏠 Buildings + overlays -->
-        <section class="🏠 scene-layer city">
+        <section class="🏠 scene-layer buildings">
           <div class="houseBlock--church"></div>
           <div class="houseBlock--main">
             <div class="houseBlock--main--windows"></div>
@@ -348,11 +439,19 @@ onBeforeUnmount(() => {
       <div class="scene-grade scene-grade--soft-haze" aria-hidden="true"></div>
     </div>
 
-    <header v-if="store.city" class="city-name">
-      <p class="city-name--city">{{ store.city }}</p>
+    <header v-if="store.city" class="city">
+      <p class="city--label">
+        <AppIcon
+          :name="locationSourceMeta.iconName"
+          class="city--icon"
+          :label="`Location source: ${locationSourceMeta.label}`"
+        />
+        <span class="city--name">{{ store.city }}</span>
+      </p>
     </header>
 
-    <div class="main-content">
+    <!-- Legacy overlay — kept for loading/error; hidden while the Figma dock is in use -->
+    <div class="main-content" hidden>
       <div v-if="store.loading">Loading...</div>
       <div v-else-if="store.error" class="location-error">
         <p>{{ store.error }}</p>
@@ -366,24 +465,78 @@ onBeforeUnmount(() => {
           <NuxtLink to="/search" class="location-error__link">Search city</NuxtLink>
         </div>
       </div>
-
-      <div v-else-if="store.weather" class="weather-panel">
-        <h1 class="weather-panel__temp">{{ store.weather.temperature }}°</h1>
-        <p v-if="store.weather.apparentTemperature != null" class="weather-panel__feels">
-          Feels like {{ Math.round(store.weather.apparentTemperature) }}°
-        </p>
-        <p class="weather-panel__meta">
-          <span>code: {{ store.weather.weathercode }}</span>
-          <span class="weather-panel__sep" aria-hidden="true">|</span>
-          <span
-            :title="locationSourceMeta.label"
-            :aria-label="`Location source: ${locationSourceMeta.label}`"
-          >source: {{ locationSourceMeta.icon }}</span>
-        </p>
-        <p v-if="ui" class="weather-panel__key">{{ ui.key }}</p>
-      </div>
     </div>
 
+    <aside v-if="store.weather" class="dock" aria-label="Weather summary">
+      <section class="dock--now">
+        <div class="temperature">
+          <p class="temperature--value">
+            {{ Math.round(store.weather.temperature) }}<span class="temperature--unit">°</span>
+          </p>
+          <p
+            v-if="store.weather.apparentTemperature != null"
+            class="temperature--feels"
+          >
+            feels like
+            <span class="temperature--feels-value">{{ Math.round(store.weather.apparentTemperature) }}°</span>
+          </p>
+        </div>
+
+        <div class="condition">
+          <div class="condition--badge">
+            <AppIcon :name="conditionIconName" class="condition--icon" />
+          </div>
+          <p class="condition--label">{{ conditionLabel }}</p>
+        </div>
+      </section>
+
+      <section class="dock--timeline" aria-label="Time of day">
+        <div
+          class="timeline"
+          :class="{ 'timeline--forecast': timelineMode === 'forecast' }"
+        >
+          <div class="timeline--track">
+            <div class="timeline--pane" role="list">
+              <button
+                v-for="slot in daypartSlots"
+                :key="`daypart-${slot.id}`"
+                type="button"
+                class="timeline--item"
+                role="listitem"
+                :class="{ 'timeline--item-active': isTimelineSlotActive(slot, 'dayparts') }"
+                :disabled="isTimelineSlotActive(slot, 'dayparts')"
+                :aria-current="isTimelineSlotActive(slot, 'dayparts') ? 'true' : undefined"
+                @click="onTimelineSlotClick(slot, 'dayparts')"
+              >
+                <span class="timeline--badge">
+                  <AppIcon :name="slot.icon" class="timeline--icon" />
+                </span>
+                <span class="timeline--label">{{ slot.label }}</span>
+              </button>
+            </div>
+
+            <div class="timeline--pane" role="list">
+              <button
+                v-for="slot in forecastSlots"
+                :key="`forecast-${slot.id}`"
+                type="button"
+                class="timeline--item"
+                role="listitem"
+                :class="{ 'timeline--item-active': isTimelineSlotActive(slot, 'forecast') }"
+                :disabled="isTimelineSlotActive(slot, 'forecast')"
+                :aria-current="isTimelineSlotActive(slot, 'forecast') ? 'true' : undefined"
+                @click="onTimelineSlotClick(slot, 'forecast')"
+              >
+                <span class="timeline--badge">
+                  <AppIcon :name="slot.icon" class="timeline--icon" />
+                </span>
+                <span class="timeline--label">{{ slot.label }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </aside>
 
   </div>
 </template>
@@ -1282,7 +1435,7 @@ $clouds--low: (
 // =============================================================================
 // Sized like trees/bushes: height:0 + %-padding (of terrain width). Tops stay
 // artboard px so the skyline stays locked on taller phones.
-.city { z-index: 6; }
+.buildings { z-index: 6; }
 
 .houseBlock--church {
   @include mx.house-block(church, (
@@ -1392,95 +1545,4 @@ $clouds--low: (
 }
 
 .building-overlay { @include overlay-pane('building'); }
-
-
-// =============================================================================
-// UI — location + card
-// =============================================================================
-.city-name {
-  position: absolute;
-  top: calc(44px + 1.5vh);
-  z-index: 20;
-  line-height: 1;
-
-  &--city {
-    font-size: 2.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-}
-
-.main-content {
-  position: absolute;
-  bottom: calc(1rem + 4rem + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  border-radius: 1rem;
-  padding: 0.9rem 1.2rem;
-  background: rgba(128, 128, 128, 0.22);
-}
-
-.weather-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.35rem;
-
-  &__temp {
-    font-size: 3.75rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  &__feels {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    line-height: 1;
-  }
-
-  &__meta,
-  &__key {
-    font-size: 0.95rem;
-    opacity: 0.85;
-  }
-
-  &__meta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-  }
-
-  &__sep {
-    opacity: 0.55;
-  }
-}
-
-.location-error {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 22rem;
-
-  &__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    align-items: center;
-  }
-
-  &__btn {
-    padding: 0.4rem 0.75rem;
-    border: 1px solid currentColor;
-    border-radius: 0.35rem;
-    background: transparent;
-    cursor: pointer;
-  }
-
-  &__link {
-    text-decoration: underline;
-  }
-}
 </style>

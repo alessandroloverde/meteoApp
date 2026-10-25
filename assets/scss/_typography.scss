@@ -19,10 +19,13 @@ $_type-scale: (
 }
 
 // ---- Base type rules ----
+// Weights loaded offline via @fontsource/nunito (500/600/700/800).
+// Default medium (500) — no 400 shipped; matches Figma’s lightest weight.
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: map.get($_type-scale, 'body');
+  font-weight: 500;
   line-height: 1.5;
   color: v.$color-text;
 }

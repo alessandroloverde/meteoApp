@@ -92,7 +92,9 @@ async function selectCity(result) {
     </ul>
 
     <p v-if="store.city && store.source === 'search'" class="search-page__current">
-      Current: <strong>{{ store.city }}</strong>
+      Current:
+      <strong>{{ store.city }}</strong>
+      <span v-if="store.country" class="search-page__current-country">{{ store.country }}</span>
       <button class="search-page__reset" @click="store.resetToGPS()">
         Use GPS instead
       </button>
@@ -104,15 +106,16 @@ async function selectCity(result) {
 .search-page {
   display: flex;
   flex-direction: column;
-  padding: v.$space-md;
+  padding: calc(var(--status-bar-h, 44px) + #{v.$space-md}) v.$space-md v.$space-md;
   gap: v.$space-sm;
 }
 
 .search-page__header {
   position: sticky;
-  top: 0;
+  top: var(--status-bar-h, 44px);
   z-index: 1;
   padding-bottom: v.$space-sm;
+  background: v.$color-bg;
 }
 
 .search-page__input {
@@ -131,7 +134,7 @@ async function selectCity(result) {
   }
 
   &:focus {
-    border-color: v.$color-primary;
+    border-color: v.$accent-color;
   }
 }
 
@@ -196,6 +199,11 @@ async function selectCity(result) {
   }
 }
 
+.search-page__current-country {
+  margin-left: 0.35em;
+  color: v.$color-text-muted;
+}
+
 .search-page__reset {
   display: block;
   margin: v.$space-sm auto 0;
@@ -203,13 +211,13 @@ async function selectCity(result) {
   border-radius: v.$radius-full;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: transparent;
-  color: v.$color-primary-light;
+  color: v.$accent-color;
   font-size: 0.8rem;
   cursor: pointer;
   transition: background-color v.$transition-fast;
 
   &:hover {
-    background: rgba(v.$color-primary, 0.1);
+    background: rgba(v.$accent-color, 0.1);
   }
 }
 </style>
