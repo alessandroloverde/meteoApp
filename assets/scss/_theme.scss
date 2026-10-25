@@ -2067,6 +2067,15 @@ $trunk-dusk-b: #412b15;
   --building-church:      #7d8a90;
 }
 
+// Evening & night — cold (wins over paint-bundle).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='autumn'][data-weather='drizzle'][data-temp='cold'][data-time='evening'],
+[data-season='autumn'][data-weather='drizzle'][data-temp='cold'][data-time='night'] {
+  --building-wall-base: #292d34;
+  --building-roof-base: #808080;
+  --building-church:    #413d4a;
+}
+
 // =============================================================================
 // Building windows — evening / night (all seasons & weather)
 // =============================================================================
@@ -3377,6 +3386,24 @@ $trunk-dusk-b: #412b15;
 // drizzle--autumn — scene recipes (autumn--drizzle paint library enabled)
 // =============================================================================
 
+// drizzle--autumn--morning--cold: sky copied from afternoon.
+
+[data-scene-id='drizzle--autumn--morning--cold'] {
+  --sky-stop-0: #7b929f;
+  --sky-stop-1: #7b92a1;
+  --sky-stop-2: #b3c4cd;
+  --sky-stop-3: #c8d5dd;
+
+  --scene-grade-soft-haze-bg:      #72aab554;
+  --scene-grade-soft-haze-opacity: 0.5;
+
+  --terrain-overlay-color:   #817760;
+  --terrain-overlay-opacity: 0.5;
+
+  --bush-overlay-color:   #ccbe7e;
+  --bush-overlay-opacity: 0.5;
+}
+
 // drizzle--autumn--afternoon--cold: sky below.
 
 [data-scene-id='drizzle--autumn--afternoon--cold'] {
@@ -3393,5 +3420,61 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.4;
+  }
+}
+
+// drizzle--autumn--evening--cold: sky below.
+
+[data-scene-id='drizzle--autumn--evening--cold'] {
+  --sky-stop-0: #544e5a;
+  --sky-stop-1: #776f7e;
+  --sky-stop-2: #b28f8e;
+  --sky-stop-3: #ca9a96;
+
+  --cloud-top-overlay-color:   #474158f5;
+  --cloud-top-overlay-opacity: 1;
+
+  --terrain-overlay-color:   #9786b5;
+  --terrain-overlay-opacity: 0.5;
+
+  --bush-overlay-color:   #9786b5;
+  --bush-overlay-opacity: 0.5;
+
+  --foliage-overlay-color:   #926f9e;
+  --foliage-overlay-opacity: 0.5;
+
+  .bottom-clouds {
+    opacity: 0.4;
+  }
+}
+
+// drizzle--autumn--night--cold: sky below.
+
+[data-scene-id='drizzle--autumn--night--cold'] {
+  --sky-stop-0: #2b2e3f;
+  --sky-stop-1: #363a54;
+  --sky-stop-2: #423a55;
+  --sky-stop-3: #4e465d;
+
+  --cloud-top-overlay-color:   #040533;
+  --cloud-top-overlay-opacity: 0.5;
+  --cloud-top-overlay-blend:   multiply;
+
+  --moon-opacity: 0.65;
+
+  --terrain-overlay-color:   #0606c7;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   darken;
+
+  --bush-overlay-color:   #0606c7;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   darken;
+
+  --foliage-overlay-color:   #332e4ba6;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   multiply;
+
+  .bottom-clouds {
+    opacity: 0.25;
   }
 }
