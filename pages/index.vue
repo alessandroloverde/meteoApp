@@ -276,8 +276,7 @@ onBeforeUnmount(() => {
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
     >
-      <!-- SKY Group — .sky-body grows by --scene-extend-top (no separate extender)
-           so clouds can sit at the real top of taller phones. -->
+      <!-- SKY Group -->
       <div class="🟦 scene-layer sky-base">
         <div class="sky-body">
 
@@ -354,13 +353,12 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <!-- 🖼️ TERRAIN Group — .terrain-body grows by --scene-extend-bottom so
-           ridges fill taller phones; ground fill is --terrain-1-c on .terrain. -->
+      <!-- 🖼️ TERRAIN Group — .terrain-body grows by --scene-extend-bottom so -->
       <div class="🖼️ scene-layer terrain">
         <div class="terrain-body">
         <div class="scene-layer drizzle-rain drizzle-rain--terrain"></div>
 
-        <!-- 🌲 Trees — scene mix is a second background layer on each foliage element -->
+        <!-- 🌲 Trees -->
         <section class="🌲 scene-layer mask-layer trees">
           <div class="1️⃣🌲 trees-1">
             <div class="trees-1--trunk"></div>
@@ -384,9 +382,7 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <!-- Terrain ridges (1–3, behind buildings). Terrain-1 keeps a pane so the
-             scene mix stays above its ::before/::after accent stack; 2–5 blend it
-             in as a second background layer. -->
+        <!-- Terrain ridges -->
         <div class="scene-layer terrain-layer--accent terrain-1">
           <div class="terrain-overlay"></div>
         </div>
@@ -885,7 +881,8 @@ $trees: (
   height: auto;
   aspect-ratio: 1;
   position: absolute;
-  z-index: 2;
+  // Always behind bottom clouds (z-index 2) and top clouds (z-index 3).
+  z-index: 1;
 
   top:       var(--moon-top);
   left:      var(--moon-left);

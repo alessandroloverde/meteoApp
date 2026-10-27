@@ -58,7 +58,10 @@ const TERRAIN_VARIANT_BY_TEMP = {
       warm: 'warm',
       hot: 'hot',
     },
-    // drizzle: temp variants (mild / warm / hot / …) added as authored
+    drizzle: {
+      cold: 'cold',
+      mild: 'mild',
+    },
   },
   spring: {
     cloudy: {

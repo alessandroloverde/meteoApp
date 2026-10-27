@@ -1,14 +1,12 @@
-// Autumn + drizzle — neutral defaults until per-temp terrain is authored.
+// Autumn + drizzle — cold authored; mild/warm/hot added as authored.
 //
 // Block 1 — branch defaults:
 //   • sky `default`     — sky gradient stops + clouds (neutral until authored)
-//   • terrain `default` — neutral terrain basics (foliage/bushes/buildings TBD)
+//   • terrain `default` — token-only neutrals (temp variants carry real paint)
 //   Trunk colors live in _theme.scss (season / temp axis), not the paint library.
 //
-// Block 2 — terrain temp variants (add when authoring per temp).
+// Block 2 — terrain temp variants (cold done; mild next).
 // Block 3 — sparse sky variants (add when a scene needs non-default sky paint).
-//
-// Re-enable in `utils/scenePaint.js` → PAINT_LIBRARY_BRANCHES when ready.
 
 $neutral: #808080;
 
@@ -40,13 +38,41 @@ $autumn-drizzle-sky-default: (
 // gradients index.vue builds, leaving unauthored layers gray.
 $autumn-drizzle-terrain-default: (
   terrain: (
+    1: (a: $neutral, c: $neutral, d: $neutral, blend: overlay),
+    2: (a: $neutral, b: $neutral),
+    3: (a: $neutral, b: $neutral),
+    4: (a: $neutral, b: $neutral),
+    5: (a: $neutral, b: $neutral),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, $neutral, $neutral 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, $neutral, $neutral 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, $neutral, $neutral 100%)),
+    4: (gradient: radial-gradient(at 0 30%, $neutral, $neutral 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, $neutral, $neutral 100%)),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, $neutral, $neutral 70%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, $neutral, $neutral 60%)),
+    3: (gradient: linear-gradient(356deg, $neutral, $neutral 70%)),
+  ),
+  building: (
+    wall: $neutral,
+    roof: $neutral,
+    window: $neutral,
+    church: $neutral,
+  ),
+);
+
+// Terrain temp patch — cold (terrain 1–5 + bushes + foliage + daylight buildings).
+$autumn-drizzle-terrain-cold: (
+  terrain: (
     1: (a: #bc9742, c: #5f2b27, d: #6b3c28, blend: overlay),
     2: (a: #8d7337, b: #c6ae6e),
     3: (a: #9e5039, b: #693b23),
     4: (a: #baa589, b: #76634e),
     5: (a: #5f2d28, b: #9fb4b9),
   ),
-
   foliage: (
     1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #a18953, #806b41 100%)),
     2: (gradient: radial-gradient(at 30% 35%, #cfb055, #7d5916 100%)),
@@ -54,13 +80,11 @@ $autumn-drizzle-terrain-default: (
     4: (gradient: radial-gradient(at 0 30%, #c07935, #7e4006 100%)),
     5: (gradient: radial-gradient(at 80% 20%, #b4863d, #64441f 100%)),
   ),
-
   bush: (
     1: (gradient: linear-gradient(7deg, #7b5020 10%, #bf8f32 70%)),
     2: (gradient: radial-gradient(ellipse at -30% 100%, #592a1c, #9d5d3d 50%)),
     3: (gradient: linear-gradient(356deg, #724d20 30%, #a47028 70%)),
   ),
-
   building: (
     wall: #6f7f82,
     roof: #808080,
@@ -69,6 +93,34 @@ $autumn-drizzle-terrain-default: (
   ),
 );
 
+// Terrain temp patch — mild (terrain 1–5 + bushes + foliage + daylight buildings).
+$autumn-drizzle-terrain-mild: (
+  terrain: (
+    1: (a: #99471e, c: #a8703d, d: #cd9a4c, blend: overlay),
+    2: (a: #8b5e2c, b: #be9560),
+    3: (a: #dfb979, b: #9f7d4b),
+    4: (a: #c1a285, b: #9f542f),
+    5: (a: #904b27, b: #ba965f),
+  ),
+  bush: (
+    1: (gradient: linear-gradient(-7deg, #863123, #b4b34e 90%)),
+    2: (gradient: radial-gradient(ellipse at -30% 100%, #88502c, #b59239 70%)),
+    3: (gradient: linear-gradient(356deg, #734306 10%, #ba9d4f 70%)),
+  ),
+  foliage: (
+    1: (gradient: radial-gradient(ellipse 100% 50% at 0% 25%, #c26c49, #8d3e35 100%)),
+    2: (gradient: radial-gradient(at 30% 35%, #b96447, #376a23 100%)),
+    3: (gradient: radial-gradient(at 10% 30%, #c1b043, #8d3a18 100%)),
+    4: (gradient: radial-gradient(at 0 30%, #9f692d, #e2b45e 100%)),
+    5: (gradient: radial-gradient(at 80% 20%, #dd9853, #486a26 100%)),
+  ),
+  building: (
+    wall: #867362,
+    roof: #808080,
+    window: #808080,
+    church: #a08f7f,
+  ),
+);
 
 // =============================================================================
 // Library map — season → weather → cluster → variant
@@ -81,6 +133,8 @@ $paint-library: (
       ),
       terrain: (
         default: $autumn-drizzle-terrain-default,
+        cold: $autumn-drizzle-terrain-cold,
+        mild: $autumn-drizzle-terrain-mild,
       ),
     ),
   ),

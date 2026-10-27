@@ -569,8 +569,8 @@ $trunk-dusk-b: #412b15;
   --trunk-5-a: #3f3e4f;
 }
 
-// Trunk palette — drizzle--autumn (all temps / times).
-[data-season='autumn'][data-weather='drizzle'] {
+// Trunk palette — drizzle--autumn--cold (all times).
+[data-season='autumn'][data-weather='drizzle'][data-temp='cold'] {
   --trunk-base: #5a554f;
   --trunk-1-a: #48464d;
   --trunk-1-b: #493f35;
@@ -582,6 +582,21 @@ $trunk-dusk-b: #412b15;
   --trunk-4-b: #493f35;
   --trunk-5-a: #48464d;
   --trunk-5-b: #493f35;
+}
+
+// Trunk palette — drizzle--autumn--mild (all times).
+[data-season='autumn'][data-weather='drizzle'][data-temp='mild'] {
+  --trunk-base: #6c645b;
+  --trunk-1-a: #6c645b;
+  --trunk-1-b: #583b1e;
+  --trunk-2-a: #6c645b;
+  --trunk-2-b: #583b1e;
+  --trunk-3-a: #6c645b;
+  --trunk-3-b: #583b1e;
+  --trunk-4-a: #6c645b;
+  --trunk-4-b: #583b1e;
+  --trunk-5-a: #6c645b;
+  --trunk-5-b: #583b1e;
 }
 
 
@@ -2058,9 +2073,9 @@ $trunk-dusk-b: #412b15;
 // =============================================================================
 // drizzle--autumn — building palette
 // =============================================================================
-// Morning & afternoon — daylight (all temps; wins over paint-bundle).
-[data-season='autumn'][data-weather='drizzle'][data-time='morning'],
-[data-season='autumn'][data-weather='drizzle'][data-time='afternoon'] {
+// Morning & afternoon — cold (daylight; wins over paint-bundle).
+[data-season='autumn'][data-weather='drizzle'][data-temp='cold'][data-time='morning'],
+[data-season='autumn'][data-weather='drizzle'][data-temp='cold'][data-time='afternoon'] {
   --building-wall-base:   #6f7f82;
   --building-roof-base:   #808080;
   --building-window-base: #808080;
@@ -2074,6 +2089,23 @@ $trunk-dusk-b: #412b15;
   --building-wall-base: #292d34;
   --building-roof-base: #808080;
   --building-church:    #413d4a;
+}
+
+// Morning & afternoon — mild (daylight; wins over paint-bundle).
+[data-season='autumn'][data-weather='drizzle'][data-temp='mild'][data-time='morning'],
+[data-season='autumn'][data-weather='drizzle'][data-temp='mild'][data-time='afternoon'] {
+  --building-wall-base:   #867362;
+  --building-roof-base:   #808080;
+  --building-window-base: #808080;
+  --building-church:      #a08f7f;
+}
+
+// Evening & night — mild (wins over paint-bundle).
+// Do not set --building-window-base — lit windows come from the global evening/night rule.
+[data-season='autumn'][data-weather='drizzle'][data-temp='mild'][data-time='evening'],
+[data-season='autumn'][data-weather='drizzle'][data-temp='mild'][data-time='night'] {
+  --building-wall-base: #4a404d;
+  --building-church:    #5c5967;
 }
 
 // =============================================================================
@@ -3476,5 +3508,117 @@ $trunk-dusk-b: #412b15;
 
   .bottom-clouds {
     opacity: 0.25;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// drizzle--autumn--mild — scene recipes (terrain via `autumn--drizzle--mild`)
+// -----------------------------------------------------------------------------
+
+// drizzle--autumn--morning--mild: sky below; sun hidden.
+
+[data-scene-id='drizzle--autumn--morning--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #a2b6c0 0%, #b1c5d0 40%, #b9cdda 70%, #ccdbe4 100%);
+
+  --cloud-top-overlay-color:   #abc4d8;
+  --cloud-top-overlay-opacity: 0.5;
+  --cloud-top-overlay-blend:   lighten;
+
+  --moon-opacity:     0;
+  --sun-glow-opacity: 0;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// drizzle--autumn--afternoon--mild: sky below.
+
+[data-scene-id='drizzle--autumn--afternoon--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #6e94ac 0%, #7fa7c0 40%, #9fb5c2 70%, #e9d7c4 100%);
+
+  --moon-filter: contrast(1.25) brightness(1.1) hue-rotate(346deg);
+
+  --sky-overlay-blend:   overlay;
+  --sky-overlay-stop-0:  #0b00006b;
+  --sky-overlay-stop-1:  #e7a30e7d;
+  --sky-overlay-stop-2:  #d16608;
+  --sky-overlay-opacity: 0.5;
+
+  --terrain-overlay-color:   #853721;
+  --terrain-overlay-opacity: 0.5;
+
+  .bottom-clouds {
+    opacity: 0.5;
+  }
+}
+
+// drizzle--autumn--evening--mild: terrain + bushes below.
+
+[data-scene-id='drizzle--autumn--evening--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #5b4f62 0%, #746371 40%, #987071 70%, #c68070 100%);
+
+  --moon-top:  71%;
+  --moon-left: 50%;
+
+  --sun-glow-color-0: rgb(197 129 113);
+  --sun-glow-color-1: rgb(243 212 154 / 5%);
+  --sun-glow-opacity: 0.5;
+
+  --sky-overlay-stop-0:  #6c5e75;
+  --sky-overlay-stop-1:  #bf7d71;
+  --sky-overlay-stop-2:  #d7977b;
+  --sky-overlay-opacity: 0.5;
+
+  --cloud-top-overlay-color:   #ab7876;
+  --cloud-top-overlay-opacity: 0.5;
+  --cloud-top-overlay-blend:   color-burn;
+
+  --cloud-bottom-overlay-color:   #cf9683;
+  --cloud-bottom-overlay-opacity: 0.5;
+
+  --terrain-overlay-color:   #5e3953;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   darken;
+
+  --bush-overlay-color:   #c7bfe6;
+  --bush-overlay-opacity: 0.5;
+
+  .bottom-clouds {
+    opacity: 0.4;
+  }
+}
+
+// drizzle--autumn--night--mild: sky + bottom clouds below.
+
+[data-scene-id='drizzle--autumn--night--mild'] {
+  --sky-gradient: linear-gradient(to bottom, #2a2c43 0%, #353557 40%, #806e68 70%, #776977 100%);
+
+  --cloud-top-overlay-color:   #2d3047;
+  --cloud-top-overlay-opacity: 0.5;
+  --cloud-top-overlay-blend:   color-burn;
+
+  --cloud-bottom-overlay-color:   #413066;
+  --cloud-bottom-overlay-opacity: 0.5;
+  --cloud-bottom-overlay-blend:   color-burn;
+
+  --scene-grade-night-bg:      linear-gradient(1deg, #2e3047, transparent);
+  --scene-grade-night-opacity: 0.5;
+  --scene-grade-night-blend:   color-burn;
+
+  --terrain-overlay-color:   #803673;
+  --terrain-overlay-opacity: 0.5;
+  --terrain-overlay-blend:   darken;
+
+  --bush-overlay-color:   #803673;
+  --bush-overlay-opacity: 0.5;
+  --bush-overlay-blend:   overlay;
+
+  --foliage-overlay-color:   #9a66ad;
+  --foliage-overlay-opacity: 0.5;
+  --foliage-overlay-blend:   darken;
+
+  .bottom-clouds {
+    opacity: 0.5;
   }
 }
