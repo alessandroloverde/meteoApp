@@ -13,6 +13,77 @@
  */
 
 /** @type {Record<string, unknown>} */
+const hot = {
+  base: {
+    // Shared ground for all hot times — fill while authoring.
+    terrain: {
+      1: { a: '#eec666', c: '#8f5027', d: '#9c672f' },
+      2: { a: '#a86814', b: '#f4cd85' },
+      3: { a: '#ea984a', b: '#8f5941' },
+      4: { a: '#deba83', b: '#b18b52' },
+      5: { a: '#dab485', b: '#9b7e69' },
+    },
+    bush: {
+      1: { a: '#a6693b', b: '#d79451' },
+      2: { a: '#845238', b: '#e1a968' },
+      3: { a: '#9e5f15', b: '#facc7e' },
+    },
+    foliage: {
+      1: { a: '#b06253', b: '#67270f' },
+      2: { a: '#a96a7c', b: '#7b3322' },
+      3: { a: '#f7b044', b: '#5a1504' },
+      4: { a: '#a0a65e', b: '#b25d1e' },
+      5: { a: '#d99856', b: '#924c1b' },
+    },
+    trunks: {
+      a: '#524639',
+      b: '#8e7559',
+    },
+    buildings: {
+      window: '#b19270',
+      windowOpacity: 0.9,
+      windowGlowFilter: 'none',
+      church: '#d0af90',
+    },
+    overlays: {
+      building: {
+        color: '#808080',
+        opacity: 0,
+        blend: 'soft-light',
+      },
+    },
+    grades: {},
+  },
+
+  morning: {
+    sky: {
+      stops: {
+        0: '#e9d7be',
+        1: '#a6aa97',
+        2: '#6d9396',
+        3: '#5c8486',
+      },
+    },
+    clouds: {
+      bottom: { opacity: 0.5 },
+    },
+    smallClouds: {
+      1: { a: '#b9c9c8', b: '#9eafaf', c: '#8c9d97' },
+      2: { a: '#b9c9c8', b: '#9eafaf', c: '#8c9d97' },
+      3: { a: '#b9c9c8', b: '#9eafaf', c: '#8c9d97' },
+      4: { a: '#b9c9c8', b: '#9eafaf', c: '#8c9d97' },
+    },
+    moon: {
+      top: '91%',
+      left: '50%',
+    },
+    sunGlow: {
+      opacity: 1,
+    },
+  },
+}
+
+/** @type {Record<string, unknown>} */
 const warm = {
   base: {
     // Shared ground for all warm times — fill while authoring.
@@ -179,5 +250,6 @@ const warm = {
 
 export default {
   warm,
+  hot,
   // cold / mild — add here when porting off legacy
 }

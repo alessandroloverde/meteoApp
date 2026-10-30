@@ -184,6 +184,7 @@ function emitOverlays(overlays, vars) {
   emitOverlayGroup('terrain', overlays.terrain, vars)
   emitOverlayGroup('bush', overlays.bush, vars)
   emitOverlayGroup('foliage', overlays.foliage, vars)
+  emitOverlayGroup('building', overlays.building, vars)
 }
 
 function emitOverlayGroup(prefix, overlay, vars) {

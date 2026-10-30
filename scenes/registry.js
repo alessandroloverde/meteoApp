@@ -13,8 +13,7 @@ const BRANCHES = {
     autumn: {
       module: drizzleAutumn,
       // cold + mild stay on legacy (_library-autumn-drizzle + _theme).
-      // Uncomment / add when starting that band in v2:
-      temps: ['warm'],
+      temps: ['warm', 'hot'],
     },
   },
 }
