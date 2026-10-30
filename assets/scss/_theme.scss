@@ -175,24 +175,20 @@ $trunk-dusk-b: #412b15;
   --cloud-bottom-overlay-blend:    color;
 
   // --------------------------------------------------------------------------
-  // Terrain — per-layer gradient stops (a = highlight, b = mid, c = deep)
+  // Terrain — live tokens only:
+  //   1: a (accent) + c/d (fill)  |  2–5: a/b (fill)
   // --------------------------------------------------------------------------
   --terrain-1-a: #{$gray};
-  --terrain-1-b: #{$gray};
   --terrain-1-c: #{$gray};
   --terrain-1-d: #{$gray};
   --terrain-2-a: #{$gray};
   --terrain-2-b: #{$gray};
-  --terrain-2-c: #{$gray};
   --terrain-3-a: #{$gray};
   --terrain-3-b: #{$gray};
-  --terrain-3-c: #{$gray};
   --terrain-4-a: #{$gray};
   --terrain-4-b: #{$gray};
-  --terrain-4-c: #{$gray};
   --terrain-5-a: #{$gray};
   --terrain-5-b: #{$gray};
-  --terrain-5-c: #{$gray};
 
   // Shared fallback — used by overlay containers and anything that needs a
   // single terrain color without layer specificity.
@@ -212,11 +208,20 @@ $trunk-dusk-b: #412b15;
   // --------------------------------------------------------------------------
   --foliage-base:  #{$gray};
 
-  --foliage-1-bg: #{$gray};
-  --foliage-2-bg: #{$gray};
-  --foliage-3-bg: #{$gray};
-  --foliage-4-bg: #{$gray};
-  --foliage-5-bg: #{$gray};
+  // Color stops (geometry lives in index.vue). Legacy --foliage-N-bg still wins if set.
+  --foliage-1-a: #{$gray};
+  --foliage-1-b: #{$gray};
+  --foliage-2-a: #{$gray};
+  --foliage-2-b: #{$gray};
+  --foliage-3-a: #{$gray};
+  --foliage-3-b: #{$gray};
+  --foliage-4-a: #{$gray};
+  --foliage-4-b: #{$gray};
+  --foliage-5-a: #{$gray};
+  --foliage-5-b: #{$gray};
+  // Shared trunk stops (v2); also mirrored to --trunk-N-a/b for tree rules.
+  --trunk-a: #{$trunk-warm-a};
+  --trunk-b: #{$trunk-warm-b};
   --trunk-base: #{$trunk-warm-a};
   --trunk-1-a: #{$trunk-warm-a};
   --trunk-1-b: #{$trunk-warm-b};
@@ -238,11 +243,15 @@ $trunk-dusk-b: #412b15;
   // --------------------------------------------------------------------------
   --bush-base: #{$gray};
 
-  --bush-1-bg: #{$gray};
-  --bush-2-bg: #{$gray};
-  --bush-3-bg: #{$gray};
+  // Color stops (geometry lives in index.vue). Legacy --bush-N-bg still wins if set.
+  --bush-1-a: #{$gray};
+  --bush-1-b: #{$gray};
+  --bush-2-a: #{$gray};
+  --bush-2-b: #{$gray};
+  --bush-3-a: #{$gray};
+  --bush-3-b: #{$gray};
 
-  // Second background layer — scene recipes only (paint sets --bush-N-bg).
+  // Second background layer — scene recipes only.
   --bush-bg-secondary: transparent;
   --bush-bg-blend:     normal;
 
@@ -295,6 +304,17 @@ $trunk-dusk-b: #412b15;
 .scene {
   --sky-gradient: linear-gradient(
     to bottom,
+    var(--sky-stop-0)  0%,
+    var(--sky-stop-1) 40%,
+    var(--sky-stop-2) 70%,
+    var(--sky-stop-3) 100%
+  );
+}
+
+// V2 scenes — same stop tokens, radial geometry (legacy keeps linear above).
+.scene[data-scene-v2] {
+  --sky-gradient: radial-gradient(
+    circle farthest-corner at 50% 90%,
     var(--sky-stop-0)  0%,
     var(--sky-stop-1) 40%,
     var(--sky-stop-2) 70%,

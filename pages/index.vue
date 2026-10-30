@@ -250,6 +250,7 @@ const sceneDisplayId = computed(() =>
 )
 
 const { paintBundles: scenePaint } = useScenePaint(sceneDisplayId)
+const { isV2: sceneIsV2, cssVars: sceneCssVars } = useSceneDefinition(sceneDisplayId)
 
 onBeforeUnmount(() => {
   if (sceneAttrRaf != null) {
@@ -269,12 +270,14 @@ onBeforeUnmount(() => {
     <div
       class="scene"
       :data-scene-id="sceneDisplayId"
-      :data-paint-sky="scenePaint?.sky ?? undefined"
-      :data-paint-terrain="scenePaint?.terrain ?? undefined"
+      :data-paint-sky="sceneIsV2 ? undefined : (scenePaint?.sky ?? undefined)"
+      :data-paint-terrain="sceneIsV2 ? undefined : (scenePaint?.terrain ?? undefined)"
+      :data-scene-v2="sceneIsV2 ? '' : undefined"
       :data-season="sceneDisplaySeason"
       :data-time="sceneDisplayTime"
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
+      :style="sceneCssVars"
     >
       <!-- SKY Group -->
       <div class="🟦 scene-layer sky-base">
@@ -700,14 +703,53 @@ $trees: (
 .trees-4--trunk { background: linear-gradient(0deg,  var(--trunk-4-a)  0%, var(--trunk-4-b) 100%); }
 .trees-5--trunk { background: linear-gradient(90deg, var(--trunk-5-a) 44%, var(--trunk-5-b)  57%); }
 
-// Per-tree foliage — paint from the terrain cluster (--foliage-N-bg) with the
-// scene mix blended on top as a second background layer. --foliage-N-bg may be
-// an image (paint library) or a color (:root stubs); both work as the last layer.
-.trees-1--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-1-bg)); }
-.trees-2--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-2-bg)); }
-.trees-3--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-3-bg)); }
-.trees-4--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-4-bg)); }
-.trees-5--foliage { @include mx.overlay-blend-paint('foliage', var(--foliage-5-bg)); }
+// Per-tree foliage — geometry fixed; author --foliage-N-a / --foliage-N-b.
+// Legacy paint may still set a full --foliage-N-bg (overrides the token fallback).
+.trees-1--foliage {
+  @include mx.overlay-blend-paint(
+    'foliage',
+    var(
+      --foliage-1-bg,
+      radial-gradient(ellipse 100% 50% at 0% 25%, var(--foliage-1-a), var(--foliage-1-b) 100%)
+    )
+  );
+}
+.trees-2--foliage {
+  @include mx.overlay-blend-paint(
+    'foliage',
+    var(
+      --foliage-2-bg,
+      radial-gradient(at 30% 35%, var(--foliage-2-a), var(--foliage-2-b) 100%)
+    )
+  );
+}
+.trees-3--foliage {
+  @include mx.overlay-blend-paint(
+    'foliage',
+    var(
+      --foliage-3-bg,
+      radial-gradient(at 10% 30%, var(--foliage-3-a), var(--foliage-3-b) 100%)
+    )
+  );
+}
+.trees-4--foliage {
+  @include mx.overlay-blend-paint(
+    'foliage',
+    var(
+      --foliage-4-bg,
+      radial-gradient(at 0 30%, var(--foliage-4-a), var(--foliage-4-b) 100%)
+    )
+  );
+}
+.trees-5--foliage {
+  @include mx.overlay-blend-paint(
+    'foliage',
+    var(
+      --foliage-5-bg,
+      radial-gradient(at 80% 20%, var(--foliage-5-a), var(--foliage-5-b) 100%)
+    )
+  );
+}
 
 // =============================================================================
 // Page shell
@@ -1026,6 +1068,8 @@ $clouds--low: (
   z-index: 2;
 }
 .top-clouds    { z-index: 3; }
+// V2 scenes set --bottom-clouds-opacity; legacy scene recipes still use nested rules.
+.bottom-clouds { opacity: var(--bottom-clouds-opacity, 1); }
 
 // Weather folders inside top-clouds — cloudy is the default pack.
 .top-clouds .cloudy,
@@ -1412,17 +1456,33 @@ $clouds--low: (
 // The bush element's own mask clips them automatically.
 .bush-overlay { @include overlay-pane('bush'); }
 
-// Per-bush background — --bush-N-bg from terrain paint; secondary layer from scene.
+// Per-bush fill — geometry fixed here; author --bush-N-a / --bush-N-b.
+// Legacy paint may still set a full --bush-N-bg (overrides the token fallback).
 .bushes-1 {
-  background: var(--bush-1-bg), var(--bush-bg-secondary);
+  background:
+    var(
+      --bush-1-bg,
+      linear-gradient(-7deg, var(--bush-1-a), var(--bush-1-b) 70%)
+    ),
+    var(--bush-bg-secondary);
   background-blend-mode: var(--bush-bg-blend);
 }
 .bushes-2 {
-  background: var(--bush-2-bg), var(--bush-bg-secondary);
+  background:
+    var(
+      --bush-2-bg,
+      radial-gradient(ellipse at -30% 100%, var(--bush-2-a), var(--bush-2-b) 60%)
+    ),
+    var(--bush-bg-secondary);
   background-blend-mode: var(--bush-bg-blend);
 }
 .bushes-3 {
-  background: var(--bush-3-bg), var(--bush-bg-secondary);
+  background:
+    var(
+      --bush-3-bg,
+      linear-gradient(356deg, var(--bush-3-a), var(--bush-3-b) 70%)
+    ),
+    var(--bush-bg-secondary);
   background-blend-mode: var(--bush-bg-blend);
 }
 

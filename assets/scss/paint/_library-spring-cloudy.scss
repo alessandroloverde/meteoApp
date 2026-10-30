@@ -39,7 +39,7 @@ $spring-cloudy-sky-default: (
 // Bush-1 base — linear-gradient(-7deg, <deep>, <highlight> 60%).
 $spring-cloudy-terrain-default: (
   terrain: (
-    1: (a: $neutral, b: $neutral, c: $neutral, d: $neutral, blend: normal),
+    1: (a: $neutral, c: $neutral, d: $neutral, blend: normal),
     2: (layer-bkg: linear-gradient(-7deg, #{$neutral} 80%, #{$neutral} 90%)),
     3: (a: $neutral, b: $neutral),
     4: (a: $neutral, b: $neutral),
