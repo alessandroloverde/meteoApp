@@ -40,6 +40,7 @@ const hot = {
       b: '#8e7559',
     },
     buildings: {
+      wall: '#bd9c7d',
       window: '#b19270',
       windowOpacity: 0.9,
       windowGlowFilter: 'none',
@@ -52,7 +53,20 @@ const hot = {
         blend: 'soft-light',
       },
     },
-    grades: {},
+    grades: {
+      afternoonColor: {
+        pane: 'color',
+        bg: 'radial-gradient(farthest-corner, red, blue)',
+        opacity: 0.5,
+        blend: 'lighten',
+      },
+      evening: {
+        pane: 'evening',
+        bg: 'radial-gradient(#605151, #10134ac4)',
+        opacity: 0.65,
+        blend: 'hard-light',
+      },
+    },
   },
 
   morning: {
@@ -79,6 +93,91 @@ const hot = {
     },
     sunGlow: {
       opacity: 1,
+    },
+  },
+
+  afternoon: {
+    sky: {
+      stops: {
+        0: '#f7dec1',
+        1: '#e2c393',
+        2: '#a2bebf',
+        3: '#98b2c9',
+      },
+    },
+    clouds: {
+      bottom: { opacity: 0.5 },
+    },
+    smallClouds: {
+      1: { a: '#eccca3', b: '#d9ae78', c: '#d2a979' },
+      2: { a: '#eccca3', b: '#d9ae78', c: '#d2a979' },
+      3: { a: '#eccca3', b: '#d9ae78', c: '#d2a979' },
+      4: { a: '#eccca3', b: '#d9ae78', c: '#d2a979' },
+    },
+    grade: 'afternoonColor',
+  },
+
+  evening: {
+    sky: {
+      stops: {
+        0: '#f5e4c5',
+        1: '#eead8e',
+        2: '#c1958f',
+        3: '#6d6385',
+      },
+    },
+    clouds: {
+      bottom: { opacity: 0.64 },
+    },
+    buildings: {
+      wall: '#3b2c39',
+      church: '#433340',
+    },
+    grade: 'evening',
+  },
+
+  night: {
+    sky: {
+      stops: {
+        0: '#5e5a6f',
+        1: '#3c384b',
+        2: '#3a3549',
+        3: '#1d2240',
+      },
+    },
+    clouds: {
+      bottom: { opacity: 0.25 },
+    },
+    smallClouds: {
+      1: { a: '#5d587e', b: '#3f4265', c: '#29304c' },
+      2: { a: '#5d587e', b: '#3f4265', c: '#29304c' },
+      3: { a: '#5d587e', b: '#3f4265', c: '#29304c' },
+      4: { a: '#5d587e', b: '#3f4265', c: '#29304c' },
+    },
+    buildings: {
+      wall: '#3b2c39',
+      church: '#433340',
+    },
+    trunks: {
+      a: '#2a2229',
+      b: '#373342',
+    },
+    overlays: {
+      terrain: {
+        color: '#280f22',
+        opacity: 0.65,
+        blend: 'darken',
+      },
+      bush: {
+        color: '#280f22',
+        opacity: 0.65,
+        blend: 'darken',
+      },
+      foliage: {
+        color: '#280f22',
+        opacity: 0.65,
+        blend: 'darken',
+      },
     },
   },
 }
