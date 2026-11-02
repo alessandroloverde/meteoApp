@@ -101,6 +101,23 @@ const ui = computed(() => {
   return mapWeatherToUI(store.weather)
 })
 
+// Dev/test theming knobs — driven by <SceneControls> in the layout.
+// Sync once from live weather when it first arrives (avoids persisted night
+// while Berlin is afternoon). Later authoring sticks; use “Use live weather”
+// on SceneControls to snap back.
+const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: sceneTemp } = useSceneControls()
+
+const didSyncLiveScene = ref(false)
+watch(
+  ui,
+  (v) => {
+    if (!v || didSyncLiveScene.value) return
+    didSyncLiveScene.value = true
+    applyLiveWeatherToSceneControls()
+  },
+  { immediate: true },
+)
+
 const locationSourceMeta = computed(() => {
   switch (store.source) {
     case 'gps':
@@ -122,9 +139,8 @@ const conditionLabel = computed(() => {
   return c.replaceAll('_', ' ')
 })
 
-/** Map Open-Meteo condition → AppIcon name. */
-const conditionIconName = computed(() => {
-  const c = ui.value?.condition
+/** Map condition axis → AppIcon name. */
+function conditionToIconName(c) {
   switch (c) {
     case 'clear':
       return 'condition-clear'
@@ -147,7 +163,10 @@ const conditionIconName = computed(() => {
     default:
       return 'condition-cloudy'
   }
-})
+}
+
+const conditionIconName = computed(() => conditionToIconName(ui.value?.condition))
+const sceneConditionIconName = computed(() => conditionToIconName(sceneDisplayWeather.value))
 
 /** Day-part strip (default). Forecast strip opens from “tomorrow”. */
 const daypartSlots = [
@@ -205,10 +224,6 @@ function onTimelineSlotClick(slot, mode) {
   // Other slots clickable later — only today / tomorrow navigation for now
 }
 
-// Dev/test theming knobs — driven by <SceneControls> in the layout.
-// Replace these bindings with the live `ui.*` values when wiring real data.
-const { season: sceneSeason, time: sceneTime, weather: sceneWeather, temp: sceneTemp } = useSceneControls()
-
 // Scene `data-*` attributes drive a large subtree of masks, filters, and CSS vars.
 // Updating them in the same frame as a native <select> change hurts INP. Mirror
 // shared `useState` into these refs on the next animation frame (client only).
@@ -251,6 +266,8 @@ const sceneDisplayId = computed(() =>
 
 const { paintBundles: scenePaint } = useScenePaint(sceneDisplayId)
 const { isV2: sceneIsV2, cssVars: sceneCssVars } = useSceneDefinition(sceneDisplayId)
+const { isPlaceholder: sceneIsPlaceholder, background: scenePlaceholderBg } =
+  useScenePlaceholder(sceneDisplayId)
 
 onBeforeUnmount(() => {
   if (sceneAttrRaf != null) {
@@ -270,15 +287,31 @@ onBeforeUnmount(() => {
     <div
       class="scene"
       :data-scene-id="sceneDisplayId"
-      :data-paint-sky="sceneIsV2 ? undefined : (scenePaint?.sky ?? undefined)"
-      :data-paint-terrain="sceneIsV2 ? undefined : (scenePaint?.terrain ?? undefined)"
+      :data-paint-sky="sceneIsV2 || sceneIsPlaceholder ? undefined : (scenePaint?.sky ?? undefined)"
+      :data-paint-terrain="sceneIsV2 || sceneIsPlaceholder ? undefined : (scenePaint?.terrain ?? undefined)"
       :data-scene-v2="sceneIsV2 ? '' : undefined"
+      :data-scene-placeholder="sceneIsPlaceholder ? '' : undefined"
       :data-season="sceneDisplaySeason"
       :data-time="sceneDisplayTime"
       :data-weather="sceneDisplayWeather"
       :data-temp="sceneDisplayTemp"
-      :style="sceneCssVars"
+      :style="sceneIsPlaceholder ? undefined : sceneCssVars"
     >
+      <div
+        v-if="sceneIsPlaceholder"
+        class="scene-placeholder"
+        :style="{ background: scenePlaceholderBg }"
+      >
+        <AppIcon
+          :name="sceneConditionIconName"
+          :size="200"
+          class="scene-placeholder__icon"
+          :label="sceneDisplayWeather"
+        />
+        <p class="scene-placeholder__id">{{ sceneDisplayId }}</p>
+      </div>
+
+      <template v-else>
       <!-- SKY Group -->
       <div class="🟦 scene-layer sky-base">
         <div class="sky-body">
@@ -436,6 +469,7 @@ onBeforeUnmount(() => {
       <div class="scene-grade scene-grade--night" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--evening" aria-hidden="true"></div>
       <div class="scene-grade scene-grade--soft-haze" aria-hidden="true"></div>
+      </template>
     </div>
 
     <header v-if="store.city" class="city">
@@ -789,6 +823,38 @@ $trees: (
   // Frozen sky/terrain band heights (were 55% / 55% of the phone).
   --scene-core-band: calc(var(--scene-base-h, 667px) * 0.55);
   --scene-core-overlap: calc(var(--scene-base-h, 667px) * 0.08);
+}
+
+// Unauthored scene — temp-tinted oklch ramp (light→dark) + condition + id.
+.scene-placeholder {
+  position: absolute;
+  inset: 0;
+  top: -20vh;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+.scene-placeholder__icon {
+  color: #fff;
+  opacity: 0.25;
+}
+
+.scene-placeholder__id {
+  margin: 0;
+  max-width: 100%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  color: oklch(1 0 0 / 0.72);
+  text-shadow: 0 1px 2px oklch(0 0 0 / 0.35);
+  word-break: break-all;
 }
 
 .scene-layer {

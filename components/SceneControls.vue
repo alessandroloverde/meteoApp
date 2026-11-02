@@ -2,6 +2,13 @@
 import { computed } from 'vue'
 import { buildSceneIdentifier } from '@/utils/sceneIdentifier'
 import { resolveScenePaintBundles } from '@/utils/scenePaint'
+import { useWeatherStore } from '@/stores/weather.store'
+import {
+  applyLiveWeatherToSceneControls,
+  getLiveSceneAxes,
+} from '@/composables/useLiveSceneSync'
+
+const store = useWeatherStore()
 
 const {
   season, time, weather, temp,
@@ -18,6 +25,34 @@ const sceneId = computed(() =>
 )
 
 const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
+
+const liveAxes = computed(() => {
+  void store.weather
+  return getLiveSceneAxes()
+})
+
+const matchingLive = computed(() => {
+  const live = liveAxes.value
+  if (!live) return false
+  return (
+    season.value === live.season &&
+    time.value === live.time &&
+    weather.value === live.weather &&
+    temp.value === live.temp
+  )
+})
+
+const canUseLiveWeather = computed(() => Boolean(liveAxes.value) && !matchingLive.value)
+
+const liveWeatherTitle = computed(() => {
+  if (!liveAxes.value) return 'Live weather not loaded yet'
+  if (matchingLive.value) return 'Already matching live weather'
+  return 'Reset season / time / weather / temp from the current API mapping'
+})
+
+function onUseLiveWeather() {
+  applyLiveWeatherToSceneControls()
+}
 </script>
 
 <template>
@@ -26,9 +61,20 @@ const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
     role="group"
     aria-label="Scene theming controls (development)"
   >
-    <p class="scene-controls__scene-id" title="weather--season--time--temp">
-      {{ sceneId }}
-    </p>
+    <div class="scene-controls__header">
+      <p class="scene-controls__scene-id" title="weather--season--time--temp">
+        {{ sceneId }}
+      </p>
+      <button
+        type="button"
+        class="scene-controls__live"
+        :disabled="!canUseLiveWeather"
+        :title="liveWeatherTitle"
+        @click="onUseLiveWeather"
+      >
+        Use live weather
+      </button>
+    </div>
     <template v-if="paintBundles">
       <div class="scene-controls__paint-bundles">
         <p
@@ -114,9 +160,18 @@ const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
   color: #f5a623;
 }
 
+.scene-controls__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
 .scene-controls__scene-id {
   margin: 0;
   padding: 0 2px;
+  min-width: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 10px;
   line-height: 1.35;
@@ -139,7 +194,7 @@ const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
   grid-template-columns: repeat(4, 1fr);
   gap: 10px 12px;
 
-  .scene-controls__scene-id,
+  .scene-controls__header,
   .scene-controls__paint-bundles,
   .scene-controls__paint-bundle--missing {
     grid-column: 1 / -1;
@@ -149,6 +204,36 @@ const paintBundles = computed(() => resolveScenePaintBundles(sceneId.value))
   // directly in the parent 4-column grid.
   .scene-controls__row {
     display: contents;
+  }
+}
+
+.scene-controls__live {
+  margin: 0;
+  width: auto;
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  background: oklch(0.76 0.07 250);
+  color: oklch(0.22 0.04 250);
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: filter 120ms ease, opacity 120ms ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+
+  &:focus-visible {
+    outline: 2px solid oklch(0.9 0.05 250);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
 

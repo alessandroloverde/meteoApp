@@ -19,7 +19,7 @@ export function useScenePaint(sceneIdRef) {
     watch(paintBundles, (bundles) => {
       const id = resolveId()
       if (id && bundles == null) {
-        console.warn(`[scene-paint] No paint library for "${id}" — using gray stubs.`)
+        console.warn(`[scene-paint] No paint library for "${id}" — placeholder if not v2.`)
       }
     })
   }
