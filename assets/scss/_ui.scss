@@ -189,10 +189,14 @@
   }
 }
 
-// Timeline — day-parts ↔ forecast strips (slide)
+// Timeline — day-parts ↔ forecast strips (slide) inside a 36px pill
 .timeline {
   width: 100%;
   overflow: hidden;
+  box-sizing: border-box;
+  border-radius: v.$radius-xl;
+  border: 2px solid v.$color-border;
+  background: v.$anthracite;
 
   &--track {
     display: flex;
@@ -208,9 +212,11 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: v.$space-xs;
+    gap: 0;
     width: 50%;
     flex-shrink: 0;
+    box-sizing: border-box;
+    padding: 0 8px 4px;
   }
 
   &--item {
@@ -223,7 +229,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0;
     min-width: 0;
     cursor: pointer;
     color: inherit;
@@ -235,15 +241,15 @@
   }
 
   &--badge {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     box-sizing: border-box;
     display: grid;
     place-items: center;
-    border-radius: v.$radius-full;
-    border: 3px solid rgba(v.$cream, 0.35);
+    border-radius: v.$radius-sm;
+    border: 0;
     background: transparent;
-    color: v.$beige;
+    color: v.$color-text-muted;
   }
 
   &--icon {
@@ -251,23 +257,22 @@
   }
 
   &--label {
+    margin-top: -4px;
     font-family: 'Nunito', system-ui, sans-serif;
     font-size: 0.65rem;
     font-weight: 500;
-    color: v.$beige;
+    color: v.$turquoise;
     text-align: center;
     line-height: 1.15;
   }
 
   &--item-active &--badge {
-    border: 3px solid rgba(v.$cream, 0.35);
-    background: v.$anthracite;
-    color: rgba(v.$cream, 0.5);
+    background: v.$color-surface;
+    color: v.$turquoise;
   }
 
   &--item-active &--label {
     color: v.$turquoise;
     font-weight: 700;
-    text-decoration: underline;
   }
 }
