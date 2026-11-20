@@ -78,8 +78,8 @@ async function selectCity(result) {
 
     <ul v-if="results.length" class="search-page__results">
       <li
-        v-for="(r, i) in results"
-        :key="i"
+        v-for="r in results"
+        :key="r.id"
         class="search-page__result"
         role="button"
         tabindex="0"
@@ -87,7 +87,7 @@ async function selectCity(result) {
         @keydown.enter="selectCity(r)"
       >
         <span class="search-page__city">{{ r.city }}</span>
-        <span class="search-page__country">{{ r.country }}</span>
+        <span class="search-page__country">{{ [r.admin1, r.country].filter(Boolean).join(', ') }}</span>
       </li>
     </ul>
 
