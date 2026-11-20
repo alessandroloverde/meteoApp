@@ -246,10 +246,10 @@
     box-sizing: border-box;
     display: grid;
     place-items: center;
-    border-radius: v.$radius-sm;
+    border-radius: v.$radius-full;
     border: 0;
     background: transparent;
-    color: v.$color-text-muted;
+    color: v.$beige;
   }
 
   &--icon {
@@ -261,18 +261,18 @@
     font-family: 'Nunito', system-ui, sans-serif;
     font-size: 0.65rem;
     font-weight: 500;
-    color: v.$turquoise;
+    color: v.$color-text-muted;
     text-align: center;
     line-height: 1.15;
   }
 
   &--item-active &--badge {
-    background: v.$color-surface;
+    background: radial-gradient(v.$color-surface 55%, transparent 45%);
     color: v.$turquoise;
   }
 
   &--item-active &--label {
-    color: v.$turquoise;
+    color: v.$beige;
     font-weight: 700;
   }
 }
