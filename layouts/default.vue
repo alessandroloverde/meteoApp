@@ -1,79 +1,68 @@
 <template>
-  <div class="pageContainer">
-    <div class="phoneStage">
-    <div class="phoneRow">
-      <div class="phoneColumn">
-        <label class="reference-bg-label" for="reference-bg-select">Reference background</label>
-        <select
-          id="reference-bg-select"
-          v-model="selectedFilename"
-          class="reference-bg-select"
-        >
-          <option
-            v-for="opt in referenceOptions"
-            :key="opt.filename"
-            :value="opt.filename"
-          >
-            {{ opt.filename }}
-          </option>
-        </select>
-        <div
-          class="phoneContainer phoneContainer--reference"
-          aria-hidden="true"
-          :style="referencePhoneStyle"
-        />
-      </div>
+  <div>
+    <!-- Preview mode: full-bleed, no dev chrome — what a real device sees. -->
+    <div
+      v-if="isPreview"
+      class="phoneContainer phoneContainer--preview"
+      :style="previewPhoneStyle"
+    >
+      <main class="phoneContainer__main">
+        <slot />
+      </main>
 
-      <div class="phoneColumn">
-        <PhoneViewportSelect class="scene-controls--above-phone" />
-        <div class="phoneContainer phoneContainer--app" :style="appPhoneStyle">
-          <StatusBar />
-          <main class="phoneContainer__main">
-            <slot />
-          </main>
-
-          <nav class="bottom-nav" aria-label="Primary">
-            <NuxtLink
-              to="/"
-              class="bottom-nav__link"
-              :class="{ 'bottom-nav__link--active': route.path === '/' }"
-              :aria-current="route.path === '/' ? 'page' : undefined"
-            >
-              <AppIcon name="weather" :size="26" class="bottom-nav__icon" />
-              <span class="bottom-nav__label">weather</span>
-            </NuxtLink>
-
-            <NuxtLink
-              to="/search"
-              class="bottom-nav__link"
-              :class="{ 'bottom-nav__link--active': route.path.startsWith('/search') }"
-            >
-              <AppIcon name="cities" :size="26" class="bottom-nav__icon" />
-              <span class="bottom-nav__label">cities</span>
-            </NuxtLink>
-
-            <NuxtLink
-              to="/settings"
-              class="bottom-nav__link"
-              :class="{ 'bottom-nav__link--active': route.path.startsWith('/settings') }"
-            >
-              <AppIcon name="settings" :size="26" class="bottom-nav__icon" />
-              <span class="bottom-nav__label">settings</span>
-            </NuxtLink>
-          </nav>
-        </div>
-      </div>
+      <BottomNav />
     </div>
-    <SceneControls class="scene-controls--below-row" />
+
+    <!-- Authoring harness: reference art + app phone + dev controls. -->
+    <div v-else class="pageContainer">
+      <div class="phoneStage">
+        <div class="phoneRow">
+          <div class="phoneColumn">
+            <label class="reference-bg-label" for="reference-bg-select">Reference background</label>
+            <select
+              id="reference-bg-select"
+              v-model="selectedFilename"
+              class="reference-bg-select"
+            >
+              <option
+                v-for="opt in referenceOptions"
+                :key="opt.filename"
+                :value="opt.filename"
+              >
+                {{ opt.filename }}
+              </option>
+            </select>
+            <div
+              class="phoneContainer phoneContainer--reference"
+              aria-hidden="true"
+              :style="referencePhoneStyle"
+            />
+          </div>
+
+          <div class="phoneColumn">
+            <PhoneViewportSelect class="scene-controls--above-phone" />
+            <div class="phoneContainer phoneContainer--app" :style="appPhoneStyle">
+              <StatusBar />
+              <main class="phoneContainer__main">
+                <slot />
+              </main>
+
+              <BottomNav />
+            </div>
+          </div>
+        </div>
+        <SceneControls class="scene-controls--below-row" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
+import { useMobilePreviewMode } from '@/composables/useMobilePreviewMode'
 
 const { options: referenceOptions, selectedFilename, selectedUrl } = useReferenceBackgrounds()
 const { current: phoneViewport, SCENE_BASE_HEIGHT } = usePhoneViewport()
+const { isPreview } = useMobilePreviewMode()
 
 const referencePhoneStyle = computed(() => {
   const u = selectedUrl.value
@@ -93,6 +82,16 @@ const appPhoneStyle = computed(() => {
     '--scene-base-h': `${SCENE_BASE_HEIGHT}px`,
   }
 })
+
+// Real viewport, real safe areas — no JS measurement needed, CSS does it.
+// `--status-bar-h` reads the device's actual top inset (no fake StatusBar
+// here; the OS already draws the real one). `--phone-h: 100dvh` feeds the
+// same "extra height" scene scaling the dev harness uses for tall iPhones.
+const previewPhoneStyle = {
+  '--status-bar-h': 'env(safe-area-inset-top, 20px)',
+  '--phone-h': '100dvh',
+  '--scene-base-h': `${SCENE_BASE_HEIGHT}px`,
+}
 </script>
 
 <style lang="scss" scoped>
@@ -144,66 +143,5 @@ const appPhoneStyle = computed(() => {
   flex-direction: column;
   align-items: stretch;
   gap: v.$space-md;
-}
-
-.bottom-nav {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  gap: v.$space-sm;
-  padding: v.$space-sm v.$space-md calc(v.$space-sm + env(safe-area-inset-bottom, 0px));
-  background-color: rgba(v.$color-surface, 0.5);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.bottom-nav__link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  min-width: 64px;
-  min-height: 44px;
-  padding: 4px 8px;
-  border-radius: v.$radius-md;
-  color: var(--icon-muted);
-  transition: color v.$transition-fast, background-color v.$transition-fast;
-
-  &:focus-visible {
-    outline: 2px solid var(--icon-accent);
-    outline-offset: 2px;
-  }
-
-  &:hover {
-    color: var(--icon-accent);
-    background-color: rgba(255, 255, 255, 0.04);
-  }
-
-  &--active {
-    color: var(--icon-accent);
-    background-color: rgba(v.$accent-color, 0.12);
-  }
-}
-
-.bottom-nav__icon {
-  flex-shrink: 0;
-  color: inherit;
-}
-
-.bottom-nav__label {
-  font-family: 'Nunito', system-ui, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
-  text-transform: lowercase;
-  color: inherit;
 }
 </style>

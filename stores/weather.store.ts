@@ -73,14 +73,16 @@ export const useWeatherStore = defineStore('weather', {
 
     resetToGPS() {
       clearLocation()
-
-      this.source = 'gps'
-      this.city = null
-      this.country = null
-      this.coords = null
-      this.weather = null
-      this.locationNotice = null
-      this.error = null
+    
+      this.$patch({
+        source: 'gps',
+        city: null,
+        country: null,
+        coords: null,
+        weather: null,
+        locationNotice: null,
+        error: null,
+      })
     },
 
     setCountry(country: string) {

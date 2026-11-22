@@ -1,24 +1,37 @@
 import { buildSceneIdentifier } from './sceneIdentifier'
 
+/**
+ * Open-Meteo times are location-local ISO strings without an offset
+ * (e.g. "2026-11-21T15:00"). Parse parts from the string so we don't depend
+ * on the browser timezone via `new Date(...)`.
+ */
+function parseLocalParts(dateStr) {
+  const m = String(dateStr).match(/(\d{4})-(\d{2})-(\d{2})T(\d{2})/)
+  if (!m) return null
+  return { month: Number(m[2]), hour: Number(m[4]) }
+}
+
 // ---- SEASON ----
 function getSeason(dateStr) {
-   const month = new Date(dateStr).getMonth() + 1
- 
-   if (month >= 3 && month <= 5) return 'spring'
-   if (month >= 6 && month <= 8) return 'summer'
-   if (month >= 9 && month <= 11) return 'autumn'
-   return 'winter'
- }
- 
- // ---- TIME OF DAY ----
- function getTimeOfDay(dateStr) {
-   const hour = new Date(dateStr).getHours()
- 
-   if (hour >= 6 && hour < 12) return 'morning'
-   if (hour >= 12 && hour < 18) return 'afternoon'
-   if (hour >= 18 && hour < 22) return 'evening'
-   return 'night'
- }
+  const parts = parseLocalParts(dateStr)
+  const month = parts?.month ?? new Date(dateStr).getMonth() + 1
+
+  if (month >= 3 && month <= 5) return 'spring'
+  if (month >= 6 && month <= 8) return 'summer'
+  if (month >= 9 && month <= 11) return 'autumn'
+  return 'winter'
+}
+
+// ---- TIME OF DAY ----
+function getTimeOfDay(dateStr) {
+  const parts = parseLocalParts(dateStr)
+  const hour = parts?.hour ?? new Date(dateStr).getHours()
+
+  if (hour >= 6 && hour < 12) return 'morning'
+  if (hour >= 12 && hour < 18) return 'afternoon'
+  if (hour >= 18 && hour < 22) return 'evening'
+  return 'night'
+}
  
  // ---- TEMPERATURE ----
  function mapTemperature(temp) {

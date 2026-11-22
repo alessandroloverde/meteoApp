@@ -2,10 +2,11 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useWeatherStore } from '@/stores/weather.store'
 import { useLocation } from '@/composables/useLocation'
-import { fetchWeather } from '@/composables/useWeather'
+import { fetchWeather, fetchWeatherAtDaypart } from '@/composables/useWeather'
 import { mapWeatherToUI } from '@/utils/weatherMapper'
 import { buildSceneIdentifier } from '@/utils/sceneIdentifier'
 import { reverseGeocode } from '@/composables/useReverseGeocoding'
+import { applyLiveWeatherToSceneControls } from '@/composables/useLiveSceneSync'
 
 const store = useWeatherStore()
 const { getBestLocation, getGpsLocation } = useLocation()
@@ -179,6 +180,7 @@ const daypartSlots = [
 
 const timelineMode = ref('dayparts') // 'dayparts' | 'forecast'
 const forecastActiveId = ref('tomorrow')
+const timelineLoading = ref(false)
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
@@ -197,6 +199,7 @@ const forecastSlots = computed(() => {
       id,
       label,
       icon: i === 0 ? 'time-today' : 'time-tomorrow',
+      dayOffset: i,
     })
   }
   return slots
@@ -207,21 +210,60 @@ function isTimelineSlotActive(slot, mode) {
   return forecastActiveId.value === slot.id
 }
 
-function onTimelineSlotClick(slot, mode) {
-  if (isTimelineSlotActive(slot, mode)) return
+/**
+ * Fetch hourly weather for a day-part (and optional day offset), then sync the scene.
+ * @param {string} daypart
+ * @param {number} [dayOffset=0]
+ */
+async function activateDaypart(daypart, dayOffset = 0) {
+  if (!store.coords || timelineLoading.value) return
 
+  const { latitude, longitude } = store.coords
+  timelineLoading.value = true
+  store.setError(null)
+
+  try {
+    const weather = await fetchWeatherAtDaypart(latitude, longitude, daypart, dayOffset)
+    store.setWeather(weather)
+    applyLiveWeatherToSceneControls()
+    sceneTime.value = daypart
+  } catch (err) {
+    store.setError(err.message || `Unable to load ${daypart} weather.`)
+  } finally {
+    timelineLoading.value = false
+  }
+}
+
+async function onTimelineSlotClick(slot, mode) {
+  if (isTimelineSlotActive(slot, mode) || timelineLoading.value) return
+
+  // Day-part strip → tomorrow: load tomorrow at the current day-part, open forecast
   if (mode === 'dayparts' && slot.id === 'tomorrow') {
+    const daypart = sceneTime.value
+    await activateDaypart(daypart, 1)
     forecastActiveId.value = 'tomorrow'
     timelineMode.value = 'forecast'
     return
   }
 
+  // Morning / afternoon / evening / night → today’s hourly, then scene
+  if (mode === 'dayparts') {
+    await activateDaypart(slot.id, 0)
+    return
+  }
+
+  // Forecast strip → today: reload that day-part for today, return to day-parts
   if (mode === 'forecast' && slot.id === 'today') {
+    await activateDaypart(sceneTime.value, 0)
     timelineMode.value = 'dayparts'
     return
   }
 
-  // Other slots clickable later — only today / tomorrow navigation for now
+  // Forecast strip → tomorrow / later days
+  if (mode === 'forecast') {
+    await activateDaypart(sceneTime.value, slot.dayOffset ?? 1)
+    forecastActiveId.value = slot.id
+  }
 }
 
 // Scene `data-*` attributes drive a large subtree of masks, filters, and CSS vars.
@@ -537,7 +579,8 @@ onBeforeUnmount(() => {
                 class="timeline--item"
                 role="listitem"
                 :class="{ 'timeline--item-active': isTimelineSlotActive(slot, 'dayparts') }"
-                :disabled="isTimelineSlotActive(slot, 'dayparts')"
+                :disabled="timelineLoading || isTimelineSlotActive(slot, 'dayparts')"
+                :aria-busy="timelineLoading || undefined"
                 :aria-current="isTimelineSlotActive(slot, 'dayparts') ? 'true' : undefined"
                 @click="onTimelineSlotClick(slot, 'dayparts')"
               >
@@ -556,7 +599,7 @@ onBeforeUnmount(() => {
                 class="timeline--item"
                 role="listitem"
                 :class="{ 'timeline--item-active': isTimelineSlotActive(slot, 'forecast') }"
-                :disabled="isTimelineSlotActive(slot, 'forecast')"
+                :disabled="timelineLoading || isTimelineSlotActive(slot, 'forecast')"
                 :aria-current="isTimelineSlotActive(slot, 'forecast') ? 'true' : undefined"
                 @click="onTimelineSlotClick(slot, 'forecast')"
               >

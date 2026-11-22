@@ -77,6 +77,19 @@
   background-repeat: no-repeat;
 }
 
+// Preview mode — real device, no dev chrome: edge-to-edge, no rounding/shadow.
+// `position: fixed` anchors to the true viewport regardless of any wrapper
+// padding (safe since no ancestor has a transform/filter/contain that would
+// change the fixed containing block — see base.scss / _theme.scss).
+.phoneContainer--preview {
+  position: fixed;
+  inset: 0;
+  width: 100dvw;
+  height: 100dvh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
 .phoneContainer__main {
   flex: 1;
   min-height: 0;
